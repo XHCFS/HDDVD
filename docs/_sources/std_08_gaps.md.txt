@@ -1,0 +1,65 @@
+# S8. Gaps and single-specimen caveats
+
+The honest boundary of this archival set. Standard Content rests on one disc, so this
+sheet states plainly what is solid, what could be a Scenarist artifact, and what was
+never decoded.
+
+## 8.1 The single-specimen problem
+
+Everything graded SINGLE was read from `RESERVOIR_DOGS` alone, with no patent RBP table
+and no second disc to confirm it. Such a claim could be a property of Sonic Scenarist
+SCA 4.2 rather than of the format. The VERIFIED claims are safer, because they either
+match a patent RBP table (VMGI_MAT, VTSI_MAT) or close arithmetically or chain-validate
+over many samples (TT_SRPT stride, cell chaining across 204 cells, TMAPT durations, the
+40-VOBU DSI walk).
+
+A second Standard Content disc would settle most SINGLE items at once. The most
+promising lead is Sonic Scenarist sample projects, since authoring tools ship them and
+the one specimen came from that toolchain. None was located in this work.
+
+## 8.2 Solid (VERIFIED)
+
+- Volume layer: UDF 2.50 with Metadata Partition; category detection ([§1](std_01_volume.md)).
+- VMGI_MAT and VTSI_MAT byte layouts, including the two HD DVD-inserted VMGI fields and
+  the shifted VTSI pointer block (patent and disc agree) ([§2](std_02_vmgi.md), [§3](std_03_vtsi.md)).
+- VTS_TMAPT and VTS_PTT_SRPT (fully cross-validated) ([§3](std_03_vtsi.md)).
+- VTS_ATRT table geometry: 11 entries of 926 bytes, arithmetic-closing ([§2.4](std_02_vmgi.md)).
+- The 16-bit command rotation and the VM type dispatch ([§4](std_04_pgc_vm.md)).
+- EVO container and the NV_PCK packet set (PCI, DSI, GCI) ([§5](std_05_evob_nv.md)).
+- Time and sector seek via TMAPT and DSI ([§5](std_05_evob_nv.md), [§6](std_06_playback.md)).
+
+## 8.3 Plausible but single-specimen (SINGLE)
+
+- TT_SRPT 16-byte stride and field widths.
+- VTS_PGCIT 12-byte SRP.
+- The PGC header layout, the two palettes, and cell_playback at 28 bytes.
+- The specific first-play and post-command decodes (`JumpTT 15`, `CallSS VTSM`).
+- PCI and DSI general-information offsets (proven on one disc, later confirmed on
+  Advanced).
+- VMGM_PGCI_UT hierarchy and the menu PGC body layout (decoded on the specimen; the
+  menu PGC's 28-byte cell stride closes) ([§2.3](std_02_vmgi.md)).
+- VTS_ATR attribute-block interior (mirrors the VERIFIED VTSI_MAT attributes)
+  ([§2.4](std_02_vmgi.md)).
+
+## 8.4 Open (not decoded, or patent-only)
+
+| Item | Status |
+|---|---|
+| HDVTSM (VTS menu) `PGCI_UT` body | OPEN; the VMG menu `PGCI_UT` is decoded ([§2.3](std_02_vmgi.md)) and the VTS menu follows the same DVD-shaped hierarchy (patent [3] FIG.20) |
+| `PTL_MAIT`, `TXTDT_MG` (absent on specimen) | OPEN, structure in patent [3] FIG.9 through 14 |
+| Set-command GPRM register field (decodes to g0, implausible) | OPEN, needs a second disc |
+| The 2 extra bits in the PGC seconds byte | OPEN, not frame rate |
+| PCI HLI (buttons, highlights) and the GU byte offsets | OPEN, structure in patent [3] FIG.45 |
+| DSI tail (`sml_pbi`, `sml_agli`, `vobu_sri`, `synci`) | OPEN, not examined |
+| Interleaved-block (ILVU) walk for multi-angle | OPEN, specimen is single-angle |
+| Category 3 Standard-to-Advanced transitions | OPEN, no specimen; patent [3] FIG.87 |
+| AACS title-key binding for an encrypted Standard disc | OPEN, specimen is unencrypted ([§7](std_07_aacs.md)) |
+
+## 8.5 Provenance trail
+
+This set distils the earlier working notes in `spec/clean/` (`00_PRIMER_dvd_to_hddvd`,
+`01_VMGI_MAT_and_TT_SRPT`, `02_VTSI_MAT_PGC_and_commands`, `08_NV_PCK_PCI_DSI`,
+`12_DISC_STRUCTURE`, `13_PLAYBACK`) into a single archival specification. Where a note
+there disagrees with these sheets, these sheets win. The patent-figure reading behind
+the Standard-Content structures is recorded in
+``spec/clean/16b_WO_FIGURE_INDEX.md``.

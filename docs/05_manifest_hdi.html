@@ -9,6 +9,7 @@
   <title>5. Manifest, markup, script (HDi) &mdash; HD DVD Advanced Content</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="_static/overrides.css?v=a0cfb525" />
 
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
@@ -270,6 +271,83 @@
 </ul>
 </li>
 </ul>
+<p class="caption" role="heading"><span class="caption-text">Appendix: Standard Content (archival)</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="std_INDEX.html">HD DVD-Video Standard Content Format Specification (archival)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="std_INDEX.html#what-standard-content-is">What Standard Content is</a></li>
+<li class="toctree-l2"><a class="reference internal" href="std_INDEX.html#about-this-specification">About this specification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="std_INDEX.html#sheets">Sheets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="std_INDEX.html#conventions">Conventions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="std_01_volume.html">S1. Volume and directories (Standard Content)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="std_01_volume.html#filesystem">1.1 Filesystem</a></li>
+<li class="toctree-l2"><a class="reference internal" href="std_01_volume.html#category-detection">1.2 Category detection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="std_01_volume.html#hvdvd-ts-file-naming">1.3 <code class="docutils literal notranslate"><span class="pre">HVDVD_TS/</span></code> file naming</a></li>
+<li class="toctree-l2"><a class="reference internal" href="std_01_volume.html#specimen-inventory-reservoir-dogs">1.4 Specimen inventory (<code class="docutils literal notranslate"><span class="pre">RESERVOIR_DOGS</span></code>)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="std_02_vmgi.html">S2. <code class="docutils literal notranslate"><span class="pre">HVDVD-VMG100</span></code>: Video Manager (VMGI)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="std_02_vmgi.html#vmgi-mat-management-attribute-table">2.1 VMGI_MAT: Management Attribute Table</a></li>
+<li class="toctree-l2"><a class="reference internal" href="std_02_vmgi.html#tt-srpt-title-search-pointer-table-16-byte-entries">2.2 TT_SRPT: Title Search Pointer Table (16-byte entries)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="std_02_vmgi.html#first-play-pgc-and-vmg-menus">2.3 First-play PGC and VMG menus</a></li>
+<li class="toctree-l2"><a class="reference internal" href="std_02_vmgi.html#vts-atrt-cached-per-vts-attributes">2.4 VTS_ATRT: cached per-VTS attributes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="std_02_vmgi.html#tables-absent-on-the-specimen-layout-from-patent-only">2.5 Tables absent on the specimen (layout from patent only)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="std_03_vtsi.html">S3. <code class="docutils literal notranslate"><span class="pre">STANDARD-VTS</span></code>: Video Title Set (VTSI)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="std_03_vtsi.html#vtsi-mat-management-attribute-table">3.1 VTSI_MAT: Management Attribute Table</a></li>
+<li class="toctree-l2"><a class="reference internal" href="std_03_vtsi.html#vts-ptt-srpt-part-of-title-search-pointer-table">3.2 VTS_PTT_SRPT: Part-of-Title Search Pointer Table</a></li>
+<li class="toctree-l2"><a class="reference internal" href="std_03_vtsi.html#vts-pgcit-pgc-information-table-12-byte-srp">3.3 VTS_PGCIT: PGC Information Table (12-byte SRP)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="std_03_vtsi.html#vts-tmapt-time-map-table-identical-to-dvd-video">3.4 VTS_TMAPT: Time Map Table (identical to DVD-Video)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="std_03_vtsi.html#vts-c-adt-and-vts-evobu-admap-identical-to-dvd-video">3.5 VTS_C_ADT and VTS_EVOBU_ADMAP (identical to DVD-Video)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="std_03_vtsi.html#vts-menu-tables-patent-only">3.6 VTS menu tables (patent only)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="std_04_pgc_vm.html">S4. Program Chain and the navigation-command VM</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="std_04_pgc_vm.html#pgc-layout">4.1 PGC layout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="std_04_pgc_vm.html#cell-playback-28-bytes-dvd-has-24">4.2 cell_playback: 28 bytes (DVD has 24)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="std_04_pgc_vm.html#the-navigation-command-vm-dvd-s-instruction-set-rotated-16-bits">4.3 The navigation-command VM: DVD’s instruction set, rotated 16 bits</a></li>
+<li class="toctree-l2"><a class="reference internal" href="std_04_pgc_vm.html#playback-time-one-unresolved-detail">4.4 playback_time: one unresolved detail</a></li>
+<li class="toctree-l2"><a class="reference internal" href="std_04_pgc_vm.html#menu-pgc-category-hdvtsm-pgc-cat-and-hdvmgm-pgc-cat">4.5 Menu PGC category (<code class="docutils literal notranslate"><span class="pre">HDVTSM_PGC_CAT</span></code> and <code class="docutils literal notranslate"><span class="pre">HDVMGM_PGC_CAT</span></code>)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="std_05_evob_nv.html">S5. EVOB, NV_PCK, cells, and highlight buttons</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="std_05_evob_nv.html#the-evo-container-shared-with-advanced">5.1 The EVO container (shared with Advanced)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="std_05_evob_nv.html#stream-identifiers">5.2 Stream identifiers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="std_05_evob_nv.html#cells-and-interleaved-blocks">5.3 Cells and interleaved blocks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="std_05_evob_nv.html#nv-pck-pci-dsi-gci">5.4 NV_PCK: PCI, DSI, GCI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="std_05_evob_nv.html#highlight-information-and-menu-buttons-hli">5.5 Highlight information and menu buttons (HLI)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="std_05_evob_nv.html#seek-within-a-pgc">5.6 Seek within a PGC</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="std_06_playback.html">S6. Playback sequence (Category 1)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="std_06_playback.html#boot">6.1 Boot</a></li>
+<li class="toctree-l2"><a class="reference internal" href="std_06_playback.html#first-play-title-and-menu-the-vm-state-machine">6.2 First-play, title, and menu (the VM state machine)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="std_06_playback.html#seek">6.3 Seek</a></li>
+<li class="toctree-l2"><a class="reference internal" href="std_06_playback.html#relationship-to-a-player-implementation">6.4 Relationship to a player implementation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="std_07_aacs.html">S7. AACS overlay (Standard Content)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="std_07_aacs.html#same-scheme-same-on-disc-layout">7.1 Same scheme, same on-disc layout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="std_07_aacs.html#the-one-standard-specific-difference">7.2 The one Standard-specific difference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="std_07_aacs.html#what-a-licensed-player-adds-unchanged-from-advanced">7.3 What a licensed player adds (unchanged from Advanced)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="std_08_gaps.html">S8. Gaps and single-specimen caveats</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="std_08_gaps.html#the-single-specimen-problem">8.1 The single-specimen problem</a></li>
+<li class="toctree-l2"><a class="reference internal" href="std_08_gaps.html#solid-verified">8.2 Solid (VERIFIED)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="std_08_gaps.html#plausible-but-single-specimen-single">8.3 Plausible but single-specimen (SINGLE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="std_08_gaps.html#open-not-decoded-or-patent-only">8.4 Open (not decoded, or patent-only)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="std_08_gaps.html#provenance-trail">8.5 Provenance trail</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="std_09_references.html">S9. References</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="std_09_references.html#sources-cited-in-this-set">Sources cited in this set</a></li>
+<li class="toctree-l2"><a class="reference internal" href="std_09_references.html#reference-implementations-delta-sources">Reference implementations (delta sources)</a></li>
+</ul>
+</li>
+</ul>
 
         </div>
       </div>
@@ -426,16 +504,25 @@ Root: <code class="docutils literal notranslate"><span class="pre">root</span></
 <p>Used <code class="docutils literal notranslate"><span class="pre">ihd#state</span></code>: <code class="docutils literal notranslate"><span class="pre">value</span></code> 80, <code class="docutils literal notranslate"><span class="pre">focused</span></code> 33, <code class="docutils literal notranslate"><span class="pre">enabled</span></code> 1. Markup rarely sets
 <code class="docutils literal notranslate"><span class="pre">actioned</span></code>; Jumpstart Chapters and <code class="docutils literal notranslate"><span class="pre">1408</span></code> fire it from the remote (Enter).</p>
 <p><strong>Clocks.</strong> <code class="docutils literal notranslate"><span class="pre">timing&#64;clock</span></code>: <code class="docutils literal notranslate"><span class="pre">page</span></code> 66, <code class="docutils literal notranslate"><span class="pre">application</span></code> 9, <code class="docutils literal notranslate"><span class="pre">title</span></code> 3, omitted 6.</p>
-<p>Definitions (Microsoft HDi Jumpstart [14], <em>Dissecting Chapters</em>). A <strong>title clock</strong> is used <em>“when cues should occur at specific timecodes during the movie”</em> (in-movie experiences such as Warner IME and Universal U-Control). It is locked to media time. A <strong>page clock</strong> is <em>“for cues that are time independent [and] have times relative to other cues (like menus)”</em>. It is independent of media time, so a page-clock menu keeps ticking when video is paused. A markup document may carry both timing blocks. The <strong>application clock</strong> (XSD enum [5], 9 uses) runs for the application’s active lifetime, independent of both, for app-global timers. Relation to <code class="docutils literal notranslate"><span class="pre">ApplicationSegment&#64;sync</span></code> [1]: <code class="docutils literal notranslate"><span class="pre">hard</span></code> holds the Title Timeline until File Cache + startup finish; <code class="docutils literal notranslate"><span class="pre">soft</span></code> lets it run (the app may miss its window). <code class="docutils literal notranslate"><span class="pre">[14]</span></code> <strong>VERIFIED</strong> (title/page from Jumpstart); application-clock lifetime <strong>INFERRED</strong> (XSD enum + usage).
-Jumpstart: page clock for menus (cues relative to other cues); title clock
-for in-movie cues. Omitted <code class="docutils literal notranslate"><span class="pre">&lt;timing&gt;</span></code> is legal (STALINGRAD <code class="docutils literal notranslate"><span class="pre">startUp.xmu</span></code>).
-Hello World’s “empty timing tag is required” is a sample convention.
-Page / application clocks are <strong>independent of the media clock</strong> (patent).
-A mapped <code class="docutils literal notranslate"><span class="pre">clock=&quot;page&quot;</span></code> menu keeps ticking when video is paused; <code class="docutils literal notranslate"><span class="pre">sync=&quot;soft&quot;</span></code>
-does not freeze cues. Unmap at exclusive <code class="docutils literal notranslate"><span class="pre">titleTimeEnd</span></code>.
-<code class="docutils literal notranslate"><span class="pre">[11,</span> <span class="pre">12]</span></code> <strong>VERIFIED</strong>
-<code class="docutils literal notranslate"><span class="pre">[14]</span></code>
-<code class="docutils literal notranslate"><span class="pre">[1]</span></code> <strong>INFERRED</strong> (pause).</p>
+<p>The three clock types (Microsoft HDi Jumpstart [14], <em>Dissecting Chapters</em>):</p>
+<ul class="simple">
+<li><p><strong>title clock</strong>: locked to media time, <em>“when cues should occur at specific timecodes
+during the movie”</em> (in-movie experiences such as Warner IME and Universal U-Control).</p></li>
+<li><p><strong>page clock</strong>: independent of media time, <em>“for cues that are time independent [and]
+have times relative to other cues (like menus)”</em>. A page-clock menu keeps ticking
+while the user pauses video.</p></li>
+<li><p><strong>application clock</strong> (XSD enum [5]): runs for the application’s active lifetime,
+independent of both, for app-global timers.</p></li>
+</ul>
+<p>A markup document may carry more than one timing block. An omitted <code class="docutils literal notranslate"><span class="pre">&lt;timing&gt;</span></code> is legal
+(STALINGRAD <code class="docutils literal notranslate"><span class="pre">startUp.xmu</span></code>); the Hello World sample’s “empty timing tag is required” is a
+sample convention, not a rule. Because the page and application clocks are independent of
+the media clock (patent), <code class="docutils literal notranslate"><span class="pre">sync=&quot;soft&quot;</span></code> does not freeze a page-clock menu’s cues. Unmap
+at exclusive <code class="docutils literal notranslate"><span class="pre">titleTimeEnd</span></code>.</p>
+<p><code class="docutils literal notranslate"><span class="pre">ApplicationSegment&#64;sync</span></code> [1]: <code class="docutils literal notranslate"><span class="pre">hard</span></code> holds the Title Timeline until File Cache load and
+startup finish; <code class="docutils literal notranslate"><span class="pre">soft</span></code> lets the timeline run, so the app may miss its window.</p>
+<p><code class="docutils literal notranslate"><span class="pre">[11,</span> <span class="pre">12]</span></code> <strong>VERIFIED</strong> (title and page clocks from Jumpstart; independence from patent).
+<code class="docutils literal notranslate"><span class="pre">[5]</span></code> application-clock lifetime and <code class="docutils literal notranslate"><span class="pre">[1]</span></code> pause behaviour are <strong>INFERRED</strong>.</p>
 <p><strong>Cue.</strong> <code class="docutils literal notranslate"><span class="pre">begin</span></code>/<code class="docutils literal notranslate"><span class="pre">end</span></code> are <code class="docutils literal notranslate"><span class="pre">TimeOrPathExpressionType</span></code> (iHD.xsd): either
 <code class="docutils literal notranslate"><span class="pre">HH:MM:SS:FF</span></code> / <code class="docutils literal notranslate"><span class="pre">NNh|m|s|ms|f</span></code>, or a path. Retail menus use XPath:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">cue</span> <span class="n">select</span><span class="o">=</span><span class="s2">"id('BT_scenes')"</span>
@@ -456,8 +543,7 @@ subset, not a general XPath 1.0 engine.</p>
 decide whether the app is on the Title Timeline. Cues run only while that
 app is active. If a cue time and the mapping disagree, <strong>mapping wins</strong>:
 there is no app to tick. Soft-sync apps may miss their window (Q52).
-<code class="docutils literal notranslate"><span class="pre">[11,</span> <span class="pre">12]</span></code> <strong>INFERRED</strong> (two clocks, one gate).
-<code class="docutils literal notranslate"><span class="pre">[11,</span> <span class="pre">12]</span></code> <strong>VERIFIED</strong></p>
+<code class="docutils literal notranslate"><span class="pre">[11,</span> <span class="pre">12]</span></code> The mapping fields are <strong>VERIFIED</strong>; the rule that mapping (not cue time) gates whether an app ticks is <strong>INFERRED</strong> (Annex Z unpublished).</p>
 <p><strong>Layout (used attrs only).</strong> Implement §5.9. <code class="docutils literal notranslate"><span class="pre">x</span></code>,<code class="docutils literal notranslate"><span class="pre">y</span></code>,<code class="docutils literal notranslate"><span class="pre">width</span></code>,<code class="docutils literal notranslate"><span class="pre">height</span></code> are
 aperture pixels (Configuration Aperture 1920×1080 on 247/247). <code class="docutils literal notranslate"><span class="pre">position</span></code> is
 <strong>always <code class="docutils literal notranslate"><span class="pre">absolute</span></code></strong> in this sample (1462/1462). <code class="docutils literal notranslate"><span class="pre">backgroundImage</span></code> is a list of

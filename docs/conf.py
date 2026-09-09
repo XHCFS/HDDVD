@@ -24,6 +24,37 @@ for _name in (
 ):
     shutil.copy(_SPEC / _name, _HERE / _name)
 
+# Standard Content (archival appendix). Its sheets share the base names of the
+# Advanced sheets, so they are copied flat with a "std_" prefix and their
+# cross-links are rewritten to the flattened docs layout:
+#   intra-set links  0N_x.md / INDEX.md      -> std_0N_x.md / std_INDEX.md
+#   links to Advanced ../advanced/0N_x.md    -> 0N_x.md (Advanced is flat at root)
+#   links to research notes ../clean/*.md    -> plain text (not part of the build)
+import re as _re
+
+_STD = Path(__file__).resolve().parents[1] / "spec" / "standard"
+_std_names = [
+    "INDEX.md",
+    "01_volume.md",
+    "02_vmgi.md",
+    "03_vtsi.md",
+    "04_pgc_vm.md",
+    "05_evob_nv.md",
+    "06_playback.md",
+    "07_aacs.md",
+    "08_gaps.md",
+    "09_references.md",
+]
+for _name in _std_names:
+    _text = (_STD / _name).read_text(encoding="utf-8")
+    # 1) prefix intra-set links (not ../, http, #, or already std_)
+    _text = _re.sub(r"\]\((?!\.\./|https?:|#|std_)([0-9A-Za-z_]+\.md)", r"](std_\1", _text)
+    # 2) flatten links into the Advanced set
+    _text = _text.replace("](../advanced/", "](")
+    # 3) neutralise links to research notes: [label](../clean/x.md) -> `label`
+    _text = _re.sub(r"\[([^\]]+)\]\(\.\./clean/[^)]+\)", r"`\1`", _text)
+    (_HERE / f"std_{_name}").write_text(_text, encoding="utf-8")
+
 project = "HD DVD Advanced Content"
 copyright = "Working specification"
 author = "HD DVD Advanced Content"
@@ -60,6 +91,7 @@ exclude_patterns = [
 
 html_theme = "sphinx_rtd_theme"
 html_static_path = ["_static"]
+html_css_files = ["overrides.css"]
 html_title = "HD DVD Advanced Content"
 html_show_sphinx = True
 html_show_sourcelink = True
@@ -79,10 +111,16 @@ html_context = {
     "display_github": False,
 }
 
-# Rasterise Mermaid so EPUB and print HTML keep the playback flowcharts.
+# Rasterise Mermaid to PNG so every builder (HTML, single-page print, EPUB)
+# embeds the playback flowcharts as <img>; the SVG/<object> path does not render
+# in EPUB readers or print-to-PDF.
 mermaid_cmd = sys.executable + " " + str(Path(__file__).resolve().parent / "_mermaid_ink.py")
-mermaid_cmd_shell = True
-mermaid_output_format = "svg"
+mermaid_cmd_shell = "False"
+mermaid_output_format = "png"
+
+# EPUB packages the RTD theme web fonts, whose mimetypes the epub builder does not
+# recognise; the fonts still embed. Silence that cosmetic noise.
+suppress_warnings = ["epub.unknown_project_files"]
 
 epub_basename = "HD-DVD-Advanced-Content"
 epub_title = "HD DVD-Video Advanced Content Format Specification"

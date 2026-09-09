@@ -1,0 +1,23 @@
+/* Print-to-PDF comes from the single-page build. On paper <pre> cannot scroll,
+   so shrink code enough that the widest code lines (~100 cols) and the ASCII
+   flowchart in 10 (§10.0b, 94 cols) fit the page instead of clipping. */
+@media print {
+  div.highlight pre,
+  pre,
+  .rst-content pre {
+    font-size: 0.68rem;
+    line-height: 1.25;
+  }
+}
+
+/* Any builder: let a wide code block scroll rather than clip, and keep every
+   image (the playback flowcharts) inside the page width in EPUB and print. */
+div.highlight,
+div.highlight pre,
+pre {
+  overflow-x: auto;
+}
+img {
+  max-width: 100%;
+  height: auto;
+}

@@ -104,16 +104,27 @@ Used `ihd#state`: `value` 80, `focused` 33, `enabled` 1. Markup rarely sets
 
 **Clocks.** `timing@clock`: `page` 66, `application` 9, `title` 3, omitted 6.
 
-Definitions (Microsoft HDi Jumpstart [14], *Dissecting Chapters*). A **title clock** is used *"when cues should occur at specific timecodes during the movie"* (in-movie experiences such as Warner IME and Universal U-Control). It is locked to media time. A **page clock** is *"for cues that are time independent [and] have times relative to other cues (like menus)"*. It is independent of media time, so a page-clock menu keeps ticking when video is paused. A markup document may carry both timing blocks. The **application clock** (XSD enum [5], 9 uses) runs for the application's active lifetime, independent of both, for app-global timers. Relation to `ApplicationSegment@sync` [1]: `hard` holds the Title Timeline until File Cache + startup finish; `soft` lets it run (the app may miss its window). `[14]` **VERIFIED** (title/page from Jumpstart); application-clock lifetime **INFERRED** (XSD enum + usage).
-Jumpstart: page clock for menus (cues relative to other cues); title clock
-for in-movie cues. Omitted `<timing>` is legal (STALINGRAD `startUp.xmu`).
-Hello World’s “empty timing tag is required” is a sample convention.
-Page / application clocks are **independent of the media clock** (patent).
-A mapped `clock="page"` menu keeps ticking when video is paused; `sync="soft"`
-does not freeze cues. Unmap at exclusive `titleTimeEnd`.
-`[11, 12]` **VERIFIED**
-`[14]`
-`[1]` **INFERRED** (pause).
+The three clock types (Microsoft HDi Jumpstart [14], *Dissecting Chapters*):
+
+- **title clock**: locked to media time, *"when cues should occur at specific timecodes
+  during the movie"* (in-movie experiences such as Warner IME and Universal U-Control).
+- **page clock**: independent of media time, *"for cues that are time independent [and]
+  have times relative to other cues (like menus)"*. A page-clock menu keeps ticking
+  while the user pauses video.
+- **application clock** (XSD enum [5]): runs for the application's active lifetime,
+  independent of both, for app-global timers.
+
+A markup document may carry more than one timing block. An omitted `<timing>` is legal
+(STALINGRAD `startUp.xmu`); the Hello World sample's "empty timing tag is required" is a
+sample convention, not a rule. Because the page and application clocks are independent of
+the media clock (patent), `sync="soft"` does not freeze a page-clock menu's cues. Unmap
+at exclusive `titleTimeEnd`.
+
+`ApplicationSegment@sync` [1]: `hard` holds the Title Timeline until File Cache load and
+startup finish; `soft` lets the timeline run, so the app may miss its window.
+
+`[11, 12]` **VERIFIED** (title and page clocks from Jumpstart; independence from patent).
+`[5]` application-clock lifetime and `[1]` pause behaviour are **INFERRED**.
 
 **Cue.** `begin`/`end` are `TimeOrPathExpressionType` (iHD.xsd): either
 `HH:MM:SS:FF` / `NNh|m|s|ms|f`, or a path. Retail menus use XPath:
@@ -139,8 +150,7 @@ subset, not a general XPath 1.0 engine.
 decide whether the app is on the Title Timeline. Cues run only while that
 app is active. If a cue time and the mapping disagree, **mapping wins**:
 there is no app to tick. Soft-sync apps may miss their window (Q52).
-`[11, 12]` **INFERRED** (two clocks, one gate).
-`[11, 12]` **VERIFIED**
+`[11, 12]` The mapping fields are **VERIFIED**; the rule that mapping (not cue time) gates whether an app ticks is **INFERRED** (Annex Z unpublished).
 
 **Layout (used attrs only).** Implement §5.9. `x`,`y`,`width`,`height` are
 aperture pixels (Configuration Aperture 1920×1080 on 247/247). `position` is

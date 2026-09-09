@@ -1,65 +1,68 @@
-# S2. `HVDVD-VMG100` — Video Manager (VMGI)
+# S2. `HVDVD-VMG100`: Video Manager (VMGI)
 
-*Byte-level claims are from `RESERVOIR_DOGS` `/HVDVD_TS/HV000I01.IFO` (20 480 B) [11]
-unless a patent RBP table [2] corroborates; grades noted per section.*
+*Byte-level values are from `RESERVOIR_DOGS` `/HVDVD_TS/HV000I01.IFO` (20 480 B) [11]
+unless a patent RBP table [2] corroborates them. Grades are noted per section.*
 
-The Video Manager is the disc-level index: one per disc, at `HV000I01.IFO`. Its ID
-string is `HVDVD-VMG100` (cf. DVD's `DVDVIDEO-VMG`). All big-endian.
+The Video Manager is the disc-level index. There is one per disc, at `HV000I01.IFO`.
+Its ID string is `HVDVD-VMG100`, compared with DVD's `DVDVIDEO-VMG`. All fields are
+big-endian.
 
-## 2.1 VMGI_MAT — Management Attribute Table
+## 2.1 VMGI_MAT: Management Attribute Table
 
-`[SRC: PATENT | US20080298219A1 VMGI_MAT RBP table]` + `[11]` **VERIFIED** — patent and
-disc agree field-for-field. RBP 0–215 is byte-compatible with DVD-Video; **HD DVD
-inserts two fields at RBP 216/220** and shifts the last two pointers.
+The patent RBP table and the disc agree on every field. `[SRC: PATENT | US20080298219A1
+VMGI_MAT RBP table]` `[11]` **VERIFIED**. RBP 0 through 215 is byte-compatible with
+DVD-Video. HD DVD inserts two fields at RBP 216 and 220 and shifts the last two
+pointers.
 
 | RBP | Field | Specimen | Notes |
 |---|---|---|---|
-| 0 | `VMG_ID` | `HVDVD-VMG100` | 12 ASCII |
-| 12 | `VMG_EA` | 169536 | end address (sectors); VTS#1 starts at +1 |
-| 28 | `VMGI_EA` | 9 | VMGI is 10 sectors |
-| 32 | `VERN` | 0x0010 | spec 1.0 |
-| 34 | `VMG_CAT` | 0 | region/category mask |
-| 62 | `VTS_N` | 11 | matches 11 VTS files |
+| 0 | `VMG_ID` | `HVDVD-VMG100` | 12 ASCII bytes |
+| 12 | `VMG_EA` | 169536 | end address in sectors; VTS 1 starts at the next sector |
+| 28 | `VMGI_EA` | 9 | VMGI occupies 10 sectors |
+| 32 | `VERN` | 0x0010 | specification 1.0 |
+| 34 | `VMG_CAT` | 0 | region and category mask |
+| 62 | `VTS_N` | 11 | matches the 11 VTS files |
 | 128 | `VMGI_MAT_EA` | 1479 | end of this table |
-| 132 | `FP_PGCI_SA` | 1158 | first-play PGC (byte offset) |
+| 132 | `FP_PGCI_SA` | 1158 | first-play PGC, byte offset |
 | 192 | `VMGM_EVOBS_SA` | 10 | first sector after VMGI |
-| 196 | `TT_SRPT_SA` | 1 | Title Search Pointer Table (sector) |
+| 196 | `TT_SRPT_SA` | 1 | Title Search Pointer Table, sector |
 | 200 | `VMGM_PGCI_UT_SA` | 2 | menu PGC unit table (body **OPEN**) |
-| 204 | `PTL_MAIT_SA` | 0 | parental mgmt — absent here |
+| 204 | `PTL_MAIT_SA` | 0 | parental management, absent here |
 | 208 | `VTS_ATRT_SA` | 3 | VTS attribute table (`nr_of_vtss`=11) |
-| 212 | `TXTDT_MG_SA` | 0 | text data manager — absent here |
-| 216 | **`FP_PGCM_C_ADT_SA`** | 0 | **new in HD DVD** — first-play menu cell address table |
-| 220 | **`FP_PGCM_EVOBU_ADMAP_SA`** | 0 | **new in HD DVD** — first-play menu VOBU map |
-| 224 | `VMGM_C_ADT_SA` | 8 | (DVD had this at 0xD8) |
-| 228 | `VMGM_EVOBU_ADMAP_SA` | 9 | (DVD had this at 0xDC) |
+| 212 | `TXTDT_MG_SA` | 0 | text data manager, absent here |
+| 216 | `FP_PGCM_C_ADT_SA` | 0 | new in HD DVD: first-play menu cell address table |
+| 220 | `FP_PGCM_EVOBU_ADMAP_SA` | 0 | new in HD DVD: first-play menu VOBU map |
+| 224 | `VMGM_C_ADT_SA` | 8 | DVD placed this at 0xD8 |
+| 228 | `VMGM_EVOBU_ADMAP_SA` | 9 | DVD placed this at 0xDC |
 
-**Implementation note.** A DVD `ifoRead_VMGI_MAT()` port needs (a) the new ID constant,
-and (b) the two inserted `u32` fields at RBP 216/220, which push `VMGM_C_ADT`/
-`VMGM_EVOBU_ADMAP` to 224/228. Reading DVD's 0xD8/0xDC yields the inserted (here zero)
-fields and silently mis-parses. The patent table covers this region and is the correct
-reference — not DVD-Video. `[2]` `[11]`
+Implementation note. A DVD `ifoRead_VMGI_MAT()` port needs the new ID constant and the
+two inserted `u32` fields at RBP 216 and 220, which push `VMGM_C_ADT` and
+`VMGM_EVOBU_ADMAP` to 224 and 228. Reading DVD's 0xD8 and 0xDC instead yields the
+inserted (here zero) fields and mis-parses silently. The patent table covers this
+region and is the correct reference, not DVD-Video. `[2]` `[11]`
 
-## 2.2 TT_SRPT — Title Search Pointer Table (16-byte entries)
+## 2.2 TT_SRPT: Title Search Pointer Table (16-byte entries)
 
-**No patent RBP table exists**; derived from disc bytes by arithmetic closure. `[11]`
-`[SRC: DERIVED | header last_byte=247 → 240 data bytes / 15 titles = 16-byte stride]`
-**SINGLE**. Header is DVD-compatible (`nr_of_srps` u16 @0, `last_byte` u32 @4).
+No patent RBP table exists for TT_SRPT. It was derived from disc bytes by arithmetic
+closure: the header `last_byte=247` gives 240 data bytes, and 240 divided by 15 titles
+is a 16-byte stride. `[11]` `[SRC: DERIVED | arithmetic closure]` **SINGLE**. The header
+is DVD-compatible (`nr_of_srps` u16 at 0, `last_byte` u32 at 4).
 
 | Offset | Size | Field | DVD-Video |
 |---|---|---|---|
 | 0x00 | 1 | `TT_PB_TY` playback type | same |
 | 0x01 | 1 | number of angles | same |
-| 0x02 | 2 | number of PTTs (parts of title) | same |
+| 0x02 | 2 | number of PTTs | same |
 | 0x04 | 2 | parental management mask | same |
-| 0x06 | 2 | reserved | **new** |
-| 0x08 | 2 | `VTSN` (title set number) | u8 @0x06 in DVD |
-| 0x0A | 2 | `VTS_TTN` (title number within VTS) | u8 @0x07 in DVD |
-| 0x0C | 4 | VTS start sector | u32 @0x08 in DVD |
+| 0x06 | 2 | reserved | new |
+| 0x08 | 2 | `VTSN` (title set number) | u8 at 0x06 in DVD |
+| 0x0A | 2 | `VTS_TTN` (title number within VTS) | u8 at 0x07 in DVD |
+| 0x0C | 4 | VTS start sector | u32 at 0x08 in DVD |
 
-**Why it widened (12→16).** The spec allows up to 511 VTS [1], which does not fit in a
-byte, so `VTSN`/`VTS_TTN` become `u16`; with 2 reserved bytes that accounts for all 4
-extra bytes. Every widening in Standard Content follows this pattern — fields grow
-exactly where DVD's limits were raised.
+The widening from 12 to 16 bytes follows one rule that governs all of Standard Content:
+fields grow where DVD's limits were raised. The spec allows up to 511 VTS [1], which
+does not fit in a byte, so `VTSN` and `VTS_TTN` become `u16`. With 2 reserved bytes that
+accounts for all four extra bytes.
 
 Decoded specimen (15 titles) `[11]`:
 ```
@@ -68,35 +71,58 @@ t6        VTSN=2,     VTS_TTN=1
 t7        VTSN=3,     VTS_TTN=1
 t8..t15   VTSN=4..11, VTS_TTN=1      ascending
 ```
-All 15 have `TT_PB_TY=0x14` (one sequential PGC) and 1 angle. Title 1 beginning at
-exactly `VMG_EA + 1` is the cross-check that the 16-byte stride is correct.
+All 15 titles have `TT_PB_TY=0x14` (one sequential PGC) and 1 angle. Title 1 beginning
+at exactly `VMG_EA + 1` is the cross-check that the 16-byte stride is correct.
 
 ## 2.3 First-play PGC and VMG menus
 
-- **`FP_PGCI`** (RBP 132 → byte 1158) is the first-play program chain — what runs on
-  insert before any title. On the specimen its command decodes as **`JumpTT 15`**
-  (§4), i.e. jump to title 15, which maps via TT_SRPT to VTSN=11, the last VTS — a
-  warning/logo clip. `[11]` **SINGLE**.
-- **`VMGM_PGCI_UT`** (RBP 200) is the VMG menu program-chain unit table (by language).
-  Its body was **not decoded** — the menu-PGC unit-table layout is **OPEN**. Structure
-  from patent [3] FIG.6/7 (`HDVMGM_PGCI_UT` → `HDVMGM_LU` → per-language PGCI), byte
-  offsets unconfirmed.
-- **`VMGM_C_ADT`** / **`VMGM_EVOBU_ADMAP`** (RBP 224/228) address the VMG menu object
-  (`HV000M02.EVO`); same shape as DVD's `VMGM_C_ADT`/`VMGM_VOBU_ADMAP` ([§3.5](03_vtsi.md)).
+- `FP_PGCI` (RBP 132, byte 1158) is the first-play program chain, which runs on insert
+  before any title. On the specimen its command decodes as `JumpTT 15` (§4), a jump to
+  title 15, which TT_SRPT maps to VTSN=11, the last VTS, consistent with a warning or
+  logo clip. `[11]` **SINGLE**.
+- `VMGM_PGCI_UT` (RBP 200, sector 2) is the VMG menu program-chain unit table, indexed
+  by language. It decodes on the specimen as the DVD-shaped `pgci_ut` hierarchy `[11]`
+  **SINGLE**: an 8-byte header (`nr_of_lu` u16, reserved u16, `last_byte` u32), then one
+  language unit (`lang='en'`, category byte, `SA` u32), then a language-unit table
+  (`nr_of_pgci_srp=5`, `last_byte`, then 8-byte PGCI search pointers of `PGC_CAT` u32
+  plus `PGC_SA` u32). The menu PGCs themselves use the same body layout as title PGCs
+  ([§4.1](04_pgc_vm.md)): the decoded menu PGC has 1 program and 1 cell, and its
+  28-byte `cell_playback` stride closes to `cell_position_offset` exactly. This matches
+  patent [3] FIG.6 and FIG.7 (`HDVMGM_PGCI_UT`, `HDVMGM_LU`). The per-language PGC
+  categories seen are `0x80200000` (entry PGC), `0x44`, `0x32c`, and two entry-only
+  pointers.
+- `VMGM_C_ADT` and `VMGM_EVOBU_ADMAP` (RBP 224 and 228) address the VMG menu object
+  `HV000M02.EVO`, with the same shape as DVD's `VMGM_C_ADT` and `VMGM_VOBU_ADMAP`
+  ([§3.5](03_vtsi.md)).
 
-## 2.4 Tables absent on the specimen (layout from patent only)
+## 2.4 VTS_ATRT: cached per-VTS attributes
 
-`PTL_MAIT_SA=0` and `TXTDT_MG_SA=0` — parental management and text-data manager are not
-present on `RESERVOIR_DOGS`, so their on-disc layout is unconfirmed. Patent structures:
+`VTS_ATRT` (RBP 208, sector 3) caches each title set's attributes at the VMG level, so a
+player can read stream and audio attributes without opening every VTS IFO. It decodes
+on the specimen `[11]` **VERIFIED** for the table geometry (arithmetic closes):
 
-- **`PTL_MAIT`** — parental management (FIG.9/10 [3]): `PTL_MAITI` header (`CTY_Ns`
-  countries, `HDVTS_Ns`, `EA`), then per-country `PTL_MAI_SRP` (`CTY_CD` country code,
-  `SA`), then `PTL_MAI`/`PTL_LVLI` giving a `PTL_ID_FLD` per level per VMG/VTS.
-- **`TXTDT_MG`** — text data manager (FIG.12–14 [3]): `TXTDT_MGI` (`TXTDT_ID`,
+- 8-byte header: `nr_of_vtss` u16 = 11 (matches `VTS_N`), reserved u16, `last_byte` u32
+  = 10237.
+- Then 11 u32 offsets to each `VTS_ATR` (52, 978, 1904, and so on).
+- Each `VTS_ATR` is a fixed 926-byte block: `VTS_CAT` u32 followed by the same attribute
+  layout as the VTSI_MAT attribute region ([§3.1](03_vtsi.md)) (`V_ATR`, `AST_N`,
+  `AST_ATR`, sub-picture and multichannel attributes). Closure: 52 + 11 x 926 = 10238 =
+  `last_byte` + 1.
+
+The attribute-block interior is graded **SINGLE** (one specimen; it mirrors VTSI_MAT,
+which is VERIFIED against the patent). Structure matches patent [3] FIG.11
+(`HDVTS_ATRTI`, `HDVTS_ATR_SRP`, `HDVTS_ATR`).
+
+## 2.5 Tables absent on the specimen (layout from patent only)
+
+`PTL_MAIT_SA=0` and `TXTDT_MG_SA=0`, so parental management and the text-data manager
+are not present on `RESERVOIR_DOGS`. Their on-disc layout is unconfirmed and graded
+**OPEN**. The patent structures are:
+
+- `PTL_MAIT`, parental management (FIG.9 and FIG.10 [3]): a `PTL_MAITI` header
+  (`CTY_Ns` countries, `HDVTS_Ns`, `EA`), then per-country `PTL_MAI_SRP` (`CTY_CD`
+  country code, `SA`), then `PTL_MAI` and `PTL_LVLI` giving a `PTL_ID_FLD` per level per
+  VMG or VTS.
+- `TXTDT_MG`, text data manager (FIG.12 through FIG.14 [3]): `TXTDT_MGI` (`TXTDT_ID`,
   `TXTDT_LU_Ns`, `EA`), language units `TXTDT_LU` with a character-set code, then
-  per-title/volume `IT_TXT` item text. This is DVD's `TXTDT_MG` widened.
-- **`VTS_ATRT`** — VTS attribute table (FIG.11 [3]): `HDVTS_ATRTI` header + per-VTS
-  `HDVTS_ATR_SRP` + `HDVTS_ATR` (category + attribute block). Header reports
-  `nr_of_vtss=11` on the specimen; entry **bodies OPEN**.
-
-All three are graded **OPEN** (no specimen; patent structure only).
+  per-title and per-volume `IT_TXT` item text. This is DVD's `TXTDT_MG` widened.

@@ -14,11 +14,11 @@ OPEN / UNCLOSEABLE / OUT** are evidence-strength, not citations
 
 ## Standards & specifications
 
-- **[4]** AACS LA, *Advanced Access Content System — HD DVD and DVD Pre-recorded Book*, Final Revision 0.953: pack encryption Table 4-7, CPI Table 4-1/4-2, VTKF Table 3-8, DKF Table 6-2. Specifications index (HD DVD/DVD books withdrawn, available on request; archived copies via the Internet Archive): <https://aacsla.com/aacs-specifications/>
+- **[4]** AACS LA, *Advanced Access Content System: HD DVD and DVD Pre-recorded Book*, Final Revision 0.953: pack encryption Table 4-7, CPI Table 4-1/4-2, VTKF Table 3-8, DKF Table 6-2. Specifications index (HD DVD/DVD books withdrawn, available on request; archived copies via the Internet Archive): <https://aacsla.com/aacs-specifications/>
 - **[5]** DVD Forum, *HD DVD-Video Advanced Content* XML Schemas v1.0 (16 Jul 2006): `Playlist.xsd`, `Manifest.xsd`, `iHD.xsd`, `iHDstyle.xsd`, `iHDstate.xsd`. Bundled: `spec/raw/adv_obj/v1.0/`. Origin (Scenarist install): <https://archive.org/details/scenarist-hd-dvd-45>
 - **[17]** W3C, *Document Object Model (DOM) Level 2 Core* <https://www.w3.org/TR/DOM-Level-2-Core/> and *DOM Level 2 Events* <https://www.w3.org/TR/DOM-Level-2-Events/>.
 - **[18]** W3C, *Synchronized Multimedia Integration Language (SMIL 2.0)*. <https://www.w3.org/TR/2005/REC-SMIL2-20050107/>
-- **[19]** Ecma International, *ECMA-327 — Compact Profile of ECMAScript*. <https://ecma-international.org/publications-and-standards/standards/ecma-327/>
+- **[19]** Ecma International, *ECMA-327, Compact Profile of ECMAScript*. <https://ecma-international.org/publications-and-standards/standards/ecma-327/>
 
 ## Software, tools & primary artifacts
 

@@ -1,0 +1,104 @@
+# S5. EVOB, NV_PCK, cells, and highlight buttons
+
+*Values are from `RESERVOIR_DOGS` (unencrypted), cross-referenced to `MYSTERY_MEN` and
+`DOWNFALL` (Advanced) where the container is shared [11]. The EVO container and NV_PCK
+are common to both content categories; only the navigation around them differs.*
+
+## 5.1 The EVO container (shared with Advanced)
+
+`.EVO` is an MPEG-2 program stream in 2048-byte packs. The pack start code `00 00 01 BA`
+occurs at every 2048-byte boundary, with MPEG-2 marker bits `01`. `[11]` **VERIFIED**
+(two discs, one encrypted and one not). This is identical to
+[Advanced §8.1](08_evo.md). Any MPEG-2 PS demuxer that accepts 2048-byte
+packs consumes EVO. Pack and system headers are always in the clear; AACS, when present,
+covers elementary-stream payload only ([§7](std_07_aacs.md)).
+
+## 5.2 Stream identifiers
+
+Standard Content uses the same `stream_id` and `sub_stream_id` assignments as Advanced
+(patent TABLE 45 through 47 [2]; WO FIG.119 through 125 [3]): video is `0xE0` (MPEG-2),
+`0xE2`, or `0xFD` with an extension (VC-1 or AVC); audio and sub-picture ride inside
+`private_stream_1` (`0xBD`), keyed by the first payload byte; PCI, DSI, and GCI ride
+inside `private_stream_2` (`0xBF`). Full routing is in
+[Advanced §8.7](08_evo.md); sub-picture RLE and DCSQC decoding is in
+[Advanced §8.8](08_evo.md). **VERIFIED** (shared layer).
+
+## 5.3 Cells and interleaved blocks
+
+A cell is a contiguous or interleaved run of VOBUs addressed by `cell_playback`
+([§4.2](std_04_pgc_vm.md)) and `VTS_C_ADT` ([§3.5](std_03_vtsi.md)). Interleaved blocks
+(multi-angle or seamless branching) place ILVUs from several VOBs on disc in the pattern
+VOB 1 chunk, VOB 2 chunk, and so on, addressed by `first_ilvu_end_sector` and
+`last_vobu_start_sector`. This is DVD's ILVU model, drawn in patent FIG.69, FIG.93, and
+FIG.94 [3]. The specimen's titles are single-angle and contiguous (`TT_PB_TY=0x14`, 1
+angle), so the interleaved path is patent-only here and graded **OPEN** for Standard
+Content.
+
+## 5.4 NV_PCK: PCI, DSI, GCI
+
+The first pack of each EVOBU is the NV_PCK. It carries three `private_stream_2`
+(`0x000001BF`) packets distinguished by a sub-stream byte. `[11]` **VERIFIED** (packet
+set on 3 discs); the GI offsets are **SINGLE** (first proven on this Standard disc, then
+confirmed on Advanced).
+
+| Sub-stream | PES length | Identity |
+|---|---|---|
+| `0x00` | 977 | PCI, Presentation Control Information |
+| `0x01` | 755 | DSI, Data Search Information |
+| `0x04` | 257 | GCI_PKT, General Control Information (16 B `GCI_GI`, 189 B `RECI`, reserved) |
+
+DVD-Video uses the same mechanism and IDs (`0x00` and `0x01`) at different lengths (980
+and 1018). `0x04` (GCI) is new in HD DVD (patent TABLE 50 through 52 [2]). It also
+carries the AACS Copy Protection Information on protected discs ([§7](std_07_aacs.md), with
+CPI at pack offset `0x3C`, see [Advanced §9.6](09_aacs.md)). `GCI_CAT` reads
+`0x00` on this Standard disc and `0x40` on Advanced.
+
+PCI general information (`pci_gi`) follows DVD's layout. Offsets are relative to the
+sub-stream byte. `[11]` (VOBU 0 and 1, 40-VOBU chain) **SINGLE**: `nv_pck_lbn` at 1,
+`vobu_cat` at 5, `vobu_uop_ctl` at 9, `vobu_s_ptm` at 13, `vobu_e_ptm` at 17.
+Cross-check: `vobu_e_ptm` minus `vobu_s_ptm` is 45045 ticks at 90 kHz, which is 500.5 ms
+and 15 frames at 29.97 fps; VOBU 1's `vobu_s_ptm` equals VOBU 0's `vobu_e_ptm`.
+
+DSI general information (`dsi_gi`) also follows DVD's layout: `nv_pck_scr` at 1,
+`nv_pck_lbn` at 5, `vobu_ea` at 9, `vobu_1stref_ea` at 13, second and third references
+at 17 and 21, `vobu_vob_idn` at 25, `vobu_c_idn` at 28. `vobu_ea` is relative to the
+VOBU start, not absolute, so walk with `next = lbn + vobu_ea + 1`. Chain-validated 40 of
+40 VOBUs. `[11]` **SINGLE**.
+
+## 5.5 Highlight information and menu buttons (HLI)
+
+Standard-Content menu buttons live in the stream, not in a markup document. They appear
+in two places.
+
+- PCI HLI (`hli`, `hl_gi`, `btn_colit`, `btni` in DVD's `pci_t`) is the run-time
+  highlight state, following `pci_gi` in the NV_PCK PCI packet. This region was not
+  examined on the specimen and is **OPEN**.
+- The sub-picture Graphics Unit (GU) holds the button graphics. Patent FIG.45 [3] gives
+  the GU data structure: a `GU pack` sequence forms a Graphics Unit made of a header,
+  the HLI, mask data 1 through n, and graphics data. The HLI block (b21 through b23)
+  carries general info, a color palette (normal, selection, and set-action color), and
+  per-button info: `b231` start address of mask data, `b232` size, `b233` neighbouring
+  button position for D-pad navigation, and `b234` button command. The button command is
+  a VM command ([§4.3](std_04_pgc_vm.md)) executed on activation. This is DVD's highlight and
+  button model extended for HD sub-picture. Byte offsets within the GU are **OPEN** (no
+  specimen dumped).
+
+The graphics-plane composition order (main, then sub-picture, then highlight, then
+graphics, then cursor) is the same order given in
+[Advanced §8.8](08_evo.md) and WO FIG.102 and FIG.144 [3]. The graphics
+decoder pipeline (video, sub-picture, highlight, and graphics decoders plus mixers) is
+patent FIG.39 [3].
+
+## 5.6 Seek within a PGC
+
+Two addressing layers, both from DVD:
+
+1. Time to sector, via `VTS_TMAPT` ([§3.4](std_03_vtsi.md)): the entry index is `t / tmu`,
+   and the entry value is a VOBU start sector (bit 31 marks a discontinuity).
+2. Sector to VOBU-accurate, via `VTS_EVOBU_ADMAP` and the in-stream DSI (`vobu_ea`, and
+   `vobu_1stref_ea` for the first decodable I-frame). `[11]` **VERIFIED** (TMAPT
+   durations match PGC playback time; DSI chains 40 of 40).
+
+No `.MAP` sidecar files exist for Standard Content. The time map is the in-IFO
+`VTS_TMAPT`, unlike Advanced Content, which uses standalone `.MAP` files
+([Advanced §7](07_map.md)).

@@ -89,8 +89,8 @@ expected, not a decoder gap.
 | 16 | film camera (C00008 only) | **0** on 1131/1131 |
 | 15–12 | source resolution | `1100b` 1920×1080 (677), `0101b` 720×480/576 (451), `0000b` 352×240/288 (3) |
 
-WO FIG.111 draws ATRI as `V_ATR`, `AST_Ns`, `AST_ATR`, `MU_AST_ATR`, `SPST_*`, palettes
-— a **logical tree**, not these 1024-byte offsets. C00010’s 64-bit `A_ATR` is not the
+WO FIG.111 draws ATRI as `V_ATR`, `AST_Ns`, `AST_ATR`, `MU_AST_ATR`, `SPST_*`, palettes,
+a **logical tree**, not these 1024-byte offsets. C00010’s 64-bit `A_ATR` is not the
 4-byte disc `AST_ATR`. Observed 4-byte words (`e14`, 9 unique): `1c00c400` ×878,
 `1c00d400` ×474, plus 7 rarer. Bit layout vs C00010’s 64-bit `A_ATR` remains **OPEN**.
 Language is not in this word (XPL `langcode`).

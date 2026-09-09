@@ -61,6 +61,26 @@ encrypted (entropy 7.997), verified in `11_gaps.md` §11.F. Remaining gaps are i
 13_references
 ```
 
+The **Standard Content (Category 1)** mode, the DVD-Video-like navigation used by one
+disc in the corpus, is documented for the record in the archival appendix below. It is
+out of scope for the player.
+
+```{toctree}
+:maxdepth: 2
+:caption: Appendix: Standard Content (archival)
+
+std_INDEX
+std_01_volume
+std_02_vmgi
+std_03_vtsi
+std_04_pgc_vm
+std_05_evob_nv
+std_06_playback
+std_07_aacs
+std_08_gaps
+std_09_references
+```
+
 Authoritative XML schemas (DVD Forum 16 Jul 2006, v1.0; every retail playlist):
 
 - `spec/raw/adv_obj/v1.0/Playlist.xsd`

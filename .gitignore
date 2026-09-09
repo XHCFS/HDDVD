@@ -8,3 +8,5 @@ docs/.doctrees/
 docs/.buildinfo
 docs/.buildinfo.bak
 .DS_Store
+docs/[0-9][0-9]_*.md
+docs/std_*.md

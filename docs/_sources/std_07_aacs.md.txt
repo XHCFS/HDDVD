@@ -1,0 +1,46 @@
+# S7. AACS overlay (Standard Content)
+
+*Format only. No keys and no decryptor. The AACS overlay is identical to Advanced
+Content, fully treated in [Advanced §9](09_aacs.md). This sheet records only
+what differs or is worth noting for Standard Content. The one Standard specimen,
+`RESERVOIR_DOGS`, is unencrypted, so the observations are cross-referenced from Advanced
+discs where the layer is shared.*
+
+## 7.1 Same scheme, same on-disc layout
+
+AACS replaces DVD's CSS. Nothing in the AACS layer is category-specific.
+
+- Encrypted packs keep bytes 0 through 127 clear and bytes 128 through 2047 under
+  AES-CBC with the fixed IV. `Kc = AES-G(Kt, Dtk || CPI_lsb_96)`, with `Dtk` at pack
+  bytes 84 through 87 and CPI at pack offset `0x3C` inside the GCI
+  ([Advanced §9.6](09_aacs.md)). `[SPEC: Final 0.953 Tables 4-1, 4-2, 4-7]`.
+- `NV_PCK` and `ADV_PCK` are not encryptable, so navigation (IFO, VTI, and NV_PCK
+  headers) reads in the clear on every disc.
+- Key and usage files live in `ANY!/` or `AAC!/` with `*_BAK/` copies: `MKBROM.AACS`,
+  `DKF.AACS`, `VTKF$$$.AACS` (title keys), `VTUF$$$.AACS`, `CONTENT_CERT.AACS`, and
+  content-hash tables.
+- The title key binds by navigation object name, and the Volume ID comes from the drive
+  (MMC `READ DISC STRUCTURE 80h`), never from the ISO.
+
+`RESERVOIR_DOGS` has no `ANY!/` directory at all. It is an unencrypted Standard disc,
+which is precisely why its IFOs could be read byte for byte. `[11]` **VERIFIED**.
+
+## 7.2 The one Standard-specific difference
+
+On Advanced Content the active playlist filename selects the VTKF title key. Standard
+Content has no playlist, so the AACS HD DVD book binds the title key to the VTS or title
+navigation object instead. The exact Standard binding could not be exercised on this
+corpus, since the sole Standard disc is unencrypted, so it is **OPEN**. An encrypted
+Standard specimen would be needed to confirm which navigation object name indexes the
+VTKF. The Advanced binding is documented in
+[Advanced §9.6 and §9.11](09_aacs.md).
+
+## 7.3 What a licensed player adds (unchanged from Advanced)
+
+The key ladder (MKB to Media Key to `Kvu` via the Volume ID to `Kt`) and the device and
+host keys are the licensed secrets this specification deliberately does not contain.
+Open toolchains (`aacskeys`, `dumphd`) implement the ladder; libaacs supplies the MKB
+walk and AES-G primitives, but its `aacs_decrypt_unit` (Blu-ray 6144-byte aligned unit)
+does not apply to HD DVD's 2048-byte packs. See
+[Advanced §9.9 through §9.14](09_aacs.md) for the porting boundary. No
+decryptor and no keys are in this repository.
