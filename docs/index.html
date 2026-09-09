@@ -81,12 +81,12 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="05_manifest_hdi.html">5. Manifest, markup, script (HDi)</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="05_manifest_hdi.html#implementation-gate-closed">5.0 Implementation gate (CLOSED)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_manifest_hdi.html#scope-closed">5.0 Scope (CLOSED)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="05_manifest_hdi.html#manifest-xmf">5.1 Manifest: <code class="docutils literal notranslate"><span class="pre">.xmf</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="05_manifest_hdi.html#markup-xmu">5.2 Markup: <code class="docutils literal notranslate"><span class="pre">.xmu</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="05_manifest_hdi.html#script">5.3 Script</a></li>
 <li class="toctree-l2"><a class="reference internal" href="05_manifest_hdi.html#runtime-patent-fig-50-steps-67">5.4 Runtime (patent FIG.50 steps 6–7)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="05_manifest_hdi.html#what-is-specified-vs-what-blocks-the-gate">5.5 What is specified vs what blocks the gate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_manifest_hdi.html#what-is-specified-vs-out-of-scope">5.5 What is specified vs out of scope</a></li>
 <li class="toctree-l2"><a class="reference internal" href="05_manifest_hdi.html#remaining-spec-work-no-firmware">5.6 Remaining spec work (no firmware)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="05_manifest_hdi.html#file-cache-size">5.7 File Cache <code class="docutils literal notranslate"><span class="pre">&#64;size</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="05_manifest_hdi.html#persistent-storage-uris-script">5.8 Persistent storage URIs (script)</a></li>
@@ -296,15 +296,13 @@
              
   <section id="hd-dvd-video-advanced-content-format-specification">
 <h1>HD DVD-Video Advanced Content Format Specification<a class="headerlink" href="#hd-dvd-video-advanced-content-format-specification" title="Link to this heading"></a></h1>
-<p>A complete, implementable specification of the <strong>HD DVD-Video Advanced Content</strong>
-disc format (the “Category 2” / HDi format used by nearly all retail HD DVDs):
-its filesystem, on-disc structures, navigation model, interactive engine,
-stream layout, and copy-protection layout. An engineer can build a player (for
-example a VLC input module backed by a new <code class="docutils literal notranslate"><span class="pre">libhddvd</span></code>) from these sheets alone,
-without the unpublished DVD Forum books. There is no program-chain, cell, or
-navigation-command VM. Advanced Content replaces all of that with an XML playlist
-and an interactive application engine (HDi). Standard Content (the older,
-DVD-Video-like Category 1 mode) is out of scope.</p>
+<p>A specification of the <strong>HD DVD-Video Advanced Content</strong> disc format (Category 2 /
+HDi, used by nearly all retail HD DVDs): filesystem, on-disc structures,
+navigation model, interactive engine, stream layout, and copy-protection layout.
+The unpublished DVD Forum books are not required to read these sheets. There is
+no program-chain, cell, or navigation-command VM. Advanced Content replaces all
+of that with an XML playlist and an interactive application engine (HDi).
+Standard Content (the older, DVD-Video-like Category 1 mode) is out of scope.</p>
 <p><strong>How this was reconstructed, and how to read a claim.</strong> Most of the format was
 never published, so it was recovered from three kinds of source, each fact stated
 with its evidence: <strong>primary specifications</strong> (Toshiba patents, the AACS HD DVD
@@ -318,24 +316,24 @@ carries a citation <code class="docutils literal notranslate"><span class="pre">
 artifact) and an evidence grade: <strong>VERIFIED / INFERRED / OPEN / UNCLOSEABLE / OUT</strong>.
 See the <a class="reference internal" href="13_references.html"><span class="std std-doc">reference list</span></a>. OPEN/UNCLOSEABLE items are collected in
 <a class="reference internal" href="11_gaps.html"><span class="std std-doc">the gap register</span></a>. None is on the critical path to playback.</p>
-<p><strong>Printing.</strong> This site is also built as a single printable page (Sphinx
-<code class="docutils literal notranslate"><span class="pre">singlehtml</span></code>, <code class="docutils literal notranslate"><span class="pre">docs/_build/singlehtml/index.html</span></code>) containing every sheet in order,
-suitable for print-to-PDF.</p>
-<section id="prior-art-and-status">
-<h2>Prior art and status<a class="headerlink" href="#prior-art-and-status" title="Link to this heading"></a></h2>
-<p><strong>No open-source HD DVD player exists.</strong> VLC, Kodi and xine have never implemented
-Advanced Content / HDi. The proprietary players that once did (WinDVD 9,
+<p><strong>Print and EPUB.</strong> The whole specification is one document:
+<a href="print/index.html">print this site</a>
+(browser print-to-PDF) or download
+<a href="HD-DVD-Advanced-Content.epub">HD-DVD-Advanced-Content.epub</a>.</p>
+<section id="status-of-public-sources">
+<h2>Status of public sources<a class="headerlink" href="#status-of-public-sources" title="Link to this heading"></a></h2>
+<p>No published open implementation of Advanced Content / HDi is known. VLC, Kodi and
+xine have never implemented it. The proprietary players that once did (WinDVD 9,
 PowerDVD 7 Ultra, ArcSoft TotalMedia Theatre) are discontinued, fail on modern
-Windows, and <strong>cannot open menus from an ISO or folder</strong>. They drove a physical
-disc through a licensed drive. A player built from this spec would be the first
-able to play HD DVD Advanced Content from an image.
+Windows, and <strong>cannot open menus from an ISO or folder</strong>. They required a physical
+disc in a licensed drive.
 <code class="docutils literal notranslate"><span class="pre">[20]</span></code></p>
-<p><strong>What is and is not buildable</strong> is enumerated in <code class="docutils literal notranslate"><span class="pre">11_gaps.md</span></code>. Sheets 01–10 fully
-specify Category 2 linear playback and PNG-button HDi menus (the gate). A <em>general</em>
-HDi engine additionally needs the unpublished iHD/Annex Z behavioural book (B1) and
-the full type-library IDL (B2, recoverable from the Scenarist MSI). Player firmware
-is not a usable source for those. The Toshiba update images are fully encrypted
-(entropy 7.997), verified in <code class="docutils literal notranslate"><span class="pre">11_gaps.md</span></code> §11.F.</p>
+<p>Sheets 01–10 specify Category 2 linear playback and on-disc HDi menus. A complete
+HDi runtime additionally needs the unpublished iHD/Annex Z behavioural book (B1)
+and the full type-library IDL (B2, recoverable from the Scenarist MSI). Player
+firmware is not a usable source for those. The Toshiba update images are fully
+encrypted (entropy 7.997), verified in <code class="docutils literal notranslate"><span class="pre">11_gaps.md</span></code> §11.F. Remaining gaps are in
+<code class="docutils literal notranslate"><span class="pre">11_gaps.md</span></code>.</p>
 <div class="toctree-wrapper compound">
 <p class="caption" role="heading"><span class="caption-text">Specification</span></p>
 <ul>
@@ -377,12 +375,12 @@ is not a usable source for those. The Toshiba update images are fully encrypted
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="05_manifest_hdi.html">5. Manifest, markup, script (HDi)</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="05_manifest_hdi.html#implementation-gate-closed">5.0 Implementation gate (CLOSED)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_manifest_hdi.html#scope-closed">5.0 Scope (CLOSED)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="05_manifest_hdi.html#manifest-xmf">5.1 Manifest: <code class="docutils literal notranslate"><span class="pre">.xmf</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="05_manifest_hdi.html#markup-xmu">5.2 Markup: <code class="docutils literal notranslate"><span class="pre">.xmu</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="05_manifest_hdi.html#script">5.3 Script</a></li>
 <li class="toctree-l2"><a class="reference internal" href="05_manifest_hdi.html#runtime-patent-fig-50-steps-67">5.4 Runtime (patent FIG.50 steps 6–7)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="05_manifest_hdi.html#what-is-specified-vs-what-blocks-the-gate">5.5 What is specified vs what blocks the gate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_manifest_hdi.html#what-is-specified-vs-out-of-scope">5.5 What is specified vs out of scope</a></li>
 <li class="toctree-l2"><a class="reference internal" href="05_manifest_hdi.html#remaining-spec-work-no-firmware">5.6 Remaining spec work (no firmware)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="05_manifest_hdi.html#file-cache-size">5.7 File Cache <code class="docutils literal notranslate"><span class="pre">&#64;size</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="05_manifest_hdi.html#persistent-storage-uris-script">5.8 Persistent storage URIs (script)</a></li>
@@ -521,19 +519,16 @@ is not a usable source for those. The Toshiba update images are fully encrypted
 </tbody>
 </table>
 </section>
-<section id="library-gate-full-menus-not-first-picture">
-<h2>Library gate (full menus, not first picture)<a class="headerlink" href="#library-gate-full-menus-not-first-picture" title="Link to this heading"></a></h2>
-<p><strong>The library gate (<code class="docutils literal notranslate"><span class="pre">05_manifest_hdi.md</span></code> §5.0) is CLOSED.</strong> It existed to stop a
-pack-demuxer-only build being mistaken for a player. Category 2 discs are HDi
-products, so the Advanced Application engine is required, not optional. A reader
-can now build PNG-button on-disc menus from these sheets, so <code class="docutils literal notranslate"><span class="pre">libhddvd</span></code> may
-proceed, within the boundary of <code class="docutils literal notranslate"><span class="pre">11_gaps.md</span></code> (corpus fully specified; remaining
-work is B1 runtime glue, now specified from DOM2/SMIL/ECMA-327 in
-<code class="docutils literal notranslate"><span class="pre">12_hdi_scripting_abi.md</span></code>, and B2 parameter IDL with the type-library binary saved
-in the repo).</p>
-<p>On-disc menus (the gate): File Cache + ACA + Manifest + iHD markup + ECMAScript
-typelib + graphics plane over scaled main video + the playback API discs call.
-Network TLS / <code class="docutils literal notranslate"><span class="pre">.CER</span></code> and firmware reverse-engineering are out of the gate. ADV_PCK and
+<section id="scope">
+<h2>Scope<a class="headerlink" href="#scope" title="Link to this heading"></a></h2>
+<p>Category 2 discs are HDi titles, so the Advanced Application engine is part of
+the format, not an optional extra. Sheets 01–10 specify linear playback and
+on-disc menus for the retail corpus. Remaining items are in <code class="docutils literal notranslate"><span class="pre">11_gaps.md</span></code>: B1
+runtime glue (DOM2/SMIL/ECMA-327 in <code class="docutils literal notranslate"><span class="pre">12_hdi_scripting_abi.md</span></code>) and B2 parameter
+IDL (type-library binary in the repository).</p>
+<p>On-disc menus: File Cache + ACA + Manifest + iHD markup + ECMAScript typelib +
+graphics plane over scaled main video + the playback API discs call. Network TLS
+/ <code class="docutils literal notranslate"><span class="pre">.CER</span></code> and firmware reverse-engineering are out of scope. ADV_PCK and
 persistent-storage URI grammar are in.</p>
 </section>
 </section>

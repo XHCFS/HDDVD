@@ -1,6 +1,7 @@
 # Configuration file for the Sphinx documentation builder.
 # https://www.sphinx-doc.org/en/master/usage/configuration.html
 
+import sys
 from pathlib import Path
 import shutil
 
@@ -25,8 +26,9 @@ for _name in (
 
 project = "HD DVD Advanced Content"
 copyright = "Working specification"
-author = ""
+author = "HD DVD Advanced Content"
 release = "0.1"
+version = "0.1"
 
 extensions = [
     "myst_parser",
@@ -46,7 +48,15 @@ source_suffix = {
 }
 
 templates_path = ["_templates"]
-exclude_patterns = ["_build", "Thumbs.db", ".DS_Store", "search.html", "genindex.html"]
+exclude_patterns = [
+    "_build",
+    "Thumbs.db",
+    ".DS_Store",
+    "search.html",
+    "genindex.html",
+    "print",
+    "_mermaid_ink.py",
+]
 
 html_theme = "sphinx_rtd_theme"
 html_static_path = ["_static"]
@@ -68,3 +78,19 @@ html_theme_options = {
 html_context = {
     "display_github": False,
 }
+
+# Rasterise Mermaid so EPUB and print HTML keep the playback flowcharts.
+mermaid_cmd = sys.executable + " " + str(Path(__file__).resolve().parent / "_mermaid_ink.py")
+mermaid_cmd_shell = True
+mermaid_output_format = "svg"
+
+epub_basename = "HD-DVD-Advanced-Content"
+epub_title = "HD DVD-Video Advanced Content Format Specification"
+epub_author = "HD DVD Advanced Content"
+epub_publisher = "HD DVD Advanced Content"
+epub_language = "en"
+epub_theme = "epub"
+epub_show_urls = "footnote"
+epub_tocdepth = 3
+epub_tocdup = False
+epub_use_index = False

@@ -3,6 +3,7 @@ __pycache__/
 .venv/
 corpus/
 docs/_build/
+print/.doctrees/
 docs/.doctrees/
 docs/.buildinfo
 docs/.buildinfo.bak

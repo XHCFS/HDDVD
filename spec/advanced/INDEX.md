@@ -1,11 +1,9 @@
 # HD DVD-Video Advanced Content Format Specification
 
-A complete, implementable specification of the **HD DVD-Video Advanced Content**
-disc format (the "Category 2" / HDi format used by nearly all retail HD DVDs):
-its filesystem, on-disc structures, navigation model, interactive engine,
-stream layout, and copy-protection layout. It is written so an engineer can build
-a player, for example a VLC input module backed by a new library, from these
-sheets alone, without access to the unpublished DVD Forum books.
+A specification of the **HD DVD-Video Advanced Content** disc format (Category 2 /
+HDi, used by nearly all retail HD DVDs): filesystem, on-disc structures,
+navigation model, interactive engine, stream layout, and copy-protection layout.
+The unpublished DVD Forum books are not required to read these sheets.
 
 There is no program-chain (PGC), cell, or navigation-command VM here. Advanced
 Content replaces all of that with an XML playlist and an interactive application
@@ -25,7 +23,7 @@ kinds of source and states each fact with its evidence:
   example, "247/247 playlists" means the claim held for all 247 playlist files across
   the corpus. Reference [11].
 - **Reproducible checks.** Every quantitative claim is re-derived by a numbered
-  verification experiment, written **`e01` through `e20`**, that a reader can re-run.
+  verification experiment, written **`e01` through `e20`**.
   Reference [12].
 
 **How to read a claim.** Normative rules are stated in imperative English. Each
@@ -36,10 +34,9 @@ source), **OPEN** (a runtime guess would still be required), **UNCLOSEABLE** (ne
 material not publicly available), or **OUT** (out of scope). OPEN/UNCLOSEABLE items
 are collected in [11_gaps.md](11_gaps.md). None is on the critical path to playback.
 
-**Reading / printing.** Read online via the rendered site (`docs/_build/html/`), or
-as a single printable document via the single-page build (`docs/_build/singlehtml/`,
-`make singlehtml` in `docs/`). That build is one HTML page containing every sheet,
-suitable for print-to-PDF.
+**Reading / printing.** The HTML site is one sheet per page. The whole specification
+is also a single printable page (`make singlehtml` in `docs/`, served as `docs/print/`)
+and an EPUB (`make epub`, `docs/HD-DVD-Advanced-Content.epub`).
 
 
 | Sheet | What it specifies |
@@ -48,13 +45,13 @@ suitable for print-to-PDF.
 | [02_discid.md](02_discid.md) | `ADV_OBJ/DISCID.DAT` |
 | [03_playlist.md](03_playlist.md) | `VPLST$$$.XPL`: titles, clips, chapters, tracks |
 | [04_aca.md](04_aca.md) | `.ACA` archive |
-| [05_manifest_hdi.md](05_manifest_hdi.md) | Manifest, iHD, script. **Library gate.** |
+| [05_manifest_hdi.md](05_manifest_hdi.md) | Manifest, iHD, script |
 | [06_vti.md](06_vti.md) | `HVA00001.VTI`: Advanced VTSI, ATRI, EVOBI |
 | [07_map.md](07_map.md) | `.MAP` time map (seek) |
 | [08_evo.md](08_evo.md) | `.EVO` MPEG-2 PS, NV_PCK |
 | [09_aacs.md](09_aacs.md) | `ANY!` / `AAC!` overlay (format only; not a decryptor) |
 | [10_playback.md](10_playback.md) | Insert to designed menus to title to pack. §10.0 flow and §10.8 Q&A |
-| [11_gaps.md](11_gaps.md) | **What a C author still cannot build.** Gap register. |
+| [11_gaps.md](11_gaps.md) | Gap register |
 | [12_hdi_scripting_abi.md](12_hdi_scripting_abi.md) | HDi scripting host ABI: 106 typeinfos, 200 constants, full iHD XSD surface |
 | [13_references.md](13_references.md) | Numbered reference list. Every citation, live links. |
 
@@ -67,22 +64,21 @@ Authoritative XML schemas (DVD Forum 16 Jul 2006, v1.0; every retail playlist):
 - `spec/raw/adv_obj/v1.0/iHDstate.xsd`
 - `spec/raw/adv_obj/iHD_Scripting_API.txt` (106 typeinfos; names only)
 
-## Prior art and status
+## Status of public sources
 
-**No open-source HD DVD player exists.** VLC, Kodi and xine have never implemented
-Advanced Content / HDi. The proprietary players that once did (WinDVD 9,
+No published open implementation of Advanced Content / HDi is known. VLC, Kodi and
+xine have never implemented it. The proprietary players that once did (WinDVD 9,
 PowerDVD 7 Ultra, ArcSoft TotalMedia Theatre) are discontinued, fail on modern
-Windows, and **cannot open menus from an ISO or folder**. They drove a physical
-disc through a licensed drive. A player built from this spec would be the first
-able to play HD DVD Advanced Content from an image.
+Windows, and **cannot open menus from an ISO or folder**. They required a physical
+disc in a licensed drive.
 `[20]`
 
-**What is and is not buildable** is enumerated in `11_gaps.md`. Sheets 01–10 fully
-specify Category 2 linear playback and PNG-button HDi menus (the gate). A *general*
-HDi engine additionally needs the unpublished iHD/Annex Z behavioural book (B1) and
-the full type-library IDL (B2, recoverable from the Scenarist MSI). Player firmware
-is not a usable source for those. The Toshiba update images are fully encrypted
-(entropy 7.997), verified in `11_gaps.md` §11.F.
+Sheets 01–10 specify Category 2 linear playback and on-disc HDi menus. A complete
+HDi runtime additionally needs the unpublished iHD/Annex Z behavioural book (B1)
+and the full type-library IDL (B2, recoverable from the Scenarist MSI). Player
+firmware is not a usable source for those. The Toshiba update images are fully
+encrypted (entropy 7.997), verified in `11_gaps.md` §11.F. Remaining gaps are in
+[11_gaps.md](11_gaps.md).
 
 ## Conventions
 
@@ -99,41 +95,35 @@ is not a usable source for those. The Toshiba update images are fully encrypted
 | Citations | Inline `[n]` → numbered source in [13_references.md](13_references.md) (every entry a live/accessible link). Grades **VERIFIED/INFERRED/OPEN/UNCLOSEABLE/OUT** are evidence strength, not citations. |
 | Patent figures | What the drawings specify vs this corpus: `spec/clean/16_PATENT_FIGURES.md`. |
 
-## Library gate (CLOSED)
+## Scope
 
-The gate ([05](05_manifest_hdi.md) §5.0) exists to stop a *pack-demuxer-only*
-implementation being mistaken for an HD DVD player. Category 2 discs are HDi
-products (203/247 playlists ship a `PlaylistApplication`, 2529
-`ApplicationSegment`s, 3/119 boot a selector with no video until
-`IPlaylist.load`), so a demuxer without the Advanced Application engine is not
-this player.
+Category 2 discs are HDi titles (203/247 playlists ship a `PlaylistApplication`,
+2529 `ApplicationSegment`s, 3/119 boot a selector with no video until
+`IPlaylist.load`). Pack demux without the Advanced Application engine is not
+Category 2.
 
-**The gate is met. A reader can build PNG-button on-disc menus from these
-sheets, so `libhddvd` may proceed.** Build within the boundary of
-[11_gaps.md](11_gaps.md): the corpus (linear playback and menus) is fully
-specified. Remaining work for a *general* engine is B1 runtime glue (now specified
-from published DOM2/SMIL/ECMA-327 in [12](12_hdi_scripting_abi.md) §12.4) and B2
-parameter IDL (the type-library binary is bundled). This is a specification, not an
-implementation.
+Sheets 01–10 specify linear playback and on-disc menus for the retail corpus.
+Remaining work for a complete HDi runtime is B1 (DOM2/SMIL/ECMA-327 in
+[12](12_hdi_scripting_abi.md) §12.4) and B2 parameter IDL (type-library binary
+bundled). See [11_gaps.md](11_gaps.md).
 
-On-disc menus (the gate) are: File Cache + ACA + Manifest + iHD markup
-(layout / style / state / timing) + ECMAScript typelib + graphics plane over
-scaled main video + the playback API discs actually call. Network TLS / `.CER`
-and firmware reverse-engineering are **out** of the gate. ADV_PCK concat,
-persistent-storage URI grammar, `jump` pause-at-destination, used cue paths,
-glyph/`anchor` fail-closed raster, src-over plane blend, `changeLayout` 8-tuple,
-`createTimer` / `ITimer`, `animate` keyframes, and `sync` hard/soft are
-specified ([05](05_manifest_hdi.md) §5.3 / §5.9, [08](08_evo.md) §8.6,
+On-disc menus are File Cache + ACA + Manifest + iHD markup (layout / style /
+state / timing) + ECMAScript typelib + graphics plane over scaled main video +
+the playback API discs actually call. Network TLS / `.CER` and firmware
+reverse-engineering are **out of scope**. ADV_PCK concat, persistent-storage URI
+grammar, `jump` pause-at-destination, used cue paths, glyph/`anchor` fail-closed
+raster, src-over plane blend, `changeLayout` 8-tuple, `createTimer` / `ITimer`,
+`animate` keyframes, and `sync` hard/soft are specified
+([05](05_manifest_hdi.md) §5.3 / §5.9, [08](08_evo.md) §8.6,
 [03](03_playlist.md) §3.5). Change those rules only if a disc contradicts them.
 Flow: [10](10_playback.md) §10.0 / §10.8.
 
-Uncloseable even after the gate: firmware vs FIG.50 (catalog
-http://hd-dvd.org/firmware.html is intermittent; no reverse-engineering), CHT bodies, VTUF
-`URS_NUM>0`, ATRI palettes, EVOBI+282 units, Category 3 / `HVSO` / `APLST`
-(0/120). See [10](10_playback.md) §10.7.
+Still uncloseable: firmware vs FIG.50 (catalog
+http://hd-dvd.org/firmware.html is intermittent; no reverse-engineering), CHT
+bodies, VTUF `URS_NUM>0`, ATRI palettes, EVOBI+282 units, Category 3 / `HVSO` /
+`APLST` (0/120). See [10](10_playback.md) §10.7.
 
-Adversarial implementer pass (what is not a C struct, remaining holes):
-`spec/clean/15_ADVERSARIAL_QUESTIONS.md`.
+Open questions that are not C structs: `spec/clean/15_ADVERSARIAL_QUESTIONS.md`.
 
 ## Verification status (final)
 
@@ -145,5 +135,5 @@ VTI 119 / `ADVANCED-VTS` / VERN 0x0010 / `VTS_CAT`=2 / `VTSI_EA`; MAP 2421 / mag
 `TMAP_EA`; ACA 97 files·885 members·magic; typelib 106 typeinfos·954 names; ATRI 1131;
 EVOBI 2431; `sync` 2120·304·105; ApplicationSegment 2529; PlaylistApplication 203;
 AACS BAK 104 (5 with `MKBRECORDABLE`); EVO pack framing + §8.7 stream routing on disc.
-All matched. Remaining OPEN items ([11_gaps.md](11_gaps.md)) are off the build path.
+All matched. Remaining OPEN items ([11_gaps.md](11_gaps.md)) are off the playback path.
 Every factual line carries a numbered citation to a live source ([13_references.md](13_references.md)).

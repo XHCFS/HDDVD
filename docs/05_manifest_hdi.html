@@ -82,12 +82,12 @@
 </ul>
 </li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">5. Manifest, markup, script (HDi)</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#implementation-gate-closed">5.0 Implementation gate (CLOSED)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#scope-closed">5.0 Scope (CLOSED)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#manifest-xmf">5.1 Manifest: <code class="docutils literal notranslate"><span class="pre">.xmf</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#markup-xmu">5.2 Markup: <code class="docutils literal notranslate"><span class="pre">.xmu</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#script">5.3 Script</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#runtime-patent-fig-50-steps-67">5.4 Runtime (patent FIG.50 steps 6–7)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#what-is-specified-vs-what-blocks-the-gate">5.5 What is specified vs what blocks the gate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#what-is-specified-vs-out-of-scope">5.5 What is specified vs out of scope</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#remaining-spec-work-no-firmware">5.6 Remaining spec work (no firmware)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#file-cache-size">5.7 File Cache <code class="docutils literal notranslate"><span class="pre">&#64;size</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#persistent-storage-uris-script">5.8 Persistent storage URIs (script)</a></li>
@@ -298,17 +298,16 @@
   <section id="manifest-markup-script-hdi">
 <h1>5. Manifest, markup, script (HDi)<a class="headerlink" href="#manifest-markup-script-hdi" title="Link to this heading"></a></h1>
 <p><em>Counts written “N/120”, “N/119”, “on N discs”, “listings”, or as named discs are over the reference corpus of 120 archived retail HD DVD images [11]. <code class="docutils literal notranslate"><span class="pre">eNN</span></code> are the reproducible verification experiments [12].</em></p>
-<p>This layer is required for a Category 2 player. Linear titles without it are a
-research demuxer. The implementation gate (§5.0) is <strong>closed</strong>. The menu engine
-below is specified end to end.</p>
-<section id="implementation-gate-closed">
-<h2>5.0 Implementation gate (CLOSED)<a class="headerlink" href="#implementation-gate-closed" title="Link to this heading"></a></h2>
-<p>The gate is <strong>met</strong>. <code class="docutils literal notranslate"><span class="pre">libhddvd</span></code> may proceed. The test was that a reader of this sheet (plus <a class="reference internal" href="03_playlist.html"><span class="std std-doc">03</span></a>,
-<a class="reference internal" href="04_aca.html"><span class="std std-doc">04</span></a>, <a class="reference internal" href="08_evo.html"><span class="std std-doc">08</span></a>, the v1.0 XSDs, and <code class="docutils literal notranslate"><span class="pre">iHD_Scripting_API.txt</span></code>)
-can implement on-disc menus without guessing. That reader test holds for
-PNG-button Category 2 menus. Glyph/<code class="docutils literal notranslate"><span class="pre">anchor</span></code>/plane-alpha are fail-closed in
-§5.9 (OpenType + XSL-FO names + patent overlay). They are not a second gate.</p>
-<p><strong>In the gate.</strong> A designed retail menu must work offline:</p>
+<p>HDi markup, script, and File Cache are part of Category 2. Linear video without
+them is not Advanced Content. The surface below is specified end to end.</p>
+<section id="scope-closed">
+<h2>5.0 Scope (CLOSED)<a class="headerlink" href="#scope-closed" title="Link to this heading"></a></h2>
+<p>On-disc menus are specified: this sheet plus <a class="reference internal" href="03_playlist.html"><span class="std std-doc">03</span></a>,
+<a class="reference internal" href="04_aca.html"><span class="std std-doc">04</span></a>, <a class="reference internal" href="08_evo.html"><span class="std std-doc">08</span></a>, the v1.0 XSDs, and <code class="docutils literal notranslate"><span class="pre">iHD_Scripting_API.txt</span></code>.
+That holds for PNG-button Category 2 menus. Glyph/<code class="docutils literal notranslate"><span class="pre">anchor</span></code>/plane-alpha are
+fail-closed in §5.9 (OpenType + XSL-FO names + patent overlay). They are not a
+separate gap.</p>
+<p><strong>In scope.</strong> A designed retail menu works offline:</p>
 <ol class="arabic simple">
 <li><p>FIG.50 File Cache load of Manifest, markup, script, fonts, images, TMAPs.</p></li>
 <li><p>ACA extract, including <code class="docutils literal notranslate"><span class="pre">0xff</span></code> members by offset/length.</p></li>
@@ -328,7 +327,7 @@ be absent from that EVO; see <a class="reference internal" href="08_evo.html"><s
 <li><p>Persistent-storage URI grammar for apps that <code class="docutils literal notranslate"><span class="pre">IPlaylist.load</span></code> a P-storage
 <code class="docutils literal notranslate"><span class="pre">VPLST</span></code> (PREMONITION).</p></li>
 </ol>
-<p><strong>Out of the gate:</strong> network TLS / <code class="docutils literal notranslate"><span class="pre">.CER</span></code> / <code class="docutils literal notranslate"><span class="pre">IHTTPClient</span></code>, Category 1 PCI
+<p><strong>Out of scope:</strong> network TLS / <code class="docutils literal notranslate"><span class="pre">.CER</span></code> / <code class="docutils literal notranslate"><span class="pre">IHTTPClient</span></code>, Category 1 PCI
 buttons, firmware RE, AACS video decrypt (Archive.org packs are clear; licensed
 players still need <a class="reference internal" href="09_aacs.html"><span class="std std-doc">09</span></a> later).</p>
 <p><strong>Status:</strong> File formats, <code class="docutils literal notranslate"><span class="pre">IPlaylist.load</span></code>, P-storage <strong>script</strong> URI
@@ -336,7 +335,7 @@ players still need <a class="reference internal" href="09_aacs.html"><span class
 <code class="docutils literal notranslate"><span class="pre">jump</span></code>/<code class="docutils literal notranslate"><span class="pre">elapsedTime</span></code> types, PNG-button + <code class="docutils literal notranslate"><span class="pre">&lt;p&gt;</span></code>-in-<code class="docutils literal notranslate"><span class="pre">div</span></code> raster (§5.9), File
 Cache <code class="docutils literal notranslate"><span class="pre">&#64;size</span></code> / 64 MB fail-closed / wipe-on-<code class="docutils literal notranslate"><span class="pre">load</span></code>, and ADV_PCK concat
 (<a class="reference internal" href="08_evo.html"><span class="std std-doc">08</span></a> §8.6, <code class="docutils literal notranslate"><span class="pre">e16</span></code>) are specified (<code class="docutils literal notranslate"><span class="pre">e15</span></code>/<code class="docutils literal notranslate"><span class="pre">e17</span></code>, §5.7–5.8).
-<strong>Gate met.</strong> <code class="docutils literal notranslate"><span class="pre">jump</span></code>’s boolean, cue XPath, glyph/<code class="docutils literal notranslate"><span class="pre">anchor</span></code>, and plane alpha
+<code class="docutils literal notranslate"><span class="pre">jump</span></code>’s boolean, cue XPath, glyph/<code class="docutils literal notranslate"><span class="pre">anchor</span></code>, and plane alpha
 are fail-closed in §5.3 / §5.9. Change those rules only if a disc contradicts
 them.</p>
 <p><code class="docutils literal notranslate"><span class="pre">[5,</span> <span class="pre">6,</span> <span class="pre">11,</span> <span class="pre">12]</span></code></p>
@@ -575,13 +574,13 @@ https://web.archive.org/web/20231210144123/http://hd-dvd.org/firmware.html
 OEM notes cover HDMI/network extras, not the HDi API. Cross-check FIG.50 against
 XPL/DISCID instead (<a class="reference internal" href="10_playback.html"><span class="std std-doc">10</span></a> §10.7).</p>
 </section>
-<section id="what-is-specified-vs-what-blocks-the-gate">
-<h2>5.5 What is specified vs what blocks the gate<a class="headerlink" href="#what-is-specified-vs-what-blocks-the-gate" title="Link to this heading"></a></h2>
+<section id="what-is-specified-vs-out-of-scope">
+<h2>5.5 What is specified vs out of scope<a class="headerlink" href="#what-is-specified-vs-out-of-scope" title="Link to this heading"></a></h2>
 <table class="docutils align-default">
 <thead>
 <tr class="row-odd"><th class="head"><p>Subsystem</p></th>
 <th class="head"><p>Sheet / source</p></th>
-<th class="head"><p>Gate</p></th>
+<th class="head"><p>Status</p></th>
 </tr>
 </thead>
 <tbody>

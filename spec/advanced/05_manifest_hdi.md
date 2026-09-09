@@ -3,19 +3,18 @@
 *Counts written "N/120", "N/119", "on N discs", "listings", or as named discs are over the reference corpus of 120 archived retail HD DVD images [11]. `eNN` are the reproducible verification experiments [12].*
 
 
-This layer is required for a Category 2 player. Linear titles without it are a
-research demuxer. The implementation gate (§5.0) is **closed**. The menu engine
-below is specified end to end.
+HDi markup, script, and File Cache are part of Category 2. Linear video without
+them is not Advanced Content. The surface below is specified end to end.
 
-## 5.0 Implementation gate (CLOSED)
+## 5.0 Scope (CLOSED)
 
-The gate is **met**. `libhddvd` may proceed. The test was that a reader of this sheet (plus [03](03_playlist.md),
-[04](04_aca.md), [08](08_evo.md), the v1.0 XSDs, and `iHD_Scripting_API.txt`)
-can implement on-disc menus without guessing. That reader test holds for
-PNG-button Category 2 menus. Glyph/`anchor`/plane-alpha are fail-closed in
-§5.9 (OpenType + XSL-FO names + patent overlay). They are not a second gate.
+On-disc menus are specified: this sheet plus [03](03_playlist.md),
+[04](04_aca.md), [08](08_evo.md), the v1.0 XSDs, and `iHD_Scripting_API.txt`.
+That holds for PNG-button Category 2 menus. Glyph/`anchor`/plane-alpha are
+fail-closed in §5.9 (OpenType + XSL-FO names + patent overlay). They are not a
+separate gap.
 
-**In the gate.** A designed retail menu must work offline:
+**In scope.** A designed retail menu works offline:
 
 1. FIG.50 File Cache load of Manifest, markup, script, fonts, images, TMAPs.
 2. ACA extract, including `0xff` members by offset/length.
@@ -35,7 +34,7 @@ PNG-button Category 2 menus. Glyph/`anchor`/plane-alpha are fail-closed in
 9. Persistent-storage URI grammar for apps that `IPlaylist.load` a P-storage
    `VPLST` (PREMONITION).
 
-**Out of the gate:** network TLS / `.CER` / `IHTTPClient`, Category 1 PCI
+**Out of scope:** network TLS / `.CER` / `IHTTPClient`, Category 1 PCI
 buttons, firmware RE, AACS video decrypt (Archive.org packs are clear; licensed
 players still need [09](09_aacs.md) later).
 
@@ -44,7 +43,7 @@ players still need [09](09_aacs.md) later).
 `jump`/`elapsedTime` types, PNG-button + `<p>`-in-`div` raster (§5.9), File
 Cache `@size` / 64 MB fail-closed / wipe-on-`load`, and ADV_PCK concat
 ([08](08_evo.md) §8.6, `e16`) are specified (`e15`/`e17`, §5.7–5.8).
-**Gate met.** `jump`’s boolean, cue XPath, glyph/`anchor`, and plane alpha
+`jump`’s boolean, cue XPath, glyph/`anchor`, and plane alpha
 are fail-closed in §5.3 / §5.9. Change those rules only if a disc contradicts
 them.
 
@@ -233,9 +232,9 @@ https://web.archive.org/web/20231210144123/http://hd-dvd.org/firmware.html
 OEM notes cover HDMI/network extras, not the HDi API. Cross-check FIG.50 against
 XPL/DISCID instead ([10](10_playback.md) §10.7).
 
-## 5.5 What is specified vs what blocks the gate
+## 5.5 What is specified vs out of scope
 
-| Subsystem | Sheet / source | Gate |
+| Subsystem | Sheet / source | Status |
 |---|---|---|
 | PlaylistApplication / ApplicationSegment mapping, `zOrder`, `sync`, `autorun`, `language`/`appBlock` | [03](03_playlist.md); patents FIG.57/70 | specified |
 | `IPlaylist.load` full `file:///dvddisc/ADV_OBJ/VPLST$$$.XPL`; FIG.51 soft reset | this sheet; three `selector.aca/script.js` | specified |

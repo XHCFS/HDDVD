@@ -1,14 +1,12 @@
 # HD DVD-Video Advanced Content Format Specification
 
-A complete, implementable specification of the **HD DVD-Video Advanced Content**
-disc format (the "Category 2" / HDi format used by nearly all retail HD DVDs):
-its filesystem, on-disc structures, navigation model, interactive engine,
-stream layout, and copy-protection layout. An engineer can build a player (for
-example a VLC input module backed by a new `libhddvd`) from these sheets alone,
-without the unpublished DVD Forum books. There is no program-chain, cell, or
-navigation-command VM. Advanced Content replaces all of that with an XML playlist
-and an interactive application engine (HDi). Standard Content (the older,
-DVD-Video-like Category 1 mode) is out of scope.
+A specification of the **HD DVD-Video Advanced Content** disc format (Category 2 /
+HDi, used by nearly all retail HD DVDs): filesystem, on-disc structures,
+navigation model, interactive engine, stream layout, and copy-protection layout.
+The unpublished DVD Forum books are not required to read these sheets. There is
+no program-chain, cell, or navigation-command VM. Advanced Content replaces all
+of that with an XML playlist and an interactive application engine (HDi).
+Standard Content (the older, DVD-Video-like Category 1 mode) is out of scope.
 
 **How this was reconstructed, and how to read a claim.** Most of the format was
 never published, so it was recovered from three kinds of source, each fact stated
@@ -24,25 +22,25 @@ artifact) and an evidence grade: **VERIFIED / INFERRED / OPEN / UNCLOSEABLE / OU
 See the [reference list](13_references.md). OPEN/UNCLOSEABLE items are collected in
 [the gap register](11_gaps.md). None is on the critical path to playback.
 
-**Printing.** This site is also built as a single printable page (Sphinx
-`singlehtml`, `docs/_build/singlehtml/index.html`) containing every sheet in order,
-suitable for print-to-PDF.
-## Prior art and status
+**Print and EPUB.** The whole specification is one document:
+<a href="print/index.html">print this site</a>
+(browser print-to-PDF) or download
+<a href="HD-DVD-Advanced-Content.epub">HD-DVD-Advanced-Content.epub</a>.
+## Status of public sources
 
-**No open-source HD DVD player exists.** VLC, Kodi and xine have never implemented
-Advanced Content / HDi. The proprietary players that once did (WinDVD 9,
+No published open implementation of Advanced Content / HDi is known. VLC, Kodi and
+xine have never implemented it. The proprietary players that once did (WinDVD 9,
 PowerDVD 7 Ultra, ArcSoft TotalMedia Theatre) are discontinued, fail on modern
-Windows, and **cannot open menus from an ISO or folder**. They drove a physical
-disc through a licensed drive. A player built from this spec would be the first
-able to play HD DVD Advanced Content from an image.
+Windows, and **cannot open menus from an ISO or folder**. They required a physical
+disc in a licensed drive.
 `[20]`
 
-**What is and is not buildable** is enumerated in `11_gaps.md`. Sheets 01–10 fully
-specify Category 2 linear playback and PNG-button HDi menus (the gate). A *general*
-HDi engine additionally needs the unpublished iHD/Annex Z behavioural book (B1) and
-the full type-library IDL (B2, recoverable from the Scenarist MSI). Player firmware
-is not a usable source for those. The Toshiba update images are fully encrypted
-(entropy 7.997), verified in `11_gaps.md` §11.F.
+Sheets 01–10 specify Category 2 linear playback and on-disc HDi menus. A complete
+HDi runtime additionally needs the unpublished iHD/Annex Z behavioural book (B1)
+and the full type-library IDL (B2, recoverable from the Scenarist MSI). Player
+firmware is not a usable source for those. The Toshiba update images are fully
+encrypted (entropy 7.997), verified in `11_gaps.md` §11.F. Remaining gaps are in
+`11_gaps.md`.
 
 ```{toctree}
 :maxdepth: 2
@@ -85,18 +83,15 @@ Authoritative XML schemas (DVD Forum 16 Jul 2006, v1.0; every retail playlist):
 | Version word | `VERN` `0x0010` = specification 1.0. |
 | Drift | When a patent identifier disagrees with the disc, **the disc wins**. Recorded in-place. |
 
-## Library gate (full menus, not first picture)
+## Scope
 
-**The library gate (`05_manifest_hdi.md` §5.0) is CLOSED.** It existed to stop a
-pack-demuxer-only build being mistaken for a player. Category 2 discs are HDi
-products, so the Advanced Application engine is required, not optional. A reader
-can now build PNG-button on-disc menus from these sheets, so `libhddvd` may
-proceed, within the boundary of `11_gaps.md` (corpus fully specified; remaining
-work is B1 runtime glue, now specified from DOM2/SMIL/ECMA-327 in
-`12_hdi_scripting_abi.md`, and B2 parameter IDL with the type-library binary saved
-in the repo).
+Category 2 discs are HDi titles, so the Advanced Application engine is part of
+the format, not an optional extra. Sheets 01–10 specify linear playback and
+on-disc menus for the retail corpus. Remaining items are in `11_gaps.md`: B1
+runtime glue (DOM2/SMIL/ECMA-327 in `12_hdi_scripting_abi.md`) and B2 parameter
+IDL (type-library binary in the repository).
 
-On-disc menus (the gate): File Cache + ACA + Manifest + iHD markup + ECMAScript
-typelib + graphics plane over scaled main video + the playback API discs call.
-Network TLS / `.CER` and firmware reverse-engineering are out of the gate. ADV_PCK and
+On-disc menus: File Cache + ACA + Manifest + iHD markup + ECMAScript typelib +
+graphics plane over scaled main video + the playback API discs call. Network TLS
+/ `.CER` and firmware reverse-engineering are out of scope. ADV_PCK and
 persistent-storage URI grammar are in.
