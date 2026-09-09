@@ -1,0 +1,1178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns="http://www.dvdforum.org/2005/ihd#style" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.dvdforum.org/2005/ihd#style" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<!-- (C)Copyright 2005-2007 The DVD Forum*. All rights reserved. -->
+	<!-- This schema was developed by Sonic Solutions (www.sonic.com) -->
+	<!-- Modifications contributed by Toshiba and Microsoft -->
+	<!--Schema version:  5 Nov 2007  (595)-->
+	<!--HD-DVD Specification version: 1.1-->
+	<xs:attributeGroup name="all-style-attributes">
+		<xs:attribute ref="anchor"/>
+		<xs:attribute ref="backgroundColor"/>
+		<xs:attribute ref="backgroundFrame"/>
+		<xs:attribute ref="backgroundImage"/>
+		<xs:attribute ref="backgroundPositionHorizontal"/>
+		<xs:attribute ref="backgroundPositionVertical"/>
+		<xs:attribute ref="backgroundRepeat"/>
+		<xs:attribute ref="blockProgressionDimension"/>
+		<xs:attribute ref="border"/>
+		<xs:attribute ref="borderAfter"/>
+		<xs:attribute ref="borderBefore"/>
+		<xs:attribute ref="borderEnd"/>
+		<xs:attribute ref="borderStart"/>
+		<xs:attribute ref="breakAfter"/>
+		<xs:attribute ref="breakBefore"/>
+		<xs:attribute ref="color"/>
+		<xs:attribute ref="contentHeight"/>
+		<xs:attribute ref="contentWidth"/>
+		<xs:attribute ref="crop"/>
+		<xs:attribute ref="direction"/>
+		<xs:attribute ref="display"/>
+		<xs:attribute ref="displayAlign"/>
+		<xs:attribute ref="flip"/>
+		<xs:attribute ref="font"/>
+		<xs:attribute ref="fontSize"/>
+		<xs:attribute ref="fontStyle"/>
+		<xs:attribute ref="height"/>
+		<xs:attribute ref="inlineProgressionDimension"/>
+		<xs:attribute ref="linefeedTreatment"/>
+		<xs:attribute ref="lineHeight"/>
+		<xs:attribute ref="navIndex"/>
+		<xs:attribute ref="navDown"/>
+		<xs:attribute ref="navLeft"/>
+		<xs:attribute ref="navLeftDown"/>
+		<xs:attribute ref="navLeftUp"/>
+		<xs:attribute ref="navRight"/>
+		<xs:attribute ref="navRightDown"/>
+		<xs:attribute ref="navRightUp"/>
+		<xs:attribute ref="navUp"/>
+		<xs:attribute ref="opacity"/>
+		<xs:attribute ref="padding"/>
+		<xs:attribute ref="paddingAfter"/>
+		<xs:attribute ref="paddingBefore"/>
+		<xs:attribute ref="paddingEnd"/>
+		<xs:attribute ref="paddingStart"/>
+		<xs:attribute ref="position"/>
+		<xs:attribute ref="scaling"/>
+		<xs:attribute ref="suppressAtLineBreak"/>
+		<xs:attribute ref="textAlign"/>
+		<xs:attribute ref="textAltitude"/>
+		<xs:attribute ref="textDepth"/>
+		<xs:attribute ref="textIndent"/>
+		<xs:attribute ref="visibility"/>
+		<xs:attribute ref="whiteSpaceCollapse"/>
+		<xs:attribute ref="whiteSpaceTreatment"/>
+		<xs:attribute ref="width"/>
+		<xs:attribute ref="wrapOption"/>
+		<xs:attribute ref="writingMode"/>
+		<xs:attribute ref="x"/>
+		<xs:attribute ref="y"/>
+		<xs:attribute ref="zIndex"/>
+	</xs:attributeGroup>
+	<xs:attributeGroup name="animatable-style-attributes">
+		<xs:attribute ref="anchor"/>
+		<xs:attribute ref="backgroundColor"/>
+		<xs:attribute ref="backgroundFrame"/>
+		<xs:attribute ref="backgroundImage"/>
+		<xs:attribute ref="backgroundPositionHorizontal"/>
+		<xs:attribute ref="backgroundPositionVertical"/>
+		<xs:attribute ref="blockProgressionDimension"/>
+		<xs:attribute ref="border"/>
+		<xs:attribute ref="borderAfter"/>
+		<xs:attribute ref="borderBefore"/>
+		<xs:attribute ref="borderEnd"/>
+		<xs:attribute ref="borderStart"/>
+		<xs:attribute ref="color"/>
+		<xs:attribute ref="contentHeight"/>
+		<xs:attribute ref="contentWidth"/>
+		<xs:attribute ref="crop"/>
+		<xs:attribute ref="display"/>
+		<xs:attribute ref="displayAlign"/>
+		<xs:attribute ref="flip"/>
+		<xs:attribute ref="font"/>
+		<xs:attribute ref="fontSize"/>
+		<xs:attribute ref="fontStyle"/>
+		<xs:attribute ref="height"/>
+		<xs:attribute ref="inlineProgressionDimension"/>
+		<xs:attribute ref="lineHeight"/>
+		<xs:attribute ref="navIndex"/>
+		<xs:attribute ref="navDown"/>
+		<xs:attribute ref="navLeft"/>
+		<xs:attribute ref="navLeftDown"/>
+		<xs:attribute ref="navLeftUp"/>
+		<xs:attribute ref="navRight"/>
+		<xs:attribute ref="navRightDown"/>
+		<xs:attribute ref="navRightUp"/>
+		<xs:attribute ref="navUp"/>
+		<xs:attribute ref="opacity"/>
+		<xs:attribute ref="padding"/>
+		<xs:attribute ref="paddingAfter"/>
+		<xs:attribute ref="paddingBefore"/>
+		<xs:attribute ref="paddingEnd"/>
+		<xs:attribute ref="paddingStart"/>
+		<xs:attribute ref="textAlign"/>
+		<xs:attribute ref="textAltitude"/>
+		<xs:attribute ref="textDepth"/>
+		<xs:attribute ref="textIndent"/>
+		<xs:attribute ref="visibility"/>
+		<xs:attribute ref="width"/>
+		<xs:attribute ref="wrapOption"/>
+		<xs:attribute ref="x"/>
+		<xs:attribute ref="y"/>
+		<xs:attribute ref="zIndex"/>
+	</xs:attributeGroup>
+	<xs:attributeGroup name="area-style-attributes">
+		<xs:attributeGroup ref="content-element-attributes"/>
+		<xs:attributeGroup ref="block-element-attributes"/>
+		<xs:attributeGroup ref="navigation-attributes"/>
+		<xs:attribute ref="backgroundFrame"/>
+		<xs:attribute ref="backgroundImage"/>
+		<xs:attribute ref="backgroundPositionHorizontal"/>
+		<xs:attribute ref="backgroundPositionVertical"/>
+		<xs:attribute ref="backgroundRepeat"/>
+		<xs:attribute ref="color"/>
+		<xs:attribute ref="contentHeight"/>
+		<xs:attribute ref="contentWidth"/>
+		<xs:attribute ref="crop"/>
+		<xs:attribute ref="flip"/>
+		<xs:attribute ref="scaling"/>
+		<xs:attribute ref="blockProgressionDimension"/>
+		<xs:attribute ref="height"/>
+		<xs:attribute ref="inlineProgressionDimension"/>
+		<xs:attribute ref="width"/>
+	</xs:attributeGroup>
+	<xs:attributeGroup name="br-style-attributes">
+		<xs:attributeGroup ref="content-element-attributes"/>
+		<xs:attributeGroup ref="inline-element-attributes"/>
+	</xs:attributeGroup>
+	<xs:attributeGroup name="body-style-attributes">
+		<xs:attributeGroup ref="content-element-attributes"/>
+		<xs:attributeGroup ref="block-element-attributes"/>
+		<xs:attributeGroup ref="inheritable-inline-attributes"/>
+		<xs:attribute ref="backgroundFrame"/>
+		<xs:attribute ref="backgroundImage"/>
+		<xs:attribute ref="backgroundPositionHorizontal"/>
+		<xs:attribute ref="backgroundPositionVertical"/>
+		<xs:attribute ref="backgroundRepeat"/>
+		<xs:attribute ref="contentHeight"/>
+		<xs:attribute ref="contentWidth"/>
+		<xs:attribute ref="crop"/>
+		<xs:attribute ref="flip"/>
+		<xs:attribute ref="scaling"/>
+		<xs:attribute ref="writingMode"/>
+		<xs:attribute ref="blockProgressionDimension"/>
+		<xs:attribute ref="height"/>
+		<xs:attribute ref="inlineProgressionDimension"/>
+		<xs:attribute ref="width"/>
+	</xs:attributeGroup>
+	<xs:attributeGroup name="button-style-attributes">
+		<xs:attributeGroup ref="content-element-attributes"/>
+		<xs:attributeGroup ref="block-element-attributes"/>
+		<xs:attributeGroup ref="inline-element-attributes"/>
+		<xs:attributeGroup ref="navigation-attributes"/>
+		<xs:attributeGroup ref="positioned-element-attributes"/>
+		<xs:attribute ref="backgroundFrame"/>
+		<xs:attribute ref="backgroundImage"/>
+		<xs:attribute ref="backgroundPositionHorizontal"/>
+		<xs:attribute ref="backgroundPositionVertical"/>
+		<xs:attribute ref="backgroundRepeat"/>
+		<xs:attribute ref="contentHeight"/>
+		<xs:attribute ref="contentWidth"/>
+		<xs:attribute ref="crop"/>
+		<xs:attribute ref="scaling"/>
+	</xs:attributeGroup>
+	<xs:attributeGroup name="div-style-attributes">
+		<xs:attributeGroup ref="content-element-attributes"/>
+		<xs:attributeGroup ref="positioned-element-attributes"/>
+		<xs:attributeGroup ref="block-element-attributes"/>
+		<xs:attributeGroup ref="inheritable-inline-attributes"/>
+		<xs:attribute ref="backgroundFrame"/>
+		<xs:attribute ref="backgroundImage"/>
+		<xs:attribute ref="backgroundPositionHorizontal"/>
+		<xs:attribute ref="backgroundPositionVertical"/>
+		<xs:attribute ref="backgroundRepeat"/>
+		<xs:attribute ref="contentHeight"/>
+		<xs:attribute ref="contentWidth"/>
+		<xs:attribute ref="crop"/>
+		<xs:attribute ref="scaling"/>
+		<xs:attribute ref="writingMode"/>
+	</xs:attributeGroup>
+	<xs:attributeGroup name="input-style-attributes">
+		<xs:attributeGroup ref="content-element-attributes"/>
+		<xs:attributeGroup ref="block-element-attributes"/>
+		<xs:attributeGroup ref="inline-element-attributes"/>
+		<xs:attributeGroup ref="navigation-attributes"/>
+		<xs:attribute ref="backgroundFrame"/>
+		<xs:attribute ref="backgroundImage"/>
+		<xs:attribute ref="backgroundPositionHorizontal"/>
+		<xs:attribute ref="backgroundPositionVertical"/>
+		<xs:attribute ref="backgroundRepeat"/>
+		<xs:attribute ref="blockProgressionDimension"/>
+		<xs:attribute ref="color"/>
+		<xs:attribute ref="contentHeight"/>
+		<xs:attribute ref="contentWidth"/>
+		<xs:attribute ref="crop"/>
+		<xs:attribute ref="direction"/>
+		<xs:attribute ref="flip"/>
+		<xs:attribute ref="font"/>
+		<xs:attribute ref="fontSize"/>
+		<xs:attribute ref="fontStyle"/>
+		<xs:attribute ref="height"/>
+		<xs:attribute ref="inlineProgressionDimension"/>
+		<xs:attribute ref="linefeedTreatment"/>
+		<xs:attribute ref="lineHeight"/>
+		<xs:attribute ref="scaling"/>
+		<xs:attribute ref="suppressAtLineBreak"/>
+		<xs:attribute ref="textAlign"/>
+		<xs:attribute ref="textAltitude"/>
+		<xs:attribute ref="textDepth"/>
+		<xs:attribute ref="textIndent"/>
+		<xs:attribute ref="whiteSpaceCollapse"/>
+		<xs:attribute ref="whiteSpaceTreatment"/>
+		<xs:attribute ref="width"/>
+		<xs:attribute ref="wrapOption"/>
+		<xs:attribute ref="writingMode"/>
+	</xs:attributeGroup>
+	<xs:attributeGroup name="object-style-attributes">
+		<xs:attributeGroup ref="content-element-attributes"/>
+		<xs:attributeGroup ref="block-element-attributes"/>
+		<xs:attributeGroup ref="inline-element-attributes"/>
+		<xs:attributeGroup ref="positioned-element-attributes"/>
+		<xs:attribute ref="backgroundFrame"/>
+		<xs:attribute ref="backgroundImage"/>
+		<xs:attribute ref="backgroundPositionHorizontal"/>
+		<xs:attribute ref="backgroundPositionVertical"/>
+		<xs:attribute ref="backgroundRepeat"/>
+		<xs:attribute ref="contentHeight"/>
+		<xs:attribute ref="contentWidth"/>
+		<xs:attribute ref="crop"/>
+		<xs:attribute ref="scaling"/>
+	</xs:attributeGroup>
+	<xs:attributeGroup name="p-style-attributes">
+		<xs:attributeGroup ref="content-element-attributes"/>
+		<xs:attributeGroup ref="block-element-attributes"/>
+		<xs:attribute ref="color"/>
+		<xs:attribute ref="direction"/>
+		<xs:attribute ref="font"/>
+		<xs:attribute ref="fontSize"/>
+		<xs:attribute ref="fontStyle"/>
+		<xs:attribute ref="linefeedTreatment"/>
+		<xs:attribute ref="lineHeight"/>
+		<xs:attribute ref="textAlign"/>
+		<xs:attribute ref="textAltitude"/>
+		<xs:attribute ref="textDepth"/>
+		<xs:attribute ref="textIndent"/>
+		<xs:attribute ref="whiteSpaceCollapse"/>
+		<xs:attribute ref="whiteSpaceTreatment"/>
+		<xs:attribute ref="wrapOption"/>
+		<xs:attribute ref="blockProgressionDimension"/>
+		<xs:attribute ref="height"/>
+		<xs:attribute ref="inlineProgressionDimension"/>
+		<xs:attribute ref="width"/>
+	</xs:attributeGroup>
+	<xs:attributeGroup name="span-style-attributes">
+		<xs:attributeGroup ref="content-element-attributes"/>
+		<xs:attributeGroup ref="inline-element-attributes"/>
+		<xs:attribute ref="color"/>
+		<xs:attribute ref="direction"/>
+		<xs:attribute ref="font"/>
+		<xs:attribute ref="fontSize"/>
+		<xs:attribute ref="fontStyle"/>
+		<xs:attribute ref="linefeedTreatment"/>
+		<xs:attribute ref="suppressAtLineBreak"/>
+		<xs:attribute ref="textAltitude"/>
+		<xs:attribute ref="textDepth"/>
+		<xs:attribute ref="wrapOption"/>
+	</xs:attributeGroup>
+	<xs:attributeGroup name="content-element-attributes">
+		<xs:attribute ref="backgroundColor"/>
+		<xs:attribute ref="display"/>
+		<xs:attribute ref="opacity"/>
+		<xs:attribute ref="visibility"/>
+	</xs:attributeGroup>
+	<xs:attributeGroup name="block-element-attributes">
+		<xs:attribute ref="border"/>
+		<xs:attribute ref="borderAfter"/>
+		<xs:attribute ref="borderBefore"/>
+		<xs:attribute ref="borderEnd"/>
+		<xs:attribute ref="borderStart"/>
+		<xs:attribute ref="displayAlign"/>
+		<xs:attribute ref="padding"/>
+		<xs:attribute ref="paddingAfter"/>
+		<xs:attribute ref="paddingBefore"/>
+		<xs:attribute ref="paddingEnd"/>
+		<xs:attribute ref="paddingStart"/>
+	</xs:attributeGroup>
+	<xs:attributeGroup name="inline-element-attributes">
+		<xs:attribute ref="breakAfter"/>
+		<xs:attribute ref="breakBefore"/>
+	</xs:attributeGroup>
+	<xs:attributeGroup name="positioned-element-attributes">
+		<xs:attribute ref="anchor"/>
+		<xs:attribute ref="blockProgressionDimension"/>
+		<xs:attribute ref="flip"/>
+		<xs:attribute ref="height"/>
+		<xs:attribute ref="inlineProgressionDimension"/>
+		<xs:attribute ref="position"/>
+		<xs:attribute ref="width"/>
+		<xs:attribute ref="x"/>
+		<xs:attribute ref="y"/>
+		<xs:attribute ref="zIndex"/>
+	</xs:attributeGroup>
+	<xs:attributeGroup name="navigation-attributes">
+		<xs:attribute ref="navIndex"/>
+		<xs:attribute ref="navDown"/>
+		<xs:attribute ref="navLeft"/>
+		<xs:attribute ref="navLeftDown"/>
+		<xs:attribute ref="navLeftUp"/>
+		<xs:attribute ref="navRight"/>
+		<xs:attribute ref="navRightDown"/>
+		<xs:attribute ref="navRightUp"/>
+		<xs:attribute ref="navUp"/>
+	</xs:attributeGroup>
+	<xs:attributeGroup name="inheritable-inline-attributes">
+		<xs:attribute ref="color"/>
+		<xs:attribute ref="direction"/>
+		<xs:attribute ref="font"/>
+		<xs:attribute ref="fontSize"/>
+		<xs:attribute ref="fontStyle"/>
+		<xs:attribute ref="linefeedTreatment"/>
+		<xs:attribute ref="lineHeight"/>
+		<xs:attribute ref="textAlign"/>
+		<xs:attribute ref="textIndent"/>
+		<xs:attribute ref="whiteSpaceCollapse"/>
+		<xs:attribute ref="whiteSpaceTreatment"/>
+		<xs:attribute ref="wrapOption"/>
+	</xs:attributeGroup>
+	<xs:attribute name="anchor" default="startBefore">
+		<xs:annotation>
+			<xs:documentation>Spec. 7.6.3.3.2.1</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:union>
+				<xs:simpleType>
+					<xs:restriction base="xs:token">
+						<xs:enumeration value="startBefore"/>
+						<xs:enumeration value="centerBefore"/>
+						<xs:enumeration value="endBefore"/>
+						<xs:enumeration value="startCenter"/>
+						<xs:enumeration value="center"/>
+						<xs:enumeration value="endCenter"/>
+						<xs:enumeration value="startAfter"/>
+						<xs:enumeration value="centerAfter"/>
+						<xs:enumeration value="endAfter"/>
+					</xs:restriction>
+				</xs:simpleType>
+				<xs:simpleType>
+					<xs:restriction base="xs:token">
+						<xs:pattern value="(startBefore|centerBefore|endBefore|startCenter|center|endCenter|startAfter|centerAfter|endAfter)(\s*;\s*(startBefore|centerBefore|endBefore|startCenter|center|endCenter|startAfter|centerAfter|endAfter))*"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:union>
+		</xs:simpleType>
+	</xs:attribute>
+	<xs:attribute name="backgroundColor" type="ColorType" default="transparent">
+		<xs:annotation>
+			<xs:documentation>Spec. 7.6.3.3.2.2</xs:documentation>
+		</xs:annotation>
+	</xs:attribute>
+	<xs:attribute name="backgroundFrame" default="0">
+		<xs:annotation>
+			<xs:documentation>Spec. 7.6.3.3.2.3</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:union memberTypes="AnimatedIntegerType InheritedType"/>
+		</xs:simpleType>
+	</xs:attribute>
+	<xs:attribute name="backgroundImage" default="none">
+		<xs:annotation>
+			<xs:documentation>Spec. 7.6.3.3.2.4</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:union memberTypes="URIListType">
+				<xs:simpleType>
+					<xs:restriction base="xs:token">
+						<xs:enumeration value="none"/>
+						<xs:enumeration value="inherit"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:union>
+		</xs:simpleType>
+	</xs:attribute>
+	<xs:attribute name="backgroundPositionHorizontal" default="0%">
+		<xs:annotation>
+			<xs:documentation>Spec. 7.6.3.3.2.5</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:union memberTypes="LengthType PercentageType">
+				<xs:simpleType>
+					<xs:restriction base="xs:token">
+						<xs:enumeration value="left"/>
+						<xs:enumeration value="center"/>
+						<xs:enumeration value="right"/>
+						<xs:enumeration value="inherit"/>
+					</xs:restriction>
+				</xs:simpleType>
+				<xs:simpleType>
+					<xs:restriction base="xs:token">
+						<xs:pattern value="(left|center|right|inherit)(\s*;\s*(left|center|right|inherit))*"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:union>
+		</xs:simpleType>
+	</xs:attribute>
+	<xs:attribute name="backgroundPositionVertical" default="0%">
+		<xs:annotation>
+			<xs:documentation>Spec. 7.6.3.3.2.6</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:union memberTypes="LengthType PercentageType">
+				<xs:simpleType>
+					<xs:restriction base="xs:token">
+						<xs:enumeration value="top"/>
+						<xs:enumeration value="center"/>
+						<xs:enumeration value="bottom"/>
+						<xs:enumeration value="inherit"/>
+					</xs:restriction>
+				</xs:simpleType>
+				<xs:simpleType>
+					<xs:restriction base="xs:token">
+						<xs:pattern value="(top|center|bottom|inherit)(\s*;\s*(top|center|bottom|inherit))*"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:union>
+		</xs:simpleType>
+	</xs:attribute>
+	<xs:attribute name="backgroundRepeat" default="no-repeat">
+		<xs:annotation>
+			<xs:documentation>Spec. 7.6.3.3.2.7</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="xs:token">
+				<xs:enumeration value="repeat"/>
+				<xs:enumeration value="no-repeat"/>
+				<xs:enumeration value="inherit"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:attribute>
+	<xs:attribute name="blockProgressionDimension" type="AutoLengthPercentageType" default="auto">
+		<xs:annotation>
+			<xs:documentation>Spec. 7.6.3.3.2.8</xs:documentation>
+		</xs:annotation>
+	</xs:attribute>
+	<xs:attribute name="border" type="BorderType">
+		<xs:annotation>
+			<xs:documentation>Spec. 7.6.3.3.2.9</xs:documentation>
+		</xs:annotation>
+	</xs:attribute>
+	<xs:attribute name="borderAfter" type="BorderType">
+		<xs:annotation>
+			<xs:documentation>Spec. 7.6.3.3.2.10</xs:documentation>
+		</xs:annotation>
+	</xs:attribute>
+	<xs:attribute name="borderBefore" type="BorderType">
+		<xs:annotation>
+			<xs:documentation>Spec. 7.6.3.3.2.11</xs:documentation>
+		</xs:annotation>
+	</xs:attribute>
+	<xs:attribute name="borderEnd" type="BorderType">
+		<xs:annotation>
+			<xs:documentation>Spec. 7.6.3.3.2.12</xs:documentation>
+		</xs:annotation>
+	</xs:attribute>
+	<xs:attribute name="borderStart" type="BorderType">
+		<xs:annotation>
+			<xs:documentation>Spec. 7.6.3.3.2.13</xs:documentation>
+		</xs:annotation>
+	</xs:attribute>
+	<xs:attribute name="breakAfter" type="BreakType" default="auto">
+		<xs:annotation>
+			<xs:documentation>Spec. 7.6.3.3.2.14</xs:documentation>
+		</xs:annotation>
+	</xs:attribute>
+	<xs:attribute name="breakBefore" type="BreakType" default="auto">
+		<xs:annotation>
+			<xs:documentation>Spec. 7.6.3.3.2.15</xs:documentation>
+		</xs:annotation>
+	</xs:attribute>
+	<xs:attribute name="color" default="white">
+		<xs:annotation>
+			<xs:documentation>Spec. 7.6.3.3.2.16</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:union memberTypes="ColorType InheritedType"/>
+		</xs:simpleType>
+	</xs:attribute>
+	<xs:attribute name="contentWidth" type="ContentSizeType" default="auto">
+		<xs:annotation>
+			<xs:documentation>Spec. 7.6.3.3.2.17</xs:documentation>
+		</xs:annotation>
+	</xs:attribute>
+	<xs:attribute name="contentHeight" type="ContentSizeType" default="auto">
+		<xs:annotation>
+			<xs:documentation>Spec. 7.6.3.3.2.18</xs:documentation>
+		</xs:annotation>
+	</xs:attribute>
+	<xs:attribute name="crop" default="auto">
+		<xs:annotation>
+			<xs:documentation>Spec. 7.6.3.3.2.19</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:union>
+				<xs:simpleType>
+					<xs:restriction base="xs:token">
+						<xs:pattern value="([0-9]+\s+[0-9]+\s+[0-9]+\s+[0-9]+)(\s*;\s*[0-9]+\s+[0-9]+\s+[0-9]+\s+[0-9]+)*"/>
+					</xs:restriction>
+				</xs:simpleType>
+				<xs:simpleType>
+					<xs:restriction base="xs:token">
+						<xs:enumeration value="auto"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:union>
+		</xs:simpleType>
+	</xs:attribute>
+	<xs:attribute name="direction" default="ltr">
+		<xs:annotation>
+			<xs:documentation>Spec. 7.6.3.3.2.20</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="xs:token">
+				<xs:enumeration value="ltr"/>
+				<xs:enumeration value="rtl"/>
+				<xs:enumeration value="inherit"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:attribute>
+	<xs:attribute name="display" default="auto">
+		<xs:annotation>
+			<xs:documentation>Spec. 7.6.3.3.2.21</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:union>
+				<xs:simpleType>
+					<xs:restriction base="xs:token">
+						<xs:pattern value="(auto|none|inherit)(\s*;\s*(auto|none|inherit))*"/>
+					</xs:restriction>
+				</xs:simpleType>
+				<xs:simpleType>
+					<xs:restriction base="xs:token">
+						<xs:enumeration value="auto"/>
+						<xs:enumeration value="none"/>
+						<xs:enumeration value="inherit"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:union>
+		</xs:simpleType>
+	</xs:attribute>
+	<xs:attribute name="displayAlign" default="auto">
+		<xs:annotation>
+			<xs:documentation>Spec. 7.6.3.3.2.22</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:union>
+				<xs:simpleType>
+					<xs:restriction base="xs:token">
+						<xs:pattern value="(auto|before|center|after|inherit)(\s*;\s*(auto|before|center|after|inherit))*"/>
+					</xs:restriction>
+				</xs:simpleType>
+				<xs:simpleType>
+					<xs:restriction base="xs:token">
+						<xs:enumeration value="auto"/>
+						<xs:enumeration value="before"/>
+						<xs:enumeration value="center"/>
+						<xs:enumeration value="after"/>
+						<xs:enumeration value="inherit"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:union>
+		</xs:simpleType>
+	</xs:attribute>
+	<xs:attribute name="flip" default="none">
+		<xs:annotation>
+			<xs:documentation>Spec. 7.6.3.3.2.24</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:union>
+				<xs:simpleType>
+					<xs:restriction base="xs:token">
+						<xs:pattern value="(none|inlineProgression|blockProgression|both)(\s*;\s*(none|inlineProgression|blockProgression|both))*"/>
+					</xs:restriction>
+				</xs:simpleType>
+				<xs:simpleType>
+					<xs:restriction base="xs:token">
+						<xs:enumeration value="none"/>
+						<xs:enumeration value="inlineProgression"/>
+						<xs:enumeration value="blockProgression"/>
+						<xs:enumeration value="both"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:union>
+		</xs:simpleType>
+	</xs:attribute>
+	<xs:attribute name="font" type="FontNameType">
+		<xs:annotation>
+			<xs:documentation>Spec. 7.6.3.3.2.25</xs:documentation>
+		</xs:annotation>
+	</xs:attribute>
+	<xs:attribute name="fontSize" default="medium">
+		<xs:annotation>
+			<xs:documentation>Spec. 7.6.3.3.2.26</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:union>
+				<xs:simpleType>
+					<xs:restriction base="xs:token">
+						<xs:pattern value="[0-9]+(px|em|%)"/>
+						<xs:pattern value="[0-9]+(px|em|%) [0-9]+(px|em|%)"/>
+					</xs:restriction>
+				</xs:simpleType>
+				<xs:simpleType>
+					<xs:restriction base="xs:token">
+						<xs:enumeration value="xx-small"/>
+						<xs:enumeration value="x-small"/>
+						<xs:enumeration value="small"/>
+						<xs:enumeration value="medium"/>
+						<xs:enumeration value="large"/>
+						<xs:enumeration value="x-large"/>
+						<xs:enumeration value="xx-large"/>
+						<xs:enumeration value="smaller"/>
+						<xs:enumeration value="larger"/>
+						<xs:enumeration value="inherit"/>
+					</xs:restriction>
+				</xs:simpleType>
+				<xs:simpleType>
+					<xs:restriction base="GenericAnimatedType"/>
+				</xs:simpleType>
+			</xs:union>
+		</xs:simpleType>
+	</xs:attribute>
+	<xs:attribute name="fontStyle" default="normal">
+		<xs:annotation>
+			<xs:documentation>Spec. 7.6.3.3.2.27</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:union>
+				<xs:simpleType>
+					<xs:restriction base="xs:token">
+						<xs:pattern value="(normal|italic|oblique|backslant|reverse-oblique|inherit)(\s*;\s*(normal|italic|oblique|backslant|reverse-oblique|inherit))*"/>
+					</xs:restriction>
+				</xs:simpleType>
+				<xs:simpleType>
+					<xs:restriction base="xs:token">
+						<xs:enumeration value="normal"/>
+						<xs:enumeration value="italic"/>
+						<xs:enumeration value="oblique"/>
+						<xs:enumeration value="backslant"/>
+						<xs:enumeration value="reverse-oblique"/>
+						<xs:enumeration value="inherit"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:union>
+		</xs:simpleType>
+	</xs:attribute>
+	<xs:attribute name="height" type="AutoLengthPercentageType" default="auto">
+		<xs:annotation>
+			<xs:documentation>Spec. 7.6.3.3.2.28</xs:documentation>
+		</xs:annotation>
+	</xs:attribute>
+	<xs:attribute name="inlineProgressionDimension" type="AutoLengthPercentageType" default="auto">
+		<xs:annotation>
+			<xs:documentation>Spec. 7.6.3.3.2.29</xs:documentation>
+		</xs:annotation>
+	</xs:attribute>
+	<xs:attribute name="linefeedTreatment" default="treat-as-space">
+		<xs:annotation>
+			<xs:documentation>Spec. 7.6.3.3.2.30</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="xs:token">
+				<xs:enumeration value="ignore"/>
+				<xs:enumeration value="preserve"/>
+				<xs:enumeration value="treat-as-space"/>
+				<xs:enumeration value="treat-as-zero-width-space"/>
+				<xs:enumeration value="inherit"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:attribute>
+	<xs:attribute name="lineHeight" type="AutoLengthPercentageType" default="auto">
+		<xs:annotation>
+			<xs:documentation>Spec. 7.6.3.3.2.31</xs:documentation>
+		</xs:annotation>
+	</xs:attribute>
+	<xs:attribute name="navDown" type="NavigationType" default="none">
+		<xs:annotation>
+			<xs:documentation>Spec. 7.6.3.3.2.32</xs:documentation>
+		</xs:annotation>
+	</xs:attribute>
+	<xs:attribute name="navIndex" default="auto">
+		<xs:annotation>
+			<xs:documentation>Spec. 7.6.3.3.2.33</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:union>
+				<xs:simpleType>
+					<xs:restriction base="xs:token">
+						<xs:enumeration value="auto"/>
+						<xs:enumeration value="none"/>
+					</xs:restriction>
+				</xs:simpleType>
+				<xs:simpleType>
+					<xs:restriction base="xs:token">
+						<xs:pattern value="(([0-9]+ [0-9]+)|auto|none)(\s*;\s*(([0-9]+ [0-9]+)|auto|none))*"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:union>
+		</xs:simpleType>
+	</xs:attribute>
+	<xs:attribute name="navLeft" type="NavigationType" default="none">
+		<xs:annotation>
+			<xs:documentation>Spec. 7.6.3.3.2.34</xs:documentation>
+		</xs:annotation>
+	</xs:attribute>
+	<xs:attribute name="navLeftDown" type="NavigationType" default="none">
+		<xs:annotation>
+			<xs:documentation>Spec. 7.6.3.3.2.35</xs:documentation>
+		</xs:annotation>
+	</xs:attribute>
+	<xs:attribute name="navLeftUp" type="NavigationType" default="none">
+		<xs:annotation>
+			<xs:documentation>Spec. 7.6.3.3.2.36</xs:documentation>
+		</xs:annotation>
+	</xs:attribute>
+	<xs:attribute name="navRight" type="NavigationType" default="none">
+		<xs:annotation>
+			<xs:documentation>Spec. 7.6.3.3.2.37</xs:documentation>
+		</xs:annotation>
+	</xs:attribute>
+	<xs:attribute name="navRightDown" type="NavigationType" default="none">
+		<xs:annotation>
+			<xs:documentation>Spec. 7.6.3.3.2.38</xs:documentation>
+		</xs:annotation>
+	</xs:attribute>
+	<xs:attribute name="navRightUp" type="NavigationType" default="none">
+		<xs:annotation>
+			<xs:documentation>Spec. 7.6.3.3.2.39</xs:documentation>
+		</xs:annotation>
+	</xs:attribute>
+	<xs:attribute name="navUp" type="NavigationType" default="none">
+		<xs:annotation>
+			<xs:documentation>Spec. 7.6.3.3.2.40</xs:documentation>
+		</xs:annotation>
+	</xs:attribute>
+	<xs:attribute name="opacity" default="1.0">
+		<xs:annotation>
+			<xs:documentation>Spec. 7.6.3.3.2.41</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:union memberTypes="AlphaValueType InheritedType"/>
+		</xs:simpleType>
+	</xs:attribute>
+	<xs:attribute name="padding" type="PaddingType" default="0px">
+		<xs:annotation>
+			<xs:documentation>Spec. 7.6.3.3.2.42</xs:documentation>
+		</xs:annotation>
+	</xs:attribute>
+	<xs:attribute name="paddingAfter" type="PaddingWidthType" default="0px">
+		<xs:annotation>
+			<xs:documentation>Spec. 7.6.3.3.2.43</xs:documentation>
+		</xs:annotation>
+	</xs:attribute>
+	<xs:attribute name="paddingBefore" type="PaddingWidthType" default="0px">
+		<xs:annotation>
+			<xs:documentation>Spec. 7.6.3.3.2.44</xs:documentation>
+		</xs:annotation>
+	</xs:attribute>
+	<xs:attribute name="paddingEnd" type="PaddingWidthType" default="0px">
+		<xs:annotation>
+			<xs:documentation>Spec. 7.6.3.3.2.45</xs:documentation>
+		</xs:annotation>
+	</xs:attribute>
+	<xs:attribute name="paddingStart" type="PaddingWidthType" default="0px">
+		<xs:annotation>
+			<xs:documentation>Spec. 7.6.3.3.2.46</xs:documentation>
+		</xs:annotation>
+	</xs:attribute>
+	<xs:attribute name="position" default="static">
+		<xs:annotation>
+			<xs:documentation>Spec. 7.6.3.3.2.47</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="xs:token">
+				<xs:enumeration value="static"/>
+				<xs:enumeration value="relative"/>
+				<xs:enumeration value="absolute"/>
+				<xs:enumeration value="inherit"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:attribute>
+	<xs:attribute name="scaling" default="non-uniform">
+		<xs:annotation>
+			<xs:documentation>Spec. 7.6.3.3.2.48</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="xs:token">
+				<xs:enumeration value="uniform"/>
+				<xs:enumeration value="non-uniform"/>
+				<xs:enumeration value="inherit"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:attribute>
+	<xs:attribute name="suppressAtLineBreak" default="auto">
+		<xs:annotation>
+			<xs:documentation>Spec. 7.6.3.3.2.50</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="xs:token">
+				<xs:enumeration value="auto"/>
+				<xs:enumeration value="suppress"/>
+				<xs:enumeration value="retain"/>
+				<xs:enumeration value="inherit"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:attribute>
+	<xs:attribute name="textAlign" default="start">
+		<xs:annotation>
+			<xs:documentation>Spec. 7.6.3.3.2.51</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:union>
+				<xs:simpleType>
+					<xs:restriction base="xs:token">
+						<xs:pattern value="(start|center|end|inherit)(\s*;\s*(start|center|end|inherit))*"/>
+					</xs:restriction>
+				</xs:simpleType>
+				<xs:simpleType>
+					<xs:restriction base="xs:token">
+						<xs:enumeration value="start"/>
+						<xs:enumeration value="center"/>
+						<xs:enumeration value="end"/>
+						<xs:enumeration value="inherit"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:union>
+		</xs:simpleType>
+	</xs:attribute>
+	<xs:attribute name="textAltitude" type="AutoLengthPercentageType" default="auto">
+		<xs:annotation>
+			<xs:documentation>Spec. 7.6.3.3.2.52</xs:documentation>
+		</xs:annotation>
+	</xs:attribute>
+	<xs:attribute name="textDepth" type="AutoLengthPercentageType" default="auto">
+		<xs:annotation>
+			<xs:documentation>Spec. 7.6.3.3.2.53</xs:documentation>
+		</xs:annotation>
+	</xs:attribute>
+	<xs:attribute name="textIndent" default="0px">
+		<xs:annotation>
+			<xs:documentation>Spec. 7.6.3.3.2.54</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:union memberTypes="LengthType PercentageType InheritedType"/>
+		</xs:simpleType>
+	</xs:attribute>
+	<xs:attribute name="visibility" default="visible">
+		<xs:annotation>
+			<xs:documentation>Spec. 7.6.3.3.2.55</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:union>
+				<xs:simpleType>
+					<xs:restriction base="xs:token">
+						<xs:pattern value="(visible|hidden|inherit)(\s*;\s*(visible|hidden|inherit))*"/>
+					</xs:restriction>
+				</xs:simpleType>
+				<xs:simpleType>
+					<xs:restriction base="xs:token">
+						<xs:enumeration value="visible"/>
+						<xs:enumeration value="hidden"/>
+						<xs:enumeration value="inherit"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:union>
+		</xs:simpleType>
+	</xs:attribute>
+	<xs:attribute name="whiteSpaceCollapse" default="true">
+		<xs:annotation>
+			<xs:documentation>Spec. 7.6.3.3.2.56</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="xs:token">
+				<xs:enumeration value="true"/>
+				<xs:enumeration value="false"/>
+				<xs:enumeration value="inherit"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:attribute>
+	<xs:attribute name="whiteSpaceTreatment" default="ignore-around">
+		<xs:annotation>
+			<xs:documentation>Spec. 7.6.3.3.2.57</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="xs:token">
+				<xs:enumeration value="ignore"/>
+				<xs:enumeration value="preserve"/>
+				<xs:enumeration value="ignore-before"/>
+				<xs:enumeration value="ignore-after"/>
+				<xs:enumeration value="ignore-around"/>
+				<xs:enumeration value="inherit"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:attribute>
+	<xs:attribute name="width" type="AutoLengthPercentageType" default="auto">
+		<xs:annotation>
+			<xs:documentation>Spec. 7.6.3.3.2.58</xs:documentation>
+		</xs:annotation>
+	</xs:attribute>
+	<xs:attribute name="wrapOption" default="wrap">
+		<xs:annotation>
+			<xs:documentation>Spec. 7.6.3.3.2.59</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:union>
+				<xs:simpleType>
+					<xs:restriction base="xs:token">
+						<xs:pattern value="(wrap|no-wrap|inherit)(\s*;\s*(wrap|no-wrap|inherit))*"/>
+					</xs:restriction>
+				</xs:simpleType>
+				<xs:simpleType>
+					<xs:restriction base="xs:token">
+						<xs:enumeration value="wrap"/>
+						<xs:enumeration value="no-wrap"/>
+						<xs:enumeration value="inherit"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:union>
+		</xs:simpleType>
+	</xs:attribute>
+	<xs:attribute name="writingMode" default="lr-tb">
+		<xs:annotation>
+			<xs:documentation>Spec. 7.6.3.3.2.60</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="xs:token">
+				<xs:enumeration value="lr-tb"/>
+				<xs:enumeration value="rl-tb"/>
+				<xs:enumeration value="tb-rl"/>
+				<xs:enumeration value="inherit"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:attribute>
+	<xs:attribute name="x" type="AutoLengthPercentageType" default="0px">
+		<xs:annotation>
+			<xs:documentation>Spec. 7.6.3.3.2.61</xs:documentation>
+		</xs:annotation>
+	</xs:attribute>
+	<xs:attribute name="y" type="AutoLengthPercentageType" default="0px">
+		<xs:annotation>
+			<xs:documentation>Spec. 7.6.3.3.2.62</xs:documentation>
+		</xs:annotation>
+	</xs:attribute>
+	<xs:attribute name="zIndex" default="auto">
+		<xs:annotation>
+			<xs:documentation>Spec. 7.6.3.3.2.63</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:union memberTypes="AnimatedIntegerType">
+				<xs:simpleType>
+					<xs:restriction base="xs:token">
+						<xs:enumeration value="auto"/>
+						<xs:enumeration value="inherit"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:union>
+		</xs:simpleType>
+	</xs:attribute>
+	<xs:simpleType name="AlphaValueType">
+		<xs:annotation>
+			<xs:documentation>Spec. 7.6.2</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:token">
+			<xs:pattern value="((0*(\.[0-9]+)?)|(0*1(\.0+)?))(\s*;\s*((0*(\.[0-9]+)?)|(0*1(\.0+)?)))*"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="AnimatedIntegerType">
+		<xs:restriction base="xs:token">
+			<xs:pattern value="-?[0-9]+(\s*;\s*-?[0-9]+)*"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="AutoLengthPercentageType">
+		<xs:union memberTypes="LengthType PercentageType">
+			<xs:simpleType>
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="auto"/>
+					<xs:enumeration value="inherit"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:union>
+	</xs:simpleType>
+	<xs:simpleType name="BorderType">
+		<xs:union>
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:pattern value="[^;]+"/>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType>
+				<xs:restriction base="InheritedType"/>
+			</xs:simpleType>
+			<xs:simpleType>
+				<xs:restriction base="GenericAnimatedType"/>
+			</xs:simpleType>
+		</xs:union>
+	</xs:simpleType>
+	<xs:simpleType name="BreakType">
+		<xs:restriction base="xs:token">
+			<xs:enumeration value="auto"/>
+			<xs:enumeration value="line"/>
+			<xs:enumeration value="inherit"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="ColorType">
+		<xs:annotation>
+			<xs:documentation>Spec. 7.6.2</xs:documentation>
+		</xs:annotation>
+		<xs:union>
+			<xs:simpleType>
+				<xs:restriction base="xs:token">
+					<xs:pattern value="#[0-9a-fA-F]{3}"/>
+					<xs:pattern value="#[0-9a-fA-F]{6}"/>
+					<xs:pattern value="rgb\((\s*)[0-9]{1,3}%?\s*,\s*[0-9]{1,3}%?\s*,\s*[0-9]{1,3}%?\s*\)"/>
+					<xs:pattern value="rgba\(\s*[0-9]{1,3}%?\s*,\s*[0-9]{1,3}%?\s*,\s*[0-9]{1,3}%?\s*,\s*[0-9]{1,3}%?\s*\)"/>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType>
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="aqua"/>
+					<xs:enumeration value="black"/>
+					<xs:enumeration value="blue"/>
+					<xs:enumeration value="fuchsia"/>
+					<xs:enumeration value="gray"/>
+					<xs:enumeration value="green"/>
+					<xs:enumeration value="lime"/>
+					<xs:enumeration value="maroon"/>
+					<xs:enumeration value="navy"/>
+					<xs:enumeration value="olive"/>
+					<xs:enumeration value="purple"/>
+					<xs:enumeration value="red"/>
+					<xs:enumeration value="silver"/>
+					<xs:enumeration value="teal"/>
+					<xs:enumeration value="white"/>
+					<xs:enumeration value="yellow"/>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType>
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="transparent"/>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType>
+				<xs:restriction base="GenericAnimatedType"/>
+			</xs:simpleType>
+			<xs:simpleType>
+				<xs:restriction base="InheritedType"/>
+			</xs:simpleType>
+		</xs:union>
+	</xs:simpleType>
+	<xs:simpleType name="ContentSizeType">
+		<xs:union memberTypes="LengthType PercentageType">
+			<xs:simpleType>
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="auto"/>
+					<xs:enumeration value="scale-to-fit"/>
+					<xs:enumeration value="inherit"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:union>
+	</xs:simpleType>
+	<xs:simpleType name="FontNameType">
+		<xs:annotation>
+			<xs:documentation>Spec. 7.6.2</xs:documentation>
+		</xs:annotation>
+		<xs:union>
+			<xs:simpleType>
+				<xs:restriction base="xs:anyURI"/>
+			</xs:simpleType>
+			<xs:simpleType>
+				<xs:restriction base="xs:token">
+					<xs:pattern value="[^\s;]+\s+&apos;[^&apos;]+&apos;"/>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType>
+				<xs:restriction base="InheritedType"/>
+			</xs:simpleType>
+			<xs:simpleType>
+				<xs:restriction base="GenericAnimatedType"/>
+			</xs:simpleType>
+		</xs:union>
+	</xs:simpleType>
+	<xs:simpleType name="GenericAnimatedType">
+		<xs:restriction base="xs:token">
+			<xs:pattern value="([^;]+)(\s*;\s*[^;]+)+"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="TransparentType">
+		<xs:restriction base="xs:token">
+			<xs:enumeration value="transparent"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="InheritedType">
+		<xs:restriction base="xs:token">
+			<xs:enumeration value="inherit"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="LengthType">
+		<xs:annotation>
+			<xs:documentation>Spec. 7.6.2</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:token">
+			<xs:pattern value="-?[0-9]+(px|em|%)(\s*;\s*-?[0-9]+(px|em|%))*"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="NavigationType">
+		<xs:union>
+			<xs:simpleType>
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="inherit"/>
+					<xs:enumeration value="none"/>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType>
+				<xs:restriction base="xs:string"/>
+			</xs:simpleType>
+		</xs:union>
+	</xs:simpleType>
+	<xs:simpleType name="NonNegativeLength">
+		<xs:restriction base="xs:token">
+			<xs:pattern value="[0-9]+(px|em|%)(\s*;\s*[0-9]+(px|em|%))*"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="PaddingType">
+		<xs:union>
+			<xs:simpleType>
+				<xs:restriction base="xs:token">
+					<xs:pattern value="([0-9]+(px|em|%))( ([0-9]+(px|em|%)))*(\s*;\s*([0-9]+(px|em|%))( ([0-9]+(px|em|%)))*)*"/>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType>
+				<xs:restriction base="InheritedType"/>
+			</xs:simpleType>
+		</xs:union>
+	</xs:simpleType>
+	<xs:simpleType name="PaddingWidthType">
+		<xs:annotation>
+			<xs:documentation>Spec. 7.6.2</xs:documentation>
+		</xs:annotation>
+		<xs:union memberTypes="NonNegativeLength PercentageType InheritedType"/>
+	</xs:simpleType>
+	<xs:simpleType name="PercentageType">
+		<xs:annotation>
+			<xs:documentation>Spec. 7.6.2</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:token">
+			<xs:pattern value="[0-9]+%(\s*;\s*[0-9]+%)*"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="URIListType">
+		<xs:restriction base="xs:string"/>
+	</xs:simpleType>
+</xs:schema>

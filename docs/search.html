@@ -1,0 +1,702 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Search &mdash; HD DVD Advanced Content</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+
+  
+    
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=2709fde1"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script type="module">import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11.12.1/dist/mermaid.esm.min.mjs";
+
+
+
+
+
+const initStyles = () => {
+    const defaultStyle = document.createElement('style');
+    defaultStyle.textContent = "pre.mermaid {\n    /* Same as .mermaid-container > pre */\n    display: block;\n    width: 100%;\n}\n\npre.mermaid > svg {\n    /* Same as .mermaid-container > pre > svg */\n    height: 500px;\n    width: 100%;\n    max-width: 100% !important;\n}";
+    document.head.appendChild(defaultStyle);
+
+    const fullscreenStyle = document.createElement('style');
+    fullscreenStyle.textContent = ".mermaid-container {\n    position: relative;\n    display: flex;\n    flex-direction: row;\n    width: 100%;\n}\n\n.mermaid-container > pre {\n    display: block;\n    width: 100%;\n}\n\n.mermaid-container > pre > svg {\n    height: 500px;\n    width: 100%;\n    max-width: 100% !important;\n}\n\n.mermaid-fullscreen-btn {\n    position: absolute;\n    width: 28px;\n    height: 28px;\n    background: rgba(255, 255, 255, 0.95);\n    border: 1px solid rgba(0, 0, 0, 0.3);\n    border-radius: 4px;\n    cursor: pointer;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    transition: all 0.2s;\n    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);\n    font-size: 14px;\n    line-height: 1;\n    padding: 0;\n    color: #333;\n}\n\n.mermaid-fullscreen-btn:hover {\n    opacity: 100% !important;\n    background: rgba(255, 255, 255, 1);\n    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);\n    transform: scale(1.1);\n}\n\n.mermaid-fullscreen-btn.dark-theme {\n    background: rgba(50, 50, 50, 0.95);\n    border: 1px solid rgba(255, 255, 255, 0.3);\n    color: #e0e0e0;\n}\n\n.mermaid-fullscreen-btn.dark-theme:hover {\n    background: rgba(60, 60, 60, 1);\n    box-shadow: 0 3px 10px rgba(255, 255, 255, 0.2);\n}\n\n.mermaid-fullscreen-modal {\n    display: none;\n    position: fixed !important;\n    top: 0 !important;\n    left: 0 !important;\n    width: 95vw;\n    height: 100vh;\n    background: rgba(255, 255, 255, 0.98);\n    z-index: 9999;\n    padding: 20px;\n    overflow: auto;\n}\n\n.mermaid-fullscreen-modal.dark-theme {\n    background: rgba(0, 0, 0, 0.98);\n}\n\n.mermaid-fullscreen-modal.active {\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.mermaid-container-fullscreen {\n    position: relative;\n    width: 95vw;\n    height: 90vh;\n    max-width: 95vw;\n    max-height: 90vh;\n    background: white;\n    border-radius: 8px;\n    padding: 20px;\n    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);\n    overflow: auto;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.mermaid-container-fullscreen.dark-theme {\n    background: #1a1a1a;\n    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);\n}\n\n.mermaid-container-fullscreen pre.mermaid {\n    width: 100%;\n    height: 100%;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.mermaid-container-fullscreen .mermaid svg {\n    height: 100% !important;\n    width: 100% !important;\n    cursor: grab;\n}\n\n.mermaid-fullscreen-close {\n    position: fixed !important;\n    top: 20px !important;\n    right: 20px !important;\n    width: 40px;\n    height: 40px;\n    background: rgba(255, 255, 255, 0.95);\n    border: 1px solid rgba(0, 0, 0, 0.2);\n    border-radius: 50%;\n    cursor: pointer;\n    z-index: 10000;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);\n    transition: all 0.2s;\n    font-size: 24px;\n    line-height: 1;\n    color: #333;\n}\n\n.mermaid-fullscreen-close:hover {\n    background: white;\n    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);\n    transform: scale(1.1);\n}\n\n.mermaid-fullscreen-close.dark-theme {\n    background: rgba(50, 50, 50, 0.95);\n    border: 1px solid rgba(255, 255, 255, 0.2);\n    color: #e0e0e0;\n}\n\n.mermaid-fullscreen-close.dark-theme:hover {\n    background: rgba(60, 60, 60, 1);\n    box-shadow: 0 6px 16px rgba(255, 255, 255, 0.2);\n}\n\n.mermaid-fullscreen-modal .mermaid-fullscreen-btn {\n    display: none !important;\n}";
+    document.head.appendChild(fullscreenStyle);
+}
+
+// Detect if page has dark background
+const isDarkTheme = () => {
+    // We use a set of heuristics:
+    // 1. Check for common dark mode classes or attributes
+    // 2. Check computed background color brightness
+    if (document.documentElement.classList.contains('dark') ||
+        document.documentElement.getAttribute('data-theme') === 'dark' ||
+        document.body.classList.contains('dark') ||
+        document.body.getAttribute('data-theme') === 'dark') {
+        // console.log("Dark theme detected via class/attribute");
+        return true;
+    }
+    if (document.documentElement.classList.contains('light') ||
+        document.documentElement.getAttribute('data-theme') === 'light' ||
+        document.body.classList.contains('light') ||
+        document.body.getAttribute('data-theme') === 'light') {
+        // console.log("Light theme detected via class/attribute");
+        return false;
+    }
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        // console.log("Dark theme detected via prefers-color-scheme");
+        return true;
+    }
+    const bgColor = window.getComputedStyle(document.body).backgroundColor;
+    const match = bgColor.match(/rgb\((\d+),\s*(\d+),\s*(\d+)/);
+    if (match) {
+        const r = parseInt(match[1]);
+        const g = parseInt(match[2]);
+        const b = parseInt(match[3]);
+        const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+        // console.log("Background color brightness:", brightness);
+        return brightness < 128;
+    }
+    // console.log("No dark or light theme detected, defaulting to light theme");
+    return false;
+};
+
+let darkTheme = isDarkTheme();
+let modal = null;
+let modalContent = null;
+let previousScrollOffset = [window.scrollX, window.scrollY];
+let _lazyObserver = null;
+let _renderQueue = Promise.resolve();
+let closeModal = () => {};
+
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal?.classList.contains('active')) {
+        closeModal();
+    }
+});
+
+// Apply d3 zoom to each SVG. Idempotent: an SVG already wrapped is skipped,
+// so this is safe to call both for the initial batch and for diagrams that
+// render lazily once they become visible.
+const addZoomToSvgs = (svgs) => {
+    svgs.each(function() {
+        if (this.getAttribute('data-zoom-applied') === 'true') return;
+        var svg = d3.select(this);
+        svg.html("<g class='wrapper'>" + svg.html() + "</g>");
+        var inner = svg.select("g");
+        var zoom = d3.zoom().on("zoom", function(event) {
+            inner.attr("transform", event.transform);
+        });
+        svg.call(zoom);
+        this.setAttribute('data-zoom-applied', 'true');
+    });
+};
+
+const runMermaid = async (rerun) => {
+    console.log("Running mermaid diagrams, rerun =", rerun);
+    // clear all existing mermaid charts
+    let all_mermaids = document.querySelectorAll(".mermaid");
+
+    if (rerun) {
+        // Disconnect any previous lazy rendering observer
+        if (_lazyObserver) {
+            _lazyObserver.disconnect();
+            _lazyObserver = null;
+        }
+
+        all_mermaids.forEach((el) => {
+            el.removeAttribute('data-mermaid-deferred');
+            el.removeAttribute('data-mermaid-render-failed');
+            if(!el.hasAttribute("data-original-code")) {
+                // store original code
+                // console.log(`Storing original code for first run: `, el.innerHTML);
+                el.setAttribute('data-original-code', el.innerHTML);
+            }
+            if(el.getAttribute("data-processed") === "true") {
+                // remove and restore original
+                el.removeAttribute("data-processed");
+                // console.log(`Restoring original code for re-run: `, el.getAttribute('data-original-code'));
+                el.innerHTML = el.getAttribute('data-original-code');
+            } else {
+                // store original code
+                // console.log(`Storing original code for re-run: `, el.innerHTML);
+                el.setAttribute('data-original-code', el.innerHTML);
+            }
+        });
+
+        // Separate visible and hidden elements. Mermaid's layout engine measures
+        // text dimensions via the DOM, which fails for elements hidden by a parent
+        // (e.g., Reveal.js non-active slides, sphinx-design unopened tabs),
+        // producing broken SVGs. Render visible elements now, defer hidden ones.
+        const visible = [];
+        const hidden = [];
+        all_mermaids.forEach((el) => {
+            // offsetParent is null for display:none ancestors.
+            // getClientRects().length > 0 catches position:fixed elements
+            // (which also have null offsetParent but are still visible).
+            if (el.offsetParent !== null || el.getClientRects().length > 0) {
+                visible.push(el);
+            } else {
+                hidden.push(el);
+                el.setAttribute('data-mermaid-deferred', 'true');
+            }
+        });
+
+        if (visible.length > 0) {
+            try {
+                await mermaid.run({ nodes: visible });
+            } catch (e) {
+                console.error("Mermaid rendering failed:", e);
+            }
+        }
+
+        // Lazily render hidden elements when they become visible.
+        // Uses a promise chain (_renderQueue) to serialize rendering,
+        // since IntersectionObserver may report multiple entries at once
+        // and mermaid.run() is not safe to call concurrently.
+        if (hidden.length > 0) {
+            if (typeof IntersectionObserver === 'undefined') {
+                console.warn("IntersectionObserver not available; hidden mermaid diagrams will not render.");
+            } else {
+                _renderQueue = Promise.resolve();
+                _lazyObserver = new IntersectionObserver((entries) => {
+                    for (const entry of entries) {
+                        if (entry.isIntersecting && entry.target.getAttribute("data-processed") !== "true") {
+                            _lazyObserver.unobserve(entry.target);
+                            const el = entry.target;
+                            _renderQueue = _renderQueue.then(async () => {
+                                try {
+                                    await mermaid.run({ nodes: [el] });
+                                    el.removeAttribute('data-mermaid-deferred');
+                                    // Apply zoom to the now-rendered diagram, matching
+                                    // the decoration visible diagrams receive.
+                                    if (false) {
+                                        addZoomToSvgs(d3.selectAll("").select(function() {
+                                            return this.querySelector("svg");
+                                        }));
+                                    }
+                                } catch (e) {
+                                    console.error("Mermaid deferred rendering failed:", e);
+                                    el.removeAttribute('data-mermaid-deferred');
+                                    el.setAttribute('data-mermaid-render-failed', 'true');
+                                }
+                            });
+                        }
+                    }
+                });
+                hidden.forEach((el) => _lazyObserver.observe(el));
+            }
+        }
+    }
+
+    all_mermaids = document.querySelectorAll(".mermaid");
+    // Exclude deferred (hidden) and render-failed elements from completion checks
+    const mermaids_active = document.querySelectorAll(".mermaid:not([data-mermaid-deferred]):not([data-mermaid-render-failed])");
+    const mermaids_processed = document.querySelectorAll(".mermaid:not([data-mermaid-deferred]):not([data-mermaid-render-failed])[data-processed='true']");
+
+    if (false) {
+        const mermaids_to_add_zoom = 0 === -1 ? mermaids_active.length : 0;
+        if(mermaids_to_add_zoom > 0) {
+            var svgs = d3.selectAll("").select(function() {
+                return this.querySelector("svg");
+            });
+            // Wait until every active (visible) diagram has rendered. Deferred
+            // diagrams are excluded, so a fixed d3_node_count that counts a
+            // hidden diagram no longer loops forever waiting for its SVG.
+            if(mermaids_active.length !== mermaids_processed.length) {
+                setTimeout(() => runMermaid(false), 200);
+                return;
+            }
+            addZoomToSvgs(svgs);
+        }
+    } else if(mermaids_active.length !== mermaids_processed.length) {
+        // Wait for mermaid to process all diagrams
+        setTimeout(() => runMermaid(false), 200);
+        return;
+    }
+
+    // Stop here if not adding fullscreen capability
+    if (!true) return;
+
+    if (modal !== null ) {
+        // Destroy existing modal
+        modal.remove();
+        modal = null;
+        modalContent = null;
+    }
+
+    modal = document.createElement('div');
+    modal.className = 'mermaid-fullscreen-modal' + (darkTheme ? ' dark-theme' : '');
+    modal.setAttribute('role', 'dialog');
+    modal.setAttribute('aria-modal', 'true');
+    modal.setAttribute('aria-label', 'Fullscreen diagram viewer');
+    modal.innerHTML = `
+        <button class="mermaid-fullscreen-close${darkTheme ? ' dark-theme' : ''}" aria-label="Close fullscreen">✕</button>
+        <div class="mermaid-container-fullscreen${darkTheme ? ' dark-theme' : ''}"></div>
+    `;
+    document.body.appendChild(modal);
+
+    modalContent = modal.querySelector('.mermaid-container-fullscreen');
+    const closeBtn = modal.querySelector('.mermaid-fullscreen-close');
+
+    closeModal = () => {
+        modal.classList.remove('active');
+        modalContent.innerHTML = '';
+        document.body.style.overflow = ''
+        window.scrollTo({left: previousScrollOffset[0], top: previousScrollOffset[1], behavior: 'instant'});
+    };
+
+    closeBtn.addEventListener('click', closeModal);
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) closeModal();
+    });
+    document.querySelectorAll('.mermaid').forEach((mermaidDiv) => {
+        if (mermaidDiv.parentNode.classList.contains('mermaid-container') ||
+            mermaidDiv.closest('.mermaid-fullscreen-modal')) {
+            // Already processed, adjust button class if needed
+            const existingBtn = mermaidDiv.parentNode.querySelector('.mermaid-fullscreen-btn');
+            if (existingBtn) {
+                existingBtn.className = 'mermaid-fullscreen-btn' + (darkTheme ? ' dark-theme' : '');
+            }
+            return;
+        }
+
+        const container = document.createElement('div');
+        container.className = 'mermaid-container';
+        mermaidDiv.parentNode.insertBefore(container, mermaidDiv);
+        container.appendChild(mermaidDiv);
+
+        const fullscreenBtn = document.createElement('button');
+        fullscreenBtn.className = 'mermaid-fullscreen-btn' + (darkTheme ? ' dark-theme' : '');
+        fullscreenBtn.setAttribute('aria-label', 'View diagram in fullscreen');
+        fullscreenBtn.textContent = "\u26f6";
+        fullscreenBtn.style.opacity = "50%";
+
+        // Calculate dynamic position based on diagram's margin and padding
+        const diagramStyle = window.getComputedStyle(mermaidDiv);
+        const marginTop = parseFloat(diagramStyle.marginTop) || 0;
+        const marginRight = parseFloat(diagramStyle.marginRight) || 0;
+        const paddingTop = parseFloat(diagramStyle.paddingTop) || 0;
+        const paddingRight = parseFloat(diagramStyle.paddingRight) || 0;
+        fullscreenBtn.style.top = `${marginTop + paddingTop + 4}px`;
+        fullscreenBtn.style.right = `${marginRight + paddingRight + 4}px`;
+
+        fullscreenBtn.addEventListener('click', () => {
+            previousScrollOffset = [window.scrollX, window.scrollY];
+            const clone = mermaidDiv.cloneNode(true);
+            modalContent.innerHTML = '';
+            modalContent.appendChild(clone);
+
+            const svg = clone.querySelector('svg');
+            if (svg) {
+                svg.removeAttribute('width');
+                svg.removeAttribute('height');
+                svg.style.width = '100%';
+                svg.style.height = 'auto';
+                svg.style.maxWidth = '100%';
+                svg.style.display = 'block';
+
+                if (false) {
+                    setTimeout(() => {
+                        const g = svg.querySelector('g');
+                        if (g) {
+                            var svgD3 = d3.select(svg);
+                            svgD3.html("<g class='wrapper'>" + svgD3.html() + "</g>");
+                            var inner = svgD3.select("g");
+                            var zoom = d3.zoom().on("zoom", function(event) {
+                                inner.attr("transform", event.transform);
+                            });
+                            svgD3.call(zoom);
+                        }
+                    }, 100);
+                }
+            }
+
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        });
+        container.appendChild(fullscreenBtn);
+    });
+};
+
+
+
+const load = async () => {
+    initStyles();
+
+
+    await runMermaid(true);
+
+    const reRunIfThemeChanges = async () => {
+        const newDarkTheme = isDarkTheme();
+        if (newDarkTheme !== darkTheme) {
+            darkTheme = newDarkTheme;
+            console.log("Theme change detected, re-running mermaid with", darkTheme ? "dark" : "default", "theme");
+            await mermaid.initialize(
+                {...{"startOnLoad": false},
+                ...{ darkMode: darkTheme, theme: darkTheme ? "dark" : "default" },
+                }
+            );
+            await runMermaid(true);
+        }
+    };
+
+    // Update theme classes when theme changes
+    const themeObserver = new MutationObserver(reRunIfThemeChanges);
+    themeObserver.observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ['class', 'style', 'data-theme']
+    });
+    themeObserver.observe(document.body, {
+        attributes: true,
+        attributeFilter: ['class', 'style', 'data-theme']
+    });
+};
+
+
+
+
+
+console.log("Initializing mermaid with", darkTheme ? "dark" : "default", "theme");
+mermaid.initialize(
+    {...{"startOnLoad": false},
+    ...{ darkMode: darkTheme, theme: darkTheme ? "dark" : "default" },
+    }
+);
+
+window.addEventListener("load", load);
+window.runMermaid = runMermaid;</script>
+    <script src="_static/js/theme.js"></script>
+    <script src="_static/searchtools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="#" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            HD DVD Advanced Content
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="#" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Specification</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="01_volume.html">1. Volume and directories</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="01_volume.html#filesystem">1.1 Filesystem</a></li>
+<li class="toctree-l2"><a class="reference internal" href="01_volume.html#medium-identification">1.2 Medium identification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="01_volume.html#root-directories-n-120">1.3 Root directories (N=120)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="01_volume.html#hvdvd-ts-advanced-content-files">1.4 <code class="docutils literal notranslate"><span class="pre">HVDVD_TS/</span></code>: Advanced Content files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="01_volume.html#adv-obj-files">1.5 <code class="docutils literal notranslate"><span class="pre">ADV_OBJ/</span></code>: files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="01_volume.html#disc-uri">1.6 Disc URI</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="02_discid.html">2. DISCID.DAT: Config File</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="02_discid.html#layout">2.1 Layout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="02_discid.html#observed-provider-id-tags-ascii">2.2 Observed <code class="docutils literal notranslate"><span class="pre">PROVIDER_ID</span></code> tags (ASCII)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="02_discid.html#player-use">2.3 Player use</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="03_playlist.html">3. Playlist: VPLST$$$.XPL</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="03_playlist.html#time">3.1 Time</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_playlist.html#tree">3.2 Tree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_playlist.html#title">3.3 Title</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_playlist.html#primaryaudiovideoclip">3.4 PrimaryAudioVideoClip</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_playlist.html#applicationsegment">3.5 ApplicationSegment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_playlist.html#playlistapplication">3.6 PlaylistApplication</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_playlist.html#chapter">3.7 Chapter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_playlist.html#tracknavigationlist">3.8 TrackNavigationList</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_playlist.html#uri-of-a-clip-map">3.9 URI of a clip MAP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_playlist.html#a-scheduledcontrollist-timeline-pauses-and-events">3.9a ScheduledControlList: timeline pauses and events</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_playlist.html#which-playlist-to-open">3.10 Which playlist to open</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_playlist.html#elements-in-the-xsd-unused-in-this-corpus">3.11 Elements in the XSD, unused in this corpus</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="04_aca.html">4. ACA: Advanced Content Archive</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="04_aca.html#archive-header">4.1 Archive header</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04_aca.html#directory-entry-variable-length">4.2 Directory entry (variable length)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04_aca.html#members">4.3 Members</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04_aca.html#namespace">4.4 Namespace</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="05_manifest_hdi.html">5. Manifest, markup, script (HDi)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="05_manifest_hdi.html#implementation-gate-closed">5.0 Implementation gate (CLOSED)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_manifest_hdi.html#manifest-xmf">5.1 Manifest: <code class="docutils literal notranslate"><span class="pre">.xmf</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_manifest_hdi.html#markup-xmu">5.2 Markup: <code class="docutils literal notranslate"><span class="pre">.xmu</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_manifest_hdi.html#script">5.3 Script</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_manifest_hdi.html#runtime-patent-fig-50-steps-67">5.4 Runtime (patent FIG.50 steps 6–7)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_manifest_hdi.html#what-is-specified-vs-what-blocks-the-gate">5.5 What is specified vs what blocks the gate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_manifest_hdi.html#remaining-spec-work-no-firmware">5.6 Remaining spec work (no firmware)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_manifest_hdi.html#file-cache-size">5.7 File Cache <code class="docutils literal notranslate"><span class="pre">&#64;size</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_manifest_hdi.html#persistent-storage-uris-script">5.8 Persistent storage URIs (script)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_manifest_hdi.html#raster-focus-cues-used-path">5.9 Raster, focus, cues (used path)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="06_vti.html">6. HVA00001.VTI: Advanced VTSI</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="06_vti.html#vtsi-mat-first-2048-bytes">6.1 VTSI_MAT (first 2048 bytes)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="06_vti.html#vts-evob-atrt-at-vts-evob-atrt-sa-2048">6.2 VTS_EVOB_ATRT (at <code class="docutils literal notranslate"><span class="pre">VTS_EVOB_ATRT_SA</span></code> × 2048)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="06_vti.html#atri-1024-bytes">ATRI (1024 bytes)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="06_vti.html#vts-evobit-at-vts-evobit-sa-2048">6.3 VTS_EVOBIT (at <code class="docutils literal notranslate"><span class="pre">VTS_EVOBIT_SA</span></code> × 2048)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="06_vti.html#evobi-320-bytes">EVOBI (320 bytes)</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="07_map.html">7. MAP: time map</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="07_map.html#file-layout">7.1 File layout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="07_map.html#tmap-gi-128-bytes-table-80">7.2 TMAP_GI (128 bytes): TABLE 80</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="07_map.html#tmap-ty-table-81-figure-c00039">TMAP_TY: TABLE 81 figure C00039</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="07_map.html#tmapi-srp-table-82">7.3 TMAPI_SRP: TABLE 82</a></li>
+<li class="toctree-l2"><a class="reference internal" href="07_map.html#evobu-ent-table-83-4-bytes">7.4 EVOBU_ENT: TABLE 83 (4 bytes)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="07_map.html#seek-algorithm">Seek algorithm</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="07_map.html#ilvu-ent-table-84-6-bytes">7.5 ILVU_ENT: TABLE 84 (6 bytes)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="08_evo.html">8. EVO: MPEG-2 program stream</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="08_evo.html#pack-types-table-85">8.1 Pack types (TABLE 85)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="08_evo.html#nv-pck-first-pack-of-each-evobu">8.2 NV_PCK: first pack of each EVOBU</a></li>
+<li class="toctree-l2"><a class="reference internal" href="08_evo.html#pci-gi-offsets-from-the-substream-id-byte">8.3 PCI GI (offsets from the substream id byte)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="08_evo.html#dsi-gi-offsets-from-the-substream-id-byte">8.4 DSI GI (offsets from the substream id byte)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="08_evo.html#gci-substream-0x04">8.5 GCI (substream <code class="docutils literal notranslate"><span class="pre">0x04</span></code>)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="08_evo.html#adv-pck-sub-stream-id-0x80">8.6 ADV_PCK (<code class="docutils literal notranslate"><span class="pre">sub_stream_id</span> <span class="pre">=</span> <span class="pre">0x80</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="08_evo.html#pack-grammar-e16-stalingrad-logo-evo-n-2383">Pack grammar (<code class="docutils literal notranslate"><span class="pre">e16</span></code>, <code class="docutils literal notranslate"><span class="pre">STALINGRAD</span></code> <code class="docutils literal notranslate"><span class="pre">logo.EVO</span></code>, N=2383)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="08_evo.html#aacs-vs-container">8.7 AACS vs container</a></li>
+<li class="toctree-l2"><a class="reference internal" href="08_evo.html#elementary-stream-routing-table-45-46-how-streamnumber-finds-its-pes">8.7 Elementary-stream routing (TABLE 45 / 46): how <code class="docutils literal notranslate"><span class="pre">&#64;streamNumber</span></code> finds its PES</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="08_evo.html#stream-id-stream-id-extension-table-45">stream_id / stream_id_extension (TABLE 45)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="08_evo.html#sub-stream-id-for-private-stream-1-0xbd-table-46">sub_stream_id for private_stream_1 = <code class="docutils literal notranslate"><span class="pre">0xBD</span></code> (TABLE 46)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="08_evo.html#the-rule-a-demuxer-applies">The rule a demuxer applies</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="08_evo.html#sub-picture-sp-pck-2bitrlc-8bitrlc-decode">8.8 Sub-picture (SP_PCK): <code class="docutils literal notranslate"><span class="pre">2bitRLC</span></code> / <code class="docutils literal notranslate"><span class="pre">8bitRLC</span></code> decode</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="08_evo.html#pixel-values-table-67-68">Pixel values (TABLE 67/68)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="08_evo.html#run-length-rule-eight-patterns-msb-first-bitstream">Run-length rule (eight patterns, MSB-first bitstream)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="08_evo.html#display-control-sequence-sp-dcsqt">Display-control sequence (<code class="docutils literal notranslate"><span class="pre">SP_DCSQT</span></code>)</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="09_aacs.html">9. AACS overlay (format only)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="09_aacs.html#directories">9.1 Directories</a></li>
+<li class="toctree-l2"><a class="reference internal" href="09_aacs.html#files">9.2 Files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="09_aacs.html#vtkf-table-3-8-final-0-953">9.3 VTKF: Table 3-8 (Final 0.953)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="09_aacs.html#title-key-entry-36-bytes">Title Key Entry (36 bytes)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="09_aacs.html#dkf-64-bytes-table-6-2">9.4 DKF (64 bytes): Table 6-2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="09_aacs.html#content-cert-120-bytes-table-3-17">9.5 CONTENT_CERT (120 bytes): Table 3-17</a></li>
+<li class="toctree-l2"><a class="reference internal" href="09_aacs.html#pack-encryption-table-4-7">9.6 Pack encryption: Table 4-7</a></li>
+<li class="toctree-l2"><a class="reference internal" href="09_aacs.html#volume-id">9.7 Volume ID</a></li>
+<li class="toctree-l2"><a class="reference internal" href="09_aacs.html#vtuf-144-bytes">9.8 VTUF (144 bytes)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="09_aacs.html#reusing-libaacs-what-ports-and-what-does-not">9.9 Reusing libaacs: what ports and what does not</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="09_aacs.html#exact-extension-points-libaacs-master-read-2026-09">Exact extension points (libaacs master, read 2026-09)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="09_aacs.html#prior-art-the-corpus-was-decrypted-by-known-2007-tools">9.10 Prior art: the corpus was decrypted by known 2007 tools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="09_aacs.html#full-decrypt-flow-from-backuphddvd-source-verbatim-facts-for-the-c-port">9.11 Full decrypt flow: from BackupHDDVD source (verbatim facts for the C port)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="09_aacs.html#aes-g-the-aacs-one-way-function">AES-G (the AACS one-way function)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="09_aacs.html#pack-cbc-decryption">Pack CBC decryption</a></li>
+<li class="toctree-l3"><a class="reference internal" href="09_aacs.html#field-sources-within-a-pack">Field sources within a pack</a></li>
+<li class="toctree-l3"><a class="reference internal" href="09_aacs.html#evo-decrypt-driver-per-evob-file">EVO decrypt driver (per EVOB file)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="09_aacs.html#libaacs-mapping-what-an-implementer-changes">libaacs mapping (what an implementer changes)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="09_aacs.html#how-evo-decryption-is-actually-done-and-what-applies-here">9.12 How EVO “decryption” is actually done, and what applies here</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="09_aacs.html#a-copy-the-evo-out-of-the-disc-no-keys-always-possible">(a) Copy the EVO out of the disc: no keys, always possible</a></li>
+<li class="toctree-l3"><a class="reference internal" href="09_aacs.html#b-decrypt-the-aacs-scrambled-payload-inside-the-packs">(b) Decrypt the AACS-scrambled payload inside the packs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="09_aacs.html#can-we-do-it-here-with-what-we-know">Can we do it here, with what we know?</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="09_aacs.html#sequence-key-skb-skf-format-closed-0-120-discs">9.13 Sequence Key (SKB / SKF): format closed, 0/120 discs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="09_aacs.html#empirical-decrypt-the-one-step-not-reproducible-here">9.14 Empirical decrypt: the one step not reproducible here</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="10_playback.html">10. Playback sequence</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="10_playback.html#playback-flowchart">10.0 Playback flowchart</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="10_playback.html#boot-insert-to-first-title">Boot: insert to first title</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10_playback.html#title-runtime-video-pipeline-hdi-engine-in-parallel">Title runtime: video pipeline + HDi engine in parallel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10_playback.html#seek-time-to-byte">Seek (time to byte)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10_playback.html#aacs-pack-licensed-encrypted-disc-only">AACS pack (licensed / encrypted disc only)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="10_playback.html#b-control-flow-box-numbered-for-10-8">10.0b Control flow (box-numbered for §10.8)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="10_playback.html#open-a-disc-fig-7-fig-50">Open a disc (FIG.7 + FIG.50)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10_playback.html#designed-menus-title-timeline">Designed menus (title timeline)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="10_playback.html#insert-category">10.1 Insert → category</a></li>
+<li class="toctree-l2"><a class="reference internal" href="10_playback.html#advanced-startup-fig-50">10.2 Advanced startup (FIG.50)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="10_playback.html#play-a-title">10.3 Play a title</a></li>
+<li class="toctree-l2"><a class="reference internal" href="10_playback.html#seek">10.4 Seek</a></li>
+<li class="toctree-l2"><a class="reference internal" href="10_playback.html#pack-path-to-a-demuxer">10.5 Pack path to a demuxer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="10_playback.html#aacs-if-any-or-aac-present">10.6 AACS (if <code class="docutils literal notranslate"><span class="pre">ANY!</span></code> or <code class="docutils literal notranslate"><span class="pre">AAC!</span></code> present)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="10_playback.html#what-is-specified-vs-not">10.7 What is specified vs not</a></li>
+<li class="toctree-l2"><a class="reference internal" href="10_playback.html#gap-questions-and-evidence-answers">10.8 Gap questions and evidence answers</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="10_playback.html#a1-udf">A1 UDF</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10_playback.html#a2-category">A2 Category</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10_playback.html#a3-aacs-directory">A3 AACS directory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10_playback.html#a4-discid">A4 DISCID</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10_playback.html#a5-a5b-persistent-storage-search">A5 / A5b Persistent-storage search</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10_playback.html#a6-highest-vplst">A6 Highest VPLST</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10_playback.html#a7-parse-playlist">A7 Parse playlist</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10_playback.html#a8-configuration-wipe">A8 Configuration / wipe</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10_playback.html#a9-a9b-selector">A9 / A9b Selector</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10_playback.html#a10-firstplaytitle">A10 FirstPlayTitle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10_playback.html#a11-title-1">A11 Title 1</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10_playback.html#b1b3-mapping">B1–B3 Mapping</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10_playback.html#b4-file-cache">B4 File Cache</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10_playback.html#b5-manifest">B5 Manifest</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10_playback.html#b6-aca">B6 ACA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10_playback.html#b7-ihd-raster-focus">B7 iHD raster / focus</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10_playback.html#b8-script">B8 Script</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10_playback.html#b9-packs-adv-pck">B9 Packs / ADV_PCK</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10_playback.html#b10-composite">B10 Composite</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10_playback.html#b11-cues-remote">B11 Cues / remote</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10_playback.html#b12-end-of-title">B12 End of title</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10_playback.html#c1-aacs-licensed-drive-only">C1 AACS (licensed drive only)</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="11_gaps.html">11. What a C author still cannot build (gap register)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="11_gaps.html#a-fully-specified-a-c-author-can-build-these-now">A. Fully specified (a C author CAN build these now)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="11_gaps.html#b-blocking-missing-for-a-general-engine-not-for-the-corpus-menus">B. BLOCKING (missing for a <em>general</em> engine; not for the corpus menus)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="11_gaps.html#b1-full-hdi-runtime-semantics-event-timing-execution-model">B1. Full HDi runtime semantics (event/timing execution model)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="11_gaps.html#b2-hdi-type-library-signatures-abi">B2. HDi type-library signatures (ABI)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="11_gaps.html#b3-advanced-subtitle">B3. Advanced Subtitle</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="11_gaps.html#c-degraded-plays-but-not-pixel-behaviour-exact">C. DEGRADED (plays, but not pixel/behaviour exact)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="11_gaps.html#d-external-outside-libhddvd-by-design">D. EXTERNAL (outside libhddvd by design)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="11_gaps.html#e-encryption-what-is-and-is-not-needed-detail-09-9-99-11">E. Encryption: what is and is not needed  (detail: 09 §9.9–9.11)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="11_gaps.html#f-firmware-is-not-a-usable-source-checked-not-assumed">F. Firmware is not a usable source  (checked, not assumed)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="11_gaps.html#reader-test-verdict">Reader-test verdict</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="12_hdi_scripting_abi.html">12. HDi scripting host ABI (type library)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="12_hdi_scripting_abi.html#object-model-106-typeinfos">12.1 Object model (106 typeinfos)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="12_hdi_scripting_abi.html#constant-catalog-200-constants">12.2 Constant catalog (200 constants)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="12_hdi_scripting_abi.html#complete-ihd-markup-surface-xsd">12.3 Complete iHD markup surface (XSD)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="12_hdi_scripting_abi.html#hdi-runtime-semantics-published-standards">12.4 HDi runtime semantics (published standards)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="12_hdi_scripting_abi.html#event-dispatch-order-dom-level-2-events-verbatim">Event dispatch order (DOM Level 2 Events, verbatim)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="12_hdi_scripting_abi.html#dom-level-2-node-types-standard-integer-values-typelib-order-matches-w3c">DOM Level 2 node types (standard integer values, typelib order matches W3C)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="12_hdi_scripting_abi.html#dom-level-2-exception-codes-standard-integer-values">DOM Level 2 exception codes (standard integer values)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="12_hdi_scripting_abi.html#smil-2-0-timing-resolution-cue-par-seq-set-animate">SMIL 2.0 timing resolution (<code class="docutils literal notranslate"><span class="pre">cue</span></code> / <code class="docutils literal notranslate"><span class="pre">par</span></code> / <code class="docutils literal notranslate"><span class="pre">seq</span></code> / <code class="docutils literal notranslate"><span class="pre">set</span></code> / <code class="docutils literal notranslate"><span class="pre">animate</span></code>)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="12_hdi_scripting_abi.html#player-object-model-from-the-type-library">12.5 Player object model (from the type library)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="12_hdi_scripting_abi.html#cue-predicate-grammar-pathexpressiontype">12.6 Cue-predicate grammar (<code class="docutils literal notranslate"><span class="pre">PathExpressionType</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="12_hdi_scripting_abi.html#remaining-items-after-12-5-12-6-5-2">Remaining items after §12.5 / §12.6 / §5.2</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="13_references.html">13. References</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="13_references.html#patents">Patents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="13_references.html#standards-specifications">Standards &amp; specifications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="13_references.html#software-tools-primary-artifacts">Software, tools &amp; primary artifacts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="13_references.html#disc-firmware-corpus-internet-archive">Disc &amp; firmware corpus (Internet Archive)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="13_references.html#developer-documentation-community">Developer documentation &amp; community</a></li>
+<li class="toctree-l2"><a class="reference internal" href="13_references.html#optical-drive-command-set">Optical-drive command set</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">HD DVD Advanced Content</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content style-external-links">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Search</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <noscript>
+  <div id="fallback" class="admonition warning">
+    <p class="last">
+      Please activate JavaScript to enable the search functionality.
+    </p>
+  </div>
+  </noscript>
+
+  
+  <div id="search-results">
+  
+  </div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Working specification.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+  <script>
+    jQuery(function() { Search.loadIndex("searchindex.js"); });
+  </script>
+  
+  <script id="searchindexloader"></script>
+   
+
+
+</body>
+</html>

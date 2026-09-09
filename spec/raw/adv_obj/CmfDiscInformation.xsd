@@ -1,0 +1,430 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited by Boon Kelly (DCA Inc) -->
+<!--W3C Schema generated manually -->
+<!-- This schema defines the DiscInformation file for the following...
+
+Exchange Protocol : HD DVD CMF
+Exchange state    : any
+
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.dvdforum.org/2006/HDDVDCMF/DISCINFO" targetNamespace="http://www.dvdforum.org/2006/HDDVDCMF/DISCINFO" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<!--  (C)Copyright 2006 The DVD Forum*. All rights reserved.   -->
+	<!-- Definition of Enumerations -->
+	<xs:simpleType name="ProtectionStatusValues">
+		<xs:annotation>
+			<xs:documentation>This type defines the values for the status of the copy protection system being defined in the CopyProtectionInformation section.  It is used in the ProtectionStatus elemnent in the CopyProtectionInformation section.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="INCOMPLETE"/>
+			<xs:enumeration value="COMPLETE"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="DateType">
+		<xs:annotation>
+			<xs:documentation>This type defines the attribute values for the type of Date/Time in the DataTime element in the DiscInformation section.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="Created"/>
+			<xs:enumeration value="Modified"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="AACSSectionType">
+		<xs:annotation>
+			<xs:documentation>This is an attribute value is used in the Section elements in the CopyProtectionInformation section.  It is used to identify the section of the AACS copy protection system that is being described.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="Advanced Resources"/>
+			<xs:enumeration value="Title Key Files"/>
+			<xs:enumeration value="Title Usage Files"/>
+			<xs:enumeration value="Enhanced Video Object"/>
+			<xs:enumeration value="Directory Key File"/>
+			<xs:enumeration value="Segment Key File"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="AACSKeyType">
+		<xs:annotation>
+			<xs:documentation>This is an attribute value that is used in the Key elements in the CopyProtectionInformation section.  It is used to identify the AACS Key that is being provided.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="VolumeID"/>
+			<xs:enumeration value="TitleKey"/>
+			<xs:enumeration value="SegmentKey"/>
+			<xs:enumeration value="KCD"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="CopyProtectionState">
+		<xs:annotation>
+			<xs:documentation>This value is used in the Section elements in the CopyProtectionInformation section.  It is used to identify the protection status of the section of the AACS copy protection system identified by the element's attribute.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="PARTIAL"/>
+			<xs:enumeration value="OPEN"/>
+			<xs:enumeration value="AACS PROTECTED"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="PMSNType">
+		<xs:annotation>
+			<xs:documentation>This is an attribute value that is used in the PMSN elements in the CopyProtectionInformation section.  It is used to identify the type of PMSN being described.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="TitleUnique"/>
+			<xs:enumeration value="DiscUniqueStart"/>
+			<xs:enumeration value="DiscUniqueEnd"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="CopyProtectionTypes">
+		<xs:annotation>
+			<xs:documentation>This is a table of enumerations for valid copy protection types.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="AACS"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="CHT1Types">
+		<xs:annotation>
+			<xs:documentation>This value that is used in the CHT1 element in the CopyProtectionInformation section.  It is used to identify the the status of the CHT1 in the AACS copy protection system.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="EMPTY"/>
+			<xs:enumeration value="COMPLETE"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="CHT2Types">
+		<xs:annotation>
+			<xs:documentation>This value that is used in the CHT2 element in the CopyProtectionInformation section.  It is used to identify the the status of the CHT2 in the AACS copy protection system.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="EMPTY"/>
+			<xs:enumeration value="PARTIAL"/>
+			<xs:enumeration value="COMPLETE"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="CCTypes">
+		<xs:annotation>
+			<xs:documentation>This value that is used in the CC element in the CopyProtectionInformation section.  It is used to identify the the status of the CC in the AACS copy protection system.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="AFTER AACS SIGNED"/>
+			<xs:enumeration value="BEFORE AACS SIGNED"/>
+			<xs:enumeration value="EMPTY"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="NumLayerValues">
+		<xs:annotation>
+			<xs:documentation>This value that is used in the NumberLayers element in the DiscInformation section.  It is used to identify the number of layers on the media.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:integer">
+			<xs:enumeration value="1"/>
+			<xs:enumeration value="2"/>
+			<xs:enumeration value="3"/>
+			<xs:enumeration value="4"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="TypesOfLayers">
+		<xs:annotation>
+			<xs:documentation>This value that is used in the LayerType element in the DiscInformation section.  It is used to identify the type of disc (PTP, OTP, etc).</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="PTP"/>
+			<xs:enumeration value="OTP"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<!-- Definition of Simple elements -->
+	<xs:element name="NumberLayers">
+		<xs:annotation>
+			<xs:documentation>This element defines the number of layers present on the media.  The HD DVD-ROM disc can currently have 2 and may eventually have more layers.</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="NumLayerValues"/>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="LayerType">
+		<xs:annotation>
+			<xs:documentation>This element defines the type of layers.</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="TypesOfLayers"/>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="StartAddress">
+		<xs:annotation>
+			<xs:documentation>This element defines the start Logical Block Address that the Data Area of the Layer being defined starts.</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="xs:integer">
+				<xs:minInclusive value="0"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="Length">
+		<xs:annotation>
+			<xs:documentation>This element defines the length (in number of blocks (i.e. sectors)) of the Data Area being defined.</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="xs:integer">
+				<xs:minInclusive value="0"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="BCA">
+		<xs:annotation>
+			<xs:documentation>This element contains content to be placed in the BCA.  This element should contain the total number of BCA characters that are to be placed on the disc.  For example, for HD DVD-ROM, this element should contain 76 characters.</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="xs:hexBinary">
+				<xs:maxLength value="188"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="Title">
+		<xs:annotation>
+			<xs:documentation>This element contains the title of the disc image contents or application.  It contains all characters valid for a normal XML string.  It is recommended that the maximum length of this element be 4096 characters.</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:maxLength value="4096"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="Author">
+		<xs:annotation>
+			<xs:documentation>This element contains the Name and Software Version of the Authoring System Product used to create the disc image.  It contains all characters valid for a normal XML string.  It is recommended that the maximum length of this element be 4096 characters.</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:maxLength value="4096"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="CopyrightNotice">
+		<xs:annotation>
+			<xs:documentation>This element contains the copyright notice for the disc image contents.  It contains all characters valid for a normal XML string.  It is recommended that the maximum length of this element be 4096 characters.</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:maxLength value="4096"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="Abstract">
+		<xs:annotation>
+			<xs:documentation>This element contains a description of the disc image contents.  It can be used for identifying different versions of a disc image.  It contains all characters valid for a normal XML string.  It is recommended that the maximum length of this element be 4096 characters.</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:maxLength value="4096"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="SourcePath">
+		<xs:annotation>
+			<xs:documentation>This element specifies the path to a file that is to be placed into the Disc Image.  The path specified by this element is relative to the folder that the CMFID file is found.</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="xs:string"/>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="DiscImagePath">
+		<xs:annotation>
+			<xs:documentation>This element specifies the full path to a file in the Disc Image UDF structure that the file is to replace.</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="xs:string"/>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="Extension">
+		<xs:annotation>
+			<xs:documentation>This element specifies the extension name of the file whose MIME type is application/x-data, and which is protected by AACS. Note that all the files indicated by this element are protected by AACS encapsulation.  Note that the characters in upper case shall be regarded as different from the characters in lower case and vice versa. (e.g. XML and xml are not regarded as same extension).</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="xs:string"/>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="CHT1">
+		<xs:annotation>
+			<xs:documentation>This element defines the status of the AACS Content Hash Table 1 file. When the status of CHT1 is COMPLETE, the status of Enhanced Video Object shall be AACS PROTECTED and vice versa.</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="CHT1Types"/>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="CHT2">
+		<xs:annotation>
+			<xs:documentation>This element defines the status of the AACS Content Hash Table 2 file. When the status of CHT2 is COMPLETE or PARTIAL, the status of Advanced Resources shall be AACS PROTECTED and vice versa. When the status of CHT2 is COMPLETE, the statuses of Title Usage Files and Directory Key File shall be AACS PROTECTED and vice versa.</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="CHT2Types"/>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="CC">
+		<xs:annotation>
+			<xs:documentation>This element defines the status of the AACS Content Certificate file. When the status of CC is AFTER AACS SIGNED or BEFORE AACS SIGNED, the status of CHT1 and CHT2 shall be COMPLETE and vice versa.</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="CCTypes"/>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="PartialMediaKeyBlock">
+		<xs:annotation>
+			<xs:documentation>This element specifies the path to a file that contains the Partial Media Key Block (P-MKB).  The path specified by this element is relative to the folder that the CMFID file is found.</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="xs:string"/>
+		</xs:simpleType>
+	</xs:element>
+	<!-- Definition of Complex elements -->
+	<xs:element name="Key">
+		<xs:annotation>
+			<xs:documentation>This element holds a key used for AACS encryption.  The type of key is specified by the attribute.  The value for this element is stored as a hexadecimal value.  The value is stored as a ASCII representation of the hexadecimal numbers.</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:simpleContent>
+				<xs:extension base="xs:hexBinary">
+					<xs:attribute name="Type" type="AACSKeyType" use="required"/>
+				</xs:extension>
+			</xs:simpleContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="PMSN">
+		<xs:annotation>
+			<xs:documentation>This element holds a PMSN used for AACS encryption.  The type of PMSN is specified by the attribute.  The PMSN can be specified as one of two ways according to the attribute.</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:simpleContent>
+				<xs:extension base="xs:hexBinary">
+					<xs:attribute name="Type" type="PMSNType" use="required"/>
+				</xs:extension>
+			</xs:simpleContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Layer">
+		<xs:annotation>
+			<xs:documentation>This element defines length and start location of each layer.</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="StartAddress"/>
+				<xs:element ref="Length"/>
+			</xs:sequence>
+			<xs:attribute name="Type" type="xs:nonNegativeInteger" use="required"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="DateTime">
+		<xs:annotation>
+			<xs:documentation>This element the date and time that the CMF Set was created or modified depending on the type attribute.</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:simpleContent>
+				<xs:extension base="xs:dateTime">
+					<xs:attribute name="Type" type="DateType" use="required"/>
+				</xs:extension>
+			</xs:simpleContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="ProtectionStatus">
+		<xs:annotation>
+			<xs:documentation>This element defines the status of the copy protection with regard to a piece of the disc content.</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:simpleContent>
+				<xs:extension base="ProtectionStatusValues"/>
+			</xs:simpleContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Section">
+		<xs:annotation>
+			<xs:documentation>This element contains the date and time that the CMF Set was created or modified depending on the type attribute.</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:simpleContent>
+				<xs:extension base="CopyProtectionState">
+					<xs:attribute name="Type" type="AACSSectionType" use="required"/>
+				</xs:extension>
+			</xs:simpleContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Status">
+		<xs:annotation>
+			<xs:documentation>This element defines the status of the copy protection.  It can identify different parts of the Disc Image and their copy protection status.  This allows different parts of the Disc Image to have different copy protection statuses.</xs:documentation>
+		</xs:annotation>
+		<xs:complexType mixed="true">
+			<xs:sequence>
+				<xs:element ref="ProtectionStatus"/>
+				<xs:element ref="Section" minOccurs="4" maxOccurs="6"/>
+				<xs:element ref="CHT1"/>
+				<xs:element ref="CHT2"/>
+				<xs:element ref="CC"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="ReplacementFile">
+		<xs:annotation>
+			<xs:documentation>This element is used to replace a file listed in the UDF File System within the Disc Image File with a new file.  The element has two children.  One child contains the full path in the UDF File System within the Disc Image of the file to replace.  The other child contains the path to the file that will be used as the source content.  The source content file must be the same size or smaller than the file listed in the UDF File System within the Disc Image.  When the source file is smaller, the remaining sectors in the file in the Disc Image will be filled with 00h.  In practical use, this element will exist only when a new replacement source file exists.</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="SourcePath"/>
+				<xs:element ref="DiscImagePath"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="x-data">
+		<xs:annotation>
+			<xs:documentation>In the HD-Video specification, there may be the file whose extension and content is not specified. The MIME type of such file is defined as application/x-data (See Table 3.3.5-1 File Extension and MIME Type). This element is used to indicate and protect such files.</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="Extension" minOccurs="0"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<!-- Disc Information section -->
+	<xs:element name="DiscInformation">
+		<xs:annotation>
+			<xs:documentation>This element holds all of the physical disc properties.</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="DateTime" maxOccurs="unbounded"/>
+				<xs:element ref="NumberLayers"/>
+				<xs:element ref="LayerType"/>
+				<xs:element ref="Layer" maxOccurs="4"/>
+				<xs:element ref="BCA"/>
+				<xs:element ref="Title"/>
+				<xs:element ref="Author"/>
+				<xs:element ref="CopyrightNotice"/>
+				<xs:element ref="Abstract"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<!-- Copy Protection Information section -->
+	<xs:element name="CopyProtectionInformation">
+		<xs:annotation>
+			<xs:documentation>This element holds all of the information specific to the copy protection system to be placed on the disc.</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="Status"/>
+				<xs:element ref="Key" minOccurs="2" maxOccurs="1602"/>
+				<xs:element ref="PMSN" minOccurs="0" maxOccurs="2"/>
+				<xs:element ref="PartialMediaKeyBlock" minOccurs="0"/>
+				<xs:element ref="ReplacementFile" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element ref="x-data" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+			<xs:attribute name="Type" type="CopyProtectionTypes" use="required"/>
+		</xs:complexType>
+	</xs:element>
+	<!-- Main File information -->
+	<xs:element name="DiscInformationFile">
+		<xs:annotation>
+			<xs:documentation>The DiscInformationFile element is the top level element of the Disc Information File.</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="DiscInformation"/>
+				<xs:element ref="CopyProtectionInformation" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>
+

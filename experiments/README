@@ -1,0 +1,38 @@
+experiments/
+    Verification scripts for claims in spec/advanced/ (and research notes in
+    spec/clean/). HTML is Sphinx under docs/_build/html/ after
+    `cd docs && ../.venv/bin/sphinx-build -b html . _build/html`.
+
+Each eNN_*.py is one experiment: it states the claim, what would falsify it,
+and which disc files (or listing URLs) it read. Run:
+
+    python3 experiments/run.py
+
+e01–e08 and e11 only read this repository (corpus listings + saved
+MAP/VTI/XPL/DISCID/AACS/ACA). They do not decrypt or need a drive.
+
+e09–e10 HTTP-range the Archive.org ISO (UDF walk). e09 caches packs in
+`/tmp/e09_cache.json`. e10 fetches one MAP+EVO (default DOWNFALL EVOB002).
+
+ISO provenance: line 1 of corpus/<DISC>/_listing.txt is the Internet Archive
+URL, of the form https://archive.org/download/hd-dvd_archive_NN/<DISC>.iso
+
+| ID | Claim |
+|---|---|
+| e01 | 120 discs, partition_start=288, ANY!/AAC!, VTKF {2480,2516}, MKBROM four sizes |
+| e02 | XPL parse, namespace, v1.0 |
+| e03 | MAP magic, SRP@384, SA=416 |
+| e04 | VTI / DISCID / VTKF-DKF-VTUF headers |
+| e05 | BAK: 99 omit MKBRECORDABLE, 5 copy it; VTKF vs VPLST |
+| e06 | Root dirs, no VIDEO_TS/AACS, filename census |
+| e07 | Highest VPLST boot, 0 APLST, clip src is .MAP, FirstPlayTitle 119, onEnd 3192/3196 |
+| e08 | TABLE 83 13-bit SZ, ATRI V_ATR, ATRN range, BUP identity |
+| e09 | PES_scrambling_control=00₂ on sampled packs (AACS-stripped ISOs) |
+| e10 | Live MAP walk: sum(EVOBU_SZ)=EVO packs; seek lands on 00 00 01 BA |
+| e11 | ACA 14+namelen+32; EVOBI+274/+278; ATRI +6/+391; no HVSO/APLST/Cat3; VTUF 144 B |
+| e12 | Implementer census (selectors, FirstPlayTitle, exclusive titleTimeEnd, …) |
+| e13 | MAP pad 128–371/374–383; u16@372=ILVU count; ILVU rotation walk; V_ATR 0 AVC/VC-1; ATRI@193; EVOBI 36-byte name |
+| e14 | Adversarial search (SEARCH_FLG, PROVIDER_ID shapes, multiplexed, loadingBegin, …) |
+| e15 | HDi menu census: JS UTF-16BE, size vs listing, jump/load, used iHD attrs |
+| e16 | ADV_PCK `0x80`: `STALINGRAD` `logo.EVO` concat = ACA files; dump offline. `E16_FULL=1` re-fetches |
+| e17 | Deep HDi census on saved ACA (directory, cue kinds, Player.*, object types) |

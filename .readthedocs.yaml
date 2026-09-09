@@ -1,0 +1,18 @@
+# Read the Docs
+# https://docs.readthedocs.io/en/stable/config-file/v2.html
+version: 2
+
+build:
+  os: ubuntu-24.04
+  tools:
+    python: "3.12"
+  jobs:
+    pre_build:
+      - cp spec/advanced/01_volume.md spec/advanced/02_discid.md spec/advanced/03_playlist.md spec/advanced/04_aca.md spec/advanced/05_manifest_hdi.md spec/advanced/06_vti.md spec/advanced/07_map.md spec/advanced/08_evo.md spec/advanced/09_aacs.md spec/advanced/10_playback.md docs/
+
+sphinx:
+  configuration: docs/conf.py
+
+python:
+  install:
+    - requirements: docs/requirements.txt

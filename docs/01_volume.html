@@ -1,0 +1,591 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>1. Volume and directories &mdash; HD DVD Advanced Content</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=2709fde1"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="2. DISCID.DAT: Config File" href="02_discid.html" />
+    <link rel="prev" title="HD DVD-Video Advanced Content Format Specification" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            HD DVD Advanced Content
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Specification</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">1. Volume and directories</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#filesystem">1.1 Filesystem</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#medium-identification">1.2 Medium identification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#root-directories-n-120">1.3 Root directories (N=120)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#hvdvd-ts-advanced-content-files">1.4 <code class="docutils literal notranslate"><span class="pre">HVDVD_TS/</span></code>: Advanced Content files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#adv-obj-files">1.5 <code class="docutils literal notranslate"><span class="pre">ADV_OBJ/</span></code>: files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#disc-uri">1.6 Disc URI</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="02_discid.html">2. DISCID.DAT: Config File</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="02_discid.html#layout">2.1 Layout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="02_discid.html#observed-provider-id-tags-ascii">2.2 Observed <code class="docutils literal notranslate"><span class="pre">PROVIDER_ID</span></code> tags (ASCII)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="02_discid.html#player-use">2.3 Player use</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="03_playlist.html">3. Playlist: VPLST$$$.XPL</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="03_playlist.html#time">3.1 Time</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_playlist.html#tree">3.2 Tree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_playlist.html#title">3.3 Title</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_playlist.html#primaryaudiovideoclip">3.4 PrimaryAudioVideoClip</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_playlist.html#applicationsegment">3.5 ApplicationSegment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_playlist.html#playlistapplication">3.6 PlaylistApplication</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_playlist.html#chapter">3.7 Chapter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_playlist.html#tracknavigationlist">3.8 TrackNavigationList</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_playlist.html#uri-of-a-clip-map">3.9 URI of a clip MAP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_playlist.html#a-scheduledcontrollist-timeline-pauses-and-events">3.9a ScheduledControlList: timeline pauses and events</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_playlist.html#which-playlist-to-open">3.10 Which playlist to open</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_playlist.html#elements-in-the-xsd-unused-in-this-corpus">3.11 Elements in the XSD, unused in this corpus</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="04_aca.html">4. ACA: Advanced Content Archive</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="04_aca.html#archive-header">4.1 Archive header</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04_aca.html#directory-entry-variable-length">4.2 Directory entry (variable length)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04_aca.html#members">4.3 Members</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04_aca.html#namespace">4.4 Namespace</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="05_manifest_hdi.html">5. Manifest, markup, script (HDi)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="05_manifest_hdi.html#implementation-gate-closed">5.0 Implementation gate (CLOSED)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_manifest_hdi.html#manifest-xmf">5.1 Manifest: <code class="docutils literal notranslate"><span class="pre">.xmf</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_manifest_hdi.html#markup-xmu">5.2 Markup: <code class="docutils literal notranslate"><span class="pre">.xmu</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_manifest_hdi.html#script">5.3 Script</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_manifest_hdi.html#runtime-patent-fig-50-steps-67">5.4 Runtime (patent FIG.50 steps 6–7)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_manifest_hdi.html#what-is-specified-vs-what-blocks-the-gate">5.5 What is specified vs what blocks the gate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_manifest_hdi.html#remaining-spec-work-no-firmware">5.6 Remaining spec work (no firmware)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_manifest_hdi.html#file-cache-size">5.7 File Cache <code class="docutils literal notranslate"><span class="pre">&#64;size</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_manifest_hdi.html#persistent-storage-uris-script">5.8 Persistent storage URIs (script)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_manifest_hdi.html#raster-focus-cues-used-path">5.9 Raster, focus, cues (used path)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="06_vti.html">6. HVA00001.VTI: Advanced VTSI</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="06_vti.html#vtsi-mat-first-2048-bytes">6.1 VTSI_MAT (first 2048 bytes)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="06_vti.html#vts-evob-atrt-at-vts-evob-atrt-sa-2048">6.2 VTS_EVOB_ATRT (at <code class="docutils literal notranslate"><span class="pre">VTS_EVOB_ATRT_SA</span></code> × 2048)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="06_vti.html#atri-1024-bytes">ATRI (1024 bytes)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="06_vti.html#vts-evobit-at-vts-evobit-sa-2048">6.3 VTS_EVOBIT (at <code class="docutils literal notranslate"><span class="pre">VTS_EVOBIT_SA</span></code> × 2048)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="06_vti.html#evobi-320-bytes">EVOBI (320 bytes)</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="07_map.html">7. MAP: time map</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="07_map.html#file-layout">7.1 File layout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="07_map.html#tmap-gi-128-bytes-table-80">7.2 TMAP_GI (128 bytes): TABLE 80</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="07_map.html#tmap-ty-table-81-figure-c00039">TMAP_TY: TABLE 81 figure C00039</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="07_map.html#tmapi-srp-table-82">7.3 TMAPI_SRP: TABLE 82</a></li>
+<li class="toctree-l2"><a class="reference internal" href="07_map.html#evobu-ent-table-83-4-bytes">7.4 EVOBU_ENT: TABLE 83 (4 bytes)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="07_map.html#seek-algorithm">Seek algorithm</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="07_map.html#ilvu-ent-table-84-6-bytes">7.5 ILVU_ENT: TABLE 84 (6 bytes)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="08_evo.html">8. EVO: MPEG-2 program stream</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="08_evo.html#pack-types-table-85">8.1 Pack types (TABLE 85)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="08_evo.html#nv-pck-first-pack-of-each-evobu">8.2 NV_PCK: first pack of each EVOBU</a></li>
+<li class="toctree-l2"><a class="reference internal" href="08_evo.html#pci-gi-offsets-from-the-substream-id-byte">8.3 PCI GI (offsets from the substream id byte)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="08_evo.html#dsi-gi-offsets-from-the-substream-id-byte">8.4 DSI GI (offsets from the substream id byte)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="08_evo.html#gci-substream-0x04">8.5 GCI (substream <code class="docutils literal notranslate"><span class="pre">0x04</span></code>)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="08_evo.html#adv-pck-sub-stream-id-0x80">8.6 ADV_PCK (<code class="docutils literal notranslate"><span class="pre">sub_stream_id</span> <span class="pre">=</span> <span class="pre">0x80</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="08_evo.html#pack-grammar-e16-stalingrad-logo-evo-n-2383">Pack grammar (<code class="docutils literal notranslate"><span class="pre">e16</span></code>, <code class="docutils literal notranslate"><span class="pre">STALINGRAD</span></code> <code class="docutils literal notranslate"><span class="pre">logo.EVO</span></code>, N=2383)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="08_evo.html#aacs-vs-container">8.7 AACS vs container</a></li>
+<li class="toctree-l2"><a class="reference internal" href="08_evo.html#elementary-stream-routing-table-45-46-how-streamnumber-finds-its-pes">8.7 Elementary-stream routing (TABLE 45 / 46): how <code class="docutils literal notranslate"><span class="pre">&#64;streamNumber</span></code> finds its PES</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="08_evo.html#stream-id-stream-id-extension-table-45">stream_id / stream_id_extension (TABLE 45)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="08_evo.html#sub-stream-id-for-private-stream-1-0xbd-table-46">sub_stream_id for private_stream_1 = <code class="docutils literal notranslate"><span class="pre">0xBD</span></code> (TABLE 46)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="08_evo.html#the-rule-a-demuxer-applies">The rule a demuxer applies</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="08_evo.html#sub-picture-sp-pck-2bitrlc-8bitrlc-decode">8.8 Sub-picture (SP_PCK): <code class="docutils literal notranslate"><span class="pre">2bitRLC</span></code> / <code class="docutils literal notranslate"><span class="pre">8bitRLC</span></code> decode</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="08_evo.html#pixel-values-table-67-68">Pixel values (TABLE 67/68)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="08_evo.html#run-length-rule-eight-patterns-msb-first-bitstream">Run-length rule (eight patterns, MSB-first bitstream)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="08_evo.html#display-control-sequence-sp-dcsqt">Display-control sequence (<code class="docutils literal notranslate"><span class="pre">SP_DCSQT</span></code>)</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="09_aacs.html">9. AACS overlay (format only)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="09_aacs.html#directories">9.1 Directories</a></li>
+<li class="toctree-l2"><a class="reference internal" href="09_aacs.html#files">9.2 Files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="09_aacs.html#vtkf-table-3-8-final-0-953">9.3 VTKF: Table 3-8 (Final 0.953)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="09_aacs.html#title-key-entry-36-bytes">Title Key Entry (36 bytes)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="09_aacs.html#dkf-64-bytes-table-6-2">9.4 DKF (64 bytes): Table 6-2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="09_aacs.html#content-cert-120-bytes-table-3-17">9.5 CONTENT_CERT (120 bytes): Table 3-17</a></li>
+<li class="toctree-l2"><a class="reference internal" href="09_aacs.html#pack-encryption-table-4-7">9.6 Pack encryption: Table 4-7</a></li>
+<li class="toctree-l2"><a class="reference internal" href="09_aacs.html#volume-id">9.7 Volume ID</a></li>
+<li class="toctree-l2"><a class="reference internal" href="09_aacs.html#vtuf-144-bytes">9.8 VTUF (144 bytes)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="09_aacs.html#reusing-libaacs-what-ports-and-what-does-not">9.9 Reusing libaacs: what ports and what does not</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="09_aacs.html#exact-extension-points-libaacs-master-read-2026-09">Exact extension points (libaacs master, read 2026-09)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="09_aacs.html#prior-art-the-corpus-was-decrypted-by-known-2007-tools">9.10 Prior art: the corpus was decrypted by known 2007 tools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="09_aacs.html#full-decrypt-flow-from-backuphddvd-source-verbatim-facts-for-the-c-port">9.11 Full decrypt flow: from BackupHDDVD source (verbatim facts for the C port)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="09_aacs.html#aes-g-the-aacs-one-way-function">AES-G (the AACS one-way function)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="09_aacs.html#pack-cbc-decryption">Pack CBC decryption</a></li>
+<li class="toctree-l3"><a class="reference internal" href="09_aacs.html#field-sources-within-a-pack">Field sources within a pack</a></li>
+<li class="toctree-l3"><a class="reference internal" href="09_aacs.html#evo-decrypt-driver-per-evob-file">EVO decrypt driver (per EVOB file)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="09_aacs.html#libaacs-mapping-what-an-implementer-changes">libaacs mapping (what an implementer changes)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="09_aacs.html#how-evo-decryption-is-actually-done-and-what-applies-here">9.12 How EVO “decryption” is actually done, and what applies here</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="09_aacs.html#a-copy-the-evo-out-of-the-disc-no-keys-always-possible">(a) Copy the EVO out of the disc: no keys, always possible</a></li>
+<li class="toctree-l3"><a class="reference internal" href="09_aacs.html#b-decrypt-the-aacs-scrambled-payload-inside-the-packs">(b) Decrypt the AACS-scrambled payload inside the packs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="09_aacs.html#can-we-do-it-here-with-what-we-know">Can we do it here, with what we know?</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="09_aacs.html#sequence-key-skb-skf-format-closed-0-120-discs">9.13 Sequence Key (SKB / SKF): format closed, 0/120 discs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="09_aacs.html#empirical-decrypt-the-one-step-not-reproducible-here">9.14 Empirical decrypt: the one step not reproducible here</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="10_playback.html">10. Playback sequence</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="10_playback.html#playback-flowchart">10.0 Playback flowchart</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="10_playback.html#boot-insert-to-first-title">Boot: insert to first title</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10_playback.html#title-runtime-video-pipeline-hdi-engine-in-parallel">Title runtime: video pipeline + HDi engine in parallel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10_playback.html#seek-time-to-byte">Seek (time to byte)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10_playback.html#aacs-pack-licensed-encrypted-disc-only">AACS pack (licensed / encrypted disc only)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="10_playback.html#b-control-flow-box-numbered-for-10-8">10.0b Control flow (box-numbered for §10.8)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="10_playback.html#open-a-disc-fig-7-fig-50">Open a disc (FIG.7 + FIG.50)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10_playback.html#designed-menus-title-timeline">Designed menus (title timeline)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="10_playback.html#insert-category">10.1 Insert → category</a></li>
+<li class="toctree-l2"><a class="reference internal" href="10_playback.html#advanced-startup-fig-50">10.2 Advanced startup (FIG.50)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="10_playback.html#play-a-title">10.3 Play a title</a></li>
+<li class="toctree-l2"><a class="reference internal" href="10_playback.html#seek">10.4 Seek</a></li>
+<li class="toctree-l2"><a class="reference internal" href="10_playback.html#pack-path-to-a-demuxer">10.5 Pack path to a demuxer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="10_playback.html#aacs-if-any-or-aac-present">10.6 AACS (if <code class="docutils literal notranslate"><span class="pre">ANY!</span></code> or <code class="docutils literal notranslate"><span class="pre">AAC!</span></code> present)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="10_playback.html#what-is-specified-vs-not">10.7 What is specified vs not</a></li>
+<li class="toctree-l2"><a class="reference internal" href="10_playback.html#gap-questions-and-evidence-answers">10.8 Gap questions and evidence answers</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="10_playback.html#a1-udf">A1 UDF</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10_playback.html#a2-category">A2 Category</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10_playback.html#a3-aacs-directory">A3 AACS directory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10_playback.html#a4-discid">A4 DISCID</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10_playback.html#a5-a5b-persistent-storage-search">A5 / A5b Persistent-storage search</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10_playback.html#a6-highest-vplst">A6 Highest VPLST</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10_playback.html#a7-parse-playlist">A7 Parse playlist</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10_playback.html#a8-configuration-wipe">A8 Configuration / wipe</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10_playback.html#a9-a9b-selector">A9 / A9b Selector</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10_playback.html#a10-firstplaytitle">A10 FirstPlayTitle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10_playback.html#a11-title-1">A11 Title 1</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10_playback.html#b1b3-mapping">B1–B3 Mapping</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10_playback.html#b4-file-cache">B4 File Cache</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10_playback.html#b5-manifest">B5 Manifest</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10_playback.html#b6-aca">B6 ACA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10_playback.html#b7-ihd-raster-focus">B7 iHD raster / focus</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10_playback.html#b8-script">B8 Script</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10_playback.html#b9-packs-adv-pck">B9 Packs / ADV_PCK</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10_playback.html#b10-composite">B10 Composite</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10_playback.html#b11-cues-remote">B11 Cues / remote</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10_playback.html#b12-end-of-title">B12 End of title</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10_playback.html#c1-aacs-licensed-drive-only">C1 AACS (licensed drive only)</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="11_gaps.html">11. What a C author still cannot build (gap register)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="11_gaps.html#a-fully-specified-a-c-author-can-build-these-now">A. Fully specified (a C author CAN build these now)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="11_gaps.html#b-blocking-missing-for-a-general-engine-not-for-the-corpus-menus">B. BLOCKING (missing for a <em>general</em> engine; not for the corpus menus)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="11_gaps.html#b1-full-hdi-runtime-semantics-event-timing-execution-model">B1. Full HDi runtime semantics (event/timing execution model)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="11_gaps.html#b2-hdi-type-library-signatures-abi">B2. HDi type-library signatures (ABI)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="11_gaps.html#b3-advanced-subtitle">B3. Advanced Subtitle</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="11_gaps.html#c-degraded-plays-but-not-pixel-behaviour-exact">C. DEGRADED (plays, but not pixel/behaviour exact)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="11_gaps.html#d-external-outside-libhddvd-by-design">D. EXTERNAL (outside libhddvd by design)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="11_gaps.html#e-encryption-what-is-and-is-not-needed-detail-09-9-99-11">E. Encryption: what is and is not needed  (detail: 09 §9.9–9.11)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="11_gaps.html#f-firmware-is-not-a-usable-source-checked-not-assumed">F. Firmware is not a usable source  (checked, not assumed)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="11_gaps.html#reader-test-verdict">Reader-test verdict</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="12_hdi_scripting_abi.html">12. HDi scripting host ABI (type library)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="12_hdi_scripting_abi.html#object-model-106-typeinfos">12.1 Object model (106 typeinfos)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="12_hdi_scripting_abi.html#constant-catalog-200-constants">12.2 Constant catalog (200 constants)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="12_hdi_scripting_abi.html#complete-ihd-markup-surface-xsd">12.3 Complete iHD markup surface (XSD)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="12_hdi_scripting_abi.html#hdi-runtime-semantics-published-standards">12.4 HDi runtime semantics (published standards)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="12_hdi_scripting_abi.html#event-dispatch-order-dom-level-2-events-verbatim">Event dispatch order (DOM Level 2 Events, verbatim)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="12_hdi_scripting_abi.html#dom-level-2-node-types-standard-integer-values-typelib-order-matches-w3c">DOM Level 2 node types (standard integer values, typelib order matches W3C)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="12_hdi_scripting_abi.html#dom-level-2-exception-codes-standard-integer-values">DOM Level 2 exception codes (standard integer values)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="12_hdi_scripting_abi.html#smil-2-0-timing-resolution-cue-par-seq-set-animate">SMIL 2.0 timing resolution (<code class="docutils literal notranslate"><span class="pre">cue</span></code> / <code class="docutils literal notranslate"><span class="pre">par</span></code> / <code class="docutils literal notranslate"><span class="pre">seq</span></code> / <code class="docutils literal notranslate"><span class="pre">set</span></code> / <code class="docutils literal notranslate"><span class="pre">animate</span></code>)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="12_hdi_scripting_abi.html#player-object-model-from-the-type-library">12.5 Player object model (from the type library)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="12_hdi_scripting_abi.html#cue-predicate-grammar-pathexpressiontype">12.6 Cue-predicate grammar (<code class="docutils literal notranslate"><span class="pre">PathExpressionType</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="12_hdi_scripting_abi.html#remaining-items-after-12-5-12-6-5-2">Remaining items after §12.5 / §12.6 / §5.2</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="13_references.html">13. References</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="13_references.html#patents">Patents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="13_references.html#standards-specifications">Standards &amp; specifications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="13_references.html#software-tools-primary-artifacts">Software, tools &amp; primary artifacts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="13_references.html#disc-firmware-corpus-internet-archive">Disc &amp; firmware corpus (Internet Archive)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="13_references.html#developer-documentation-community">Developer documentation &amp; community</a></li>
+<li class="toctree-l2"><a class="reference internal" href="13_references.html#optical-drive-command-set">Optical-drive command set</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">HD DVD Advanced Content</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content style-external-links">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">1. Volume and directories</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/01_volume.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="volume-and-directories">
+<h1>1. Volume and directories<a class="headerlink" href="#volume-and-directories" title="Link to this heading"></a></h1>
+<p><em>Counts written “N/120”, “N/119”, “on N discs”, “listings”, or as named discs are over the reference corpus of 120 archived retail HD DVD images [11]. <code class="docutils literal notranslate"><span class="pre">eNN</span></code> are the reproducible verification experiments [12].</em></p>
+<section id="filesystem">
+<h2>1.1 Filesystem<a class="headerlink" href="#filesystem" title="Link to this heading"></a></h2>
+<p>HD DVD-Video is <strong>UDF 2.50</strong> with a Metadata Partition.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>Value</p></th>
+<th class="head"><p>Evidence</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Logical block size</p></td>
+<td><p>2048</p></td>
+<td><p>LVD on 3 discs [11]; listings</p></td>
+</tr>
+<tr class="row-odd"><td><p>UDF revision (LVD domain suffix)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0x0250</span></code></p></td>
+<td><p><strong>N=3</strong> LVD (MYSTERY_MEN, DOWNFALL, RESERVOIR_DOGS); not a 120-disc census</p></td>
+</tr>
+<tr class="row-even"><td><p>AVDP</p></td>
+<td><p>sector 256</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">tools/udfgrab.py</span></code> (does <strong>not</strong> try <code class="docutils literal notranslate"><span class="pre">N−256</span></code>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>Partition start</p></td>
+<td><p><strong>288</strong> on 120/120 listings</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">e01</span></code> / <code class="docutils literal notranslate"><span class="pre">e14</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>File payload</p></td>
+<td><p>physical partition</p></td>
+<td><p>walker</p></td>
+</tr>
+<tr class="row-odd"><td><p>Directories / File Entries</p></td>
+<td><p>metadata partition</p></td>
+<td><p>walker</p></td>
+</tr>
+</tbody>
+</table>
+<p>A UDF 1.02 DVD walker cannot mount this. Walk the metadata partition, then read
+file extents from the physical partition.</p>
+<p><code class="docutils literal notranslate"><span class="pre">partition_start=288</span></code> is line 2 of every <code class="docutils literal notranslate"><span class="pre">corpus/&lt;DISC&gt;/_listing.txt</span></code>.
+ISO URL is line 1 of that listing.</p>
+<p>There is <strong>no</strong> <code class="docutils literal notranslate"><span class="pre">VIDEO_TS/</span></code> and <strong>no</strong> <code class="docutils literal notranslate"><span class="pre">AACS/</span></code> directory on these discs
+(listings mention neither; <code class="docutils literal notranslate"><span class="pre">e06</span></code> / <code class="docutils literal notranslate"><span class="pre">e14</span></code>).</p>
+<p><code class="docutils literal notranslate"><span class="pre">[11,</span> <span class="pre">12]</span></code> <strong>VERIFIED</strong>
+<code class="docutils literal notranslate"><span class="pre">[11]</span></code> <strong>VERIFIED</strong> (N=3)
+<code class="docutils literal notranslate"><span class="pre">[12]</span></code> <strong>VERIFIED</strong> (this walker). Backup AVDP at <code class="docutils literal notranslate"><span class="pre">N−256</span></code> is UDF-required and <strong>untested</strong> here.</p>
+</section>
+<section id="medium-identification">
+<h2>1.2 Medium identification<a class="headerlink" href="#medium-identification" title="Link to this heading"></a></h2>
+<p>Patent FIG.7: decide the medium is HD DVD, then look for a playlist.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Probe</p></th>
+<th class="head"><p>Result</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Root contains <code class="docutils literal notranslate"><span class="pre">HVDVD_TS/</span></code> and UDF 2.50</p></td>
+<td><p>treat as HD DVD-Video and continue</p></td>
+</tr>
+<tr class="row-odd"><td><p>Official “is this HD DVD?” MMC probe</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">CONFIGURATION</span></code> current profile <strong><code class="docutils literal notranslate"><span class="pre">0x0050</span></code></strong> = HD DVD-ROM (<code class="docutils literal notranslate"><span class="pre">0x0051</span></code> HD DVD-R, <code class="docutils literal notranslate"><span class="pre">0x0052</span></code> HD DVD-RAM) [21]. Drive-level, not exercised on an ISO</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ADV_OBJ/</span></code> contains <code class="docutils literal notranslate"><span class="pre">VPLST*.XPL</span></code> (not in subdirectories)</p></td>
+<td><p><strong>Category 2 or 3</strong> → this spec</p></td>
+</tr>
+<tr class="row-odd"><td><p>No playlist; <code class="docutils literal notranslate"><span class="pre">HVDVD_TS/HV000I01.IFO</span></code> magic <code class="docutils literal notranslate"><span class="pre">HVDVD-VMG100</span></code></p></td>
+<td><p>Category 1 (Standard Content); <strong>out of scope</strong></p></td>
+</tr>
+<tr class="row-even"><td><p>Both playlist and Standard VMG</p></td>
+<td><p>Category 3; <strong>0/120</strong> here</p></td>
+</tr>
+</tbody>
+</table>
+<p>Audio-only players search <code class="docutils literal notranslate"><span class="pre">APLST###.XPL</span></code> instead. <strong>0</strong> such files in this corpus.</p>
+<p><code class="docutils literal notranslate"><span class="pre">[1]</span></code>
+<code class="docutils literal notranslate"><span class="pre">[11,</span> <span class="pre">12]</span></code> <strong>VERIFIED</strong> as disc classification. <code class="docutils literal notranslate"><span class="pre">[21]</span></code> The official drive probe is <code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">CONFIGURATION</span></code> → current profile <code class="docutils literal notranslate"><span class="pre">0x0050</span></code> (HD DVD-ROM); an ISO cannot answer it, the directory test does.</p>
+</section>
+<section id="root-directories-n-120">
+<h2>1.3 Root directories (N=120)<a class="headerlink" href="#root-directories-n-120" title="Link to this heading"></a></h2>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Directory</p></th>
+<th class="head"><p>N</p></th>
+<th class="head"><p>Role</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">HVDVD_TS/</span></code></p></td>
+<td><p>120</p></td>
+<td><p>Video objects: Advanced VTI/MAP/EVO on 119; Standard IFO/EVO on 1</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ADV_OBJ/</span></code></p></td>
+<td><p>119</p></td>
+<td><p>Playlist, DISCID, ACA, assets</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ANY!/</span></code></p></td>
+<td><p>96</p></td>
+<td><p>AACS files (book name is <code class="docutils literal notranslate"><span class="pre">AACS/</span></code>)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ANY!_BAK/</span></code></p></td>
+<td><p>96</p></td>
+<td><p>AACS backup</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">AAC!/</span></code></p></td>
+<td><p>8</p></td>
+<td><p>Alternate AACS directory name</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">AAC!_BAK/</span></code></p></td>
+<td><p>8</p></td>
+<td><p>Backup of <code class="docutils literal notranslate"><span class="pre">AAC!/</span></code></p></td>
+</tr>
+</tbody>
+</table>
+<p><code class="docutils literal notranslate"><span class="pre">[11,</span> <span class="pre">12]</span></code> <strong>VERIFIED</strong>. 16 discs have no AACS dir.</p>
+</section>
+<section id="hvdvd-ts-advanced-content-files">
+<h2>1.4 <code class="docutils literal notranslate"><span class="pre">HVDVD_TS/</span></code>: Advanced Content files<a class="headerlink" href="#hvdvd-ts-advanced-content-files" title="Link to this heading"></a></h2>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Pattern</p></th>
+<th class="head"><p>Listed</p></th>
+<th class="head"><p>Role</p></th>
+<th class="head"><p>Layout</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">HVA00001.VTI</span></code></p></td>
+<td><p>119</p></td>
+<td><p>Advanced VTSI</p></td>
+<td><p><a class="reference internal" href="06_vti.html"><span class="std std-doc">06_vti.md</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">HVA00001.BUP</span></code></p></td>
+<td><p>36 saved</p></td>
+<td><p>Byte-identical copy of the VTI (<code class="docutils literal notranslate"><span class="pre">e08</span></code>, 0 differ)</p></td>
+<td><p>same as VTI; player fallback not observed</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">*.MAP</span></code></p></td>
+<td><p>2421 listed</p></td>
+<td><p>Time map for one EVOB</p></td>
+<td><p><a class="reference internal" href="07_map.html"><span class="std std-doc">07_map.md</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">*.BUP</span></code> next to a MAP</p></td>
+<td><p><strong>773 saved</strong> (more may be listed)</p></td>
+<td><p>Byte-identical copy of the MAP (<code class="docutils literal notranslate"><span class="pre">e08</span></code>, 0 differ)</p></td>
+<td><p>same as MAP</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">*.EVO</span></code></p></td>
+<td><p>2456 listed</p></td>
+<td><p>MPEG-2 program stream</p></td>
+<td><p><a class="reference internal" href="08_evo.html"><span class="std std-doc">08_evo.md</span></a></p></td>
+</tr>
+</tbody>
+</table>
+<p>Clip basenames are free-form (<code class="docutils literal notranslate"><span class="pre">FEATURE_1</span></code>, <code class="docutils literal notranslate"><span class="pre">EVOB002</span></code>, <code class="docutils literal notranslate"><span class="pre">PEVOB</span></code>). The playlist <code class="docutils literal notranslate"><span class="pre">src</span></code>
+is the <strong><code class="docutils literal notranslate"><span class="pre">.MAP</span></code></strong>, never the <code class="docutils literal notranslate"><span class="pre">.EVO</span></code>. The EVO filename is in EVOBI (<a class="reference internal" href="06_vti.html"><span class="std std-doc">06</span></a>);
+in practice the sibling of <code class="docutils literal notranslate"><span class="pre">FOO.MAP</span></code> is <code class="docutils literal notranslate"><span class="pre">FOO.EVO</span></code>.</p>
+<p><code class="docutils literal notranslate"><span class="pre">HVSO&#64;&#64;&#64;&#64;.MAP</span></code> (Standard VTS map referenced from Advanced): <strong>0/120</strong>.
+Four <code class="docutils literal notranslate"><span class="pre">*_load.log</span></code> / <code class="docutils literal notranslate"><span class="pre">*_verify.log</span></code> files exist under <code class="docutils literal notranslate"><span class="pre">HVDVD_TS/</span></code> (<code class="docutils literal notranslate"><span class="pre">e06</span></code>). Authoring debris; ignore.
+<code class="docutils literal notranslate"><span class="pre">[11,</span> <span class="pre">12]</span></code> <strong>VERIFIED</strong></p>
+</section>
+<section id="adv-obj-files">
+<h2>1.5 <code class="docutils literal notranslate"><span class="pre">ADV_OBJ/</span></code>: files<a class="headerlink" href="#adv-obj-files" title="Link to this heading"></a></h2>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Pattern</p></th>
+<th class="head"><p>Listed</p></th>
+<th class="head"><p>Role</p></th>
+<th class="head"><p>Layout</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">DISCID.DAT</span></code></p></td>
+<td><p>119</p></td>
+<td><p>Config File, always 128 bytes</p></td>
+<td><p><a class="reference internal" href="02_discid.html"><span class="std std-doc">02_discid.md</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">VPLST$$$.XPL</span></code></p></td>
+<td><p>247</p></td>
+<td><p>Playlist. <code class="docutils literal notranslate"><span class="pre">$$$</span></code> = 000–999</p></td>
+<td><p><a class="reference internal" href="03_playlist.html"><span class="std std-doc">03_playlist.md</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">VPLST$$$.BAK</span></code></p></td>
+<td><p>3</p></td>
+<td><p>Not in the boot search (<code class="docutils literal notranslate"><span class="pre">.XPL</span></code> only)</p></td>
+<td><p>ignore for boot</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">APLST###.XPL</span></code></p></td>
+<td><p>0</p></td>
+<td><p>Audio-only playlist</p></td>
+<td><p>unused</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">*.ACA</span></code></p></td>
+<td><p>409</p></td>
+<td><p>Application archive</p></td>
+<td><p><a class="reference internal" href="04_aca.html"><span class="std std-doc">04_aca.md</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">*.XMF</span></code></p></td>
+<td><p>3 loose + inside ACA</p></td>
+<td><p>Manifest</p></td>
+<td><p><a class="reference internal" href="05_manifest_hdi.html"><span class="std std-doc">05_manifest_hdi.md</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">*.XMU</span></code></p></td>
+<td><p>2 loose + inside ACA</p></td>
+<td><p>HDi markup</p></td>
+<td><p><a class="reference internal" href="05_manifest_hdi.html"><span class="std std-doc">05</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">*.JS</span></code></p></td>
+<td><p>3 loose + inside ACA</p></td>
+<td><p>ECMAScript</p></td>
+<td><p><a class="reference internal" href="05_manifest_hdi.html"><span class="std std-doc">05</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">*.PNG</span></code></p></td>
+<td><p>72</p></td>
+<td><p>Icons / resources</p></td>
+<td><p>standard PNG</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">*.TTF</span></code></p></td>
+<td><p>1 loose</p></td>
+<td><p>Font</p></td>
+<td><p>standard</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">*.CER</span></code></p></td>
+<td><p>10</p></td>
+<td><p><strong>Standard X.509 DER certificates</strong> (<code class="docutils literal notranslate"><span class="pre">30</span> <span class="pre">82…</span></code>). TLS trust anchors for the HDi network layer (<code class="docutils literal notranslate"><span class="pre">IHTTPClient</span></code>/HTTPS to studio servers). Sample <code class="docutils literal notranslate"><span class="pre">dynamichd.cer</span></code> = <em>Thawte Premium Server CA</em> root [15]. Not AACS <code class="docutils literal notranslate"><span class="pre">CONTENT_CERT</span></code>. <strong>Not used by linear playback.</strong> Ignore.</p></td>
+<td><p>X.509</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">Thumbs.db</span></code></p></td>
+<td><p>2</p></td>
+<td><p>Junk</p></td>
+<td><p>ignore</p></td>
+</tr>
+</tbody>
+</table>
+<p><code class="docutils literal notranslate"><span class="pre">[11,</span> <span class="pre">12]</span></code> <strong>VERIFIED</strong></p>
+</section>
+<section id="disc-uri">
+<h2>1.6 Disc URI<a class="headerlink" href="#disc-uri" title="Link to this heading"></a></h2>
+<p>Players resolve assets as:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">file</span><span class="p">:</span><span class="o">///</span><span class="n">dvddisc</span><span class="o">/</span><span class="n">ADV_OBJ</span><span class="o">/</span><span class="n">DISCID</span><span class="o">.</span><span class="n">DAT</span>
+<span class="n">file</span><span class="p">:</span><span class="o">///</span><span class="n">dvddisc</span><span class="o">/</span><span class="n">ADV_OBJ</span><span class="o">/</span><span class="n">VPLST000</span><span class="o">.</span><span class="n">XPL</span>
+<span class="n">file</span><span class="p">:</span><span class="o">///</span><span class="n">dvddisc</span><span class="o">/</span><span class="n">HVDVD_TS</span><span class="o">/</span><span class="n">FEATURE_1</span><span class="o">.</span><span class="n">MAP</span>
+<span class="n">file</span><span class="p">:</span><span class="o">///</span><span class="n">dvddisc</span><span class="o">/</span><span class="n">ADV_OBJ</span><span class="o">/</span><span class="n">menus</span><span class="o">.</span><span class="n">aca</span><span class="o">/</span><span class="n">MainMenu</span><span class="o">.</span><span class="n">xmf</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">file:///dvddisc</span></code> is the UDF volume root.</p>
+<p>Patent FIG.20 <strong>drawing</strong> (<code class="docutils literal notranslate"><span class="pre">US20070091495A1</span></code> <code class="docutils literal notranslate"><span class="pre">pages/page-024.png</span></code>) also lists
+<code class="docutils literal notranslate"><span class="pre">file:///filecache/</span></code>, <code class="docutils literal notranslate"><span class="pre">file:///required/</span></code>, <code class="docutils literal notranslate"><span class="pre">file:///additional/</span></code>,
+<code class="docutils literal notranslate"><span class="pre">file:///common/required/</span></code>, <code class="docutils literal notranslate"><span class="pre">file:///common/additional/</span></code>. The <strong>same patent’s
+prose</strong> writes <code class="docutils literal notranslate"><span class="pre">file:///fixed/</span></code> and <code class="docutils literal notranslate"><span class="pre">file:///removable/</span></code> instead. Playlist.xsd
+<code class="docutils literal notranslate"><span class="pre">DataSourceType</span></code> is <code class="docutils literal notranslate"><span class="pre">Disc</span></code> / <code class="docutils literal notranslate"><span class="pre">P-Storage</span></code> / <code class="docutils literal notranslate"><span class="pre">Network</span></code> / <code class="docutils literal notranslate"><span class="pre">FileCache</span></code>. Corpus <code class="docutils literal notranslate"><span class="pre">src</span></code>
+is all <code class="docutils literal notranslate"><span class="pre">file:///dvddisc/</span></code> (<strong>10 620 / 10 620</strong> playlist <code class="docutils literal notranslate"><span class="pre">src</span></code>, <code class="docutils literal notranslate"><span class="pre">e12</span></code>). The persistent-storage <strong>script</strong> URI form is specified:
+<code class="docutils literal notranslate"><span class="pre">file:///required/{contentId}/</span></code> (<a class="reference internal" href="05_manifest_hdi.html"><span class="std std-doc">05</span></a> §5.8); the host’s management-UI
+device-directory nesting is provider/content-ID folders [14] (<a class="reference internal" href="05_manifest_hdi.html"><span class="std std-doc">05</span></a> §5.8).
+<code class="docutils literal notranslate"><span class="pre">[11,</span> <span class="pre">12]</span></code> <strong>VERIFIED</strong> (<code class="docutils literal notranslate"><span class="pre">dvddisc</span></code> only)
+<code class="docutils literal notranslate"><span class="pre">[1]</span></code></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="HD DVD-Video Advanced Content Format Specification" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="02_discid.html" class="btn btn-neutral float-right" title="2. DISCID.DAT: Config File" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Working specification.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

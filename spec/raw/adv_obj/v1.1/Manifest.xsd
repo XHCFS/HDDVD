@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.dvdforum.org/2005/HDDVDVideo/Manifest" targetNamespace="http://www.dvdforum.org/2005/HDDVDVideo/Manifest" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<!-- (C)Copyright 2005-2007 The DVD Forum*. All rights reserved. -->
+	<!-- This schema were co-developed by Sonic Solutions and Toshiba -->
+	<!-- Modifications contributed by Microsoft -->
+	<!--Schema version:  5 Nov 2007  (595)-->
+	<!--HD-DVD Specification version: 1.1-->
+	<xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="http://www.w3.org/2001/xml.xsd"/>
+	<xs:element name="Application">
+		<xs:annotation>
+			<xs:documentation>Spec. 6.2.4.2 #1</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="Region"/>
+				<xs:element ref="Script" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element ref="Markup" minOccurs="0"/>
+				<xs:element ref="Resource" maxOccurs="unbounded"/>
+			</xs:sequence>
+			<xs:attribute name="id" type="xs:ID" use="optional"/>
+			<xs:attribute ref="xml:base" use="optional"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Region">
+		<xs:annotation>
+			<xs:documentation>Spec. 6.2.4.2 #2</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:attribute name="x" type="xs:nonNegativeInteger" use="required"/>
+			<xs:attribute name="y" type="xs:nonNegativeInteger" use="required"/>
+			<xs:attribute name="width" type="xs:nonNegativeInteger" use="required"/>
+			<xs:attribute name="height" type="xs:nonNegativeInteger" use="required"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Script">
+		<xs:annotation>
+			<xs:documentation>Spec. 6.2.4.2 #3</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:attribute name="id" type="xs:ID" use="optional"/>
+			<xs:attribute name="src" type="xs:anyURI" use="required"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Markup">
+		<xs:annotation>
+			<xs:documentation>Spec. 6.2.4.2 #4</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:attribute name="id" type="xs:ID" use="optional"/>
+			<xs:attribute name="src" type="xs:anyURI" use="required"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Resource">
+		<xs:annotation>
+			<xs:documentation>Spec. 6.2.4.2 #5</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:attribute name="id" type="xs:ID" use="optional"/>
+			<xs:attribute name="src" type="xs:anyURI" use="required"/>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

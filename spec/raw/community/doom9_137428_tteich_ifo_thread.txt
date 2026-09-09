@@ -1,0 +1,106 @@
+Doom9's Forum > (HD) DVD, Blu-ray & (S)VCD > (HD) DVD & Blu-ray authoring > Attempt to document HD-DVD IFO file structures w/ the aim to develop a HDDVD muxer
+
+------------------------------------------------------------------------
+
+View Full Version : Attempt to document HD-DVD IFO file structures w/ the aim to develop a HDDVD muxer
+
+------------------------------------------------------------------------
+
+tteich
+
+3rd May 2008, 12:14
+
+Hi all,
+despite the >1Mio HD-DVD players sold there seems to be no (low/no cost) solution which allows to author Mini HD-DVDs from VC1 or H264 elementary streams. Every tool I tried converts the video to MPEG2, which wastes a lot of space. Sonic Scenarist is not sold anymore, and prohibitively expensive anyway. So my dream is still that the community develops a HDDVD muxer, which accepts all supported audio and video formats as defined in the HDDVD Specification v1.1 (VC1, AVC, MPEG2, DTS-MA, DTS-HD, DTS standard, DD+, DD, PCM). The Toshiba players are perfect high-definition Audio&Video machines, so why not author .mkv, .ts, .m2ts files on SL-DVD/DL-DVDs...
+Well, developing a HDDVD muxer is quite an undertaking, and the precondition is that the involved file formats are fully understood.
+Therefore I started to hunt-down information (freely available, for a start) about the relevant files (IFO, VTS, MAP, EVOB), and was able to collect a lot of data so far. I'm confident that I found the correct sequence of data of those files, and was able to fully describe the ADVANCED-VTS (structure and sizes).
+Now comes the difficult task:
+I need the help from the community to find the missing information about IFO, DAT, MAP files. For the "STANDARD-VTS" IFO files, and Video manager ("HVDVD-VMG100") I found the sequence of data, but got stuck with the sizes of the particular data elements. So whoever has a HDDVD Specification at hand, or an idea how to solve the big puzzle, please contribute it here, your input is welcome.
+Some additional words to further explain the objective:
+In order to author a valid Type1 Mini-HDDVD (3XDVD, comprising of a HDDVD structure on Single or DualLayer DVD+-R/RW), we would need the description of the video manager ("HVDVD-VMG100", in HV000I01.IFO file), and the "STANDARD-VTS" file structure (in HVxxxI01.IFO files). The "ADVANCED-VTS" information that I found is not needed for type1 HDDVDs, so the most complete information we have at the moment is not of use until we want to analyze or author advanced HDDVDs. I started to write a tool (based on madshi's "eac3to" and drmpeg's "HDDVDDemux"), which already parses ADVANCED-VTS files, and as soon as additional information of the mentioned missing data sizes are available I'll add those and make the tool available.
+I'm linking here a plain text file containing all the information which I was able to hunt-down so far, in hope that the community will collect the information that is still missing. Please have a look...
+Link: hddvd.txt (File structure description) (http://www.h-plus-t.com/misc/hddvd.txt)
+For what it's worth, here is a complete (correct and consistent) set of IFO files of a Type1 (Standard content) HD-DVD:
+HV000I01.IFO (Video Manager) (http://www.h-plus-t.com/misc/HV000I01.IFO)
+HV001I01.IFO (VTS#1) (http://www.h-plus-t.com/misc/HV001I01.IFO)
+HV002I01.IFO (VTS#2) (http://www.h-plus-t.com/misc/HV002I01.IFO)
+HV003I01.IFO (VTS#3) (http://www.h-plus-t.com/misc/HV003I01.IFO)
+HV004I01.IFO (VTS#4) (http://www.h-plus-t.com/misc/HV004I01.IFO)
+HV005I01.IFO (VTS#5) (http://www.h-plus-t.com/misc/HV005I01.IFO)
+HV006I01.IFO (VTS#6) (http://www.h-plus-t.com/misc/HV006I01.IFO)
+HV007I01.IFO (VTS#7) (http://www.h-plus-t.com/misc/HV007I01.IFO)
+HV008I01.IFO (VTS#8) (http://www.h-plus-t.com/misc/HV008I01.IFO)
+HV009I01.IFO (VTS#9) (http://www.h-plus-t.com/misc/HV009I01.IFO)
+HV010I01.IFO (VTS#10) (http://www.h-plus-t.com/misc/HV010I01.IFO)
+
+------------------------------------------------------------------------
+
+tteich
+
+3rd May 2008, 12:15
+
+reserved
+
+------------------------------------------------------------------------
+
+oldpainless
+
+5th May 2008, 15:03
+
+This is one thread I'll be watching with great interest!..
+K
+
+------------------------------------------------------------------------
+
+ReferenceDivx
+
+7th May 2008, 09:12
+
+I am currently in the testing stage of my one click hd-dvd and bluray backup solution. I reversed engineered the hd-dvd scenarist and made a few upgrades and fixes. The ETA is about one to two more weeks.
+
+------------------------------------------------------------------------
+
+tteich
+
+7th May 2008, 09:37
+
+I am currently in the testing stage of my one click hd-dvd and bluray backup solution. I reversed engineered the hd-dvd scenarist and made a few upgrades and fixes. The ETA is about one to two more weeks.
+:) Will this tool be able to convert BD to HDDVD?
+I know, the bitrates on BD are higher, etc, but I suppose if the user choses only one sound track and the main feature m2ts', most BD can be converted to HDDVD without re-encoding the video. Btw: if you need a beta-tester, or someone who helps with development, please PM me.
+
+------------------------------------------------------------------------
+
+Eric69
+
+7th May 2008, 15:10
+
+The world will always be a better place with folks like tteich & ReferenceDivx around...Thanks.
+
+------------------------------------------------------------------------
+
+um3k
+
+7th May 2008, 18:25
+
+This is quite interesting to me. I'll do what I can to help, but there's not much I can do. At the very least I'll sacrifice a few discs for testing purposes.
+
+------------------------------------------------------------------------
+
+tteich
+
+7th May 2008, 20:25
+
+Thanks for the valuable feedback, and help. I will continue to search and read patents, but a speedup to the process would be to have an official HDDVD Specification at hand. Now someone who wanted to have one had to pay a large amount to the DVDforum, and sign NDA's, so chances are rather low that a spec will be leaked to the community. But now, after the production stop (I don't use the word "death of the format" because all my HDDVDs work just fine, and the players too ;) ), you never know...
+What ReferenceDivx is after looks very interesting as well, so let's wait and see.
+
+------------------------------------------------------------------------
+
+CanuckGod
+
+18th May 2008, 03:04
+
+bump..
+
+------------------------------------------------------------------------
+
+vBulletin® v3.8.11, Copyright ©2000-2026, vBulletin Solutions Inc.

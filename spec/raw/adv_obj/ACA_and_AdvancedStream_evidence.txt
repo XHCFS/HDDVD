@@ -1,0 +1,132 @@
+HD DVD Advanced Content - ACA archive + Advanced Stream Pack
+Verbatim evidence collected 2026-09; see SOURCE lines for provenance.
+
+================================================================
+1. .ACA  (Advanced Content Archive)
+================================================================
+
+SOURCE (primary, reference implementation): literal strings inside
+HDDVDPLAYDLL, extracted from SCENACA.msi (Sonic Scenarist Advanced
+Content 4.5, 2007-09-27), archive.org item "scenarist-hd-dvd-45".
+The DLL itself is not kept in this tree; the strings that matter are
+copied below. Re-extract from that IA item if you need the binary.
+
+Validation messages emitted by the ACA parser (verbatim):
+    "Archive header ID is not 'HDDVDACA'"
+    "Archive header version is not 1.0"
+    "Archive header file type is not 0"
+    "Archive header encoding type is not 1"
+    "Archive size is less than size of header"
+    "Buffer too small to get archive size"
+    "Invalid archive file header"
+    "invalid archive format"
+    "Index exceeds number of files in archive"
+    "archive index out of range"
+    "CRC error"
+    "File Cache: '%s' does not exist in archive"
+    "File Cache: Unable to get font file data from archive"
+    "File Cache: Could not determine archive size from advanced stream packet"
+    "HDArchive"
+
+=> Header therefore carries, at minimum:
+     - 8-byte magic          : ASCII "HDDVDACA"
+     - version               : must be 1.0 (major/minor)
+     - file type             : must be 0
+     - encoding type         : must be 1
+     - total archive size    : compared against actual size
+   followed by a file index addressed by integer index
+   ("Index exceeds number of files in archive").
+
+SOURCE (secondary, community): Doom9 thread 121236,
+"HD DVD aca file extracter (and backuphddvd C++)":
+    "Next I copy the original headerinfo, the ACA header and file index,
+     to M. This contains offsets, filesizes, CRC values and MIME-types."
+
+SOURCE (primary, vendor doc): Scenarist Advanced Content 4.5 User Guide,
+Table 1 "Supported asset formats", Advanced Content asset type:
+    Advanced Content Archive .aca
+    Manifest                 .xmf
+    JavaScript               .js
+    Advanced Subtitle        .xas
+    Capture Image Format     .cif
+    JPEG                     .jpg
+    Motion PNG               .mng
+    Portable Network Graphic .png
+    Markup                   .xmu
+    Time Map                 .map
+    S-EVOB                   .evo
+    WAVE                     .wav
+    Extensible Markup Language .xml
+    XML User Interface Language .xul
+
+Same guide, on referencing a manifest inside an archive:
+    "If the manifest for the Playlist Application is in an Advanced Content
+     Archive (ACA), the Playlist Application Name is displayed in this format:
+     PAnnn:<acaFileName.aca>:<manifestFileName.xmf>. If the manifest is not in
+     an ACA, the Playlist Application Name is displayed in this format:
+     PAnnn:manifestFileName.xmf>. nnn represents a number between 1 and 299."
+
+    "The archive is saved with an .aca extension."
+
+================================================================
+2. Advanced Stream Pack (ADV_PCK) - byte level
+================================================================
+SOURCE (primary-ish): Toshiba HD DVD patent family. Working extracts:
+`spec/raw/patents/US20070091495A1_architecture.txt`,
+`US20080298219A1_byte_tables.txt`.
+Live: https://patents.google.com/patent/US20070091495A1
+(and US20080298219A1, WO2006098395A1).
+
+    "a playlist application resource PLAPRS is divided into each data
+     consisting of 2048 bytes, and packed in an advanced pack ADV_PCK
+     every 2048 bytes"
+
+    "one pack size, one logical block size, and one logical sector size
+     are equal to each other, i.e., 2048 bytes"
+
+    "An ADV_PCK ... comprises a pack header and Advanced packet (ADV_PKT).
+     Advanced data (Advanced stream) is aligned to a boundary of logical
+     blocks. Only in case of the last pack ... when the ADV_PCK length
+     including the last data of the Advanced stream is smaller than 2048
+     bytes, that pack length can be adjusted to have 2048 bytes."
+
+    "in the data structure of the advanced pack ADV_PCK, a pack header
+     PHEAD, a packet header PHEADA, a sub-stream corresponding to an
+     advanced pack ADV_PCK, an advanced data header ADDTHD, and advanced
+     data ADVDT are arranged in that order."
+
+    "The stream_id of this ADV_PCK is, e.g., 1011 1111b (private_stream_2),
+     and its sub_stream_id is, e.g., 1000 0000b."
+
+    "packet_start_code_prefix field has a value '00 0001h', a stream_id
+     field=1011 1111b specifies private_stream_2, and a PES_packet_length
+     field is included. The Advanced packet has a Private data area, in
+     which a sub_stream_id field=1000 0000b specifies an Advanced stream,
+     a PES_scrambling_control field assumes a value '00b' or '01b'
+     (Note 1), and an adv_pkt_status field assumes a value '00b', '01b',
+     or '10b' (Note 2). Also, the Private data area includes a
+     loading_info_fname field (Note 3) which describes the filename of a
+     loading information file which refers to the advanced stream of
+     interest."
+
+=> ADV_PCK: 2048-byte pack; PES packet_start_code_prefix 0x000001;
+   stream_id 0xBF (private_stream_2); sub_stream_id 0x80 (Advanced stream);
+   private data area carries PES_scrambling_control, adv_pkt_status and
+   loading_info_fname.
+
+================================================================
+3. File Cache semantics (reference implementation strings)
+================================================================
+SOURCE: HDDVDPLAYDLL as above. Selected verbatim messages:
+    "File Cache: Resource cache URI should be 'file:///filecache/...'"
+    "File Cache: Received advanced stream first packet while processing another stream"
+    "File Cache: Advanced identifier changed in middle of advanced stream"
+    "File Cache: Advanced stream shorter than expected"
+    "File Cache: Received too much advanced stream data"
+    "File Cache: No file name in first advanced stream packet"
+    "File Cache: The resource size specified by the playlist file is too small. uri: %s, actual: %I64d, specified: %I64d."
+    "File Cache: The size specified by the playlist file is smaller than the actual file size"
+    "File Cache: Exceeded cache size!  Used: %.3f mb, Available: %.3f mb"
+    "File Cache: Application created resource already exists: '%s'"
+    "File Cache: Insufficient space in file cache"
+Other player paths seen: "file:///dvddisc/ADV_OBJ", "file:///dvddisc/ADV_OBJ/DISCID.DAT"

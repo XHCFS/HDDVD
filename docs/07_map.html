@@ -1,0 +1,612 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>7. MAP: time map &mdash; HD DVD Advanced Content</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=2709fde1"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="8. EVO: MPEG-2 program stream" href="08_evo.html" />
+    <link rel="prev" title="6. HVA00001.VTI: Advanced VTSI" href="06_vti.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            HD DVD Advanced Content
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Specification</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="01_volume.html">1. Volume and directories</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="01_volume.html#filesystem">1.1 Filesystem</a></li>
+<li class="toctree-l2"><a class="reference internal" href="01_volume.html#medium-identification">1.2 Medium identification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="01_volume.html#root-directories-n-120">1.3 Root directories (N=120)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="01_volume.html#hvdvd-ts-advanced-content-files">1.4 <code class="docutils literal notranslate"><span class="pre">HVDVD_TS/</span></code>: Advanced Content files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="01_volume.html#adv-obj-files">1.5 <code class="docutils literal notranslate"><span class="pre">ADV_OBJ/</span></code>: files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="01_volume.html#disc-uri">1.6 Disc URI</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="02_discid.html">2. DISCID.DAT: Config File</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="02_discid.html#layout">2.1 Layout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="02_discid.html#observed-provider-id-tags-ascii">2.2 Observed <code class="docutils literal notranslate"><span class="pre">PROVIDER_ID</span></code> tags (ASCII)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="02_discid.html#player-use">2.3 Player use</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="03_playlist.html">3. Playlist: VPLST$$$.XPL</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="03_playlist.html#time">3.1 Time</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_playlist.html#tree">3.2 Tree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_playlist.html#title">3.3 Title</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_playlist.html#primaryaudiovideoclip">3.4 PrimaryAudioVideoClip</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_playlist.html#applicationsegment">3.5 ApplicationSegment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_playlist.html#playlistapplication">3.6 PlaylistApplication</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_playlist.html#chapter">3.7 Chapter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_playlist.html#tracknavigationlist">3.8 TrackNavigationList</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_playlist.html#uri-of-a-clip-map">3.9 URI of a clip MAP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_playlist.html#a-scheduledcontrollist-timeline-pauses-and-events">3.9a ScheduledControlList: timeline pauses and events</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_playlist.html#which-playlist-to-open">3.10 Which playlist to open</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_playlist.html#elements-in-the-xsd-unused-in-this-corpus">3.11 Elements in the XSD, unused in this corpus</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="04_aca.html">4. ACA: Advanced Content Archive</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="04_aca.html#archive-header">4.1 Archive header</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04_aca.html#directory-entry-variable-length">4.2 Directory entry (variable length)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04_aca.html#members">4.3 Members</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04_aca.html#namespace">4.4 Namespace</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="05_manifest_hdi.html">5. Manifest, markup, script (HDi)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="05_manifest_hdi.html#implementation-gate-closed">5.0 Implementation gate (CLOSED)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_manifest_hdi.html#manifest-xmf">5.1 Manifest: <code class="docutils literal notranslate"><span class="pre">.xmf</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_manifest_hdi.html#markup-xmu">5.2 Markup: <code class="docutils literal notranslate"><span class="pre">.xmu</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_manifest_hdi.html#script">5.3 Script</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_manifest_hdi.html#runtime-patent-fig-50-steps-67">5.4 Runtime (patent FIG.50 steps 6–7)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_manifest_hdi.html#what-is-specified-vs-what-blocks-the-gate">5.5 What is specified vs what blocks the gate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_manifest_hdi.html#remaining-spec-work-no-firmware">5.6 Remaining spec work (no firmware)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_manifest_hdi.html#file-cache-size">5.7 File Cache <code class="docutils literal notranslate"><span class="pre">&#64;size</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_manifest_hdi.html#persistent-storage-uris-script">5.8 Persistent storage URIs (script)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_manifest_hdi.html#raster-focus-cues-used-path">5.9 Raster, focus, cues (used path)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="06_vti.html">6. HVA00001.VTI: Advanced VTSI</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="06_vti.html#vtsi-mat-first-2048-bytes">6.1 VTSI_MAT (first 2048 bytes)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="06_vti.html#vts-evob-atrt-at-vts-evob-atrt-sa-2048">6.2 VTS_EVOB_ATRT (at <code class="docutils literal notranslate"><span class="pre">VTS_EVOB_ATRT_SA</span></code> × 2048)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="06_vti.html#atri-1024-bytes">ATRI (1024 bytes)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="06_vti.html#vts-evobit-at-vts-evobit-sa-2048">6.3 VTS_EVOBIT (at <code class="docutils literal notranslate"><span class="pre">VTS_EVOBIT_SA</span></code> × 2048)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="06_vti.html#evobi-320-bytes">EVOBI (320 bytes)</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">7. MAP: time map</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#file-layout">7.1 File layout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#tmap-gi-128-bytes-table-80">7.2 TMAP_GI (128 bytes): TABLE 80</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#tmap-ty-table-81-figure-c00039">TMAP_TY: TABLE 81 figure C00039</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#tmapi-srp-table-82">7.3 TMAPI_SRP: TABLE 82</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#evobu-ent-table-83-4-bytes">7.4 EVOBU_ENT: TABLE 83 (4 bytes)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#seek-algorithm">Seek algorithm</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#ilvu-ent-table-84-6-bytes">7.5 ILVU_ENT: TABLE 84 (6 bytes)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="08_evo.html">8. EVO: MPEG-2 program stream</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="08_evo.html#pack-types-table-85">8.1 Pack types (TABLE 85)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="08_evo.html#nv-pck-first-pack-of-each-evobu">8.2 NV_PCK: first pack of each EVOBU</a></li>
+<li class="toctree-l2"><a class="reference internal" href="08_evo.html#pci-gi-offsets-from-the-substream-id-byte">8.3 PCI GI (offsets from the substream id byte)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="08_evo.html#dsi-gi-offsets-from-the-substream-id-byte">8.4 DSI GI (offsets from the substream id byte)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="08_evo.html#gci-substream-0x04">8.5 GCI (substream <code class="docutils literal notranslate"><span class="pre">0x04</span></code>)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="08_evo.html#adv-pck-sub-stream-id-0x80">8.6 ADV_PCK (<code class="docutils literal notranslate"><span class="pre">sub_stream_id</span> <span class="pre">=</span> <span class="pre">0x80</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="08_evo.html#pack-grammar-e16-stalingrad-logo-evo-n-2383">Pack grammar (<code class="docutils literal notranslate"><span class="pre">e16</span></code>, <code class="docutils literal notranslate"><span class="pre">STALINGRAD</span></code> <code class="docutils literal notranslate"><span class="pre">logo.EVO</span></code>, N=2383)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="08_evo.html#aacs-vs-container">8.7 AACS vs container</a></li>
+<li class="toctree-l2"><a class="reference internal" href="08_evo.html#elementary-stream-routing-table-45-46-how-streamnumber-finds-its-pes">8.7 Elementary-stream routing (TABLE 45 / 46): how <code class="docutils literal notranslate"><span class="pre">&#64;streamNumber</span></code> finds its PES</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="08_evo.html#stream-id-stream-id-extension-table-45">stream_id / stream_id_extension (TABLE 45)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="08_evo.html#sub-stream-id-for-private-stream-1-0xbd-table-46">sub_stream_id for private_stream_1 = <code class="docutils literal notranslate"><span class="pre">0xBD</span></code> (TABLE 46)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="08_evo.html#the-rule-a-demuxer-applies">The rule a demuxer applies</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="08_evo.html#sub-picture-sp-pck-2bitrlc-8bitrlc-decode">8.8 Sub-picture (SP_PCK): <code class="docutils literal notranslate"><span class="pre">2bitRLC</span></code> / <code class="docutils literal notranslate"><span class="pre">8bitRLC</span></code> decode</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="08_evo.html#pixel-values-table-67-68">Pixel values (TABLE 67/68)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="08_evo.html#run-length-rule-eight-patterns-msb-first-bitstream">Run-length rule (eight patterns, MSB-first bitstream)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="08_evo.html#display-control-sequence-sp-dcsqt">Display-control sequence (<code class="docutils literal notranslate"><span class="pre">SP_DCSQT</span></code>)</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="09_aacs.html">9. AACS overlay (format only)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="09_aacs.html#directories">9.1 Directories</a></li>
+<li class="toctree-l2"><a class="reference internal" href="09_aacs.html#files">9.2 Files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="09_aacs.html#vtkf-table-3-8-final-0-953">9.3 VTKF: Table 3-8 (Final 0.953)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="09_aacs.html#title-key-entry-36-bytes">Title Key Entry (36 bytes)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="09_aacs.html#dkf-64-bytes-table-6-2">9.4 DKF (64 bytes): Table 6-2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="09_aacs.html#content-cert-120-bytes-table-3-17">9.5 CONTENT_CERT (120 bytes): Table 3-17</a></li>
+<li class="toctree-l2"><a class="reference internal" href="09_aacs.html#pack-encryption-table-4-7">9.6 Pack encryption: Table 4-7</a></li>
+<li class="toctree-l2"><a class="reference internal" href="09_aacs.html#volume-id">9.7 Volume ID</a></li>
+<li class="toctree-l2"><a class="reference internal" href="09_aacs.html#vtuf-144-bytes">9.8 VTUF (144 bytes)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="09_aacs.html#reusing-libaacs-what-ports-and-what-does-not">9.9 Reusing libaacs: what ports and what does not</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="09_aacs.html#exact-extension-points-libaacs-master-read-2026-09">Exact extension points (libaacs master, read 2026-09)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="09_aacs.html#prior-art-the-corpus-was-decrypted-by-known-2007-tools">9.10 Prior art: the corpus was decrypted by known 2007 tools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="09_aacs.html#full-decrypt-flow-from-backuphddvd-source-verbatim-facts-for-the-c-port">9.11 Full decrypt flow: from BackupHDDVD source (verbatim facts for the C port)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="09_aacs.html#aes-g-the-aacs-one-way-function">AES-G (the AACS one-way function)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="09_aacs.html#pack-cbc-decryption">Pack CBC decryption</a></li>
+<li class="toctree-l3"><a class="reference internal" href="09_aacs.html#field-sources-within-a-pack">Field sources within a pack</a></li>
+<li class="toctree-l3"><a class="reference internal" href="09_aacs.html#evo-decrypt-driver-per-evob-file">EVO decrypt driver (per EVOB file)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="09_aacs.html#libaacs-mapping-what-an-implementer-changes">libaacs mapping (what an implementer changes)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="09_aacs.html#how-evo-decryption-is-actually-done-and-what-applies-here">9.12 How EVO “decryption” is actually done, and what applies here</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="09_aacs.html#a-copy-the-evo-out-of-the-disc-no-keys-always-possible">(a) Copy the EVO out of the disc: no keys, always possible</a></li>
+<li class="toctree-l3"><a class="reference internal" href="09_aacs.html#b-decrypt-the-aacs-scrambled-payload-inside-the-packs">(b) Decrypt the AACS-scrambled payload inside the packs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="09_aacs.html#can-we-do-it-here-with-what-we-know">Can we do it here, with what we know?</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="09_aacs.html#sequence-key-skb-skf-format-closed-0-120-discs">9.13 Sequence Key (SKB / SKF): format closed, 0/120 discs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="09_aacs.html#empirical-decrypt-the-one-step-not-reproducible-here">9.14 Empirical decrypt: the one step not reproducible here</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="10_playback.html">10. Playback sequence</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="10_playback.html#playback-flowchart">10.0 Playback flowchart</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="10_playback.html#boot-insert-to-first-title">Boot: insert to first title</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10_playback.html#title-runtime-video-pipeline-hdi-engine-in-parallel">Title runtime: video pipeline + HDi engine in parallel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10_playback.html#seek-time-to-byte">Seek (time to byte)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10_playback.html#aacs-pack-licensed-encrypted-disc-only">AACS pack (licensed / encrypted disc only)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="10_playback.html#b-control-flow-box-numbered-for-10-8">10.0b Control flow (box-numbered for §10.8)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="10_playback.html#open-a-disc-fig-7-fig-50">Open a disc (FIG.7 + FIG.50)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10_playback.html#designed-menus-title-timeline">Designed menus (title timeline)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="10_playback.html#insert-category">10.1 Insert → category</a></li>
+<li class="toctree-l2"><a class="reference internal" href="10_playback.html#advanced-startup-fig-50">10.2 Advanced startup (FIG.50)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="10_playback.html#play-a-title">10.3 Play a title</a></li>
+<li class="toctree-l2"><a class="reference internal" href="10_playback.html#seek">10.4 Seek</a></li>
+<li class="toctree-l2"><a class="reference internal" href="10_playback.html#pack-path-to-a-demuxer">10.5 Pack path to a demuxer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="10_playback.html#aacs-if-any-or-aac-present">10.6 AACS (if <code class="docutils literal notranslate"><span class="pre">ANY!</span></code> or <code class="docutils literal notranslate"><span class="pre">AAC!</span></code> present)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="10_playback.html#what-is-specified-vs-not">10.7 What is specified vs not</a></li>
+<li class="toctree-l2"><a class="reference internal" href="10_playback.html#gap-questions-and-evidence-answers">10.8 Gap questions and evidence answers</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="10_playback.html#a1-udf">A1 UDF</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10_playback.html#a2-category">A2 Category</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10_playback.html#a3-aacs-directory">A3 AACS directory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10_playback.html#a4-discid">A4 DISCID</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10_playback.html#a5-a5b-persistent-storage-search">A5 / A5b Persistent-storage search</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10_playback.html#a6-highest-vplst">A6 Highest VPLST</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10_playback.html#a7-parse-playlist">A7 Parse playlist</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10_playback.html#a8-configuration-wipe">A8 Configuration / wipe</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10_playback.html#a9-a9b-selector">A9 / A9b Selector</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10_playback.html#a10-firstplaytitle">A10 FirstPlayTitle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10_playback.html#a11-title-1">A11 Title 1</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10_playback.html#b1b3-mapping">B1–B3 Mapping</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10_playback.html#b4-file-cache">B4 File Cache</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10_playback.html#b5-manifest">B5 Manifest</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10_playback.html#b6-aca">B6 ACA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10_playback.html#b7-ihd-raster-focus">B7 iHD raster / focus</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10_playback.html#b8-script">B8 Script</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10_playback.html#b9-packs-adv-pck">B9 Packs / ADV_PCK</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10_playback.html#b10-composite">B10 Composite</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10_playback.html#b11-cues-remote">B11 Cues / remote</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10_playback.html#b12-end-of-title">B12 End of title</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10_playback.html#c1-aacs-licensed-drive-only">C1 AACS (licensed drive only)</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="11_gaps.html">11. What a C author still cannot build (gap register)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="11_gaps.html#a-fully-specified-a-c-author-can-build-these-now">A. Fully specified (a C author CAN build these now)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="11_gaps.html#b-blocking-missing-for-a-general-engine-not-for-the-corpus-menus">B. BLOCKING (missing for a <em>general</em> engine; not for the corpus menus)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="11_gaps.html#b1-full-hdi-runtime-semantics-event-timing-execution-model">B1. Full HDi runtime semantics (event/timing execution model)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="11_gaps.html#b2-hdi-type-library-signatures-abi">B2. HDi type-library signatures (ABI)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="11_gaps.html#b3-advanced-subtitle">B3. Advanced Subtitle</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="11_gaps.html#c-degraded-plays-but-not-pixel-behaviour-exact">C. DEGRADED (plays, but not pixel/behaviour exact)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="11_gaps.html#d-external-outside-libhddvd-by-design">D. EXTERNAL (outside libhddvd by design)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="11_gaps.html#e-encryption-what-is-and-is-not-needed-detail-09-9-99-11">E. Encryption: what is and is not needed  (detail: 09 §9.9–9.11)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="11_gaps.html#f-firmware-is-not-a-usable-source-checked-not-assumed">F. Firmware is not a usable source  (checked, not assumed)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="11_gaps.html#reader-test-verdict">Reader-test verdict</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="12_hdi_scripting_abi.html">12. HDi scripting host ABI (type library)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="12_hdi_scripting_abi.html#object-model-106-typeinfos">12.1 Object model (106 typeinfos)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="12_hdi_scripting_abi.html#constant-catalog-200-constants">12.2 Constant catalog (200 constants)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="12_hdi_scripting_abi.html#complete-ihd-markup-surface-xsd">12.3 Complete iHD markup surface (XSD)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="12_hdi_scripting_abi.html#hdi-runtime-semantics-published-standards">12.4 HDi runtime semantics (published standards)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="12_hdi_scripting_abi.html#event-dispatch-order-dom-level-2-events-verbatim">Event dispatch order (DOM Level 2 Events, verbatim)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="12_hdi_scripting_abi.html#dom-level-2-node-types-standard-integer-values-typelib-order-matches-w3c">DOM Level 2 node types (standard integer values, typelib order matches W3C)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="12_hdi_scripting_abi.html#dom-level-2-exception-codes-standard-integer-values">DOM Level 2 exception codes (standard integer values)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="12_hdi_scripting_abi.html#smil-2-0-timing-resolution-cue-par-seq-set-animate">SMIL 2.0 timing resolution (<code class="docutils literal notranslate"><span class="pre">cue</span></code> / <code class="docutils literal notranslate"><span class="pre">par</span></code> / <code class="docutils literal notranslate"><span class="pre">seq</span></code> / <code class="docutils literal notranslate"><span class="pre">set</span></code> / <code class="docutils literal notranslate"><span class="pre">animate</span></code>)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="12_hdi_scripting_abi.html#player-object-model-from-the-type-library">12.5 Player object model (from the type library)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="12_hdi_scripting_abi.html#cue-predicate-grammar-pathexpressiontype">12.6 Cue-predicate grammar (<code class="docutils literal notranslate"><span class="pre">PathExpressionType</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="12_hdi_scripting_abi.html#remaining-items-after-12-5-12-6-5-2">Remaining items after §12.5 / §12.6 / §5.2</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="13_references.html">13. References</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="13_references.html#patents">Patents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="13_references.html#standards-specifications">Standards &amp; specifications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="13_references.html#software-tools-primary-artifacts">Software, tools &amp; primary artifacts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="13_references.html#disc-firmware-corpus-internet-archive">Disc &amp; firmware corpus (Internet Archive)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="13_references.html#developer-documentation-community">Developer documentation &amp; community</a></li>
+<li class="toctree-l2"><a class="reference internal" href="13_references.html#optical-drive-command-set">Optical-drive command set</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">HD DVD Advanced Content</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content style-external-links">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">7. MAP: time map</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/07_map.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="map-time-map">
+<h1>7. MAP: time map<a class="headerlink" href="#map-time-map" title="Link to this heading"></a></h1>
+<p><em>Counts written “N/120”, “N/119”, “on N discs”, “listings”, or as named discs are over the reference corpus of 120 archived retail HD DVD images [11]. <code class="docutils literal notranslate"><span class="pre">eNN</span></code> are the reproducible verification experiments [12].</em></p>
+<p>Path: <code class="docutils literal notranslate"><span class="pre">HVDVD_TS/&lt;clip&gt;.MAP</span></code><br />
+Magic: <code class="docutils literal notranslate"><span class="pre">HDDVD_TMAP00</span></code> (patent text says <code class="docutils literal notranslate"><span class="pre">&quot;HDDVD-V_TMAP&quot;</span></code>; <strong>disc wins</strong>)<br />
+2421 files.</p>
+<p>Playlists address clips <strong>only</strong> through this file. Seek is:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>title time T
+  → clip where titleTimeBegin ≤ T &lt; titleTimeEnd
+  → local = T − titleTimeBegin + clipTimeBegin
+  → walk EVOBU_ENT until playback fields cover local
+  → file offset = accumulated EVOBU_SZ × 2048 in sibling .EVO
+</pre></div>
+</div>
+<section id="file-layout">
+<h2>7.1 File layout<a class="headerlink" href="#file-layout" title="Link to this heading"></a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="mi">0</span> <span class="o">..</span> <span class="mi">127</span><span class="p">]</span>     <span class="n">TMAP_GI</span>
+<span class="p">[</span><span class="mi">128</span> <span class="o">..</span> <span class="mi">371</span><span class="p">]</span>   <span class="n">zero</span> <span class="n">on</span> <span class="mi">2421</span><span class="o">/</span><span class="mi">2421</span>
+<span class="p">[</span><span class="mi">372</span> <span class="o">..</span> <span class="mi">373</span><span class="p">]</span>   <span class="n">u16be</span> <span class="n">ILVU</span> <span class="n">record</span> <span class="n">count</span> <span class="n">on</span> <span class="n">the</span> <span class="n">four</span> <span class="n">interleaved</span> <span class="n">maps</span> <span class="p">(</span><span class="n">equals</span> <span class="n">the</span> <span class="n">walk</span> <span class="n">until</span> <span class="n">ILVU_SZ</span><span class="o">=</span><span class="mi">0</span><span class="p">);</span> <span class="o">**</span><span class="n">zero</span> <span class="n">on</span> <span class="mi">2417</span> <span class="n">contiguous</span> <span class="n">maps</span><span class="o">**.</span> <span class="n">TMAPI_SRP</span><span class="o">.</span><span class="n">ILVU_ENT_Ns</span> <span class="ow">is</span> <span class="n">still</span> <span class="mf">0.</span> <span class="n">Do</span> <span class="ow">not</span> <span class="n">use</span> <span class="n">the</span> <span class="n">SRP</span> <span class="n">field</span><span class="o">.</span>
+<span class="p">[</span><span class="mi">374</span> <span class="o">..</span> <span class="mi">383</span><span class="p">]</span>   <span class="n">zero</span>
+<span class="p">[</span><span class="mi">384</span> <span class="o">..</span> <span class="p">)</span>      <span class="n">TMAPI_SRP</span><span class="p">,</span> <span class="mi">10</span><span class="o">-</span><span class="n">byte</span> <span class="n">record</span> <span class="ow">in</span> <span class="n">a</span> <span class="mi">32</span><span class="o">-</span><span class="n">byte</span> <span class="n">slot</span><span class="p">,</span> <span class="n">one</span> <span class="n">per</span> <span class="n">TMAPI</span>
+<span class="p">[</span><span class="n">TMAPI_SA</span> <span class="o">..</span><span class="p">)</span>  <span class="n">TMAPI</span> <span class="o">=</span> <span class="n">EVOBU_ENT</span><span class="p">[</span><span class="n">EVOBU_ENT_Ns</span><span class="p">]</span>
+<span class="p">[</span><span class="n">ILVUI_SA</span> <span class="o">..</span><span class="p">)</span>  <span class="n">ILVUI</span> <span class="n">only</span> <span class="k">if</span> <span class="n">present</span> <span class="p">(</span><span class="ow">not</span> <span class="mh">0xFFFFFFFF</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">[128</span> <span class="pre">..</span> <span class="pre">383]</span></code> is <strong>not</strong> reserved-zero on Pan’s four maps: only bytes <strong>372–373</strong> are live (<code class="docutils literal notranslate"><span class="pre">death</span></code> 180, <code class="docutils literal notranslate"><span class="pre">ofeliaDeath</span></code> 372, <code class="docutils literal notranslate"><span class="pre">ofeliaEnters</span></code> 500, <code class="docutils literal notranslate"><span class="pre">ofeliaFig</span></code> 240).
+<code class="docutils literal notranslate"><span class="pre">[11]</span></code> <strong>VERIFIED</strong></p>
+<p><code class="docutils literal notranslate"><span class="pre">TMAPI_SA</span></code> and <code class="docutils literal notranslate"><span class="pre">ILVUI_SA</span></code> are <strong>byte offsets from the start of the file</strong>, not LBNs
+(patent says LBN; every disc uses bytes).</p>
+</section>
+<section id="tmap-gi-128-bytes-table-80">
+<h2>7.2 TMAP_GI (128 bytes): TABLE 80<a class="headerlink" href="#tmap-gi-128-bytes-table-80" title="Link to this heading"></a></h2>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>RBP</p></th>
+<th class="head"><p>Size</p></th>
+<th class="head"><p>Field</p></th>
+<th class="head"><p>Rule</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0</p></td>
+<td><p>12</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">TMAP_ID</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&quot;HDDVD_TMAP00&quot;</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>12</p></td>
+<td><p>4</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">TMAP_EA</span></code></p></td>
+<td><p>last sector of this file (<code class="docutils literal notranslate"><span class="pre">file_sectors</span> <span class="pre">−</span> <span class="pre">1</span></code>); 2421/2421</p></td>
+</tr>
+<tr class="row-even"><td><p>16</p></td>
+<td><p>2</p></td>
+<td><p>reserved</p></td>
+<td><p>0</p></td>
+</tr>
+<tr class="row-odd"><td><p>18</p></td>
+<td><p>2</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">VERN</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0x0010</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>20</p></td>
+<td><p>2</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">TMAP_TY</span></code></p></td>
+<td><p>see below</p></td>
+</tr>
+<tr class="row-odd"><td><p>22</p></td>
+<td><p>28</p></td>
+<td><p>reserved</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p>50</p></td>
+<td><p>5</p></td>
+<td><p>reserved</p></td>
+<td><p>“VTMAP_LAST_MOD_TM” in patent</p></td>
+</tr>
+<tr class="row-odd"><td><p>55</p></td>
+<td><p>2</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">TMAPI_Ns</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">1</span></code> on Primary Video Set (2417/2421)</p></td>
+</tr>
+<tr class="row-even"><td><p>57</p></td>
+<td><p>4</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">ILVUI_SA</span></code></p></td>
+<td><p>byte offset, or <code class="docutils literal notranslate"><span class="pre">0xFFFFFFFF</span></code> if none</p></td>
+</tr>
+<tr class="row-odd"><td><p>61</p></td>
+<td><p>4</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">EVOB_ATR_SA</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0xFFFFFFFF</span></code> on primary maps</p></td>
+</tr>
+<tr class="row-even"><td><p>65</p></td>
+<td><p>49</p></td>
+<td><p>reserved</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p>114</p></td>
+<td><p>12</p></td>
+<td><p>VTI filename</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&quot;HVA00001.VTI&quot;</span></code> on 2421/2421</p></td>
+</tr>
+<tr class="row-even"><td><p>126</p></td>
+<td><p>2</p></td>
+<td><p>reserved</p></td>
+<td><p>0</p></td>
+</tr>
+</tbody>
+</table>
+<section id="tmap-ty-table-81-figure-c00039">
+<h3>TMAP_TY: TABLE 81 figure C00039<a class="headerlink" href="#tmap-ty-table-81-figure-c00039" title="Link to this heading"></a></h3>
+<p>16-bit, <code class="docutils literal notranslate"><span class="pre">b15</span></code> = MSB of byte 0. Figure: <code class="docutils literal notranslate"><span class="pre">spec/raw/patents/figures/US20080298219A1/US20080298219A1-20081204-C00039.png</span></code>.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Bits</p></th>
+<th class="head"><p>Mask</p></th>
+<th class="head"><p>Field</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>15–10</p></td>
+<td><p></p></td>
+<td><p>reserved (corpus always has <strong>b13</strong> set → <code class="docutils literal notranslate"><span class="pre">0x2000</span></code>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>9</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0x0200</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">ILVUI</span></code>: <code class="docutils literal notranslate"><span class="pre">0b</span></code> no ILVUI (contiguous); <code class="docutils literal notranslate"><span class="pre">1b</span></code> ILVUI present (interleaved)</p></td>
+</tr>
+<tr class="row-even"><td><p>8</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0x0100</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">ATR</span></code>: <code class="docutils literal notranslate"><span class="pre">0b</span></code> Primary, no <code class="docutils literal notranslate"><span class="pre">EVOB_ATR</span></code> in this file; <code class="docutils literal notranslate"><span class="pre">1b</span></code> Secondary (<code class="docutils literal notranslate"><span class="pre">EVOB_ATR</span></code> present; <strong>not allowed on Primary</strong>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>7–2</p></td>
+<td><p></p></td>
+<td><p>reserved</p></td>
+</tr>
+<tr class="row-even"><td><p>1–0</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0x0003</span></code></p></td>
+<td><p>Angle: <code class="docutils literal notranslate"><span class="pre">00b</span></code> none, <code class="docutils literal notranslate"><span class="pre">01b</span></code> non-seamless, <code class="docutils literal notranslate"><span class="pre">10b</span></code> seamless, <code class="docutils literal notranslate"><span class="pre">11b</span></code> reserved</p></td>
+</tr>
+</tbody>
+</table>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Value</p></th>
+<th class="head"><p>N</p></th>
+<th class="head"><p>Meaning</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">0x2000</span></code></p></td>
+<td><p>2417</p></td>
+<td><p>contiguous primary (<code class="docutils literal notranslate"><span class="pre">TMAPI_Ns=1</span></code>, <code class="docutils literal notranslate"><span class="pre">TMAPI_SA=416</span></code>): b13 only</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">0x2202</span></code></p></td>
+<td><p>4</p></td>
+<td><p>Pan’s interleaved: b13 + ILVUI + Angle <code class="docutils literal notranslate"><span class="pre">10b</span></code> seamless</p></td>
+</tr>
+</tbody>
+</table>
+<p><code class="docutils literal notranslate"><span class="pre">[2]</span></code>
+<code class="docutils literal notranslate"><span class="pre">[11,</span> <span class="pre">12]</span></code> <strong>VERIFIED</strong> for the named bits. Bit 13 has no label in the figure.</p>
+</section>
+</section>
+<section id="tmapi-srp-table-82">
+<h2>7.3 TMAPI_SRP: TABLE 82<a class="headerlink" href="#tmapi-srp-table-82" title="Link to this heading"></a></h2>
+<p>Starts at <strong>byte 384</strong>. One 10-byte record in a <strong>32-byte slot</strong>: <code class="docutils literal notranslate"><span class="pre">384</span> <span class="pre">+</span> <span class="pre">32×i</span></code>.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Size</p></th>
+<th class="head"><p>Field</p></th>
+<th class="head"><p>Rule</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>4</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">TMAPI_SA</span></code></p></td>
+<td><p><strong>byte</strong> offset of this TMAPI</p></td>
+</tr>
+<tr class="row-odd"><td><p>2</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">VTS_EVOBIN</span></code></p></td>
+<td><p>EVOBI index (not always the <code class="docutils literal notranslate"><span class="pre">EVOBnnn</span></code> number)</p></td>
+</tr>
+<tr class="row-even"><td><p>2</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">EVOBU_ENT_Ns</span></code></p></td>
+<td><p>entry count. <code class="docutils literal notranslate"><span class="pre">Ns×4</span> <span class="pre">+</span> <span class="pre">TMAPI_SA</span></code> lands in the file</p></td>
+</tr>
+<tr class="row-odd"><td><p>2</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">ILVU_ENT_Ns</span></code></p></td>
+<td><p><strong>0</strong> on 2417 contiguous maps <strong>and</strong> on the four interleaved maps</p></td>
+</tr>
+</tbody>
+</table>
+<p>When <code class="docutils literal notranslate"><span class="pre">TMAPI_Ns=1</span></code>, <code class="docutils literal notranslate"><span class="pre">TMAPI_SA=416</span></code> (2417/2417).<br />
+When <code class="docutils literal notranslate"><span class="pre">Ns=3</span></code>, SA=480 (<code class="docutils literal notranslate"><span class="pre">PANS_LABYRINTH</span></code> <code class="docutils literal notranslate"><span class="pre">death.MAP</span></code>). When <code class="docutils literal notranslate"><span class="pre">Ns=4</span></code>, SA=512 (three <code class="docutils literal notranslate"><span class="pre">ofelia*</span></code> maps). Those four are the only <code class="docutils literal notranslate"><span class="pre">Ns≠1</span></code>. <code class="docutils literal notranslate"><span class="pre">Video&#64;angleNumber</span></code> is <strong>1-based</strong> → TMAPI index <code class="docutils literal notranslate"><span class="pre">angleNumber</span> <span class="pre">−</span> <span class="pre">1</span></code>.</p>
+</section>
+<section id="evobu-ent-table-83-4-bytes">
+<h2>7.4 EVOBU_ENT: TABLE 83 (4 bytes)<a class="headerlink" href="#evobu-ent-table-83-4-bytes" title="Link to this heading"></a></h2>
+<p>Big-endian u32. Figure: https://patents.google.com/patent/US20080298219A1
+image <code class="docutils literal notranslate"><span class="pre">US20080298219A1-20081204-C00040.png</span></code>.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Bits</p></th>
+<th class="head"><p>Width</p></th>
+<th class="head"><p>Field</p></th>
+<th class="head"><p>Unit</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>31–21</p></td>
+<td><p>11</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">1STREF_SZ</span></code></p></td>
+<td><p>packs from EVOBU start through last byte of first reference picture</p></td>
+</tr>
+<tr class="row-odd"><td><p>20–13</p></td>
+<td><p>8</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">EVOBU_PB_TM</span></code></p></td>
+<td><p>video <strong>fields</strong> in this EVOBU</p></td>
+</tr>
+<tr class="row-even"><td><p>12–0</p></td>
+<td><p>13</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">EVOBU_SZ</span></code></p></td>
+<td><p>packs in this EVOBU</p></td>
+</tr>
+</tbody>
+</table>
+<p>Do not use an 11-bit size. Corpus: <strong>108</strong> entries have <code class="docutils literal notranslate"><span class="pre">EVOBU_SZ</span> <span class="pre">&gt;</span> <span class="pre">2047</span></code>, all on
+<strong>contiguous</strong> maps (<code class="docutils literal notranslate"><span class="pre">e14</span></code> A69). <strong>0</strong> on the four interleaved maps. 13-bit SZ is
+required even if you never play Pan’s.
+No zero sizes in 2,343,256 entries (<code class="docutils literal notranslate"><span class="pre">e08</span></code>).</p>
+<p><code class="docutils literal notranslate"><span class="pre">EVOBU_SZ</span></code> equals <code class="docutils literal notranslate"><span class="pre">DSI.vobu_ea</span> <span class="pre">+</span> <span class="pre">1</span></code> on Advanced EVOs checked (DOWNFALL first five
+EVOBUs 5/5; MYSTERY_MEN VOBU0 = 81).</p>
+<section id="seek-algorithm">
+<h3>Seek algorithm<a class="headerlink" href="#seek-algorithm" title="Link to this heading"></a></h3>
+<p>Local title time → integer ticks on <code class="docutils literal notranslate"><span class="pre">TitleSet&#64;timeBase</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ticks</span><span class="p">(</span><span class="n">HH</span><span class="p">:</span><span class="n">MM</span><span class="p">:</span><span class="n">SS</span><span class="p">:</span><span class="n">FF</span><span class="p">)</span> <span class="o">=</span> <span class="p">((</span><span class="n">HH</span><span class="o">*</span><span class="mi">60</span> <span class="o">+</span> <span class="n">MM</span><span class="p">)</span><span class="o">*</span><span class="mi">60</span> <span class="o">+</span> <span class="n">SS</span><span class="p">)</span> <span class="o">*</span> <span class="n">fps</span> <span class="o">+</span> <span class="n">FF</span>
+  <span class="n">fps</span> <span class="o">=</span> <span class="mi">60</span> <span class="k">if</span> <span class="n">timeBase</span><span class="o">=</span><span class="s2">"60fps"</span><span class="p">,</span> <span class="mi">50</span> <span class="k">if</span> <span class="s2">"50fps"</span>
+</pre></div>
+</div>
+<p>On <code class="docutils literal notranslate"><span class="pre">60fps</span></code> titles, a 0.5 s VOBU has <code class="docutils literal notranslate"><span class="pre">EVOBU_PB_TM=30</span></code> (fields) and 30 title ticks.
+Sum <code class="docutils literal notranslate"><span class="pre">EVOBU_PB_TM</span></code> directly against that tick count (do not ×2).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">need</span> <span class="o">=</span> <span class="n">ticks</span><span class="p">(</span><span class="n">local_time</span><span class="p">)</span>
+<span class="n">acc_tm</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">acc_packs</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="k">for</span> <span class="n">each</span> <span class="n">EVOBU_ENT</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">acc_tm</span> <span class="o">+</span> <span class="n">EVOBU_PB_TM</span> <span class="o">&gt;</span> <span class="n">need</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">acc_packs</span> <span class="o">*</span> <span class="mi">2048</span>          <span class="c1"># byte offset of this EVOBU in the .EVO</span>
+    <span class="n">acc_tm</span> <span class="o">+=</span> <span class="n">EVOBU_PB_TM</span>
+    <span class="n">acc_packs</span> <span class="o">+=</span> <span class="n">EVOBU_SZ</span>
+</pre></div>
+</div>
+<p>Fast decode: skip <code class="docutils literal notranslate"><span class="pre">1STREF_SZ</span></code> packs to the first reference picture.</p>
+</section>
+</section>
+<section id="ilvu-ent-table-84-6-bytes">
+<h2>7.5 ILVU_ENT: TABLE 84 (6 bytes)<a class="headerlink" href="#ilvu-ent-table-84-6-bytes" title="Link to this heading"></a></h2>
+<p>Only four maps (<code class="docutils literal notranslate"><span class="pre">PANS_LABYRINTH</span></code> <code class="docutils literal notranslate"><span class="pre">death.MAP</span></code>, <code class="docutils literal notranslate"><span class="pre">ofeliaDeath.MAP</span></code>, <code class="docutils literal notranslate"><span class="pre">ofeliaEnters.MAP</span></code>,
+<code class="docutils literal notranslate"><span class="pre">ofeliaFig.MAP</span></code>). <code class="docutils literal notranslate"><span class="pre">ILVUI_SA</span></code> is a byte offset (<code class="docutils literal notranslate"><span class="pre">death.MAP</span></code>: <code class="docutils literal notranslate"><span class="pre">0xA38</span></code>).</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Size</p></th>
+<th class="head"><p>Field</p></th>
+<th class="head"><p>Rule</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>4</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">ILVU_ADR</span></code></p></td>
+<td><p>pack index in the sibling <code class="docutils literal notranslate"><span class="pre">.EVO</span></code>, ascending</p></td>
+</tr>
+<tr class="row-odd"><td><p>2</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">ILVU_SZ</span></code></p></td>
+<td><p><strong>EVOBU count of this angle</strong> in this contiguous run (patent TABLE 84), <strong>not packs</strong>. Authoring quantum is usually <code class="docutils literal notranslate"><span class="pre">TMAPI_Ns</span></code> (3 or 4) with a leftover tail (<code class="docutils literal notranslate"><span class="pre">death</span></code> SZ=1×3; <code class="docutils literal notranslate"><span class="pre">ofelia*</span></code> SZ=3×4)</p></td>
+</tr>
+</tbody>
+</table>
+<p><strong>No ILVUI header.</strong> <code class="docutils literal notranslate"><span class="pre">ILVUI_SA</span></code> points at the first <code class="docutils literal notranslate"><span class="pre">ILVU_ENT</span></code>. Walk 6-byte records until <code class="docutils literal notranslate"><span class="pre">ILVU_SZ=0</span></code>. Count lives at <strong>u16be &#64;372</strong> (equals the walk). <code class="docutils literal notranslate"><span class="pre">TMAPI_SRP.ILVU_ENT_Ns</span></code> is <strong>0</strong>. Do not use it.</p>
+<p>Records <strong>cycle angles</strong>: record <code class="docutils literal notranslate"><span class="pre">i</span></code> belongs to TMAPI <code class="docutils literal notranslate"><span class="pre">i</span> <span class="pre">%</span> <span class="pre">TMAPI_Ns</span></code>. <code class="docutils literal notranslate"><span class="pre">ILVU_ADR</span></code> is a pack index in the sibling <code class="docutils literal notranslate"><span class="pre">.EVO</span></code>. The next <code class="docutils literal notranslate"><span class="pre">ADR</span></code> is this <code class="docutils literal notranslate"><span class="pre">ADR</span></code> plus the sum of that angle’s next <code class="docutils literal notranslate"><span class="pre">ILVU_SZ</span></code> <code class="docutils literal notranslate"><span class="pre">EVOBU_SZ</span></code> values. Verified 179/179 + 371 + 499 + 239 consecutive deltas (<code class="docutils literal notranslate"><span class="pre">e13</span></code>). Treating <code class="docutils literal notranslate"><span class="pre">SZ</span></code> as packs never matches (would step by 3 or 4, not hundreds).</p>
+<p>To play angle <code class="docutils literal notranslate"><span class="pre">A</span></code> (1-based <code class="docutils literal notranslate"><span class="pre">Video&#64;angleNumber</span></code> → <code class="docutils literal notranslate"><span class="pre">A</span> <span class="pre">=</span> <span class="pre">angleNumber</span> <span class="pre">−</span> <span class="pre">1</span></code>): skip ILVU records whose <code class="docutils literal notranslate"><span class="pre">i</span> <span class="pre">%</span> <span class="pre">Ns</span> <span class="pre">≠</span> <span class="pre">A</span></code>; at each matching record, decode <code class="docutils literal notranslate"><span class="pre">SZ</span></code> EVOBUs from <code class="docutils literal notranslate"><span class="pre">TMAPI[A]</span></code> starting at <code class="docutils literal notranslate"><span class="pre">ADR</span> <span class="pre">×</span> <span class="pre">2048</span></code>. The walk consumes every EVOBU on every TMAPI.</p>
+<p>Contiguous titles (<code class="docutils literal notranslate"><span class="pre">TMAP_TY=0x2000</span></code>) never need this. AACS sequence-key files (<code class="docutils literal notranslate"><span class="pre">SKF</span></code>) are <strong>0/120</strong> here; user angle selection is the observed mechanism. Player SK path remains <strong>OPEN</strong>.</p>
+<p>Patent FIG.77 draws <strong>one TMAP file per angle EVOB</strong>, each with its own ILVUI; FIG.88 draws two EVOBs sharing one TMAP name. This corpus is neither: one <code class="docutils literal notranslate"><span class="pre">.MAP</span></code>, <code class="docutils literal notranslate"><span class="pre">Ns</span></code> TMAPIs, one cycling ILVU array, one <code class="docutils literal notranslate"><span class="pre">.EVO</span></code>. Implement the disc walk (<code class="docutils literal notranslate"><span class="pre">spec/clean/16_PATENT_FIGURES.md</span></code>).</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="06_vti.html" class="btn btn-neutral float-left" title="6. HVA00001.VTI: Advanced VTSI" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="08_evo.html" class="btn btn-neutral float-right" title="8. EVO: MPEG-2 program stream" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Working specification.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

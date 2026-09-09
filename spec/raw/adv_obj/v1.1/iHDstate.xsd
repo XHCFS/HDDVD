@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns="http://www.dvdforum.org/2005/ihd#state" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.dvdforum.org/2005/ihd#state" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<!-- (C)Copyright 2005-2007 The DVD Forum*. All rights reserved. -->
+	<!-- This schema was developed by Sonic Solutions (www.sonic.com) -->
+	<!-- Modifications contributed by Toshiba and Microsoft -->
+	<!--Schema version:  5 Nov 2007  (595)-->
+	<!--HD-DVD Specification version: 1.1-->
+	<xs:attributeGroup name="all-state-attributes">
+		<xs:attribute ref="actioned"/>
+		<xs:attribute ref="enabled"/>
+		<xs:attribute ref="focused"/>
+		<xs:attribute ref="foreground"/>
+		<xs:attribute ref="pointer"/>
+		<xs:attribute ref="value"/>
+	</xs:attributeGroup>
+	<xs:attributeGroup name="animatable-state-attributes">
+		<xs:attribute ref="enabled"/>
+		<xs:attribute ref="focused"/>
+		<xs:attribute ref="value"/>
+	</xs:attributeGroup>
+	<xs:attribute name="actioned" type="xs:boolean" default="false">
+		<xs:annotation>
+			<xs:documentation>Spec. 7.6.3.4.2.4</xs:documentation>
+		</xs:annotation>
+	</xs:attribute>
+	<xs:attribute name="enabled" type="AnimatedBoolean" default="true">
+		<xs:annotation>
+			<xs:documentation>Spec. 7.6.3.4.2.2</xs:documentation>
+		</xs:annotation>
+	</xs:attribute>
+	<xs:attribute name="focused" type="AnimatedBoolean" default="false">
+		<xs:annotation>
+			<xs:documentation>Spec. 7.6.3.4.2.3</xs:documentation>
+		</xs:annotation>
+	</xs:attribute>
+	<xs:attribute name="foreground" type="xs:boolean" default="false">
+		<xs:annotation>
+			<xs:documentation>Spec. 7.6.3.4.2.1</xs:documentation>
+		</xs:annotation>
+	</xs:attribute>
+	<xs:attribute name="pointer" type="xs:boolean" default="false">
+		<xs:annotation>
+			<xs:documentation>Spec. 7.6.3.4.2.5</xs:documentation>
+		</xs:annotation>
+	</xs:attribute>
+	<xs:attribute name="value">
+		<xs:annotation>
+			<xs:documentation>Spec. 7.6.3.4.2.6</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:union memberTypes="AnimatedBoolean xs:string"/>
+		</xs:simpleType>
+	</xs:attribute>
+	<xs:simpleType name="AnimatedBoolean">
+		<xs:union>
+			<xs:simpleType>
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="true"/>
+					<xs:enumeration value="false"/>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType>
+				<xs:restriction base="xs:token">
+					<xs:pattern value="(true|false)(\s*;\s*(true|false))*"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:union>
+	</xs:simpleType>
+</xs:schema>

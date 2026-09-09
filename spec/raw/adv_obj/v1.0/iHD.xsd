@@ -1,0 +1,711 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.dvdforum.org/2005/ihd" xmlns:state="http://www.dvdforum.org/2005/ihd#state" xmlns:style="http://www.dvdforum.org/2005/ihd#style" targetNamespace="http://www.dvdforum.org/2005/ihd" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<!-- (C)Copyright 2005 The DVD Forum*. All rights reserved. -->
+	<!-- This schema was developed by Sonic Solutions (www.sonic.com) -->
+	<!-- Modifications contributed by Toshiba and Microsoft -->
+	<!--Schema version: 16 Jul 2006-->
+	<!--HD-DVD Specification version: 1.0-->
+	<xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="http://www.w3.org/2001/xml.xsd"/>
+	<xs:import namespace="http://www.dvdforum.org/2005/ihd#state" schemaLocation="iHDstate.xsd"/>
+	<xs:import namespace="http://www.dvdforum.org/2005/ihd#style" schemaLocation="iHDstyle.xsd"/>
+	<xs:element name="area">
+		<xs:annotation>
+			<xs:documentation>Spec. 7.5.3.1.1</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="StatefulElementBase">
+					<xs:attribute name="accessKey" type="AccessKeyList" use="optional"/>
+					<xs:attribute name="coords" type="NonNegativeIntegerList" use="optional"/>
+					<xs:attribute name="shape" use="optional" default="default">
+						<xs:simpleType>
+							<xs:restriction base="xs:token">
+								<xs:enumeration value="circle"/>
+								<xs:enumeration value="poly"/>
+								<xs:enumeration value="rect"/>
+								<xs:enumeration value="default"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:attribute>
+					<xs:attributeGroup ref="style:area-style-attributes"/>
+					<!--xs:attributeGroup ref="ExtendableElement"/-->
+					<xs:attributeGroup ref="xmlNamespace"/>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="body">
+		<xs:annotation>
+			<xs:documentation>Spec. 7.5.3.1.2</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="DisplayElementBase">
+					<xs:sequence>
+						<xs:element ref="meta" minOccurs="0" maxOccurs="unbounded"/>
+						<xs:choice minOccurs="0" maxOccurs="unbounded">
+							<xs:element ref="div"/>
+							<xs:element ref="object"/>
+							<xs:element ref="include"/>
+						</xs:choice>
+					</xs:sequence>
+					<xs:attribute name="style" type="xs:IDREFS" use="optional"/>
+					<xs:attribute name="timeContainer" type="TimeContainerType" use="optional" default="seq"/>
+					<xs:attribute ref="state:foreground" use="optional" default="false"/>
+					<xs:attributeGroup ref="InlineTimingAttributes"/>
+					<xs:attributeGroup ref="style:body-style-attributes"/>
+					<!--xs:attributeGroup ref="ExtendableElement"/-->
+					<xs:attributeGroup ref="xmlNamespace"/>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="br">
+		<xs:annotation>
+			<xs:documentation>Spec. 7.5.3.1.3</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="DisplayElementBase">
+					<xs:attributeGroup ref="style:br-style-attributes"/>
+					<!--xs:attributeGroup ref="ExtendableElement"/-->
+					<xs:attributeGroup ref="xmlNamespace"/>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="button">
+		<xs:annotation>
+			<xs:documentation>Spec. 7.5.3.1.4</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="StatefulElementBase">
+					<xs:sequence>
+						<xs:element ref="meta" minOccurs="0" maxOccurs="unbounded"/>
+						<xs:element ref="p" minOccurs="0"/>
+					</xs:sequence>
+					<xs:attribute name="accessKey" type="AccessKeyList" use="optional"/>
+					<xs:attributeGroup ref="style:button-style-attributes"/>
+					<!--xs:attributeGroup ref="ExtendableElement"/-->
+					<xs:attributeGroup ref="xmlNamespace"/>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="div">
+		<xs:annotation>
+			<xs:documentation>Spec. 7.5.3.1.5</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="NavigableElementBase">
+					<xs:sequence>
+						<xs:element ref="meta" minOccurs="0" maxOccurs="unbounded"/>
+						<xs:choice minOccurs="0" maxOccurs="unbounded">
+							<xs:element ref="button"/>
+							<xs:element ref="object"/>
+							<xs:element ref="input"/>
+							<xs:element ref="div"/>
+							<xs:element ref="p"/>
+						</xs:choice>
+					</xs:sequence>
+					<xs:attribute name="timeContainer" type="TimeContainerType" use="optional" default="par"/>
+					<xs:attributeGroup ref="InlineTimingAttributes"/>
+					<xs:attributeGroup ref="style:div-style-attributes"/>
+					<!--xs:attributeGroup ref="ExtendableElement"/-->
+					<xs:attributeGroup ref="xmlNamespace"/>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="head">
+		<xs:annotation>
+			<xs:documentation>Spec. 7.5.3.1.6</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="NonDisplayElementBase">
+					<xs:sequence>
+						<xs:element ref="meta" minOccurs="0" maxOccurs="unbounded"/>
+						<xs:choice minOccurs="0" maxOccurs="unbounded">
+							<xs:element ref="include"/>
+							<xs:element ref="styling"/>
+							<xs:element ref="timing"/>
+						</xs:choice>
+					</xs:sequence>
+					<!--xs:attributeGroup ref="ExtendableElement"/-->
+					<xs:attributeGroup ref="xmlNamespace"/>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="include">
+		<xs:annotation>
+			<xs:documentation>Spec. 7.5.3.1.7</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="NonDisplayElementBase">
+					<xs:attribute name="href" type="xs:anyURI" use="required"/>
+					<xs:attribute name="condition" type="xs:string" use="optional"/>
+					<!--xs:attributeGroup ref="ExtendableElement"/-->
+					<xs:attributeGroup ref="xmlNamespace"/>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="input">
+		<xs:annotation>
+			<xs:documentation>Spec. 7.5.3.1.8</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="StatefulElementBase">
+					<xs:sequence>
+						<xs:element ref="meta" minOccurs="0" maxOccurs="unbounded"/>
+						<xs:element ref="p" minOccurs="0"/>
+					</xs:sequence>
+					<xs:attribute name="accessKey" type="AccessKeyList" use="optional"/>
+					<xs:attribute name="mode" use="optional" default="singleline">
+						<xs:simpleType>
+							<xs:restriction base="xs:token">
+								<xs:enumeration value="password"/>
+								<xs:enumeration value="singleline"/>
+								<xs:enumeration value="multiline"/>
+								<xs:enumeration value="display"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:attribute>
+					<xs:attributeGroup ref="style:input-style-attributes"/>
+					<!--xs:attributeGroup ref="ExtendableElement"/-->
+					<xs:attributeGroup ref="xmlNamespace"/>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="meta">
+		<xs:annotation>
+			<xs:documentation>Spec. 7.5.3.1.9</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="NonDisplayElementBase">
+					<xs:choice minOccurs="0" maxOccurs="unbounded">
+						<xs:any namespace="##other" processContents="lax"/>
+					</xs:choice>
+					<xs:attributeGroup ref="ExtendableElement"/>
+					<xs:attributeGroup ref="xmlNamespace"/>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="object">
+		<xs:annotation>
+			<xs:documentation>Spec. 7.5.3.1.10</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="DisplayElementBase">
+					<xs:sequence>
+						<xs:element ref="meta" minOccurs="0" maxOccurs="unbounded"/>
+						<xs:element ref="param" minOccurs="0" maxOccurs="unbounded"/>
+						<xs:element ref="area" minOccurs="0" maxOccurs="unbounded"/>
+						<xs:element ref="p" minOccurs="0"/>
+					</xs:sequence>
+					<xs:attribute name="src" type="xs:anyURI" use="optional"/>
+					<xs:attribute name="content" type="xs:IDREF" use="optional"/>
+					<xs:attribute name="style" type="xs:IDREFS" use="optional"/>
+					<xs:attribute name="type" use="required">
+						<xs:simpleType>
+							<xs:restriction base="xs:token">
+								<xs:enumeration value="image/jpeg"/>
+								<xs:enumeration value="image/png"/>
+								<xs:enumeration value="image/cvi"/>
+								<xs:enumeration value="image/cdw"/>
+								<xs:enumeration value="image/mng"/>
+								<xs:enumeration value="audio/x-wav"/>
+								<xs:enumeration value="application/x-clearrect"/>
+								<xs:enumeration value="application/x-graphic"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:attribute>
+					<xs:attributeGroup ref="style:object-style-attributes"/>
+					<!--xs:attributeGroup ref="ExtendableElement"/-->
+					<xs:attributeGroup ref="xmlNamespace"/>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="p">
+		<xs:annotation>
+			<xs:documentation>Spec. 7.5.3.1.11</xs:documentation>
+		</xs:annotation>
+		<xs:complexType mixed="true">
+			<xs:complexContent mixed="true">
+				<xs:extension base="NavigableElementBase">
+					<xs:choice minOccurs="0" maxOccurs="unbounded">
+						<xs:element ref="meta"/>
+						<xs:element ref="object"/>
+						<xs:element ref="button"/>
+						<xs:element ref="input"/>
+						<xs:element ref="br"/>
+						<xs:element ref="span"/>
+					</xs:choice>
+					<xs:attribute name="timeContainer" type="TimeContainerType" use="optional" default="par"/>
+					<xs:attributeGroup ref="InlineTimingAttributes"/>
+					<xs:attributeGroup ref="style:p-style-attributes"/>
+					<!--xs:attributeGroup ref="ExtendableElement"/-->
+					<xs:attributeGroup ref="xmlNamespace"/>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="param">
+		<xs:annotation>
+			<xs:documentation>Spec. 7.5.3.1.12</xs:documentation>
+		</xs:annotation>
+		<xs:complexType mixed="true">
+			<xs:simpleContent>
+				<xs:extension base="xs:string">
+					<xs:attribute name="name" type="xs:string" use="required"/>
+					<xs:attribute name="value" type="xs:string" use="optional"/>
+					<!--xs:attributeGroup ref="ExtendableElement"/-->
+					<xs:attributeGroup ref="xmlNamespace"/>
+				</xs:extension>
+			</xs:simpleContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="root">
+		<xs:annotation>
+			<xs:documentation>Spec. 7.5.3.1.13</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="NonDisplayElementBase">
+					<xs:sequence>
+						<xs:element ref="head" minOccurs="0"/>
+						<xs:element ref="body" minOccurs="0"/>
+					</xs:sequence>
+					<xs:attribute ref="xml:base" use="optional"/>
+					<xs:attribute ref="xml:lang" use="required"/>
+					<xs:attribute ref="xml:space" use="optional"/>
+					<xs:attribute name="id" type="xs:ID" use="optional"/>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="span">
+		<xs:annotation>
+			<xs:documentation>Spec. 7.5.3.1.14</xs:documentation>
+		</xs:annotation>
+		<xs:complexType mixed="true">
+			<xs:complexContent mixed="true">
+				<xs:extension base="NavigableElementBase">
+					<xs:choice minOccurs="0" maxOccurs="unbounded">
+						<xs:element ref="meta"/>
+						<xs:element ref="object"/>
+						<xs:element ref="button"/>
+						<xs:element ref="input"/>
+						<xs:element ref="br"/>
+						<xs:element ref="span"/>
+					</xs:choice>
+					<xs:attribute name="timeContainer" type="TimeContainerType" use="optional" default="par"/>
+					<xs:attributeGroup ref="InlineTimingAttributes"/>
+					<xs:attributeGroup ref="style:span-style-attributes"/>
+					<!--xs:attributeGroup ref="ExtendableElement"/-->
+					<xs:attributeGroup ref="xmlNamespace"/>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="styling">
+		<xs:annotation>
+			<xs:documentation>Spec. 7.6.3.1.1</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="meta" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element ref="style" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+			<!--xs:attributeGroup ref="ExtendableElement"/-->
+			<xs:attributeGroup ref="xmlNamespace"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="style">
+		<xs:annotation>
+			<xs:documentation>Spec. 7.6.3.1.2</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="meta" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+			<xs:attribute name="id" type="xs:ID" use="optional"/>
+			<xs:attribute name="style" type="xs:IDREFS" use="optional"/>
+			<xs:attribute name="select" type="PathExpressionType" use="optional"/>
+			<xs:attribute ref="xml:base" use="optional"/>
+			<xs:attribute ref="xml:lang" use="optional"/>
+			<xs:attribute ref="xml:space" use="optional"/>
+			<xs:attributeGroup ref="style:all-style-attributes"/>
+			<!--xs:attributeGroup ref="ExtendableElement"/-->
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="animate">
+		<xs:annotation>
+			<xs:documentation>Spec. 7.7.2.9.1</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:attribute name="calcMode" use="optional" default="linear">
+				<xs:simpleType>
+					<xs:restriction base="xs:token">
+						<xs:enumeration value="linear"/>
+						<xs:enumeration value="discrete"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="additive" use="optional" default="replace">
+				<xs:simpleType>
+					<xs:restriction base="xs:token">
+						<xs:enumeration value="replace"/>
+						<xs:enumeration value="sum"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attributeGroup ref="style:animatable-style-attributes"/>
+			<xs:attributeGroup ref="state:animatable-state-attributes"/>
+			<xs:attributeGroup ref="animatable-core-attributes"/>
+			<!--xs:attributeGroup ref="ExtendableElement"/-->
+			<xs:attributeGroup ref="xmlNamespace"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="cue">
+		<xs:annotation>
+			<xs:documentation>Spec. 7.7.2.9.2</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:choice>
+				<xs:choice minOccurs="0" maxOccurs="unbounded">
+					<xs:element ref="animate"/>
+					<xs:element ref="event"/>
+					<xs:element ref="set"/>
+				</xs:choice>
+				<xs:element ref="link"/>
+			</xs:choice>
+			<xs:attribute name="fill" use="optional" default="remove">
+				<xs:simpleType>
+					<xs:restriction base="xs:token">
+						<xs:enumeration value="remove"/>
+						<xs:enumeration value="hold"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="select" type="PathExpressionType" use="optional"/>
+			<xs:attribute name="use" type="xs:IDREFS" use="optional"/>
+			<xs:attributeGroup ref="OutOfLineTimingAttributes"/>
+			<xs:attributeGroup ref="style:all-style-attributes"/>
+			<!--xs:attributeGroup ref="ExtendableElement"/-->
+			<xs:attributeGroup ref="xmlNamespace"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="defs">
+		<xs:annotation>
+			<xs:documentation>Spec. 7.7.2.9.3</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:choice minOccurs="0" maxOccurs="unbounded">
+				<xs:element ref="g"/>
+				<xs:element ref="animate"/>
+				<xs:element ref="set"/>
+				<xs:element ref="event"/>
+				<xs:element ref="link"/>
+			</xs:choice>
+			<!--xs:attributeGroup ref="ExtendableElement"/-->
+			<xs:attributeGroup ref="xmlNamespace"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="event">
+		<xs:annotation>
+			<xs:documentation>Spec. 7.7.2.9.4</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="param" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+			<xs:attribute name="name" type="xs:NMTOKEN" use="required"/>
+			<!--xs:attributeGroup ref="ExtendableElement"/-->
+			<xs:attributeGroup ref="xmlNamespace"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="g">
+		<xs:annotation>
+			<xs:documentation>Spec. 7.7.2.9.5</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:choice minOccurs="0" maxOccurs="unbounded">
+				<xs:element ref="g"/>
+				<xs:element ref="animate"/>
+				<xs:element ref="set"/>
+				<xs:element ref="event"/>
+			</xs:choice>
+			<!--xs:attributeGroup ref="ExtendableElement"/-->
+			<xs:attributeGroup ref="xmlNamespace"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="link">
+		<xs:annotation>
+			<xs:documentation>Spec. 7.7.2.9.6</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:attribute name="href" type="xs:anyURI" use="required"/>
+			<xs:attribute ref="xml:base" use="optional"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="par">
+		<xs:annotation>
+			<xs:documentation>Spec. 7.7.2.9.7</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:choice minOccurs="0" maxOccurs="unbounded">
+				<xs:element ref="cue"/>
+				<xs:element ref="par"/>
+				<xs:element ref="seq"/>
+			</xs:choice>
+			<xs:attributeGroup ref="OutOfLineTimingAttributes"/>
+			<!--xs:attributeGroup ref="ExtendableElement"/-->
+			<xs:attributeGroup ref="xmlNamespace"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="seq">
+		<xs:annotation>
+			<xs:documentation>Spec. 7.7.2.9.8</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:choice minOccurs="0" maxOccurs="unbounded">
+				<xs:element ref="cue"/>
+				<xs:element ref="par"/>
+				<xs:element ref="seq"/>
+			</xs:choice>
+			<xs:attributeGroup ref="OutOfLineTimingAttributes"/>
+			<!--xs:attributeGroup ref="ExtendableElement"/-->
+			<xs:attributeGroup ref="xmlNamespace"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="set">
+		<xs:annotation>
+			<xs:documentation>Spec. 7.7.2.9.9</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:attributeGroup ref="style:all-style-attributes"/>
+			<xs:attributeGroup ref="state:all-state-attributes"/>
+			<xs:attributeGroup ref="animatable-core-attributes"/>
+			<!--xs:attributeGroup ref="ExtendableElement"/-->
+			<xs:attributeGroup ref="xmlNamespace"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="timing">
+		<xs:annotation>
+			<xs:documentation>Spec. 7.7.2.9.10</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="defs" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:choice minOccurs="0" maxOccurs="unbounded">
+					<xs:element ref="par"/>
+					<xs:element ref="seq"/>
+				</xs:choice>
+			</xs:sequence>
+			<xs:attribute name="clock" use="optional" default="title">
+				<xs:simpleType>
+					<xs:restriction base="xs:token">
+						<xs:enumeration value="title"/>
+						<xs:enumeration value="application"/>
+						<xs:enumeration value="page"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="clockDivisor" type="xs:positiveInteger" use="optional" default="1"/>
+			<xs:attribute name="timeContainer" type="TimeContainerType" use="optional" default="par"/>
+			<xs:attributeGroup ref="OutOfLineTimingAttributes"/>
+			<!--xs:attributeGroup ref="ExtendableElement"/-->
+			<xs:attributeGroup ref="xmlNamespace"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:simpleType name="AccessKeyList">
+		<xs:annotation>
+			<xs:documentation>Spec. 7.5.3.2.1</xs:documentation>
+		</xs:annotation>
+		<xs:list itemType="AccessKeyType"/>
+	</xs:simpleType>
+	<xs:simpleType name="AccessKeyType">
+		<xs:annotation>
+			<xs:documentation>Spec. V.1</xs:documentation>
+		</xs:annotation>
+		<xs:union memberTypes="UnicodeType VirtualKeyType"/>
+	</xs:simpleType>
+	<xs:simpleType name="NonNegativeIntegerList">
+		<xs:annotation>
+			<xs:documentation>Spec. 7.5.2.2</xs:documentation>
+		</xs:annotation>
+		<xs:list itemType="xs:nonNegativeInteger"/>
+	</xs:simpleType>
+	<xs:simpleType name="PathExpressionType">
+		<xs:annotation>
+			<xs:documentation>Spec. 7.5.2.4</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string"/>
+	</xs:simpleType>
+	<xs:simpleType name="TimeContainerType">
+		<xs:annotation>
+			<xs:documentation>Spec. 7.7.2.10.10</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:token">
+			<xs:enumeration value="par"/>
+			<xs:enumeration value="seq"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="TimeExpressionType">
+		<xs:annotation>
+			<xs:documentation>Spec. 7.5.2.3</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:token">
+			<xs:pattern value="[0-9][0-9]+:[0-5][0-9]:[0-5][0-9](:[0-9][0-9]+)?"/>
+			<xs:pattern value="[0-9]+(\.[0-9]+)?(h|m|s|(ms)|f)"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="TimeOrPathExpressionType">
+		<xs:union memberTypes="TimeExpressionType PathExpressionType"/>
+	</xs:simpleType>
+	<xs:simpleType name="UnicodeType">
+		<xs:annotation>
+			<xs:documentation>Spec. 7.5.2.1</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:token">
+			<xs:pattern value="U\+[0-9a-fA-F]{4,6}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="VirtualKeyType">
+		<xs:annotation>
+			<xs:documentation>Annex V Table V-1</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:token">
+			<xs:enumeration value="VK_PLAY"/>
+			<xs:enumeration value="VK_PAUSE"/>
+			<xs:enumeration value="VK_FF"/>
+			<xs:enumeration value="VK_FR"/>
+			<xs:enumeration value="VK_SF"/>
+			<xs:enumeration value="VK_SR"/>
+			<xs:enumeration value="VK_STEP_PREV"/>
+			<xs:enumeration value="VK_STEP_NEXT"/>
+			<xs:enumeration value="VK_SKIP_PREV"/>
+			<xs:enumeration value="VK_SKIP_NEXT"/>
+			<xs:enumeration value="VK_SUBTITLE_SWITCH"/>
+			<xs:enumeration value="VK_SUBTITLE"/>
+			<xs:enumeration value="VK_CC"/>
+			<xs:enumeration value="VK_ANGLE"/>
+			<xs:enumeration value="VK_AUDIO"/>
+			<xs:enumeration value="VK_MENU"/>
+			<xs:enumeration value="VK_TOP_MENU"/>
+			<xs:enumeration value="VK_BACK"/>
+			<xs:enumeration value="VK_RESUME"/>
+			<xs:enumeration value="VK_LEFT"/>
+			<xs:enumeration value="VK_UP"/>
+			<xs:enumeration value="VK_RIGHT"/>
+			<xs:enumeration value="VK_DOWN"/>
+			<xs:enumeration value="VK_LEFTUP"/>
+			<xs:enumeration value="VK_RIGHTUP"/>
+			<xs:enumeration value="VK_LEFTDOWN"/>
+			<xs:enumeration value="VK_RIGHTDOWN"/>
+			<xs:enumeration value="VK_TAB"/>
+			<xs:enumeration value="VK_A_BUTTON"/>
+			<xs:enumeration value="VK_B_BUTTON"/>
+			<xs:enumeration value="VK_C_BUTTON"/>
+			<xs:enumeration value="VK_D_BUTTON"/>
+			<xs:enumeration value="VK_E_BUTTON"/>
+			<xs:enumeration value="VK_F_BUTTON"/>
+			<xs:enumeration value="VK_G_BUTTON"/>
+			<xs:enumeration value="VK_H_BUTTON"/>
+			<xs:enumeration value="VK_I_BUTTON"/>
+			<xs:enumeration value="VK_J_BUTTON"/>
+			<xs:enumeration value="VK_K_BUTTON"/>
+			<xs:enumeration value="VK_L_BUTTON"/>
+			<xs:enumeration value="VK_ENTER"/>
+			<xs:enumeration value="VK_ESC"/>
+			<xs:enumeration value="VK_0"/>
+			<xs:enumeration value="VK_1"/>
+			<xs:enumeration value="VK_2"/>
+			<xs:enumeration value="VK_3"/>
+			<xs:enumeration value="VK_4"/>
+			<xs:enumeration value="VK_5"/>
+			<xs:enumeration value="VK_6"/>
+			<xs:enumeration value="VK_7"/>
+			<xs:enumeration value="VK_8"/>
+			<xs:enumeration value="VK_9"/>
+			<xs:enumeration value="VK_MOUSE_1"/>
+			<xs:enumeration value="VK_MOUSE_2"/>
+			<xs:enumeration value="VK_MOUSE_3"/>
+			<xs:enumeration value="VK_MOUSE_4"/>
+			<xs:enumeration value="VK_MOUSE_5"/>
+			<xs:enumeration value="VK_VECTOR_1"/>
+			<xs:enumeration value="VK_VECTOR_2"/>
+			<xs:enumeration value="VK_VECTOR_3"/>
+			<xs:enumeration value="VK_VECTOR_4"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="NonDisplayElementBase"/>
+	<xs:complexType name="DisplayElementBase">
+		<xs:complexContent>
+			<xs:extension base="NonDisplayElementBase">
+				<xs:attribute name="class" type="xs:NMTOKENS" use="optional"/>
+				<xs:attribute ref="state:enabled" use="optional"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="NavigableElementBase">
+		<xs:complexContent>
+			<xs:extension base="DisplayElementBase">
+				<xs:attribute name="style" type="xs:IDREFS" use="optional"/>
+				<xs:attribute ref="state:pointer" use="optional"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="ActivateableElementBase">
+		<xs:complexContent>
+			<xs:extension base="NavigableElementBase">
+				<xs:attribute ref="state:focused" use="optional"/>
+				<xs:attribute ref="state:actioned" use="optional"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="StatefulElementBase">
+		<xs:complexContent>
+			<xs:extension base="ActivateableElementBase">
+				<xs:attribute ref="state:value" use="optional"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:attributeGroup name="InlineTimingAttributes">
+		<xs:attribute name="begin" type="TimeExpressionType" use="optional"/>
+		<xs:attribute name="dur" type="TimeExpressionType" use="optional"/>
+		<xs:attribute name="end" type="TimeExpressionType" use="optional"/>
+	</xs:attributeGroup>
+	<xs:attributeGroup name="OutOfLineTimingAttributes">
+		<xs:attribute name="begin" type="TimeOrPathExpressionType" use="optional"/>
+		<xs:attribute name="dur" type="TimeExpressionType" use="optional"/>
+		<xs:attribute name="end" type="TimeOrPathExpressionType" use="optional"/>
+	</xs:attributeGroup>
+	<xs:attributeGroup name="animatable-core-attributes">
+		<xs:annotation>
+			<xs:documentation>Spec. 7.8.1</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="value" type="xs:string"/>
+	</xs:attributeGroup>
+	<xs:attributeGroup name="ExtendableElement">
+		<xs:anyAttribute namespace="##other" processContents="lax"/>
+	</xs:attributeGroup>
+	<xs:attributeGroup name="xmlNamespace">
+		<xs:attribute ref="xml:base" use="optional"/>
+		<xs:attribute ref="xml:lang" use="optional"/>
+		<xs:attribute ref="xml:space" use="optional"/>
+		<xs:attribute name="id" type="xs:ID" use="optional"/>
+	</xs:attributeGroup>
+</xs:schema>

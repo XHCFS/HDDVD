@@ -1,0 +1,1057 @@
+iHD / HDi Scripting Type Library (iHDScriptingTypeLib)
+Source: IHDScriptingTLB, Sonic Scenarist Advanced Content 4.5 (SCENACA.msi, 2007-09-27)
+Binary saved at: spec/raw/adv_obj/typelib/iHDScripting.tlb (load in oleview/tlbimp for full param IDL)
+Complete ECMAScript API surface exposed to HD DVD Advanced Content applications.
+106 typeinfos, 954 names.
+
+dispinterface IJSObject  (10 members)
+    DefaultValue
+    constructor
+    prototype
+    prototype
+    toString
+    toLocaleString
+    valueOf
+    hasOwnProperty
+    isPrototypeOf
+    propertyIsEnumerable
+
+dispinterface IJSObjectEx  (10 members)
+    DefaultValue
+    constructor
+    prototype
+    prototype
+    toString
+    toLocaleString
+    valueOf
+    hasOwnProperty
+    isPrototypeOf
+    propertyIsEnumerable
+
+interface IDispatchEx  (8 members)
+    GetDispID
+    RemoteInvokeEx
+    DeleteMemberByName
+    DeleteMemberByDispID
+    GetMemberProperties
+    GetMemberName
+    GetNextDispID
+    GetNameSpaceParent
+
+interface IServiceProvider  (1 members)
+    RemoteQueryService
+
+dispinterface IDOM2EventTarget  (3 members)
+    addEventListener
+    removeEventListener
+    dispatchEvent
+
+dispinterface IJSArray  (1 members)
+    length
+
+dispinterface IJSFunction  (1 members)
+    length
+
+dispinterface IJSError  (4 members)
+    name
+    name
+    message
+    message
+
+dispinterface IApplication  (26 members)
+    FileIO
+    Diagnostics
+    ControllerManager
+    Drawing
+    Network
+    attributes
+    zOrder
+    location
+    advancedApplications
+    thisAdvancedApplication
+    document
+    application
+    coordX
+    coordX
+    coordY
+    coordY
+    TIMER_APPLICATION
+    TIMER_TITLE
+    moveToTop
+    moveToBottom
+    link
+    setMarkupLoadedHandler
+    createStringArray
+    createTimer
+    createEvent
+    computeImplicitNav
+
+dispinterface IDynamicAttributes  (0 members)
+
+dispinterface IAdvApplication  (15 members)
+    id
+    state
+    zOrder
+    type
+    autorun
+    autorun
+    APPLICATION_PLAYLIST
+    APPLICATION_TITLE
+    STATE_ACTIVE
+    STATE_INACTIVE
+    STATE_INVALID
+    activate
+    inactivate
+    moveBefore
+    moveAfter
+
+dispinterface IStringArray  (4 members)
+    size
+    equals
+    get
+    set
+
+dispinterface ITimer  (7 members)
+    autoReset
+    autoReset
+    enabled
+    enabled
+    interval
+    interval
+    type
+
+dispinterface IFileIO  (22 members)
+    FILE_IOMODE_READ
+    FILE_IOMODE_WRITE
+    FILE_IOMODE_READWRITE
+    SUCCEEDED
+    FAILED
+    FILE_NOT_FOUND
+    IO
+    NOT_PERMITTED
+    DIRECTORY_NOT_FOUND
+    ARGUMENT
+    NOT_ENOUGH_SPACE
+    saveTextFile
+    createDirectory
+    openTextFile
+    copy
+    remove
+    move
+    getFiles
+    getFileInfo
+    getDirectories
+    getDirectoryInfo
+    setLastModifiedDate
+
+dispinterface IDirectory  (4 members)
+    lastModifiedTime
+    name
+    uri
+    size
+
+dispinterface IFile  (4 members)
+    lastModifiedTime
+    name
+    uri
+    size
+
+dispinterface ITextStream  (14 members)
+    line
+    atEndOfLine
+    atEndOfStream
+    column
+    uri
+    deleteLine
+    read
+    readAll
+    readLine
+    skip
+    skipLine
+    write
+    writeLine
+    writeBlankLines
+
+dispinterface IDiagnostics  (5 members)
+    trace
+    listeners
+    TRACE_LEVEL_ERROR
+    TRACE_LEVEL_WARNING
+    TRACE_LEVEL_INFO
+
+dispinterface ITrace  (9 members)
+    autoFlush
+    autoFlush
+    indentLevel
+    indentLevel
+    indentSize
+    indentSize
+    write
+    writeLine
+    flush
+
+dispinterface ITraceListener  (11 members)
+    indentLevel
+    indentLevel
+    indentSize
+    indentSize
+    needIndent
+    needIndent
+    name
+    name
+    write
+    writeLine
+    flush
+
+dispinterface ITraceListenerCollection  (9 members)
+    count
+    LISTENER_TYPE_FILE
+    LISTENER_TYPE_NETWORK
+    LISTENER_TYPE_DEBUGGER
+    item
+    indexOf
+    add
+    remove
+    clear
+
+dispinterface IController  (9 members)
+    id
+    type
+    cursor
+    OTHER
+    REMOTE_CONTROLLER
+    KEYBORAD
+    MOUSE
+    FRONT_PANEL
+    GAME_PAD
+
+dispinterface IControllerManager  (2 members)
+    count
+    getController
+
+dispinterface IDrawing  (6 members)
+    createColor
+    createRectangle
+    createPoint
+    createSolidBrush
+    createTextureBrush
+    createPen
+
+dispinterface IColor  (10 members)
+    red
+    red
+    green
+    green
+    blue
+    blue
+    alpha
+    alpha
+    setRGBA
+    equal
+
+dispinterface IRectangle  (10 members)
+    x
+    x
+    y
+    y
+    width
+    width
+    height
+    height
+    contains
+    equal
+
+dispinterface IPen  (4 members)
+    color
+    width
+    rotateTransform
+    scaleTransform
+
+dispinterface IDrawingArea  (13 members)
+    clear
+    drawLine
+    drawLineCoord
+    drawLines
+    drawRectangle
+    drawRectangleCoord
+    drawRectangles
+    drawEllipse
+    drawEllipseCoord
+    drawPolygon
+    drawImage
+    capture
+    captureWithMAC
+
+dispinterface IPoint  (4 members)
+    x
+    x
+    y
+    y
+
+dispinterface IBrush  (2 members)
+    color
+    texture
+
+dispinterface IHTTPHeader  (6 members)
+    count
+    getHeader
+    setHeader
+    removeHeader
+    getHeaderNameByIndex
+    getHeaderVauleByIndex
+
+dispinterface IHTTPClient  (35 members)
+    requestHeaders
+    requestUri
+    timeout
+    state
+    onStateChange
+    onStateChange
+    dataUploaded
+    dataDownloaded
+    downloadFileLocation
+    downloadFileLocation
+    responseHeaders
+    statusCode
+    statucDescription
+    requestMethod
+    requestAuth
+    send
+    sendString
+    sendFile
+    sendXML
+    getResponseString
+    getResponseXML
+    abort
+    open
+    STATE_UNINITIALIZED
+    STATE_LOADING
+    STATE_REQUESTPROGRESS
+    STATE_REQUESTSENT
+    STATE_HEADERRECEIVED
+    STATE_RESPONSEPROGRESS
+    STATE_COMPLETED
+    STATE_ERROR
+    STATE_ABORT
+    AUTHENTICATION_NONE
+    AUTHENTICATION_BASIC
+    AUTHENTICATION_DIGEST
+
+dispinterface INetwork  (8 members)
+    HTTP_GET
+    HTTP_HEAD
+    HTTP_POST
+    HTTP_PUT
+    HTTP_TRACE
+    HTTP_OPTIONS
+    HTTP_DELETE
+    createHTTPClient
+
+dispinterface IDataCache  (3 members)
+    dataCacheSize
+    availableFileCacheSize
+    streamingBufferSize
+
+dispinterface IPersistentStorageMgr  (15 members)
+    contentId
+    getPersistentStorageDevices
+    callManagementMenu
+    saveBasePath
+    STORAGE_ALL
+    STORAGE_REQUIRED
+    STORAGE_ADDITIONAL
+    STORAGE_NETWORK
+    STATE_SLOT
+    STATE_MEDIA_SLOT
+    STATE_NON_SLOT
+    SUCCEEDED
+    FILE_NOT_FOUND
+    ARGUMENT
+    NOT_ENOUGH_SPACE
+
+dispinterface IPSDevice  (14 members)
+    deviceName
+    slot
+    size
+    availableSize
+    bitrate
+    type
+    state
+    basePath
+    basePath
+    getInformation
+    getProviderInformation
+    setProviderInformation
+    getContentInformation
+    setContentInformation
+
+dispinterface ICursorManager  (16 members)
+    setImage
+    moveCursor
+    setRegion
+    image
+    x
+    y
+    hotSpotX
+    hotSpotY
+    regionX
+    regionY
+    regionWidth
+    regionHeight
+    enable
+    enable
+    visible
+    visible
+
+dispinterface IPlayer  (65 members)
+    majorVersion
+    minorVersion
+    performanceLevel
+    countryCode
+    displayAspectRatio
+    currentDisplayMode
+    regionCode
+    accessibility
+    parentalLevel
+    track
+    bookmark
+    capabilities
+    playlist
+    video
+    audio
+    subtitle
+    secondaryVideoPlayer
+    standardContentPlayer
+    generalParameters
+    aacs
+    menuLanguage
+    menuLanguage
+    applicationGroup
+    applicationGroup
+    DISPLAY_ASPECT_RATIO_4_3
+    DISPLAY_ASPECT_RATIO_16_9
+    DISPLAY_ASPECT_RATIO_NOT_SPECIFIED
+    DISPLAY_NONE
+    DISPLAY_NORMAL_WIDE
+    DISPLAY_PANSCAN
+    DISPLAY_LETTERBOX
+    DISPLAY_HD
+    REGION_1
+    REGION_2
+    REGION_3
+    REGION_4
+    REGION_5
+    REGION_6
+    REGION_7
+    REGION_8
+    PARENTAL_NONE
+    PARENTAL_1
+    PARENTAL_2
+    PARENTAL_3
+    PARENTAL_4
+    PARENTAL_5
+    PARENTAL_6
+    PARENTAL_7
+    PARENTAL_8
+    ACCESSIBILITY_CLOSED_CAPTION
+    ACCESSIBILITY_SIMPLIFIED_CAPTION
+    ACCESSIBILITY_LARGE_FONT
+    ACCESSIBILITY_CONTRAST_DISPLAY
+    ACCESSIBILITY_DESCRIPTIVE_AUDIO
+    ACCESSIBILITY_EXTENDED_INTERACTION_TIMES
+    SUCCEEDED
+    FINISHED
+    FAILED
+    FILE_NOT_FOUND
+    NOT_ENOUGH_SPACE
+    WRONG_FORMAT
+    ARGUMENT
+    NETWORK_PROBLEM
+    INVALID_CALL
+    createVideoScale
+
+dispinterface IAACS  (12 members)
+    pmsn
+    volumeID
+    dun
+    tn
+    isSecureClockSupported
+    isMCMSupported
+    secureHour
+    changeTKF
+    changeTUF
+    setMACKey
+    invokeMCM
+    INVALIDKEY
+
+dispinterface ITrackSelection  (15 members)
+    currentVideoTrackNumber
+    selectedVideoTrackNumber
+    currentAudioTrackNumber
+    selectedAudioTrackNumber
+    selectedAudioLanguageCode
+    selectedAudioLanguageCodeExtension
+    currentSubtitleTrackNumber
+    selectedSubtitleTrackNumber
+    selectedSubtitleLanguageCode
+    selectedSubtitleLanguageCodeExtension
+    selectVideoTrackNumber
+    selectAudioTrackNumber
+    selectAudioLanguage
+    selectSubtitleTrackNumber
+    selectSubtitleLanguage
+
+dispinterface IBookmark  (8 members)
+    elapsedTime
+    elapsedTime
+    title
+    title
+    track
+    track
+    save
+    jump
+
+dispinterface ICapabilities  (5 members)
+    audio
+    video
+    Network
+    font
+    playback
+
+dispinterface IAudioCapabilities  (8 members)
+    main
+    sub
+    analog
+    spdif
+    hdmi
+    CHANNEL_2
+    CHANNEL_5_1
+    CHANNEL_7_1
+
+dispinterface IDecodeCapabilities  (12 members)
+    lpcm
+    ddplus
+    mpeg
+    dts_hd
+    mlp
+    aac_v2
+    mp3
+    wma_pro
+    NOT_SUPPORT
+    CHANNEL_2
+    CHANNEL_5_1
+    CHANNEL_7_1
+
+dispinterface IDigitalInterfaceCapabilities  (6 members)
+    encoded
+    main
+    channel
+    connected
+    CODEC_DD
+    CODEC_DTS
+
+dispinterface IVideoCapabilities  (3 members)
+    sub
+    SD
+    HD
+
+dispinterface INetworkCapabilities  (2 members)
+    connected
+    throughput
+
+dispinterface IFontCapabilities  (3 members)
+    openType
+    CLASS_1
+    CLASS_2
+
+dispinterface IPlaybackCapabilities  (4 members)
+    slowForward
+    slowReverse
+    stepForward
+    stepReverse
+
+dispinterface IPlaylist  (26 members)
+    location
+    titles
+    currentTitle
+    currentChapter
+    playState
+    playSpeed
+    fastForwardSpeed
+    fastReverseSpeed
+    slowForwardSpeed
+    slowReverseSpeed
+    PLAYSTATE_PLAY
+    PLAYSTATE_PAUSE
+    PLAYSTATE_FAST_FWD
+    PLAYSTATE_FAST_REV
+    PLAYSTATE_SLOW_FWD
+    PLAYSTATE_SLOW_REV
+    load
+    play
+    pause
+    stop
+    fastForward
+    fastReverse
+    slowForward
+    slowReverse
+    stepForward
+    stepBackward
+
+dispinterface ITitle  (7 members)
+    elapsedTime
+    chapters
+    videoTracks
+    audioTracks
+    subtitleTracks
+    attributes
+    jump
+
+dispinterface IChapter  (5 members)
+    number
+    elapsedTime
+    attributes
+    jump
+    top
+
+dispinterface IAudioTrack  (6 members)
+    number
+    languageCode
+    languageCodeExtension
+    selectable
+    selectable
+    getMediaAttribute
+
+dispinterface IVideoTrack  (4 members)
+    number
+    selectable
+    selectable
+    getMediaAttribute
+
+dispinterface ISubtitleTrack  (7 members)
+    number
+    forced
+    languageCode
+    languageCodeExtension
+    selectable
+    selectable
+    getMediaAttribute
+
+dispinterface IVideo  (2 members)
+    main
+    sub
+
+dispinterface IVideoScale  (2 members)
+    numerator
+    denominator
+
+dispinterface IMainVideo  (18 members)
+    capturing
+    changing
+    outerFrameColorY
+    outerFrameColorCr
+    outerFrameColorCb
+    x
+    y
+    scale
+    cropX
+    cropY
+    cropHeight
+    cropWidth
+    capture
+    captureWithMAC
+    changeImageSize
+    changeImageSizeWithMAC
+    setOuterFrameColor
+    changeLayout
+
+dispinterface ISubVideo  (11 members)
+    changing
+    x
+    y
+    scale
+    cropX
+    cropY
+    cropHeight
+    cropWidth
+    alpha
+    alpha
+    changeLayout
+
+dispinterface ISubtitle  (2 members)
+    visible
+    visible
+
+dispinterface IAudio  (3 members)
+    main
+    sub
+    effect
+
+dispinterface IOutputChannels  (8 members)
+    left
+    right
+    center
+    leftS
+    rightS
+    leftB
+    rightB
+    lfe
+
+dispinterface IAudioOutput  (1 members)
+    mix
+
+dispinterface IChannels  (2 members)
+    left
+    right
+
+dispinterface IMainAudio  (2 members)
+    channels
+    setVolumes
+
+dispinterface ISubAudio  (2 members)
+    channels
+    setMixing
+
+dispinterface IEffectAudio  (5 members)
+    playing
+    channels
+    play
+    stop
+    setMixing
+
+dispinterface IStandardContentPlayer  (7 members)
+    getGPRM
+    setGPRM
+    getSPRM
+    setSPRM
+    play
+    DOMAIN_TITLE
+    DOMAIN_MENU
+
+dispinterface ISecondaryVideoPlayer  (14 members)
+    playState
+    elapsedTime
+    PLAYSTATE_INIT
+    PLAYSTATE_PLAY
+    PLAYSTATE_PAUSE
+    PLAYSTATE_STOP
+    PLAYSTATE_SYNC
+    PLAYSTATE_STREAMING_PRELOAD
+    PLAYSTATE_STREAMING_PLAY
+    PLAYSTATE_STREAMING_PAUSE
+    play
+    pauseOn
+    pauseOff
+    stop
+
+dispinterface IGeneralParameters  (3 members)
+    availableNumber
+    getValue
+    setValue
+
+dispinterface IXML  (7 members)
+    DOMException
+    Node
+    Event
+    EventException
+    DocumentEvent
+    MutationEvent
+    XMLParser
+
+dispinterface IDOM2Implementation  (2 members)
+    hasFeature
+    createDocument
+
+dispinterface IXMLParser  (18 members)
+    UTF8
+    UTF16_BE
+    UTF16_LE
+    UTF16
+    READY
+    PARSING
+    WRITING
+    OK
+    PARSE_ERR
+    FILE_NOT_FOUND
+    FILE_OVERWRITE_ERR
+    FILECACHE_ERR
+    SERIALIZE_ERR
+    FILE_WRITE_ERR
+    parse
+    parseString
+    write
+    status
+
+dispinterface IDOM2EventListener  (1 members)
+    handleEvent
+
+dispinterface IDOM2Event  (13 members)
+    type
+    target
+    currentTarget
+    eventPhase
+    bubbles
+    cancelable
+    timeStamp
+    stopPropagation
+    preventDefault
+    initEvent
+    CAPTURING_PHASE
+    AT_TARGET
+    BUBBLING_PHASE
+
+dispinterface IDOM2DocumentEvent  (1 members)
+    createEvent
+
+dispinterface IHDCustomizedEvent  (0 members)
+
+dispinterface IHDEventProperties  (33 members)
+    id
+    oldValue
+    newValue
+    uri
+    time
+    connect
+    BEGIN
+    END
+    Event
+    CHANGE
+    connected
+    DISCONNECTED
+    timeout
+    NOT_FOUND
+    EMPTY
+    RESTART
+    CONNECTION
+    stop
+    x
+    y
+    parentX
+    parentY
+    offsetX
+    offsetY
+    key
+    code
+    dx
+    dy
+    DOWN
+    UP
+    CURSOR_MOVE
+    VECTOR
+    initControllerKeyEvent
+
+dispinterface IDOM2ExceptionFunction  (15 members)
+    INDEX_SIZE_ERR
+    DOMSTRING_SIZE_ERR
+    HIERARCHY_REQUEST_ERR
+    WRONG_DOCUMENT_ERR
+    INVALID_CHARACTER_ERR
+    NO_DATA_ALLOWED_ERR
+    NO_MODIFICATION_ALLOWED_ERR
+    NOT_FOUND_ERR
+    NOT_SUPPORTED_ERR
+    INUSE_ATTRIBUTE_ERR
+    INVALID_STATE_ERR
+    SYNTAX_ERR
+    INVALID_MODIFICATION_ERR
+    NAMESPACE_ERR
+    INVALID_ACCESS_ERR
+
+dispinterface IDOM2Exception  (2 members)
+    code
+    code
+
+dispinterface IEventExceptionFunction  (1 members)
+    UNSPECIFIED_EVENT_TYPE_ERR
+
+dispinterface IEventException  (2 members)
+    code
+    code
+
+dispinterface INodeConstructor  (12 members)
+    ELEMENT_NODE
+    ATTRIBUTE_NODE
+    TEXT_NODE
+    CDATA_SECTION_NODE
+    ENTITY_REFERENCE_NODE
+    ENTITY_NODE
+    PROCESSING_INSTRUCTION_NODE
+    COMMENT_NODE
+    DOCUMENT_NODE
+    DOCUMENT_TYPE_NODE
+    DOCUMENT_FRAGMENT_NODE
+    NOTATION_NODE
+
+dispinterface IEventConstructor  (3 members)
+    CAPTURING_PHASE
+    AT_TARGET
+    BUBBLING_PHASE
+
+dispinterface IDocumentEventConstructor  (1 members)
+    createEvent
+
+dispinterface IMutationEventConstructor  (3 members)
+    MODIFICATION
+    ADDITION
+    REMOVAL
+
+dispinterface IDOM2Node  (37 members)
+    ELEMENT_NODE
+    ATTRIBUTE_NODE
+    TEXT_NODE
+    CDATA_SECTION_NODE
+    ENTITY_REFERENCE_NODE
+    ENTITY_NODE
+    PROCESSING_INSTRUCTION_NODE
+    COMMENT_NODE
+    DOCUMENT_NODE
+    DOCUMENT_TYPE_NODE
+    DOCUMENT_FRAGMENT_NODE
+    NOTATION_NODE
+    nodeName
+    nodeValue
+    nodeValue
+    nodeType
+    parentNode
+    childNodes
+    firstChild
+    lastChild
+    previousSibling
+    nextSibling
+    attributes
+    ownerDocument
+    namespaceURI
+    prefix
+    prefix
+    localName
+    insertBefore
+    replaceChild
+    removeChild
+    appendChild
+    hasChildNodes
+    cloneNode
+    normalize
+    isSupported
+    hasAttributes
+
+dispinterface IDOM2DocumentFragment  (0 members)
+
+dispinterface IDOM2Document  (20 members)
+    doctype
+    implementation
+    documentElement
+    createElement
+    createDocumentFragment
+    createTextNode
+    createComment
+    createCDATASection
+    createProcessingInstruction
+    createAttribute
+    getElementsByTagName
+    importNode
+    createElementNS
+    createAttributeNS
+    getElementsByTagNameNS
+    getElementById
+    evaluateXPath
+    setXPathVariable
+    getXPathVariable
+    createEvent
+
+dispinterface IDOM2NodeList  (2 members)
+    length
+    item
+
+dispinterface IDOM2NamedNodeMap  (8 members)
+    length
+    getNamedItem
+    setNamedItem
+    removeNamedItem
+    item
+    getNamedItemNS
+    setNamedItemNS
+    removeNamedItemNS
+
+dispinterface IDOM2CharacterData  (8 members)
+    data
+    data
+    length
+    substringData
+    appendData
+    insertData
+    deleteData
+    replaceData
+
+dispinterface IDOM2Attr  (5 members)
+    name
+    specified
+    value
+    value
+    ownerElement
+
+dispinterface IDOM2Element  (16 members)
+    tagName
+    getAttribute
+    setAttribute
+    removeAttribute
+    getAttributeNode
+    setAttributeNode
+    removeAttributeNode
+    getElementsByTagName
+    getAttributeNS
+    setAttributeNS
+    removeAttributeNS
+    getAttributeNodeNS
+    setAttributeNodeNS
+    getElementsByTagNameNS
+    hasAttribute
+    hasAttributeNS
+
+dispinterface IDOM2Text  (1 members)
+    splitText
+
+dispinterface IDOM2Comment  (0 members)
+
+dispinterface IDOM2CDATASection  (0 members)
+
+dispinterface IDOM2DocumentType  (3 members)
+    name
+    publicId
+    systemId
+
+dispinterface IDOM2Notation  (2 members)
+    publicId
+    systemId
+
+dispinterface IDOM2Entity  (3 members)
+    publicId
+    systemId
+    notationName
+
+dispinterface IDOM2EntityReference  (0 members)
+
+dispinterface IDOM2ProcessingInstruction  (3 members)
+    target
+    data
+    data
+
+dispinterface IAnimatableDocument  (2 members)
+    getProperties
+    load
+
+dispinterface IAnimatableProperty  (6 members)
+    namespace
+    element
+    getProperty
+    setProperty
+    animateProperty
+    unsetProperty
+
+dispinterface IAnimatableElement  (4 members)
+    style
+    state
+    core
+    drawingArea
+
+coclass WinScriptInterpreter  (0 members)
+

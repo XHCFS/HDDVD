@@ -1,0 +1,11 @@
+{
+  "disc": "DOWNFALL", "evo": "EVOB002.EVO", "sample": "800 packs @50%",
+  "declared": {"video_codec": "VC-1", "audio": ["DD+ streamNumber 1", "DD+ streamNumber 2"]},
+  "observed_pes": {
+    "0xFD/ext=0x55": 769,
+    "0xBD/0xC0": 15,
+    "0xBD/0xC1": 15,
+    "0xBF (NV_PCK)": 3
+  },
+  "note": "VC-1 main video via extended_stream_id 0x55; DD+ audio streamNumber N -> 0xBD sub 0xC0+(N-1)."
+}

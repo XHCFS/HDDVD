@@ -1,0 +1,933 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>5. Manifest, markup, script (HDi) &mdash; HD DVD Advanced Content</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=2709fde1"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="6. HVA00001.VTI: Advanced VTSI" href="06_vti.html" />
+    <link rel="prev" title="4. ACA: Advanced Content Archive" href="04_aca.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            HD DVD Advanced Content
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Specification</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="01_volume.html">1. Volume and directories</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="01_volume.html#filesystem">1.1 Filesystem</a></li>
+<li class="toctree-l2"><a class="reference internal" href="01_volume.html#medium-identification">1.2 Medium identification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="01_volume.html#root-directories-n-120">1.3 Root directories (N=120)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="01_volume.html#hvdvd-ts-advanced-content-files">1.4 <code class="docutils literal notranslate"><span class="pre">HVDVD_TS/</span></code>: Advanced Content files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="01_volume.html#adv-obj-files">1.5 <code class="docutils literal notranslate"><span class="pre">ADV_OBJ/</span></code>: files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="01_volume.html#disc-uri">1.6 Disc URI</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="02_discid.html">2. DISCID.DAT: Config File</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="02_discid.html#layout">2.1 Layout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="02_discid.html#observed-provider-id-tags-ascii">2.2 Observed <code class="docutils literal notranslate"><span class="pre">PROVIDER_ID</span></code> tags (ASCII)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="02_discid.html#player-use">2.3 Player use</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="03_playlist.html">3. Playlist: VPLST$$$.XPL</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="03_playlist.html#time">3.1 Time</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_playlist.html#tree">3.2 Tree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_playlist.html#title">3.3 Title</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_playlist.html#primaryaudiovideoclip">3.4 PrimaryAudioVideoClip</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_playlist.html#applicationsegment">3.5 ApplicationSegment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_playlist.html#playlistapplication">3.6 PlaylistApplication</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_playlist.html#chapter">3.7 Chapter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_playlist.html#tracknavigationlist">3.8 TrackNavigationList</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_playlist.html#uri-of-a-clip-map">3.9 URI of a clip MAP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_playlist.html#a-scheduledcontrollist-timeline-pauses-and-events">3.9a ScheduledControlList: timeline pauses and events</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_playlist.html#which-playlist-to-open">3.10 Which playlist to open</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_playlist.html#elements-in-the-xsd-unused-in-this-corpus">3.11 Elements in the XSD, unused in this corpus</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="04_aca.html">4. ACA: Advanced Content Archive</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="04_aca.html#archive-header">4.1 Archive header</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04_aca.html#directory-entry-variable-length">4.2 Directory entry (variable length)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04_aca.html#members">4.3 Members</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04_aca.html#namespace">4.4 Namespace</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">5. Manifest, markup, script (HDi)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#implementation-gate-closed">5.0 Implementation gate (CLOSED)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#manifest-xmf">5.1 Manifest: <code class="docutils literal notranslate"><span class="pre">.xmf</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#markup-xmu">5.2 Markup: <code class="docutils literal notranslate"><span class="pre">.xmu</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#script">5.3 Script</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#runtime-patent-fig-50-steps-67">5.4 Runtime (patent FIG.50 steps 6–7)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#what-is-specified-vs-what-blocks-the-gate">5.5 What is specified vs what blocks the gate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#remaining-spec-work-no-firmware">5.6 Remaining spec work (no firmware)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#file-cache-size">5.7 File Cache <code class="docutils literal notranslate"><span class="pre">&#64;size</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#persistent-storage-uris-script">5.8 Persistent storage URIs (script)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#raster-focus-cues-used-path">5.9 Raster, focus, cues (used path)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="06_vti.html">6. HVA00001.VTI: Advanced VTSI</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="06_vti.html#vtsi-mat-first-2048-bytes">6.1 VTSI_MAT (first 2048 bytes)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="06_vti.html#vts-evob-atrt-at-vts-evob-atrt-sa-2048">6.2 VTS_EVOB_ATRT (at <code class="docutils literal notranslate"><span class="pre">VTS_EVOB_ATRT_SA</span></code> × 2048)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="06_vti.html#atri-1024-bytes">ATRI (1024 bytes)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="06_vti.html#vts-evobit-at-vts-evobit-sa-2048">6.3 VTS_EVOBIT (at <code class="docutils literal notranslate"><span class="pre">VTS_EVOBIT_SA</span></code> × 2048)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="06_vti.html#evobi-320-bytes">EVOBI (320 bytes)</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="07_map.html">7. MAP: time map</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="07_map.html#file-layout">7.1 File layout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="07_map.html#tmap-gi-128-bytes-table-80">7.2 TMAP_GI (128 bytes): TABLE 80</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="07_map.html#tmap-ty-table-81-figure-c00039">TMAP_TY: TABLE 81 figure C00039</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="07_map.html#tmapi-srp-table-82">7.3 TMAPI_SRP: TABLE 82</a></li>
+<li class="toctree-l2"><a class="reference internal" href="07_map.html#evobu-ent-table-83-4-bytes">7.4 EVOBU_ENT: TABLE 83 (4 bytes)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="07_map.html#seek-algorithm">Seek algorithm</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="07_map.html#ilvu-ent-table-84-6-bytes">7.5 ILVU_ENT: TABLE 84 (6 bytes)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="08_evo.html">8. EVO: MPEG-2 program stream</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="08_evo.html#pack-types-table-85">8.1 Pack types (TABLE 85)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="08_evo.html#nv-pck-first-pack-of-each-evobu">8.2 NV_PCK: first pack of each EVOBU</a></li>
+<li class="toctree-l2"><a class="reference internal" href="08_evo.html#pci-gi-offsets-from-the-substream-id-byte">8.3 PCI GI (offsets from the substream id byte)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="08_evo.html#dsi-gi-offsets-from-the-substream-id-byte">8.4 DSI GI (offsets from the substream id byte)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="08_evo.html#gci-substream-0x04">8.5 GCI (substream <code class="docutils literal notranslate"><span class="pre">0x04</span></code>)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="08_evo.html#adv-pck-sub-stream-id-0x80">8.6 ADV_PCK (<code class="docutils literal notranslate"><span class="pre">sub_stream_id</span> <span class="pre">=</span> <span class="pre">0x80</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="08_evo.html#pack-grammar-e16-stalingrad-logo-evo-n-2383">Pack grammar (<code class="docutils literal notranslate"><span class="pre">e16</span></code>, <code class="docutils literal notranslate"><span class="pre">STALINGRAD</span></code> <code class="docutils literal notranslate"><span class="pre">logo.EVO</span></code>, N=2383)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="08_evo.html#aacs-vs-container">8.7 AACS vs container</a></li>
+<li class="toctree-l2"><a class="reference internal" href="08_evo.html#elementary-stream-routing-table-45-46-how-streamnumber-finds-its-pes">8.7 Elementary-stream routing (TABLE 45 / 46): how <code class="docutils literal notranslate"><span class="pre">&#64;streamNumber</span></code> finds its PES</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="08_evo.html#stream-id-stream-id-extension-table-45">stream_id / stream_id_extension (TABLE 45)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="08_evo.html#sub-stream-id-for-private-stream-1-0xbd-table-46">sub_stream_id for private_stream_1 = <code class="docutils literal notranslate"><span class="pre">0xBD</span></code> (TABLE 46)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="08_evo.html#the-rule-a-demuxer-applies">The rule a demuxer applies</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="08_evo.html#sub-picture-sp-pck-2bitrlc-8bitrlc-decode">8.8 Sub-picture (SP_PCK): <code class="docutils literal notranslate"><span class="pre">2bitRLC</span></code> / <code class="docutils literal notranslate"><span class="pre">8bitRLC</span></code> decode</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="08_evo.html#pixel-values-table-67-68">Pixel values (TABLE 67/68)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="08_evo.html#run-length-rule-eight-patterns-msb-first-bitstream">Run-length rule (eight patterns, MSB-first bitstream)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="08_evo.html#display-control-sequence-sp-dcsqt">Display-control sequence (<code class="docutils literal notranslate"><span class="pre">SP_DCSQT</span></code>)</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="09_aacs.html">9. AACS overlay (format only)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="09_aacs.html#directories">9.1 Directories</a></li>
+<li class="toctree-l2"><a class="reference internal" href="09_aacs.html#files">9.2 Files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="09_aacs.html#vtkf-table-3-8-final-0-953">9.3 VTKF: Table 3-8 (Final 0.953)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="09_aacs.html#title-key-entry-36-bytes">Title Key Entry (36 bytes)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="09_aacs.html#dkf-64-bytes-table-6-2">9.4 DKF (64 bytes): Table 6-2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="09_aacs.html#content-cert-120-bytes-table-3-17">9.5 CONTENT_CERT (120 bytes): Table 3-17</a></li>
+<li class="toctree-l2"><a class="reference internal" href="09_aacs.html#pack-encryption-table-4-7">9.6 Pack encryption: Table 4-7</a></li>
+<li class="toctree-l2"><a class="reference internal" href="09_aacs.html#volume-id">9.7 Volume ID</a></li>
+<li class="toctree-l2"><a class="reference internal" href="09_aacs.html#vtuf-144-bytes">9.8 VTUF (144 bytes)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="09_aacs.html#reusing-libaacs-what-ports-and-what-does-not">9.9 Reusing libaacs: what ports and what does not</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="09_aacs.html#exact-extension-points-libaacs-master-read-2026-09">Exact extension points (libaacs master, read 2026-09)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="09_aacs.html#prior-art-the-corpus-was-decrypted-by-known-2007-tools">9.10 Prior art: the corpus was decrypted by known 2007 tools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="09_aacs.html#full-decrypt-flow-from-backuphddvd-source-verbatim-facts-for-the-c-port">9.11 Full decrypt flow: from BackupHDDVD source (verbatim facts for the C port)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="09_aacs.html#aes-g-the-aacs-one-way-function">AES-G (the AACS one-way function)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="09_aacs.html#pack-cbc-decryption">Pack CBC decryption</a></li>
+<li class="toctree-l3"><a class="reference internal" href="09_aacs.html#field-sources-within-a-pack">Field sources within a pack</a></li>
+<li class="toctree-l3"><a class="reference internal" href="09_aacs.html#evo-decrypt-driver-per-evob-file">EVO decrypt driver (per EVOB file)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="09_aacs.html#libaacs-mapping-what-an-implementer-changes">libaacs mapping (what an implementer changes)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="09_aacs.html#how-evo-decryption-is-actually-done-and-what-applies-here">9.12 How EVO “decryption” is actually done, and what applies here</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="09_aacs.html#a-copy-the-evo-out-of-the-disc-no-keys-always-possible">(a) Copy the EVO out of the disc: no keys, always possible</a></li>
+<li class="toctree-l3"><a class="reference internal" href="09_aacs.html#b-decrypt-the-aacs-scrambled-payload-inside-the-packs">(b) Decrypt the AACS-scrambled payload inside the packs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="09_aacs.html#can-we-do-it-here-with-what-we-know">Can we do it here, with what we know?</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="09_aacs.html#sequence-key-skb-skf-format-closed-0-120-discs">9.13 Sequence Key (SKB / SKF): format closed, 0/120 discs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="09_aacs.html#empirical-decrypt-the-one-step-not-reproducible-here">9.14 Empirical decrypt: the one step not reproducible here</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="10_playback.html">10. Playback sequence</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="10_playback.html#playback-flowchart">10.0 Playback flowchart</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="10_playback.html#boot-insert-to-first-title">Boot: insert to first title</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10_playback.html#title-runtime-video-pipeline-hdi-engine-in-parallel">Title runtime: video pipeline + HDi engine in parallel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10_playback.html#seek-time-to-byte">Seek (time to byte)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10_playback.html#aacs-pack-licensed-encrypted-disc-only">AACS pack (licensed / encrypted disc only)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="10_playback.html#b-control-flow-box-numbered-for-10-8">10.0b Control flow (box-numbered for §10.8)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="10_playback.html#open-a-disc-fig-7-fig-50">Open a disc (FIG.7 + FIG.50)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10_playback.html#designed-menus-title-timeline">Designed menus (title timeline)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="10_playback.html#insert-category">10.1 Insert → category</a></li>
+<li class="toctree-l2"><a class="reference internal" href="10_playback.html#advanced-startup-fig-50">10.2 Advanced startup (FIG.50)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="10_playback.html#play-a-title">10.3 Play a title</a></li>
+<li class="toctree-l2"><a class="reference internal" href="10_playback.html#seek">10.4 Seek</a></li>
+<li class="toctree-l2"><a class="reference internal" href="10_playback.html#pack-path-to-a-demuxer">10.5 Pack path to a demuxer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="10_playback.html#aacs-if-any-or-aac-present">10.6 AACS (if <code class="docutils literal notranslate"><span class="pre">ANY!</span></code> or <code class="docutils literal notranslate"><span class="pre">AAC!</span></code> present)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="10_playback.html#what-is-specified-vs-not">10.7 What is specified vs not</a></li>
+<li class="toctree-l2"><a class="reference internal" href="10_playback.html#gap-questions-and-evidence-answers">10.8 Gap questions and evidence answers</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="10_playback.html#a1-udf">A1 UDF</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10_playback.html#a2-category">A2 Category</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10_playback.html#a3-aacs-directory">A3 AACS directory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10_playback.html#a4-discid">A4 DISCID</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10_playback.html#a5-a5b-persistent-storage-search">A5 / A5b Persistent-storage search</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10_playback.html#a6-highest-vplst">A6 Highest VPLST</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10_playback.html#a7-parse-playlist">A7 Parse playlist</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10_playback.html#a8-configuration-wipe">A8 Configuration / wipe</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10_playback.html#a9-a9b-selector">A9 / A9b Selector</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10_playback.html#a10-firstplaytitle">A10 FirstPlayTitle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10_playback.html#a11-title-1">A11 Title 1</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10_playback.html#b1b3-mapping">B1–B3 Mapping</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10_playback.html#b4-file-cache">B4 File Cache</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10_playback.html#b5-manifest">B5 Manifest</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10_playback.html#b6-aca">B6 ACA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10_playback.html#b7-ihd-raster-focus">B7 iHD raster / focus</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10_playback.html#b8-script">B8 Script</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10_playback.html#b9-packs-adv-pck">B9 Packs / ADV_PCK</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10_playback.html#b10-composite">B10 Composite</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10_playback.html#b11-cues-remote">B11 Cues / remote</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10_playback.html#b12-end-of-title">B12 End of title</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10_playback.html#c1-aacs-licensed-drive-only">C1 AACS (licensed drive only)</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="11_gaps.html">11. What a C author still cannot build (gap register)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="11_gaps.html#a-fully-specified-a-c-author-can-build-these-now">A. Fully specified (a C author CAN build these now)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="11_gaps.html#b-blocking-missing-for-a-general-engine-not-for-the-corpus-menus">B. BLOCKING (missing for a <em>general</em> engine; not for the corpus menus)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="11_gaps.html#b1-full-hdi-runtime-semantics-event-timing-execution-model">B1. Full HDi runtime semantics (event/timing execution model)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="11_gaps.html#b2-hdi-type-library-signatures-abi">B2. HDi type-library signatures (ABI)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="11_gaps.html#b3-advanced-subtitle">B3. Advanced Subtitle</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="11_gaps.html#c-degraded-plays-but-not-pixel-behaviour-exact">C. DEGRADED (plays, but not pixel/behaviour exact)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="11_gaps.html#d-external-outside-libhddvd-by-design">D. EXTERNAL (outside libhddvd by design)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="11_gaps.html#e-encryption-what-is-and-is-not-needed-detail-09-9-99-11">E. Encryption: what is and is not needed  (detail: 09 §9.9–9.11)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="11_gaps.html#f-firmware-is-not-a-usable-source-checked-not-assumed">F. Firmware is not a usable source  (checked, not assumed)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="11_gaps.html#reader-test-verdict">Reader-test verdict</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="12_hdi_scripting_abi.html">12. HDi scripting host ABI (type library)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="12_hdi_scripting_abi.html#object-model-106-typeinfos">12.1 Object model (106 typeinfos)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="12_hdi_scripting_abi.html#constant-catalog-200-constants">12.2 Constant catalog (200 constants)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="12_hdi_scripting_abi.html#complete-ihd-markup-surface-xsd">12.3 Complete iHD markup surface (XSD)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="12_hdi_scripting_abi.html#hdi-runtime-semantics-published-standards">12.4 HDi runtime semantics (published standards)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="12_hdi_scripting_abi.html#event-dispatch-order-dom-level-2-events-verbatim">Event dispatch order (DOM Level 2 Events, verbatim)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="12_hdi_scripting_abi.html#dom-level-2-node-types-standard-integer-values-typelib-order-matches-w3c">DOM Level 2 node types (standard integer values, typelib order matches W3C)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="12_hdi_scripting_abi.html#dom-level-2-exception-codes-standard-integer-values">DOM Level 2 exception codes (standard integer values)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="12_hdi_scripting_abi.html#smil-2-0-timing-resolution-cue-par-seq-set-animate">SMIL 2.0 timing resolution (<code class="docutils literal notranslate"><span class="pre">cue</span></code> / <code class="docutils literal notranslate"><span class="pre">par</span></code> / <code class="docutils literal notranslate"><span class="pre">seq</span></code> / <code class="docutils literal notranslate"><span class="pre">set</span></code> / <code class="docutils literal notranslate"><span class="pre">animate</span></code>)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="12_hdi_scripting_abi.html#player-object-model-from-the-type-library">12.5 Player object model (from the type library)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="12_hdi_scripting_abi.html#cue-predicate-grammar-pathexpressiontype">12.6 Cue-predicate grammar (<code class="docutils literal notranslate"><span class="pre">PathExpressionType</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="12_hdi_scripting_abi.html#remaining-items-after-12-5-12-6-5-2">Remaining items after §12.5 / §12.6 / §5.2</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="13_references.html">13. References</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="13_references.html#patents">Patents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="13_references.html#standards-specifications">Standards &amp; specifications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="13_references.html#software-tools-primary-artifacts">Software, tools &amp; primary artifacts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="13_references.html#disc-firmware-corpus-internet-archive">Disc &amp; firmware corpus (Internet Archive)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="13_references.html#developer-documentation-community">Developer documentation &amp; community</a></li>
+<li class="toctree-l2"><a class="reference internal" href="13_references.html#optical-drive-command-set">Optical-drive command set</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">HD DVD Advanced Content</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content style-external-links">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">5. Manifest, markup, script (HDi)</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/05_manifest_hdi.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="manifest-markup-script-hdi">
+<h1>5. Manifest, markup, script (HDi)<a class="headerlink" href="#manifest-markup-script-hdi" title="Link to this heading"></a></h1>
+<p><em>Counts written “N/120”, “N/119”, “on N discs”, “listings”, or as named discs are over the reference corpus of 120 archived retail HD DVD images [11]. <code class="docutils literal notranslate"><span class="pre">eNN</span></code> are the reproducible verification experiments [12].</em></p>
+<p>This layer is required for a Category 2 player. Linear titles without it are a
+research demuxer. The implementation gate (§5.0) is <strong>closed</strong>. The menu engine
+below is specified end to end.</p>
+<section id="implementation-gate-closed">
+<h2>5.0 Implementation gate (CLOSED)<a class="headerlink" href="#implementation-gate-closed" title="Link to this heading"></a></h2>
+<p>The gate is <strong>met</strong>. <code class="docutils literal notranslate"><span class="pre">libhddvd</span></code> may proceed. The test was that a reader of this sheet (plus <a class="reference internal" href="03_playlist.html"><span class="std std-doc">03</span></a>,
+<a class="reference internal" href="04_aca.html"><span class="std std-doc">04</span></a>, <a class="reference internal" href="08_evo.html"><span class="std std-doc">08</span></a>, the v1.0 XSDs, and <code class="docutils literal notranslate"><span class="pre">iHD_Scripting_API.txt</span></code>)
+can implement on-disc menus without guessing. That reader test holds for
+PNG-button Category 2 menus. Glyph/<code class="docutils literal notranslate"><span class="pre">anchor</span></code>/plane-alpha are fail-closed in
+§5.9 (OpenType + XSL-FO names + patent overlay). They are not a second gate.</p>
+<p><strong>In the gate.</strong> A designed retail menu must work offline:</p>
+<ol class="arabic simple">
+<li><p>FIG.50 File Cache load of Manifest, markup, script, fonts, images, TMAPs.</p></li>
+<li><p>ACA extract, including <code class="docutils literal notranslate"><span class="pre">0xff</span></code> members by offset/length.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">PlaylistApplication</span></code> (whole playlist except FirstPlayTitle) and
+<code class="docutils literal notranslate"><span class="pre">ApplicationSegment</span></code> (mapped on one title): <code class="docutils literal notranslate"><span class="pre">zOrder</span></code>, <code class="docutils literal notranslate"><span class="pre">autorun</span></code>, <code class="docutils literal notranslate"><span class="pre">sync</span></code>,
+<code class="docutils literal notranslate"><span class="pre">language</span></code> / <code class="docutils literal notranslate"><span class="pre">appBlock</span></code>.</p></li>
+<li><p>iHD document: layout, <code class="docutils literal notranslate"><span class="pre">ihd#style</span></code>, <code class="docutils literal notranslate"><span class="pre">ihd#state</span></code>, timing (<code class="docutils literal notranslate"><span class="pre">cue</span></code> / <code class="docutils literal notranslate"><span class="pre">par</span></code> /
+<code class="docutils literal notranslate"><span class="pre">seq</span></code> / clocks).</p></li>
+<li><p>Focus and remote navigation (<code class="docutils literal notranslate"><span class="pre">navIndex</span></code>, <code class="docutils literal notranslate"><span class="pre">navUp</span></code>…, <code class="docutils literal notranslate"><span class="pre">button</span></code>, <code class="docutils literal notranslate"><span class="pre">input</span></code>,
+<code class="docutils literal notranslate"><span class="pre">accessKey</span></code>).</p></li>
+<li><p>ECMAScript host: language edition plus <strong>typed</strong> typelib members discs call
+(<code class="docutils literal notranslate"><span class="pre">IPlaylist.load</span></code> / <code class="docutils literal notranslate"><span class="pre">play</span></code> / <code class="docutils literal notranslate"><span class="pre">pause</span></code>, <code class="docutils literal notranslate"><span class="pre">ITitle.jump</span></code>, <code class="docutils literal notranslate"><span class="pre">Player.menuLanguage</span></code>,
+events).</p></li>
+<li><p>Graphics plane composited over scaled main video in the Aperture.</p></li>
+<li><p>ADV_PCK <code class="docutils literal notranslate"><span class="pre">0x80</span></code> → File Cache when packs exist; always load <code class="docutils literal notranslate"><span class="pre">src</span></code> (slot may
+be absent from that EVO; see <a class="reference internal" href="08_evo.html"><span class="std std-doc">08</span></a> §8.6).</p></li>
+<li><p>Persistent-storage URI grammar for apps that <code class="docutils literal notranslate"><span class="pre">IPlaylist.load</span></code> a P-storage
+<code class="docutils literal notranslate"><span class="pre">VPLST</span></code> (PREMONITION).</p></li>
+</ol>
+<p><strong>Out of the gate:</strong> network TLS / <code class="docutils literal notranslate"><span class="pre">.CER</span></code> / <code class="docutils literal notranslate"><span class="pre">IHTTPClient</span></code>, Category 1 PCI
+buttons, firmware RE, AACS video decrypt (Archive.org packs are clear; licensed
+players still need <a class="reference internal" href="09_aacs.html"><span class="std std-doc">09</span></a> later).</p>
+<p><strong>Status:</strong> File formats, <code class="docutils literal notranslate"><span class="pre">IPlaylist.load</span></code>, P-storage <strong>script</strong> URI
+<code class="docutils literal notranslate"><span class="pre">file:///required/{contentId}/</span></code>, FIG.50 search as that same URI, JS encoding,
+<code class="docutils literal notranslate"><span class="pre">jump</span></code>/<code class="docutils literal notranslate"><span class="pre">elapsedTime</span></code> types, PNG-button + <code class="docutils literal notranslate"><span class="pre">&lt;p&gt;</span></code>-in-<code class="docutils literal notranslate"><span class="pre">div</span></code> raster (§5.9), File
+Cache <code class="docutils literal notranslate"><span class="pre">&#64;size</span></code> / 64 MB fail-closed / wipe-on-<code class="docutils literal notranslate"><span class="pre">load</span></code>, and ADV_PCK concat
+(<a class="reference internal" href="08_evo.html"><span class="std std-doc">08</span></a> §8.6, <code class="docutils literal notranslate"><span class="pre">e16</span></code>) are specified (<code class="docutils literal notranslate"><span class="pre">e15</span></code>/<code class="docutils literal notranslate"><span class="pre">e17</span></code>, §5.7–5.8).
+<strong>Gate met.</strong> <code class="docutils literal notranslate"><span class="pre">jump</span></code>’s boolean, cue XPath, glyph/<code class="docutils literal notranslate"><span class="pre">anchor</span></code>, and plane alpha
+are fail-closed in §5.3 / §5.9. Change those rules only if a disc contradicts
+them.</p>
+<p><code class="docutils literal notranslate"><span class="pre">[5,</span> <span class="pre">6,</span> <span class="pre">11,</span> <span class="pre">12]</span></code></p>
+</section>
+<section id="manifest-xmf">
+<h2>5.1 Manifest: <code class="docutils literal notranslate"><span class="pre">.xmf</span></code><a class="headerlink" href="#manifest-xmf" title="Link to this heading"></a></h2>
+<p>Namespace: <code class="docutils literal notranslate"><span class="pre">http://www.dvdforum.org/2005/HDDVDVideo/Manifest</span></code><br />
+Schema: <code class="docutils literal notranslate"><span class="pre">spec/raw/adv_obj/v1.0/Manifest.xsd</span></code><br />
+Root element: <code class="docutils literal notranslate"><span class="pre">Application</span></code></p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Child</p></th>
+<th class="head"><p>Min</p></th>
+<th class="head"><p>Attributes</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">Region</span></code></p></td>
+<td><p>1</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&#64;x</span> <span class="pre">&#64;y</span> <span class="pre">&#64;width</span> <span class="pre">&#64;height</span></code> required (pixels, typically 0,0,1920,1080)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">Script</span></code></p></td>
+<td><p>0..n</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&#64;src</span></code> URI of <code class="docutils literal notranslate"><span class="pre">.js</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">Markup</span></code></p></td>
+<td><p>0..1</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&#64;src</span></code> URI of <code class="docutils literal notranslate"><span class="pre">.xmu</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">Resource</span></code></p></td>
+<td><p>1..n</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&#64;src</span></code> URI of any asset the app needs</p></td>
+</tr>
+</tbody>
+</table>
+<p>Example (<code class="docutils literal notranslate"><span class="pre">1408</span></code> <code class="docutils literal notranslate"><span class="pre">extras.xmf</span></code>):</p>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;Application</span><span class="w"> </span><span class="na">xmlns=</span><span class="s">"http://www.dvdforum.org/2005/HDDVDVideo/Manifest"</span><span class="nt">&gt;</span>
+<span class="w">  </span><span class="nt">&lt;Region</span><span class="w"> </span><span class="na">x=</span><span class="s">"0"</span><span class="w"> </span><span class="na">y=</span><span class="s">"0"</span><span class="w"> </span><span class="na">width=</span><span class="s">"1920"</span><span class="w"> </span><span class="na">height=</span><span class="s">"1080"</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="w">  </span><span class="nt">&lt;Script</span><span class="w"> </span><span class="na">src=</span><span class="s">"file:///dvddisc/ADV_OBJ/script-extras.js"</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="w">  </span><span class="nt">&lt;Resource</span><span class="w"> </span><span class="na">src=</span><span class="s">"file:///dvddisc/ADV_OBJ/script-extras.js"</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/Application&gt;</span>
+</pre></div>
+</div>
+<p>Playlist points here via <code class="docutils literal notranslate"><span class="pre">ApplicationSegment&#64;src</span></code> or <code class="docutils literal notranslate"><span class="pre">PlaylistApplication&#64;src</span></code>.</p>
+</section>
+<section id="markup-xmu">
+<h2>5.2 Markup: <code class="docutils literal notranslate"><span class="pre">.xmu</span></code><a class="headerlink" href="#markup-xmu" title="Link to this heading"></a></h2>
+<p>Namespace: <code class="docutils literal notranslate"><span class="pre">http://www.dvdforum.org/2005/ihd</span></code><br />
+Also: <code class="docutils literal notranslate"><span class="pre">ihd#style</span></code>, <code class="docutils literal notranslate"><span class="pre">ihd#state</span></code><br />
+Schema: <code class="docutils literal notranslate"><span class="pre">spec/raw/adv_obj/v1.0/iHD.xsd</span></code><br />
+Root: <code class="docutils literal notranslate"><span class="pre">root</span></code> with required <code class="docutils literal notranslate"><span class="pre">xml:lang</span></code></p>
+<p>Saved sample (<code class="docutils literal notranslate"><span class="pre">e15</span></code> after the ≤320 KiB ACA pull): <strong>97 ACA</strong>, <strong>84 XMU</strong>,
+<strong>122 JS</strong>. Counts move as more archives land. Method:
+<code class="docutils literal notranslate"><span class="pre">spec/clean/17_HDI_MENU_RESEARCH.md</span></code>.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Element</p></th>
+<th class="head"><p>Count (<code class="docutils literal notranslate"><span class="pre">e15</span></code>)</p></th>
+<th class="head"><p>Notes</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">p</span></code></p></td>
+<td><p>1390</p></td>
+<td><p>always a child of <code class="docutils literal notranslate"><span class="pre">div</span></code>; text runs, no style attrs on <code class="docutils literal notranslate"><span class="pre">p</span></code> itself</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">div</span></code> <code class="docutils literal notranslate"><span class="pre">button</span></code> <code class="docutils literal notranslate"><span class="pre">input</span></code></p></td>
+<td><p>1339 / 492 / 113</p></td>
+<td><p>body</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">object</span></code></p></td>
+<td><p>7</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">application/x-clearrect</span></code> or <code class="docutils literal notranslate"><span class="pre">audio/x-wav</span></code>, not JPEG/PNG <code class="docutils literal notranslate"><span class="pre">object</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">cue</span></code> <code class="docutils literal notranslate"><span class="pre">par</span></code> <code class="docutils literal notranslate"><span class="pre">seq</span></code> <code class="docutils literal notranslate"><span class="pre">defs</span></code> <code class="docutils literal notranslate"><span class="pre">g</span></code> <code class="docutils literal notranslate"><span class="pre">set</span></code> <code class="docutils literal notranslate"><span class="pre">animate</span></code> <code class="docutils literal notranslate"><span class="pre">event</span></code></p></td>
+<td><p>timing</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">include</span></code> 36 → <code class="docutils literal notranslate"><span class="pre">.xmu</span></code> / <code class="docutils literal notranslate"><span class="pre">.xts</span></code> / <code class="docutils literal notranslate"><span class="pre">.xss</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">style</span></code> <code class="docutils literal notranslate"><span class="pre">styling</span></code> <code class="docutils literal notranslate"><span class="pre">meta</span></code> <code class="docutils literal notranslate"><span class="pre">link</span></code></p></td>
+<td><p>head / chrome</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+<p>Used <code class="docutils literal notranslate"><span class="pre">ihd#style</span></code> local-names ⊆ iHDstyle.xsd (no unknown attrs). Top: <code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">y</span> <span class="pre">width</span> <span class="pre">height</span> <span class="pre">position</span> <span class="pre">display</span> <span class="pre">backgroundImage</span> <span class="pre">opacity</span> <span class="pre">nav*</span></code> then
+<code class="docutils literal notranslate"><span class="pre">contentWidth</span> <span class="pre">contentHeight</span> <span class="pre">backgroundFrame</span> <span class="pre">fontSize</span> <span class="pre">color</span> <span class="pre">font</span> <span class="pre">lineHeight</span> <span class="pre">anchor</span> <span class="pre">zIndex</span> <span class="pre">visibility</span> <span class="pre">…</span></code>. New vs the first 50-ACA cut: <code class="docutils literal notranslate"><span class="pre">lineHeight</span></code>
+(37) once <code class="docutils literal notranslate"><span class="pre">&lt;p&gt;</span></code> archives landed.</p>
+<p>Used <code class="docutils literal notranslate"><span class="pre">ihd#state</span></code>: <code class="docutils literal notranslate"><span class="pre">value</span></code> 80, <code class="docutils literal notranslate"><span class="pre">focused</span></code> 33, <code class="docutils literal notranslate"><span class="pre">enabled</span></code> 1. Markup rarely sets
+<code class="docutils literal notranslate"><span class="pre">actioned</span></code>; Jumpstart Chapters and <code class="docutils literal notranslate"><span class="pre">1408</span></code> fire it from the remote (Enter).</p>
+<p><strong>Clocks.</strong> <code class="docutils literal notranslate"><span class="pre">timing&#64;clock</span></code>: <code class="docutils literal notranslate"><span class="pre">page</span></code> 66, <code class="docutils literal notranslate"><span class="pre">application</span></code> 9, <code class="docutils literal notranslate"><span class="pre">title</span></code> 3, omitted 6.</p>
+<p>Definitions (Microsoft HDi Jumpstart [14], <em>Dissecting Chapters</em>). A <strong>title clock</strong> is used <em>“when cues should occur at specific timecodes during the movie”</em> (in-movie experiences such as Warner IME and Universal U-Control). It is locked to media time. A <strong>page clock</strong> is <em>“for cues that are time independent [and] have times relative to other cues (like menus)”</em>. It is independent of media time, so a page-clock menu keeps ticking when video is paused. A markup document may carry both timing blocks. The <strong>application clock</strong> (XSD enum [5], 9 uses) runs for the application’s active lifetime, independent of both, for app-global timers. Relation to <code class="docutils literal notranslate"><span class="pre">ApplicationSegment&#64;sync</span></code> [1]: <code class="docutils literal notranslate"><span class="pre">hard</span></code> holds the Title Timeline until File Cache + startup finish; <code class="docutils literal notranslate"><span class="pre">soft</span></code> lets it run (the app may miss its window). <code class="docutils literal notranslate"><span class="pre">[14]</span></code> <strong>VERIFIED</strong> (title/page from Jumpstart); application-clock lifetime <strong>INFERRED</strong> (XSD enum + usage).
+Jumpstart: page clock for menus (cues relative to other cues); title clock
+for in-movie cues. Omitted <code class="docutils literal notranslate"><span class="pre">&lt;timing&gt;</span></code> is legal (STALINGRAD <code class="docutils literal notranslate"><span class="pre">startUp.xmu</span></code>).
+Hello World’s “empty timing tag is required” is a sample convention.
+Page / application clocks are <strong>independent of the media clock</strong> (patent).
+A mapped <code class="docutils literal notranslate"><span class="pre">clock=&quot;page&quot;</span></code> menu keeps ticking when video is paused; <code class="docutils literal notranslate"><span class="pre">sync=&quot;soft&quot;</span></code>
+does not freeze cues. Unmap at exclusive <code class="docutils literal notranslate"><span class="pre">titleTimeEnd</span></code>.
+<code class="docutils literal notranslate"><span class="pre">[11,</span> <span class="pre">12]</span></code> <strong>VERIFIED</strong>
+<code class="docutils literal notranslate"><span class="pre">[14]</span></code>
+<code class="docutils literal notranslate"><span class="pre">[1]</span></code> <strong>INFERRED</strong> (pause).</p>
+<p><strong>Cue.</strong> <code class="docutils literal notranslate"><span class="pre">begin</span></code>/<code class="docutils literal notranslate"><span class="pre">end</span></code> are <code class="docutils literal notranslate"><span class="pre">TimeOrPathExpressionType</span></code> (iHD.xsd): either
+<code class="docutils literal notranslate"><span class="pre">HH:MM:SS:FF</span></code> / <code class="docutils literal notranslate"><span class="pre">NNh|m|s|ms|f</span></code>, or a path. Retail menus use XPath:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">cue</span> <span class="n">select</span><span class="o">=</span><span class="s2">"id('BT_scenes')"</span>
+     <span class="n">begin</span><span class="o">=</span><span class="s2">"id('BT_scenes')[state:focused()=1]"</span>
+     <span class="n">end</span><span class="o">=</span><span class="s2">"id('BT_scenes')[state:focused()=0]"</span>
+     <span class="n">use</span><span class="o">=</span><span class="s2">"ButtonFocused"</span> <span class="o">/&gt;</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">use</span></code> points at <code class="docutils literal notranslate"><span class="pre">defs/g</span></code> which may <code class="docutils literal notranslate"><span class="pre">set</span></code> style (e.g. <code class="docutils literal notranslate"><span class="pre">backgroundFrame</span></code>) and
+dispatch <code class="docutils literal notranslate"><span class="pre">event&#64;name</span></code>. Script <code class="docutils literal notranslate"><span class="pre">addEventListener</span></code> that name.</p>
+<p>Also used (<code class="docutils literal notranslate"><span class="pre">e17</span></code>): <code class="docutils literal notranslate"><span class="pre">state:actioned()=true()</span></code> (Enter, Jumpstart Chapters;
+<code class="docutils literal notranslate"><span class="pre">1408</span></code> uses a <code class="docutils literal notranslate"><span class="pre">seq</span></code> on <code class="docutils literal notranslate"><span class="pre">//button[state:actioned()=true()]</span></code>); durations
+(<code class="docutils literal notranslate"><span class="pre">400ms</span></code>); <code class="docutils literal notranslate"><span class="pre">style:opacity()=1</span></code>; <code class="docutils literal notranslate"><span class="pre">$name</span></code> variables bound by
+<code class="docutils literal notranslate"><span class="pre">document.setXPathVariable</span></code>. Timecode <code class="docutils literal notranslate"><span class="pre">HH:MM:SS:FF</span></code> on <code class="docutils literal notranslate"><span class="pre">begin</span></code>/<code class="docutils literal notranslate"><span class="pre">end</span></code> is rare
+(69). An unknown path is false (the cue does not fire). This is the used
+subset, not a general XPath 1.0 engine.</p>
+<p><strong>Mapping vs cues (A40).</strong> <code class="docutils literal notranslate"><span class="pre">ApplicationSegment&#64;titleTimeBegin</span></code> / <code class="docutils literal notranslate"><span class="pre">&#64;titleTimeEnd</span></code>
+decide whether the app is on the Title Timeline. Cues run only while that
+app is active. If a cue time and the mapping disagree, <strong>mapping wins</strong>:
+there is no app to tick. Soft-sync apps may miss their window (Q52).
+<code class="docutils literal notranslate"><span class="pre">[11,</span> <span class="pre">12]</span></code> <strong>INFERRED</strong> (two clocks, one gate).
+<code class="docutils literal notranslate"><span class="pre">[11,</span> <span class="pre">12]</span></code> <strong>VERIFIED</strong></p>
+<p><strong>Layout (used attrs only).</strong> Implement §5.9. <code class="docutils literal notranslate"><span class="pre">x</span></code>,<code class="docutils literal notranslate"><span class="pre">y</span></code>,<code class="docutils literal notranslate"><span class="pre">width</span></code>,<code class="docutils literal notranslate"><span class="pre">height</span></code> are
+aperture pixels (Configuration Aperture 1920×1080 on 247/247). <code class="docutils literal notranslate"><span class="pre">position</span></code> is
+<strong>always <code class="docutils literal notranslate"><span class="pre">absolute</span></code></strong> in this sample (1462/1462). <code class="docutils literal notranslate"><span class="pre">backgroundImage</span></code> is a list of
+<code class="docutils literal notranslate"><span class="pre">url(...)</span></code> frames; <code class="docutils literal notranslate"><span class="pre">backgroundFrame</span></code> selects the index. <code class="docutils literal notranslate"><span class="pre">navUp</span></code>/<code class="docutils literal notranslate"><span class="pre">navDown</span></code>/
+<code class="docutils literal notranslate"><span class="pre">navLeft</span></code>/<code class="docutils literal notranslate"><span class="pre">navRight</span></code> are the remote graph; <code class="docutils literal notranslate"><span class="pre">navIndex=&quot;none&quot;</span></code> skips a node
+(<code class="docutils literal notranslate"><span class="pre">1408</span></code> debug <code class="docutils literal notranslate"><span class="pre">input</span></code>). Full box-model
+of unused XSD attrs (<code class="docutils literal notranslate"><span class="pre">writingMode</span></code>, padding, borders, …) is <strong>not</strong> required
+until a census hits them.</p>
+<p><strong>Encoding.</strong> Saved XMU is UTF-8 (<code class="docutils literal notranslate"><span class="pre">&lt;?xml</span> <span class="pre">…</span> <span class="pre">encoding=&quot;utf-8&quot;</span></code>). JS is not.</p>
+<p>Full element/attribute list remains the XSD. Do not invent a second schema.</p>
+</section>
+<section id="script">
+<h2>5.3 Script<a class="headerlink" href="#script" title="Link to this heading"></a></h2>
+<p>Compact-profile ECMAScript (no <code class="docutils literal notranslate"><span class="pre">with</span></code>, no <code class="docutils literal notranslate"><span class="pre">eval</span></code>; no optional methods such as
+<code class="docutils literal notranslate"><span class="pre">substr</span></code>) talking to the HDi type library
+(<code class="docutils literal notranslate"><span class="pre">spec/raw/adv_obj/iHD_Scripting_API.txt</span></code>, 106 typeinfos).
+<code class="docutils literal notranslate"><span class="pre">[14]</span></code></p>
+<p><strong>Encoding:</strong> UTF-16BE with BOM <code class="docutils literal notranslate"><span class="pre">FE</span> <span class="pre">FF</span></code> on <strong>every</strong> saved <code class="docutils literal notranslate"><span class="pre">.js</span></code> (<code class="docutils literal notranslate"><span class="pre">e15</span></code> N=122),
+including the three loose <code class="docutils literal notranslate"><span class="pre">1408</span></code> files. Do not sniff UTF-8 for script.</p>
+<p>Playback surface actually <strong>called</strong> on saved discs (<code class="docutils literal notranslate"><span class="pre">e15</span></code>):</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Call</p></th>
+<th class="head"><p>Signature (disc + Jumpstart)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">Player.playlist.load(uri)</span></code></p></td>
+<td><p>string, full URI (<code class="docutils literal notranslate"><span class="pre">file:///dvddisc/ADV_OBJ/VPLST$$$.XPL</span></code> or <code class="docutils literal notranslate"><span class="pre">psUrl+name</span></code>)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ITitle.jump(time,</span> <span class="pre">pause)</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">time</span></code> = <code class="docutils literal notranslate"><span class="pre">HH:MM:SS:FF</span></code>; <code class="docutils literal notranslate"><span class="pre">pause</span></code> boolean. Saved sources: <strong>always <code class="docutils literal notranslate"><span class="pre">false</span></code></strong></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">IChapter.jump(time,</span> <span class="pre">pause)</span></code></p></td>
+<td><p>same. Index: <code class="docutils literal notranslate"><span class="pre">Player.playlist.titles[&quot;id&quot;]</span></code> or <code class="docutils literal notranslate"><span class="pre">.chapters[n]</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">Player.playlist.play()</span></code> / <code class="docutils literal notranslate"><span class="pre">.pause</span></code></p></td>
+<td><p>distinct from <code class="docutils literal notranslate"><span class="pre">jump</span></code>. <code class="docutils literal notranslate"><span class="pre">1408</span></code> chapter handler: <code class="docutils literal notranslate"><span class="pre">jump(...,</span> <span class="pre">false)</span></code> then <code class="docutils literal notranslate"><span class="pre">play()</span></code> after hiding the menubar</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">Player.playlist.currentTitle.elapsedTime</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">HH:MM:SS:FF</span></code> string</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">application.createTimer(time,</span> <span class="pre">type,</span> <span class="pre">cb)</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">time</span></code> = <code class="docutils literal notranslate"><span class="pre">HH:MM:SS:FF</span></code> interval. <code class="docutils literal notranslate"><span class="pre">type</span></code> is <code class="docutils literal notranslate"><span class="pre">1</span></code> (150/151 sites) or <code class="docutils literal notranslate"><span class="pre">TIMER_APPLICATION</span></code> (1). <code class="docutils literal notranslate"><span class="pre">1</span></code> = title-timeline clock (fail-closed <code class="docutils literal notranslate"><span class="pre">TIMER_TITLE</span></code>; that name is unused in JS). Owner is <code class="docutils literal notranslate"><span class="pre">application.</span></code> (127 sites; 24 bare are continuation lines of the same). Returns <code class="docutils literal notranslate"><span class="pre">ITimer</span></code>: set <code class="docutils literal notranslate"><span class="pre">.enabled</span></code> (true 155 / false 74) and <code class="docutils literal notranslate"><span class="pre">.autoReset</span></code>. <strong><code class="docutils literal notranslate"><span class="pre">.autoReset</span></code> is <code class="docutils literal notranslate"><span class="pre">false</span></code> (one-shot) on 142 sites but <code class="docutils literal notranslate"><span class="pre">true</span></code> on 7</strong>, all <code class="docutils literal notranslate"><span class="pre">resumeStoreTimer</span></code>, a <code class="docutils literal notranslate"><span class="pre">00:00:15:00</span></code> periodic resume-position saver. <strong>Honor <code class="docutils literal notranslate"><span class="pre">autoReset</span></code> as written; do not assume one-shot.</strong> <code class="docutils literal notranslate"><span class="pre">[11,</span> <span class="pre">12]</span></code> VERIFIED</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">Player.video.main.changeLayout(x,</span> <span class="pre">y,</span> <span class="pre">scale,</span> <span class="pre">cropX,</span> <span class="pre">cropY,</span> <span class="pre">cropW,</span> <span class="pre">cropH,</span> <span class="pre">time)</span></code></p></td>
+<td><p><strong>always 8 args</strong> (101/101). <code class="docutils literal notranslate"><span class="pre">scale</span></code> = <code class="docutils literal notranslate"><span class="pre">Player.createVideoScale(num,</span> <span class="pre">den)</span></code> or <code class="docutils literal notranslate"><span class="pre">null</span></code>. Used: <code class="docutils literal notranslate"><span class="pre">(96,166,createVideoScale(1,1),0,0,720,480,&quot;00:00:00:00&quot;)</span></code> ×67 (SD window); <code class="docutils literal notranslate"><span class="pre">(0,0,null,0,0,1920,1080,&quot;00:00:00:00&quot;)</span></code> ×30 (full aperture). <code class="docutils literal notranslate"><span class="pre">createVideoScale</span></code> is <strong>only</strong> <code class="docutils literal notranslate"><span class="pre">(1,1)</span></code> (71/71)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">addEventListener(name,</span> <span class="pre">fn,</span> <span class="pre">bool)</span></code></p></td>
+<td><p>markup <code class="docutils literal notranslate"><span class="pre">event&#64;name</span></code>, plus <code class="docutils literal notranslate"><span class="pre">controller_key_down</span></code>, <code class="docutils literal notranslate"><span class="pre">application_end</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">Player.menuLanguage</span></code></p></td>
+<td><p>two-letter (<code class="docutils literal notranslate"><span class="pre">en</span></code>/<code class="docutils literal notranslate"><span class="pre">fr</span></code>/<code class="docutils literal notranslate"><span class="pre">ja</span></code>/<code class="docutils literal notranslate"><span class="pre">de</span></code>). Selectors <code class="docutils literal notranslate"><span class="pre">switch</span></code> on that. Some JS <code class="docutils literal notranslate"><span class="pre">slice(0,2)</span></code> first</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">Player.track.selectAudioTrackNumber</span></code> / <code class="docutils literal notranslate"><span class="pre">selectSubtitleTrackNumber</span></code></p></td>
+<td><p>1-based</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">Player.generalParameters.getValue</span></code> / <code class="docutils literal notranslate"><span class="pre">setValue</span></code></p></td>
+<td><p>string keys</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">PersistentStorageManager.contentId</span></code></p></td>
+<td><p>GUID string in URI</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FileIO.getFileInfo</span></code> / <code class="docutils literal notranslate"><span class="pre">remove</span></code> / <code class="docutils literal notranslate"><span class="pre">createDirectory</span></code> / <code class="docutils literal notranslate"><span class="pre">getDirectoryInfo</span></code></p></td>
+<td><p>P-storage paths</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">document.setXPathVariable(name,</span> <span class="pre">value)</span></code></p></td>
+<td><p>binds <code class="docutils literal notranslate"><span class="pre">$name</span></code> for cue path expressions (ARMY_OF_SHADOWS <code class="docutils literal notranslate"><span class="pre">$sw01</span></code>)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">document.getElementById</span></code> / <code class="docutils literal notranslate"><span class="pre">setProperty</span></code></p></td>
+<td><p>markup nodes from script</p></td>
+</tr>
+</tbody>
+</table>
+<p><code class="docutils literal notranslate"><span class="pre">ITitle.jump</span></code> / <code class="docutils literal notranslate"><span class="pre">IChapter.jump</span></code> second argument is <strong>pause-at-destination</strong>
+(fail-closed). <code class="docutils literal notranslate"><span class="pre">true</span></code> → seek then <code class="docutils literal notranslate"><span class="pre">PLAYSTATE_PAUSE</span></code>. <code class="docutils literal notranslate"><span class="pre">false</span></code> → seek and do
+not force pause: a jump that selects another Title starts that title playing
+(<code class="docutils literal notranslate"><span class="pre">1408</span></code> extras/trailers call <code class="docutils literal notranslate"><span class="pre">jump(...,</span> <span class="pre">false)</span></code> with no <code class="docutils literal notranslate"><span class="pre">play()</span></code>). If the
+current title was already paused, it stays paused unless script calls
+<code class="docutils literal notranslate"><span class="pre">Player.playlist.play()</span></code> (<code class="docutils literal notranslate"><span class="pre">1408</span></code> chapter buttons: <code class="docutils literal notranslate"><span class="pre">jump</span></code> then <code class="docutils literal notranslate"><span class="pre">play()</span></code> after
+<code class="docutils literal notranslate"><span class="pre">menubarHide()</span></code>). Saved JS never passes <code class="docutils literal notranslate"><span class="pre">true</span></code> (<code class="docutils literal notranslate"><span class="pre">e15</span></code> 258/258 <code class="docutils literal notranslate"><span class="pre">false</span></code>).
+Typelib: <code class="docutils literal notranslate"><span class="pre">play</span></code> / <code class="docutils literal notranslate"><span class="pre">pause</span></code> / <code class="docutils literal notranslate"><span class="pre">playState</span></code> live on <code class="docutils literal notranslate"><span class="pre">IPlaylist</span></code>, not on <code class="docutils literal notranslate"><span class="pre">jump</span></code>.
+<code class="docutils literal notranslate"><span class="pre">[11]</span></code> <strong>INFERRED</strong>
+(Annex Z unpublished; disc call shapes).</p>
+<p><code class="docutils literal notranslate"><span class="pre">IPlaylist.load</span></code> / soft reset is how a selector playlist (<code class="docutils literal notranslate"><span class="pre">VPLST099</span></code>) replaces
+itself with <code class="docutils literal notranslate"><span class="pre">VPLST000</span></code> (patent FIG.51). Argument is the <strong>full URI</strong>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Player</span><span class="o">.</span><span class="n">playlist</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">"file:///dvddisc/ADV_OBJ/VPLST000.XPL"</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>PREMONITION also loads from required storage:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">var</span> <span class="n">psUrl</span> <span class="o">=</span> <span class="s2">"file:///required/"</span> <span class="o">+</span> <span class="n">PersistentStorageManager</span><span class="o">.</span><span class="n">contentId</span> <span class="o">+</span> <span class="s2">"/"</span><span class="p">;</span>
+<span class="n">Player</span><span class="o">.</span><span class="n">playlist</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">psUrl</span> <span class="o">+</span> <span class="n">playlist</span><span class="p">);</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">[11,</span> <span class="pre">12]</span></code> <strong>VERIFIED</strong>
+Soft reset replaces the playlist document; it is not a disc re-insert (DISCID
+category probe is not re-run).</p>
+</section>
+<section id="runtime-patent-fig-50-steps-67">
+<h2>5.4 Runtime (patent FIG.50 steps 6–7)<a class="headerlink" href="#runtime-patent-fig-50-steps-67" title="Link to this heading"></a></h2>
+<p>After the playlist is chosen:</p>
+<ol class="arabic simple">
+<li><p>File Cache Manager loads Manifest, markup, script, fonts, images, and any TMAP
+needed before start.</p></li>
+<li><p>Init Primary Video Player with VTI + TMAP(s) for Primary Audio Video.</p></li>
+<li><p>Init Advanced Application engine.</p></li>
+<li><p>Start Title Timeline. Objects mapped onto the timeline present according to
+<code class="docutils literal notranslate"><span class="pre">titleTimeBegin</span></code> / <code class="docutils literal notranslate"><span class="pre">titleTimeEnd</span></code>.</p></li>
+</ol>
+<p>Firmware vs this API is <strong>uncloseable</strong> (no RE of player binaries). Catalog:
+<a class="reference external" href="http://hd-dvd.org/firmware.html">http://hd-dvd.org/firmware.html</a> is live but
+intermittent (200 then 503 on 2026-09-08). Wayback:
+https://web.archive.org/web/20231210144123/http://hd-dvd.org/firmware.html
+OEM notes cover HDMI/network extras, not the HDi API. Cross-check FIG.50 against
+XPL/DISCID instead (<a class="reference internal" href="10_playback.html"><span class="std std-doc">10</span></a> §10.7).</p>
+</section>
+<section id="what-is-specified-vs-what-blocks-the-gate">
+<h2>5.5 What is specified vs what blocks the gate<a class="headerlink" href="#what-is-specified-vs-what-blocks-the-gate" title="Link to this heading"></a></h2>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Subsystem</p></th>
+<th class="head"><p>Sheet / source</p></th>
+<th class="head"><p>Gate</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>PlaylistApplication / ApplicationSegment mapping, <code class="docutils literal notranslate"><span class="pre">zOrder</span></code>, <code class="docutils literal notranslate"><span class="pre">sync</span></code>, <code class="docutils literal notranslate"><span class="pre">autorun</span></code>, <code class="docutils literal notranslate"><span class="pre">language</span></code>/<code class="docutils literal notranslate"><span class="pre">appBlock</span></code></p></td>
+<td><p><a class="reference internal" href="03_playlist.html"><span class="std std-doc">03</span></a>; patents FIG.57/70</p></td>
+<td><p>specified</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">IPlaylist.load</span></code> full <code class="docutils literal notranslate"><span class="pre">file:///dvddisc/ADV_OBJ/VPLST$$$.XPL</span></code>; FIG.51 soft reset</p></td>
+<td><p>this sheet; three <code class="docutils literal notranslate"><span class="pre">selector.aca/script.js</span></code></p></td>
+<td><p>specified</p></td>
+</tr>
+<tr class="row-even"><td><p>Manifest tree (<code class="docutils literal notranslate"><span class="pre">Region</span></code>, <code class="docutils literal notranslate"><span class="pre">Script</span></code>, <code class="docutils literal notranslate"><span class="pre">Markup</span></code>, <code class="docutils literal notranslate"><span class="pre">Resource</span></code>)</p></td>
+<td><p>Manifest.xsd</p></td>
+<td><p>specified (schema)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ACA directory <code class="docutils literal notranslate"><span class="pre">14+(flags&amp;0xFF)+32</span></code>; extract by offset/length</p></td>
+<td><p><a class="reference internal" href="04_aca.html"><span class="std std-doc">04</span></a>; <code class="docutils literal notranslate"><span class="pre">e17</span></code> 97 ACA / 885 members</p></td>
+<td><p>specified (namelen 0/<code class="docutils literal notranslate"><span class="pre">&gt;</span></code>/<code class="docutils literal notranslate"><span class="pre">/</span></code> = 0)</p></td>
+</tr>
+<tr class="row-even"><td><p>iHD used subset + cue XPath + clocks</p></td>
+<td><p>iHD.xsd; <code class="docutils literal notranslate"><span class="pre">e15</span></code>/<code class="docutils literal notranslate"><span class="pre">e17</span></code></p></td>
+<td><p>specified for used attrs; unused XSD attrs untranscribed</p></td>
+</tr>
+<tr class="row-odd"><td><p>Compact ES + typed <code class="docutils literal notranslate"><span class="pre">load</span></code>/<code class="docutils literal notranslate"><span class="pre">jump</span></code>/<code class="docutils literal notranslate"><span class="pre">elapsedTime</span></code>/<code class="docutils literal notranslate"><span class="pre">createTimer</span></code>/<code class="docutils literal notranslate"><span class="pre">changeLayout</span></code>/<code class="docutils literal notranslate"><span class="pre">setXPathVariable</span></code></p></td>
+<td><p>Jumpstart; <code class="docutils literal notranslate"><span class="pre">e15</span></code> N=122 JS</p></td>
+<td><p>specified (<code class="docutils literal notranslate"><span class="pre">jump</span></code> pause; layout 8-tuple; timer type)</p></td>
+</tr>
+<tr class="row-even"><td><p>PNG-button raster + <code class="docutils literal notranslate"><span class="pre">nav*</span></code> + <code class="docutils literal notranslate"><span class="pre">backgroundFrame</span></code> + <code class="docutils literal notranslate"><span class="pre">&lt;p&gt;</span></code> in styled <code class="docutils literal notranslate"><span class="pre">div</span></code></p></td>
+<td><p>this sheet §5.9</p></td>
+<td><p>specified; glyph/<code class="docutils literal notranslate"><span class="pre">anchor</span></code>/alpha fail-closed same section</p></td>
+</tr>
+<tr class="row-odd"><td><p>File Cache <code class="docutils literal notranslate"><span class="pre">&#64;size</span></code> vs file</p></td>
+<td><p>Jumpstart; <code class="docutils literal notranslate"><span class="pre">e15</span></code></p></td>
+<td><p>532 equal, 2428 larger, <strong>1 smaller</strong></p></td>
+</tr>
+<tr class="row-even"><td><p>File Cache 64 MB flush</p></td>
+<td><p>Scenarist; HDDVDPLAYDLL strings; <code class="docutils literal notranslate"><span class="pre">&#64;priority</span></code></p></td>
+<td><p>specified fail-closed (§5.7)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ADV_PCK <code class="docutils literal notranslate"><span class="pre">0x80</span></code> payload</p></td>
+<td><p><a class="reference internal" href="08_evo.html"><span class="std std-doc">08</span></a> §8.6; <code class="docutils literal notranslate"><span class="pre">e16</span></code></p></td>
+<td><p>specified (<code class="docutils literal notranslate"><span class="pre">STALINGRAD</span></code> <code class="docutils literal notranslate"><span class="pre">logo.EVO</span></code> N=2383; concat = ADV_OBJ file)</p></td>
+</tr>
+<tr class="row-even"><td><p>P-storage <strong>script</strong> URI</p></td>
+<td><p>PREMONITION; Jumpstart; FIG.20 drawing</p></td>
+<td><p>specified <code class="docutils literal notranslate"><span class="pre">file:///required/{contentId}/</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>FIG.50 VPLST search</p></td>
+<td><p>same URI; empty P-storage still boots</p></td>
+<td><p>specified INFERRED (§5.8)</p></td>
+</tr>
+<tr class="row-even"><td><p>File Cache wipe on <code class="docutils literal notranslate"><span class="pre">load</span></code></p></td>
+<td><p>FIG.51 body; A37</p></td>
+<td><p>specified fail-closed (wipe then reload)</p></td>
+</tr>
+<tr class="row-odd"><td><p>Markup <code class="docutils literal notranslate"><span class="pre">cue</span></code> vs <code class="docutils literal notranslate"><span class="pre">titleTimeBegin</span></code></p></td>
+<td><p>A40; §5.2</p></td>
+<td><p>specified (mapping wins)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">.CER</span></code> / <code class="docutils literal notranslate"><span class="pre">IHTTPClient</span></code></p></td>
+<td><p>10 listed, bodies unsaved</p></td>
+<td><p>out of gate</p></td>
+</tr>
+</tbody>
+</table>
+<p>XSD annotations cite unpublished DVD Forum book sections (<code class="docutils literal notranslate"><span class="pre">Spec.</span> <span class="pre">7.5…</span></code>). Those
+numbers are <strong>not</strong> a substitute for writing the engine here. Jumpstart
+(https://learn.microsoft.com/en-us/archive/blogs/amyd/) and Scenarist AC 4.5
+User Guide are the public prose; disc <code class="docutils literal notranslate"><span class="pre">.xmu</span></code> / <code class="docutils literal notranslate"><span class="pre">.js</span></code> win when they disagree.</p>
+</section>
+<section id="remaining-spec-work-no-firmware">
+<h2>5.6 Remaining spec work (no firmware)<a class="headerlink" href="#remaining-spec-work-no-firmware" title="Link to this heading"></a></h2>
+<p>Closed by <code class="docutils literal notranslate"><span class="pre">e15</span></code>/<code class="docutils literal notranslate"><span class="pre">e17</span></code>/<code class="docutils literal notranslate"><span class="pre">e16</span></code> + Jumpstart + patents (do not re-open): JS
+encoding, <code class="docutils literal notranslate"><span class="pre">jump</span></code> pause-at-destination, <code class="docutils literal notranslate"><span class="pre">elapsedTime</span></code> string, cue path
+allowlist, <code class="docutils literal notranslate"><span class="pre">file:///required/{contentId}/</span></code>, File Cache <code class="docutils literal notranslate"><span class="pre">size</span> <span class="pre">≥</span> <span class="pre">file</span></code> except
+one authoring error, used iHD attr allowlist, compact ES, PNG-button layout</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">nav*</span></code> + <code class="docutils literal notranslate"><span class="pre">backgroundFrame</span></code> + <code class="docutils literal notranslate"><span class="pre">&lt;p&gt;</span></code>-in-<code class="docutils literal notranslate"><span class="pre">div</span></code> + glyph/<code class="docutils literal notranslate"><span class="pre">anchor</span></code>/src-over
+(§5.9), <code class="docutils literal notranslate"><span class="pre">changeLayout</span></code> 8-tuple / <code class="docutils literal notranslate"><span class="pre">createVideoScale(1,1)</span></code>, <code class="docutils literal notranslate"><span class="pre">createTimer</span></code>
+type+<code class="docutils literal notranslate"><span class="pre">ITimer</span></code>, <code class="docutils literal notranslate"><span class="pre">animate</span></code> keyframe lists, <code class="docutils literal notranslate"><span class="pre">input</span></code> mode, <code class="docutils literal notranslate"><span class="pre">accessKey</span></code> VK_*,
+<code class="docutils literal notranslate"><span class="pre">sync</span></code> hard/soft, <code class="docutils literal notranslate"><span class="pre">multiplexed=&quot;0&quot;</span></code> as URI, ADV_PCK concat (<a class="reference internal" href="08_evo.html"><span class="std std-doc">08</span></a>
+§8.6).</p></li>
+</ul>
+<p>Not a second gate:</p>
+<ol class="arabic simple">
+<li><p>Re-run <code class="docutils literal notranslate"><span class="pre">e15</span></code>/<code class="docutils literal notranslate"><span class="pre">e17</span></code> if more ACA land so unused-attr claims stay
+falsifiable.</p></li>
+<li><p>Unused iHDstyle attrs (<code class="docutils literal notranslate"><span class="pre">writingMode</span></code>, padding, borders, MNG, <code class="docutils literal notranslate"><span class="pre">pointer</span></code>)
+stay on the XSD until a census hits them.</p></li>
+<li><p>Screenshot calibration of a specific OpenType file (hinting) is not
+required; scale <code class="docutils literal notranslate"><span class="pre">fontSize</span></code> to the em square.</p></li>
+</ol>
+<p>Xbox <code class="docutils literal notranslate"><span class="pre">0xC667000A</span></code>: playlist <code class="docutils literal notranslate"><span class="pre">size</span></code> smaller than the file (<code class="docutils literal notranslate"><span class="pre">e15</span></code> N=1
+PANS_LABYRINTH). Conforming player: reject that resource. The file on disc is
+still 6436 bytes.</p>
+</section>
+<section id="file-cache-size">
+<h2>5.7 File Cache <code class="docutils literal notranslate"><span class="pre">&#64;size</span></code><a class="headerlink" href="#file-cache-size" title="Link to this heading"></a></h2>
+<p>Jumpstart: declared <code class="docutils literal notranslate"><span class="pre">size</span></code> <strong>may be larger</strong> than the file, <strong>must not be
+smaller</strong>. Xbox error <code class="docutils literal notranslate"><span class="pre">XPLAYER_E_CANT_LOAD_RESOURCE</span></code> (0xC667000A) if the
+resource is missing or <code class="docutils literal notranslate"><span class="pre">size</span></code> is too small.
+<code class="docutils literal notranslate"><span class="pre">[14]</span></code>
+<code class="docutils literal notranslate"><span class="pre">[14]</span></code></p>
+<p>Corpus (<code class="docutils literal notranslate"><span class="pre">e15</span></code>, every <code class="docutils literal notranslate"><span class="pre">ApplicationResource</span></code> / <code class="docutils literal notranslate"><span class="pre">PlaylistApplicationResource</span></code>
+with <code class="docutils literal notranslate"><span class="pre">file:///dvddisc/</span></code> and a listing path): <strong>532</strong> equal, <strong>2428</strong> larger,
+<strong>1</strong> smaller (<code class="docutils literal notranslate"><span class="pre">PANS_LABYRINTH</span></code> <code class="docutils literal notranslate"><span class="pre">/ADV_OBJ/multi_angle.aca</span></code> size 5500 vs listing
+6436), <strong>0</strong> unlisted.</p>
+<p>64 MB cap: Scenarist AC 4.5 User Guide (“The File Cache Loading must not at
+any time exceed 64 MB”). Clips are flushed <strong>only when space is needed</strong>.
+Higher Buffer Flush Priority is removed first; priority 0 is last. That maps
+to playlist <code class="docutils literal notranslate"><span class="pre">&#64;priority</span></code> (corpus: <code class="docutils literal notranslate"><span class="pre">1</span></code> on 2440 resources, omitted 455, <code class="docutils literal notranslate"><span class="pre">2</span></code> on
+32, <code class="docutils literal notranslate"><span class="pre">3</span></code> on 34). Accounting unit is the playlist <code class="docutils literal notranslate"><span class="pre">&#64;size</span></code> (Jumpstart / Xbox),
+not raw member bytes.
+<code class="docutils literal notranslate"><span class="pre">[7]</span></code> <strong>INFERRED</strong>
+(authoring tool, not a player dump).</p>
+<p>If a conforming title stays ≤ 64 MB, a player does not need an overflow
+policy. When the live reserved <code class="docutils literal notranslate"><span class="pre">&#64;size</span></code> sum would exceed 64 MB: flush
+resources with the <strong>highest</strong> <code class="docutils literal notranslate"><span class="pre">&#64;priority</span></code> first (Scenarist Buffer Flush
+Priority; omitted PlaylistApplicationResource stays; they outlive titles).
+If the new resource still does not fit, <strong>do not load it</strong>. Reference
+decoder strings: <code class="docutils literal notranslate"><span class="pre">Exceeded</span> <span class="pre">cache</span> <span class="pre">size!</span> <span class="pre">Used:</span> <span class="pre">%.3f</span> <span class="pre">mb,</span> <span class="pre">Available:</span> <span class="pre">%.3f</span> <span class="pre">mb</span></code>
+and <code class="docutils literal notranslate"><span class="pre">Insufficient</span> <span class="pre">space</span> <span class="pre">in</span> <span class="pre">file</span> <span class="pre">cache</span></code>.
+<code class="docutils literal notranslate"><span class="pre">[10]</span></code>
+<strong>INFERRED</strong> as fail-closed (no player dump of an overflowing title).
+Conforming authored titles never hit this.</p>
+<p><strong><code class="docutils literal notranslate"><span class="pre">IPlaylist.load</span></code> (A37).</strong> Follow FIG.51 <strong>body</strong>, not the drawing: Soft
+Reset runs Change System Configuration (wipe File Cache and Streaming
+Buffer) then loads the <strong>new</strong> playlist’s resources. Shared filenames are
+re-fetched from disc / P-storage, not kept. Re-fetch is always correct;
+keep-on-overlap is an unproven optimisation.
+<code class="docutils literal notranslate"><span class="pre">[1]</span></code>
+<strong>INFERRED</strong> (drawing vs body; body wins for wipe).</p>
+</section>
+<section id="persistent-storage-uris-script">
+<h2>5.8 Persistent storage URIs (script)<a class="headerlink" href="#persistent-storage-uris-script" title="Link to this heading"></a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">file</span><span class="p">:</span><span class="o">///</span><span class="n">required</span><span class="o">/</span><span class="p">{</span><span class="n">PersistentStorageManager</span><span class="o">.</span><span class="n">contentId</span><span class="p">}</span><span class="o">/</span><span class="p">{</span><span class="n">relative</span><span class="p">}</span>
+<span class="n">file</span><span class="p">:</span><span class="o">///</span><span class="n">filecache</span><span class="o">/</span><span class="p">{</span><span class="n">relative</span><span class="p">}</span>
+<span class="n">file</span><span class="p">:</span><span class="o">///</span><span class="n">dvddisc</span><span class="o">/</span><span class="n">ADV_OBJ</span><span class="o">/</span><span class="p">{</span><span class="n">relative</span><span class="p">}</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">file:///fixed/</span></code> and <code class="docutils literal notranslate"><span class="pre">file:///removable/</span></code> do not occur in saved JS (<code class="docutils literal notranslate"><span class="pre">e15</span></code>).
+<code class="docutils literal notranslate"><span class="pre">STORAGE_REQUIRED</span></code> is how PREMONITION opens the device
+(<code class="docutils literal notranslate"><span class="pre">getPersistentStorageDevices(PersistentStorageManager.STORAGE_REQUIRED)</span></code> and
+<code class="docutils literal notranslate"><span class="pre">getPersistentStorageDevices(1)</span></code>).</p>
+<p><code class="docutils literal notranslate"><span class="pre">file:///required/</span></code> is the <strong>own-provider</strong> area (FIG.20 drawing). Scripts
+never put <code class="docutils literal notranslate"><span class="pre">PROVIDER_ID</span></code> in the URI. Jumpstart downloads to
+<code class="docutils literal notranslate"><span class="pre">file:///required/</span></code> + <code class="docutils literal notranslate"><span class="pre">PersistentStorageManager.contentId</span></code> + filename
+(https://learn.microsoft.com/en-us/archive/blogs/amyd/very-simple-network-example).
+PREMONITION uses the same concatenation for <code class="docutils literal notranslate"><span class="pre">VPLST</span></code> and <code class="docutils literal notranslate"><span class="pre">update.txt</span></code>.</p>
+<p><strong>Host binding for <code class="docutils literal notranslate"><span class="pre">contentId</span></code>:</strong> DISCID <code class="docutils literal notranslate"><span class="pre">CONTENT_ID</span></code> (16 bytes &#64;44).
+PREMONITION names the value <code class="docutils literal notranslate"><span class="pre">GUID</span></code>. Scenarist “Auto-generate” for Content
+ID. Expose it as lowercase UUID <code class="docutils literal notranslate"><span class="pre">8-4-4-4-12</span></code> hex (<code class="docutils literal notranslate"><span class="pre">aabbccdd-eeff-…</span></code>).
+All-<code class="docutils literal notranslate"><span class="pre">FF</span></code> (10 discs, usually <code class="docutils literal notranslate"><span class="pre">SEARCH_FLG=1</span></code>) is not a usable content
+directory. Skip P-storage search.
+<code class="docutils literal notranslate"><span class="pre">[11,</span> <span class="pre">12]</span></code> <strong>INFERRED</strong>
+(string punctuation; 16 bytes VERIFIED).</p>
+<p><strong>FIG.50 VPLST search (<code class="docutils literal notranslate"><span class="pre">SEARCH_FLG=0</span></code>).</strong> Search
+<code class="docutils literal notranslate"><span class="pre">file:///required/{contentId}/VPLST$$$.XPL</span></code> on every connected required
+device, then <code class="docutils literal notranslate"><span class="pre">ADV_OBJ/VPLST$$$.XPL</span></code> on disc, then pick the highest <code class="docutils literal notranslate"><span class="pre">$$$</span></code>.
+Empty P-storage still boots the disc playlist (106 discs).</p>
+<p><strong>Management-UI directory nesting (resolved [14]).</strong> When a disc first writes to
+persistent storage the player creates a <strong>content folder keyed by DISCID
+<code class="docutils literal notranslate"><span class="pre">CONTENT_ID</span></code>, nested under a provider folder keyed by <code class="docutils literal notranslate"><span class="pre">PROVIDER_ID</span></code></strong>. Those
+folders are labelled by <code class="docutils literal notranslate"><span class="pre">[language]-explanation</span></code> / <code class="docutils literal notranslate"><span class="pre">[language]-icon</span></code> keys (DVD
+HD-Video spec ch.10), set with <code class="docutils literal notranslate"><span class="pre">setProviderInformation(&quot;en-explanation&quot;,</span> <span class="pre">…)</span></code> and
+<code class="docutils literal notranslate"><span class="pre">setContentInformation(contentId,</span> <span class="pre">&quot;en-explanation&quot;,</span> <span class="pre">…)</span></code> on the
+<code class="docutils literal notranslate"><span class="pre">getPersistentStorageDevices(STORAGE_REQUIRED)[0]</span></code> device; unset → “Unknown
+Provider” / “Unknown Content”. This provider/content nesting is the <strong>management
+UI</strong> layout only; it is <strong>not</strong> part of the <code class="docutils literal notranslate"><span class="pre">file:///required/{contentId}/</span></code> script
+URI. ASCII <code class="docutils literal notranslate"><span class="pre">PROVIDER_ID</span></code> tags and binary UUID-shaped IDs are those folder labels,
+not a second URI family.
+<code class="docutils literal notranslate"><span class="pre">[1]</span></code>
+<code class="docutils literal notranslate"><span class="pre">[14]</span></code>
+<strong>INFERRED</strong> (0 on-device directory specimens). Scripts on disc only ever
+write <code class="docutils literal notranslate"><span class="pre">file:///required/{contentId}/</span></code>.</p>
+</section>
+<section id="raster-focus-cues-used-path">
+<h2>5.9 Raster, focus, cues (used path)<a class="headerlink" href="#raster-focus-cues-used-path" title="Link to this heading"></a></h2>
+<p>This is enough to paint <code class="docutils literal notranslate"><span class="pre">1408</span></code> <code class="docutils literal notranslate"><span class="pre">menu.xmu</span></code> and the OLIVER <code class="docutils literal notranslate"><span class="pre">archive2</span></code> menus.
+It is <strong>not</strong> a full XSL-FO engine. Unused iHDstyle attributes stay on the
+XSD until a census hits them.
+<code class="docutils literal notranslate"><span class="pre">[11,</span> <span class="pre">12]</span></code> <strong>VERIFIED</strong>
+<code class="docutils literal notranslate"><span class="pre">[5]</span></code>
+<code class="docutils literal notranslate"><span class="pre">[14]</span></code></p>
+<p><strong>Coordinate space.</strong> Manifest <code class="docutils literal notranslate"><span class="pre">Region</span></code> and playlist Configuration Aperture
+are 1920×1080 on 247/247 playlists. <code class="docutils literal notranslate"><span class="pre">style:x</span></code> / <code class="docutils literal notranslate"><span class="pre">y</span></code> / <code class="docutils literal notranslate"><span class="pre">width</span></code> / <code class="docutils literal notranslate"><span class="pre">height</span></code> are
+<code class="docutils literal notranslate"><span class="pre">LengthType</span></code> (<code class="docutils literal notranslate"><span class="pre">-?[0-9]+(px|em|%)</span></code>, default <code class="docutils literal notranslate"><span class="pre">x</span></code>/<code class="docutils literal notranslate"><span class="pre">y</span></code> = <code class="docutils literal notranslate"><span class="pre">0px</span></code>, <code class="docutils literal notranslate"><span class="pre">width</span></code>/<code class="docutils literal notranslate"><span class="pre">height</span></code>
+= <code class="docutils literal notranslate"><span class="pre">auto</span></code>). Retail buttons use <code class="docutils literal notranslate"><span class="pre">px</span></code>. A box may sit outside the aperture
+(<code class="docutils literal notranslate"><span class="pre">1408</span></code> <code class="docutils literal notranslate"><span class="pre">BT_dummy</span></code> at <code class="docutils literal notranslate"><span class="pre">y=&quot;1100px&quot;</span></code>). Clip at the aperture; it is still
+focusable.</p>
+<p><strong>Position.</strong> XSD: <code class="docutils literal notranslate"><span class="pre">static</span></code> | <code class="docutils literal notranslate"><span class="pre">relative</span></code> | <code class="docutils literal notranslate"><span class="pre">absolute</span></code> | <code class="docutils literal notranslate"><span class="pre">inherit</span></code>, default
+<code class="docutils literal notranslate"><span class="pre">static</span></code>. Saved markup: <strong>every</strong> <code class="docutils literal notranslate"><span class="pre">position</span></code> is <code class="docutils literal notranslate"><span class="pre">absolute</span></code> (406/406). For
+this sample, place the box at <code class="docutils literal notranslate"><span class="pre">(x,y)</span></code> in the parent’s content box (the
+root/<code class="docutils literal notranslate"><span class="pre">body</span></code> is the Region). <code class="docutils literal notranslate"><span class="pre">static</span></code>/<code class="docutils literal notranslate"><span class="pre">relative</span></code> remain untranscribed.</p>
+<p><strong>Anchor.</strong> Default <code class="docutils literal notranslate"><span class="pre">startBefore</span></code>. Used 31 times. XSD 3×3
+(<code class="docutils literal notranslate"><span class="pre">start|center|end</span></code> × <code class="docutils literal notranslate"><span class="pre">Before|Center|After</span></code>, plus token <code class="docutils literal notranslate"><span class="pre">center</span></code>; Spec
+7.6.3.3.2.1). Same names as XSL-FO area alignment: the named point of the
+<strong>border box</strong> sits on <code class="docutils literal notranslate"><span class="pre">(x,y)</span></code>. <code class="docutils literal notranslate"><span class="pre">writingMode</span></code> is unused in the census.
+<code class="docutils literal notranslate"><span class="pre">start</span></code> is left, <code class="docutils literal notranslate"><span class="pre">before</span></code> is top. Even <code class="docutils literal notranslate"><span class="pre">width</span></code>/<code class="docutils literal notranslate"><span class="pre">height</span></code> for a <code class="docutils literal notranslate"><span class="pre">center*</span></code>
+token: integer-floor toward start/before (do not screenshot-measure).
+<code class="docutils literal notranslate"><span class="pre">[5]</span></code> <strong>VERIFIED</strong> (names, default).
+Pixel of even <code class="docutils literal notranslate"><span class="pre">center</span></code> <strong>INFERRED</strong> (fail-closed floor).</p>
+<p><strong>Stacking.</strong> <code class="docutils literal notranslate"><span class="pre">zIndex</span></code> default <code class="docutils literal notranslate"><span class="pre">auto</span></code> (used 19). <code class="docutils literal notranslate"><span class="pre">opacity</span></code> default <code class="docutils literal notranslate"><span class="pre">1.0</span></code>
+(<code class="docutils literal notranslate"><span class="pre">AlphaValueType</span></code>, 0–1). <code class="docutils literal notranslate"><span class="pre">display</span></code> <code class="docutils literal notranslate"><span class="pre">auto</span></code>|<code class="docutils literal notranslate"><span class="pre">none</span></code> (default <code class="docutils literal notranslate"><span class="pre">auto</span></code>);
+<code class="docutils literal notranslate"><span class="pre">visibility</span></code> <code class="docutils literal notranslate"><span class="pre">hidden</span></code> is used to hide whole menu layers (<code class="docutils literal notranslate"><span class="pre">1408</span></code> <code class="docutils literal notranslate"><span class="pre">menubar</span></code> /
+<code class="docutils literal notranslate"><span class="pre">special</span></code>). <code class="docutils literal notranslate"><span class="pre">none</span></code> / <code class="docutils literal notranslate"><span class="pre">hidden</span></code> still occupy their nav graph.</p>
+<p><strong>Background.</strong> <code class="docutils literal notranslate"><span class="pre">backgroundImage</span></code> is <code class="docutils literal notranslate"><span class="pre">URIListType</span></code> (a string). Retail form:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">url</span><span class="p">(</span><span class="s1">'popupMenu.aca/N1_scenes.PNG'</span><span class="p">)</span> <span class="n">url</span><span class="p">(</span><span class="s1">'popupMenu.aca/S1_scenes.PNG'</span><span class="p">)</span> <span class="n">url</span><span class="p">(</span><span class="s1">'popupMenu.aca/A1_scenes.PNG'</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Split on <code class="docutils literal notranslate"><span class="pre">url(...)</span></code>. <code class="docutils literal notranslate"><span class="pre">backgroundFrame</span></code> (integer, default 0) selects that
+index. Jumpstart Chapters + <code class="docutils literal notranslate"><span class="pre">1408</span></code>: frame 0 = normal, 1 = focused, 2 =
+actioned. Lists with 17–41 URLs are animation strips; <code class="docutils literal notranslate"><span class="pre">animate</span></code> /
+<code class="docutils literal notranslate"><span class="pre">set</span></code> advance the frame (or other style). Resolve each URL relative to the File Cache
+(ACA member or <code class="docutils literal notranslate"><span class="pre">file:///dvddisc/...</span></code>). <code class="docutils literal notranslate"><span class="pre">backgroundColor</span></code> default
+<code class="docutils literal notranslate"><span class="pre">transparent</span></code> (used 3). <code class="docutils literal notranslate"><span class="pre">contentWidth</span></code>/<code class="docutils literal notranslate"><span class="pre">contentHeight</span></code> (used ~40) size the
+image inside the box; default <code class="docutils literal notranslate"><span class="pre">auto</span></code> = box size. <code class="docutils literal notranslate"><span class="pre">scaling</span></code> used once
+(<code class="docutils literal notranslate"><span class="pre">uniform</span></code> | <code class="docutils literal notranslate"><span class="pre">non-uniform</span></code>, default <code class="docutils literal notranslate"><span class="pre">non-uniform</span></code>).</p>
+<p><strong><code class="docutils literal notranslate"><span class="pre">object</span></code>.</strong> Required <code class="docutils literal notranslate"><span class="pre">&#64;type</span></code>. Used values:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>type</p></th>
+<th class="head"><p>Role</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">application/x-clearrect</span></code></p></td>
+<td><p>fill the box (usually 1920×1080) with transparent / clear the graphics plane</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">audio/x-wav</span></code></p></td>
+<td><p>effect audio; OLIVER sets <code class="docutils literal notranslate"><span class="pre">display=&quot;none&quot;</span></code> and <code class="docutils literal notranslate"><span class="pre">src=&quot;chimes.wav&quot;</span></code></p></td>
+</tr>
+</tbody>
+</table>
+<p>JPEG/PNG as <code class="docutils literal notranslate"><span class="pre">object</span></code> is legal in the XSD and unused here; those assets are
+<code class="docutils literal notranslate"><span class="pre">backgroundImage</span></code> on <code class="docutils literal notranslate"><span class="pre">div</span></code>/<code class="docutils literal notranslate"><span class="pre">button</span></code>.</p>
+<p><strong>Composite (graphics over video).</strong> Five presentation planes; main video
+is the bottom plane inside the Aperture after <code class="docutils literal notranslate"><span class="pre">changeLayout</span></code> /
+<code class="docutils literal notranslate"><span class="pre">createVideoScale</span></code>. Paint the graphics plane <strong>src-over</strong> that scaled
+YCbCr: PNG per-pixel alpha × object <code class="docutils literal notranslate"><span class="pre">opacity</span></code> (default 1.0).
+<code class="docutils literal notranslate"><span class="pre">application/x-clearrect</span></code> punches alpha 0 in that box (video shows
+through). <code class="docutils literal notranslate"><span class="pre">zOrder</span></code> stacks apps on the graphics plane. Cursor sits above
+graphics. Unmapped ticks: fill <code class="docutils literal notranslate"><span class="pre">MainVideoDefaultColor</span></code>.
+<code class="docutils literal notranslate"><span class="pre">[2,</span> <span class="pre">3]</span></code>
+<strong>INFERRED</strong> (fail-closed overlay; not screenshot-measured).
+<code class="docutils literal notranslate"><span class="pre">[11,</span> <span class="pre">12]</span></code> <strong>VERIFIED</strong>
+(API / object type). <code class="docutils literal notranslate"><span class="pre">changeLayout</span></code> 8-tuple <strong>VERIFIED</strong> (call sites).</p>
+<p><strong>Focus graph.</strong> <code class="docutils literal notranslate"><span class="pre">button</span></code> and <code class="docutils literal notranslate"><span class="pre">input</span></code> are navigable. <code class="docutils literal notranslate"><span class="pre">navUp</span></code> <code class="docutils literal notranslate"><span class="pre">navDown</span></code>
+<code class="docutils literal notranslate"><span class="pre">navLeft</span></code> <code class="docutils literal notranslate"><span class="pre">navRight</span></code> (and the four diagonals, used 4 each) are
+<code class="docutils literal notranslate"><span class="pre">NavigationType</span></code>: <code class="docutils literal notranslate"><span class="pre">none</span></code> | <code class="docutils literal notranslate"><span class="pre">inherit</span></code> | element <code class="docutils literal notranslate"><span class="pre">xml:id</span></code>. Arrow on the
+remote follows that id; <code class="docutils literal notranslate"><span class="pre">none</span></code> does not move. <code class="docutils literal notranslate"><span class="pre">navIndex</span></code> is used twice, both
+<code class="docutils literal notranslate"><span class="pre">1408</span></code> debug <code class="docutils literal notranslate"><span class="pre">&lt;input</span> <span class="pre">mode=&quot;display&quot;</span> <span class="pre">style:navIndex=&quot;none&quot;&gt;</span></code>. <code class="docutils literal notranslate"><span class="pre">none</span></code> = skip
+the node in the remote graph. XSD <code class="docutils literal notranslate"><span class="pre">auto</span></code> / <code class="docutils literal notranslate"><span class="pre">N</span> <span class="pre">N</span></code> unused.</p>
+<p><strong><code class="docutils literal notranslate"><span class="pre">accessKey</span></code>.</strong> Used (OLIVER <code class="docutils literal notranslate"><span class="pre">VK_A_BUTTON</span></code>…<code class="docutils literal notranslate"><span class="pre">VK_D_BUTTON</span></code> / <code class="docutils literal notranslate"><span class="pre">VK_MENU</span></code>;
+Resident Evil <code class="docutils literal notranslate"><span class="pre">VK_TOP_MENU</span></code> / <code class="docutils literal notranslate"><span class="pre">VK_MENU</span></code>). Token is <code class="docutils literal notranslate"><span class="pre">AccessKeyType</span></code> in iHD.xsd.
+That remote key synthesizes <code class="docutils literal notranslate"><span class="pre">state:actioned</span></code> on the element (same path as
+Enter on a focused button). It is not a second nav graph.</p>
+<p><strong><code class="docutils literal notranslate"><span class="pre">input</span></code>.</strong> 113 elements. <code class="docutils literal notranslate"><span class="pre">&#64;mode</span></code>: <code class="docutils literal notranslate"><span class="pre">multiline</span></code> 106 (AACS error text on
+CRANK/DEATH_PROOF/PREMONITION <code class="docutils literal notranslate"><span class="pre">client.aca</span></code>; paint <code class="docutils literal notranslate"><span class="pre">state:value</span></code>),
+<code class="docutils literal notranslate"><span class="pre">display</span></code> 7 (<code class="docutils literal notranslate"><span class="pre">1408</span></code> debug line, <code class="docutils literal notranslate"><span class="pre">navIndex=&quot;none&quot;</span></code>). <code class="docutils literal notranslate"><span class="pre">password</span></code> unused.
+Treat used <code class="docutils literal notranslate"><span class="pre">input</span></code> as a styled text run of <code class="docutils literal notranslate"><span class="pre">state:value</span></code>, not a PIN pad.</p>
+<p><strong>Initial focus.</strong> An element may set <code class="docutils literal notranslate"><span class="pre">state:focused=&quot;true&quot;</span></code> at parse
+(<code class="docutils literal notranslate"><span class="pre">1408</span></code> <code class="docutils literal notranslate"><span class="pre">BT_dummy</span></code>). Otherwise the first navigable in document order.
+Exactly one focused node. Moving focus: old node <code class="docutils literal notranslate"><span class="pre">focused=false</span></code>, new
+<code class="docutils literal notranslate"><span class="pre">focused=true</span></code>. Enter: <code class="docutils literal notranslate"><span class="pre">state:actioned=true</span></code> while the key is held /
+until the action cue ends (Jumpstart: actioned begins the <code class="docutils literal notranslate"><span class="pre">g</span></code> that
+dispatches the event). <code class="docutils literal notranslate"><span class="pre">state:enabled</span></code> default <code class="docutils literal notranslate"><span class="pre">true</span></code> (used 1).
+<code class="docutils literal notranslate"><span class="pre">state:value</span></code> on <code class="docutils literal notranslate"><span class="pre">input</span></code> (80).</p>
+<p><strong>Cues (page clock, menus).</strong> On each focus/action/timer tick:</p>
+<ol class="arabic simple">
+<li><p>Evaluate every <code class="docutils literal notranslate"><span class="pre">cue&#64;begin</span></code> / <code class="docutils literal notranslate"><span class="pre">&#64;end</span></code> as either a clock time / duration
+or a path (<code class="docutils literal notranslate"><span class="pre">PathExpressionType</span></code> is an unrestricted <code class="docutils literal notranslate"><span class="pre">xs:string</span></code>; Spec
+7.5.2.4 is unpublished).</p></li>
+<li><p>Implement the <strong>used</strong> path subset only (<code class="docutils literal notranslate"><span class="pre">e17</span></code>):
+<code class="docutils literal notranslate"><span class="pre">id('ID')[state:focused()=0|1]</span></code>,
+<code class="docutils literal notranslate"><span class="pre">//button[state:actioned()=true()]</span></code>, duration, timecode,
+<code class="docutils literal notranslate"><span class="pre">style:opacity()=1</span></code>, <code class="docutils literal notranslate"><span class="pre">$name</span></code> / <code class="docutils literal notranslate"><span class="pre">$name='…'</span></code> after <code class="docutils literal notranslate"><span class="pre">setXPathVariable</span></code>.
+An unknown path is false. The cue does <strong>not</strong> fire. This is not a
+general XPath 1.0 engine.</p></li>
+<li><p>When begin is true and end is false, apply <code class="docutils literal notranslate"><span class="pre">use</span></code> (<code class="docutils literal notranslate"><span class="pre">defs/g</span></code>: <code class="docutils literal notranslate"><span class="pre">set</span></code>
+style/state, <code class="docutils literal notranslate"><span class="pre">event&#64;name</span></code>) and/or child <code class="docutils literal notranslate"><span class="pre">set</span></code>/<code class="docutils literal notranslate"><span class="pre">event</span></code>/<code class="docutils literal notranslate"><span class="pre">animate</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">1408</span></code> action path: <code class="docutils literal notranslate"><span class="pre">seq</span> <span class="pre">begin=&quot;//button[state:actioned()=true()]&quot;</span> <span class="pre">dur=&quot;400ms&quot;</span></code> then <code class="docutils literal notranslate"><span class="pre">backgroundFrame=2</span></code> for 180ms then
+<code class="docutils literal notranslate"><span class="pre">event</span> <span class="pre">name=&quot;runActivatedHandler&quot;</span></code>.</p></li>
+</ol>
+<p><strong><code class="docutils literal notranslate"><span class="pre">set</span></code> / <code class="docutils literal notranslate"><span class="pre">animate</span></code>.</strong> <code class="docutils literal notranslate"><span class="pre">set</span></code> snaps one style/state for the cue
+(<code class="docutils literal notranslate"><span class="pre">backgroundFrame</span></code> 111, <code class="docutils literal notranslate"><span class="pre">display</span></code> 89, <code class="docutils literal notranslate"><span class="pre">opacity</span></code> 40). <code class="docutils literal notranslate"><span class="pre">animate</span></code> (57) puts a
+<strong>semicolon list</strong> on a LengthType / AlphaValueType attr (XSD already allows
+<code class="docutils literal notranslate"><span class="pre">;</span></code> keyframes) and spreads those N values across the parent <code class="docutils literal notranslate"><span class="pre">cue&#64;dur</span></code>
+(<code class="docutils literal notranslate"><span class="pre">0.25s</span></code> / <code class="docutils literal notranslate"><span class="pre">0.5s</span></code> / <code class="docutils literal notranslate"><span class="pre">800ms</span></code> on ARMY_OF_SHADOWS). <code class="docutils literal notranslate"><span class="pre">calcMode</span></code> default <code class="docutils literal notranslate"><span class="pre">linear</span></code>
+(interpolates); <code class="docutils literal notranslate"><span class="pre">discrete</span></code> jumps. <code class="docutils literal notranslate"><span class="pre">additive</span></code> default <code class="docutils literal notranslate"><span class="pre">replace</span></code>; <code class="docutils literal notranslate"><span class="pre">sum</span></code> adds to
+the current value (subtitle drift). <code class="docutils literal notranslate"><span class="pre">fill=&quot;hold&quot;</span></code> (used) keeps the last
+keyframe; XSD default <code class="docutils literal notranslate"><span class="pre">remove</span></code>.</p>
+<p><strong>Include.</strong> <code class="docutils literal notranslate"><span class="pre">include&#64;href</span></code> loads another iHD document (<code class="docutils literal notranslate"><span class="pre">.xmu</span></code> fragment,
+<code class="docutils literal notranslate"><span class="pre">.xts</span></code> timing-only, <code class="docutils literal notranslate"><span class="pre">.xss</span></code> style fragment) into the parent. Same
+namespaces. Not Mozilla XUL (<code class="docutils literal notranslate"><span class="pre">.xul</span></code> on PANS_LABYRINTH is a different
+language; ignore for the HDi engine).</p>
+<p><strong>Not in this algorithm:</strong> unused iHDstyle attrs (<code class="docutils literal notranslate"><span class="pre">writingMode</span></code>, padding,
+borders, MNG, <code class="docutils literal notranslate"><span class="pre">pointer</span></code> state). Stay on the XSD until a census hits them.</p>
+<p><strong>Text (<code class="docutils literal notranslate"><span class="pre">&lt;p&gt;</span></code>).</strong> 1390/1390 <code class="docutils literal notranslate"><span class="pre">&lt;p&gt;</span></code> are children of a <code class="docutils literal notranslate"><span class="pre">div</span></code> (TERMINATOR_2_GER
+<code class="docutils literal notranslate"><span class="pre">bonus_menu.xmu</span></code> and others). The <code class="docutils literal notranslate"><span class="pre">p</span></code> itself has <strong>no</strong> style attributes.
+The parent <code class="docutils literal notranslate"><span class="pre">div</span></code> is <code class="docutils literal notranslate"><span class="pre">position=&quot;absolute&quot;</span></code> with <code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">y</span> <span class="pre">width</span> <span class="pre">height</span></code>,
+<code class="docutils literal notranslate"><span class="pre">color</span></code>, <code class="docutils literal notranslate"><span class="pre">fontSize</span></code>, <code class="docutils literal notranslate"><span class="pre">lineHeight</span></code>, <code class="docutils literal notranslate"><span class="pre">font</span></code> (File Cache URI, sometimes
+without a <code class="docutils literal notranslate"><span class="pre">.ttf</span></code> suffix, e.g. <code class="docutils literal notranslate"><span class="pre">…/IMAGION_SA</span></code>), and often
+<code class="docutils literal notranslate"><span class="pre">display=&quot;inherit&quot;</span></code> <code class="docutils literal notranslate"><span class="pre">opacity=&quot;inherit&quot;</span></code>. Jumpstart: players have <strong>no</strong>
+built-in fonts; missing OpenType in File Cache → no glyphs.</p>
+<p>Fail-closed raster: scale the OpenType em so <code class="docutils literal notranslate"><span class="pre">unitsPerEm</span></code> maps to
+<code class="docutils literal notranslate"><span class="pre">fontSize</span></code> CSS px. Line box height is <code class="docutils literal notranslate"><span class="pre">lineHeight</span></code> (equals <code class="docutils literal notranslate"><span class="pre">fontSize</span></code> on
+the checked pages). Successive <code class="docutils literal notranslate"><span class="pre">&lt;p&gt;</span></code> in one tall box (<code class="docutils literal notranslate"><span class="pre">height=&quot;2604px&quot;</span></code>)
+stack on that stride. Baseline from font <code class="docutils literal notranslate"><span class="pre">hhea</span></code> / <code class="docutils literal notranslate"><span class="pre">OS/2</span></code>. Do not
+screenshot-calibrate hinting.
+<code class="docutils literal notranslate"><span class="pre">[11,</span> <span class="pre">12]</span></code> <strong>VERIFIED</strong>
+(structure).
+<code class="docutils literal notranslate"><span class="pre">[14]</span></code> <strong>INFERRED</strong>
+(em scale; not screenshot-measured).</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="04_aca.html" class="btn btn-neutral float-left" title="4. ACA: Advanced Content Archive" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="06_vti.html" class="btn btn-neutral float-right" title="6. HVA00001.VTI: Advanced VTSI" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Working specification.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
