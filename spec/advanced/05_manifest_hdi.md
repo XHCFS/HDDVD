@@ -55,12 +55,35 @@ Namespace: `http://www.dvdforum.org/2005/HDDVDVideo/Manifest`
 Schema: `spec/raw/adv_obj/v1.0/Manifest.xsd`  
 Root element: `Application`
 
-| Child | Min | Attributes |
+| Element | Occurs | Attributes |
 |---|---|---|
-| `Region` | 1 | `@x @y @width @height` required (pixels, typically 0,0,1920,1080) |
-| `Script` | 0..n | `@src` URI of `.js` |
-| `Markup` | 0..1 | `@src` URI of `.xmu` |
-| `Resource` | 1..n | `@src` URI of any asset the app needs |
+| `Application` | 1 (root) | `@id` optional; `@xml:base` optional |
+| `Region` | 1, first | `@x @y @width @height` required, non-negative integers (pixels) |
+| `Script` | 0..n, after `Region` | `@src` URI of a `.js` (required); `@id` optional |
+| `Markup` | 0..1, after the `Script`s | `@src` URI of an `.xmu` (required); `@id` optional |
+| `Resource` | 1..n, last | `@src` URI of any asset the application needs (required); `@id` optional |
+
+Children appear in exactly that order (the XSD is a `sequence`).
+
+**On disc** (`e24`, every `.xmf` in the corpus: 89 manifests on 28 discs, 86 of
+them ACA members, extracted by offset/length):
+
+- All 89 match the XSD: order `Region Script* Markup? Resource+`, no undeclared
+  attributes. 26 roots also carry `xsi:schemaLocation`, which describes the file
+  rather than the application.
+- `Region` is `0,0,1920,1080` on all 89: the application covers the whole graphics plane.
+- 72 have `Markup`. 17 are script-only (no markup, for example a loader or logo
+  application). `Script` count runs 0–17 per manifest (71 have exactly one).
+- `@id` appears on `Application` (6), `Script` (14) and `Markup` (5), never on
+  `Resource`. `xml:base` never appears.
+- `@src` is `file:///dvddisc/…` on 440 references. The other 12 are a bare
+  relative name (`UniLoad.js`, `script.js`), always on a `Script`, always in a
+  manifest that is itself an ACA member, and always naming a member of that same
+  ACA. A relative `src` resolves against the manifest's own location (inside its
+  archive), per `xml:base` / RFC 3986 rules.
+- Encoding is UTF-8 on all 89; 6 start with a UTF-8 byte-order mark.
+
+`[5, 11, 12]` **VERIFIED**
 
 Example (`1408` `extras.xmf`):
 
