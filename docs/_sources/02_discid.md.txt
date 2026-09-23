@@ -22,7 +22,7 @@ if they fill the field.
 |---|---|---|---|
 | 0 | 12 | `ID` | `"HDDVD-V_CONF"` |
 | 12 | 16 | Disc ID (network) | `0xFF`×16 on 109 discs; UUID on 10. **Not** Volume ID. |
-| 28 | 16 | `PROVIDER_ID` | ASCII studio tag or 16-byte binary. Persistent-storage directory key. |
+| 28 | 16 | `PROVIDER_ID` | ASCII studio tag or 16-byte binary. Input to the persistent-storage provider directory name (below). |
 | 44 | 16 | `CONTENT_ID` | 16-byte UUID |
 | 60 | 1 | `SEARCH_FLG` | `0` = also search persistent storage for `VPLST$$$.XPL`; `1` = disc only |
 | 61 | 67 | reserved | zeros |
@@ -34,15 +34,23 @@ version. Fail closed.
 Disc ID @12: `0xFF`×16 on **109**, other (UUID-shaped) on **10** (`e14`).
 `PROVIDER_ID`: 9 distinct ASCII tags (95 discs) + **24 binary**. Binary shapes
 include all-`FF`, UUID-like 16 bytes, and mixed (`BROTHERS_GRIMM` ends `SLY`).
-Persistent-storage directory spelling of the binary form is the host’s
-folder label, not the script URI. Scripts use `file:///required/{contentId}/`
-([05](05_manifest_hdi.md) §5.8).
+On an AACS disc the provider's persistent-storage directory is **not** named
+`PROVIDER_ID`: it is `PROVIDER_DIR = AES-G(KDIR, PROVIDER_ID)` written as a GUID,
+with `KDIR` from the DKF ([09](09_aacs.md) §9.4, [4 §6.3]). Scripts never see it; they
+use `file:///required/{contentId}/` ([05](05_manifest_hdi.md) §5.8).
 
 ## 2.2 Observed `PROVIDER_ID` tags (ASCII)
 
 `WHV***V1**HD-DVD` (25), `UNIVERSAL_HD-DVD` (22), `UNIVERSAL_HD-SLY` (18),
 `PARAMOUNT_HD-DVD` (12), `PARAMOUNT_HD-SLY` (8), `WHV***V1**HD-SLY` (7),
 plus `NEWLINE_HDDVD_V1`, `DREAMWORKS_HDDVD`, `DW_ANIM___HD-SLY`, and 24 binary IDs.
+
+**`SLY` is not an authored value.** Every `PROVIDER_ID` ending in ASCII `SLY` (33
+discs: the `-SLY` tags and five binary IDs ending `534c59`) differs from the DISCID
+the disc's AACS hash table committed to; restoring `DVD` (or the recovered original
+bytes) makes the hash match. These DISCIDs were rewritten after authoring, when the
+image was processed; see [09](09_aacs.md) §9.2. Only the other 86 tags are as pressed.
+`[11]` **VERIFIED** (`e22`)
 
 ## 2.3 Player use
 

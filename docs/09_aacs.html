@@ -148,16 +148,24 @@
 </li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">9. AACS overlay (format only)</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#directories">9.1 Directories</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#files">9.2 Files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#files">9.2 Files</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#content-hash-tables-tables-3-18-3-19">Content Hash Tables (Tables 3-18, 3-19)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sly-discid-rewritten-after-authoring"><code class="docutils literal notranslate"><span class="pre">-SLY</span></code>: DISCID rewritten after authoring</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="#vtkf-table-3-8-final-0-953">9.3 VTKF: Table 3-8 (Final 0.953)</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#title-key-entry-36-bytes">Title Key Entry (36 bytes)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#bifo-binding-information-table-3-9">BIFO: Binding Information (Table 3-9)</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#dkf-64-bytes-table-6-2">9.4 DKF (64 bytes): Table 6-2</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#content-cert-120-bytes-table-3-17">9.5 CONTENT_CERT (120 bytes): Table 3-17</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#pack-encryption-table-4-7">9.6 Pack encryption: Table 4-7</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pack-encryption-table-4-7">9.6 Pack encryption: Table 4-7</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#cpi-layout-tables-4-1-to-4-6">CPI layout (Tables 4-1 to 4-6)</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="#volume-id">9.7 Volume ID</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#vtuf-144-bytes">9.8 VTUF (144 bytes)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#vtuf-table-3-10-final-0-953">9.8 VTUF: Table 3-10 (Final 0.953)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#reusing-libaacs-what-ports-and-what-does-not">9.9 Reusing libaacs: what ports and what does not</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#exact-extension-points-libaacs-master-read-2026-09">Exact extension points (libaacs master, read 2026-09)</a></li>
 </ul>
@@ -407,87 +415,159 @@ Probe <code class="docutils literal notranslate"><span class="pre">ANY!</span></
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">DKF.AACS</span></code></p></td>
 <td><p>64</p></td>
-<td><p>Directory Key File. Persistent-storage name, not title key</p></td>
+<td><p>Directory Key File: names the provider’s persistent-storage directory (§9.4)</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">VTKF$$$.AACS</span></code></p></td>
-<td><p>2480; 2516 on two Pan’s files</p></td>
+<td><p>2480 (<code class="docutils literal notranslate"><span class="pre">HD_VTKF_SIZE</span></code>); two Pan’s files add 36 zero bytes (§9.3)</p></td>
 <td><p>Title Key File for <code class="docutils literal notranslate"><span class="pre">VPLST$$$.XPL</span></code></p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">VTUF$$$.AACS</span></code></p></td>
-<td><p>144</p></td>
-<td><p>Title Usage File (CCI). Same <code class="docutils literal notranslate"><span class="pre">$$$</span></code> as VTKF</p></td>
+<td><p>144 (all <code class="docutils literal notranslate"><span class="pre">URS_NUM</span></code> 0); format allows ≤ 64 KB</p></td>
+<td><p>Title Usage File (§9.8). Same <code class="docutils literal notranslate"><span class="pre">$$$</span></code> as VTKF</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">CONTENT_CERT.AACS</span></code></p></td>
 <td><p>120</p></td>
-<td><p>Content certificate</p></td>
+<td><p>Content Certificate (§9.5)</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">CONTENT_HASH_TABLE1.AACS</span></code> / <code class="docutils literal notranslate"><span class="pre">2</span></code></p></td>
-<td><p>varies</p></td>
-<td><p>208 listed (104+104); sizes not a closed stride (44 676 …). <strong>Bodies not saved; uncloseable</strong></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">CONTENT_HASH_TABLE1.AACS</span></code></p></td>
+<td><p>8 + 8 × NHV</p></td>
+<td><p>CHT #1: low 64 bits of SHA-1 of every EVOBU / TU, indexed by CPI <code class="docutils literal notranslate"><span class="pre">CH_PTR</span></code></p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">CONTENT_REVOCATION_LIST.AACS</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">CONTENT_HASH_TABLE2.AACS</span></code></p></td>
+<td><p>40 060 + 8 × NHA</p></td>
+<td><p>CHT #2: hashes of <code class="docutils literal notranslate"><span class="pre">DISCID.DAT</span></code>, <code class="docutils literal notranslate"><span class="pre">DKF</span></code>, <code class="docutils literal notranslate"><span class="pre">MNGCPY_MANIFEST</span></code>, every VTUF / ATUF, every XML and script file</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">CONTENT_REVOCATION_LIST.AACS</span></code></p></td>
 <td><p>usually 1e6; 61440 on Pan’s</p></td>
 <td><p>revocation</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">MNGCPY_MANIFEST.XML</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">MNGCPY_MANIFEST.XML</span></code></p></td>
 <td><p>~200–304</p></td>
 <td><p>Managed Copy; not playback</p></td>
 </tr>
 </tbody>
 </table>
 <p><code class="docutils literal notranslate"><span class="pre">ATKF</span></code> / <code class="docutils literal notranslate"><span class="pre">SKF</span></code> / <code class="docutils literal notranslate"><span class="pre">APLST</span></code>: <strong>0/120</strong>.</p>
+<p><strong>Trailing residue</strong> is permitted only after <code class="docutils literal notranslate"><span class="pre">MKBROM</span></code>, <code class="docutils literal notranslate"><span class="pre">MKBRECORDABLE</span></code>, <code class="docutils literal notranslate"><span class="pre">SKBF</span></code> and
+<code class="docutils literal notranslate"><span class="pre">CONTENT_REVOCATION_LIST</span></code> [4 p. 21]; that is why their listed sizes vary. Every other
+AACS file ends at its declared size.</p>
+<section id="content-hash-tables-tables-3-18-3-19">
+<h3>Content Hash Tables (Tables 3-18, 3-19)<a class="headerlink" href="#content-hash-tables-tables-3-18-3-19" title="Link to this heading"></a></h3>
+<p>CHT #1: <code class="docutils literal notranslate"><span class="pre">NHV</span></code> (u32, ≤ 500 000), 4 reserved bytes, then <code class="docutils literal notranslate"><span class="pre">NHV</span></code> 8-byte hashes, one per
+EVOBU / TU, each the <strong>least-significant 64 bits (last 8 bytes) of SHA-1</strong> over the
+EVOBU as stored (encrypted or not). An EVOBU’s CPI <code class="docutils literal notranslate"><span class="pre">CH_PTR</span></code> (§9.6) is its 1-based
+index here.</p>
+<p>CHT #2 (fixed offsets): 0 <code class="docutils literal notranslate"><span class="pre">DISCID.DAT</span></code> (8), 8 <code class="docutils literal notranslate"><span class="pre">DKF.AACS</span></code> (8), 16 <code class="docutils literal notranslate"><span class="pre">MNGCPY_MANIFEST.XML</span></code>
+(full 20-byte SHA-1), 36 <code class="docutils literal notranslate"><span class="pre">VTUF.AACS</span></code> (20), 56 <code class="docutils literal notranslate"><span class="pre">VTUF000</span></code>–<code class="docutils literal notranslate"><span class="pre">VTUF999</span></code> (20 each), 20 056
+<code class="docutils literal notranslate"><span class="pre">ATUF000</span></code>–<code class="docutils literal notranslate"><span class="pre">ATUF999</span></code> (20 each), 40 056 <code class="docutils literal notranslate"><span class="pre">NHA</span></code> (u32), 40 060 <code class="docutils literal notranslate"><span class="pre">NHA</span></code> 8-byte hashes of XML
+and ECMAScript files. A TUF hash covers its first <code class="docutils literal notranslate"><span class="pre">HASH_SIZE</span></code> bytes. Absent files are
+<code class="docutils literal notranslate"><span class="pre">FF</span></code>-filled. The player checks these before using the file [4 §3.8].</p>
+<p>Keyless verification on <strong>104/104</strong> AACS discs (<code class="docutils literal notranslate"><span class="pre">e22</span></code>): both CHT sizes match their
+counts; Content Certificate digest #1 = SHA-1(CHT #1) and #2 = SHA-1(CHT #2); the DKF,
+manifest and all 217 VTUF slots match; absent-TUF slots are <code class="docutils literal notranslate"><span class="pre">FF</span></code>. “Least-significant
+64 bits” is the <strong>last</strong> 8 bytes of the digest (DKF: 104 match last-8, 0 first-8).
+Two VTUFs with <code class="docutils literal notranslate"><span class="pre">HASH_SIZE</span></code> = 8 are hashed over <strong>8</strong> bytes, not 128: the stored field,
+not the book’s definition, is what the authoring tool hashed.
+<code class="docutils literal notranslate"><span class="pre">Total_Number_of_HashUnits</span></code> (§9.5) = <code class="docutils literal notranslate"><span class="pre">NHV</span></code> + <code class="docutils literal notranslate"><span class="pre">NHA</span></code> + 3 + (VTUF files present) on
+104/104. Every EVOBU sampled in <code class="docutils literal notranslate"><span class="pre">e23</span></code> has <code class="docutils literal notranslate"><span class="pre">CH_PTR</span></code> within 1 … <code class="docutils literal notranslate"><span class="pre">NHV</span></code>. <code class="docutils literal notranslate"><span class="pre">[11]</span></code> <strong>VERIFIED</strong></p>
+</section>
+<section id="sly-discid-rewritten-after-authoring">
+<h3><code class="docutils literal notranslate"><span class="pre">-SLY</span></code>: DISCID rewritten after authoring<a class="headerlink" href="#sly-discid-rewritten-after-authoring" title="Link to this heading"></a></h3>
+<p>CHT #2 fixes the hash of <code class="docutils literal notranslate"><span class="pre">DISCID.DAT</span></code> at authoring time. It matches the shipped DISCID
+on <strong>71</strong> discs. On the other <strong>33</strong> the DISCID was changed afterwards, and all 33 are
+exactly the discs whose <code class="docutils literal notranslate"><span class="pre">PROVIDER_ID</span></code> ends in ASCII <strong><code class="docutils literal notranslate"><span class="pre">SLY</span></code></strong> (<a class="reference internal" href="02_discid.html"><span class="std std-doc">02</span></a> §2.2):</p>
+<ul class="simple">
+<li><p>28 ASCII tags (<code class="docutils literal notranslate"><span class="pre">UNIVERSAL_HD-SLY</span></code>, <code class="docutils literal notranslate"><span class="pre">PARAMOUNT_HD-SLY</span></code>, <code class="docutils literal notranslate"><span class="pre">WHV***V1**HD-SLY</span></code>,
+<code class="docutils literal notranslate"><span class="pre">DW_ANIM___HD-SLY</span></code>): the committed hash matches the same file with <strong><code class="docutils literal notranslate"><span class="pre">DVD</span></code></strong>
+restored in place of <code class="docutils literal notranslate"><span class="pre">SLY</span></code>. They were authored as <code class="docutils literal notranslate"><span class="pre">…HD-DVD</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">HOT_FUZZ</span></code>, <code class="docutils literal notranslate"><span class="pre">PREMONITION_GER</span></code> (binary IDs ending <code class="docutils literal notranslate"><span class="pre">534c59</span></code>): the original last three
+bytes were recovered by exhaustive search against the committed hash: <code class="docutils literal notranslate"><span class="pre">66</span> <span class="pre">49</span> <span class="pre">2d</span></code> and
+<code class="docutils literal notranslate"><span class="pre">4d</span> <span class="pre">01</span> <span class="pre">cf</span></code>. <code class="docutils literal notranslate"><span class="pre">HOT_FUZZ</span></code>’s restored ID equals the provider ID of <code class="docutils literal notranslate"><span class="pre">RAMBO_1/2/3_FRA</span></code>,
+<code class="docutils literal notranslate"><span class="pre">TOTAL_RECALL_FRA</span></code> and <code class="docutils literal notranslate"><span class="pre">ARMY_OF_SHADOWS</span></code> byte for byte, which confirms the search.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">BROTHERS_GRIMM</span></code>, <code class="docutils literal notranslate"><span class="pre">PHANTOM_OF_THE_OPERA</span></code>, <code class="docutils literal notranslate"><span class="pre">THE_JACKAL</span></code> (identical DISCIDs, all-<code class="docutils literal notranslate"><span class="pre">FF</span></code>
+ID ending <code class="docutils literal notranslate"><span class="pre">SLY</span></code>): original differs in more than the last three bytes; not recovered.</p></li>
+</ul>
+<p>A conforming AACS player verifies this hash at boot, so these images do not carry the
+DISCID that was pressed. <code class="docutils literal notranslate"><span class="pre">[11]</span></code> <strong>VERIFIED</strong> (<code class="docutils literal notranslate"><span class="pre">e22</span></code>, 33/33 rewrites, 0 other
+mismatches). That the suffix marks images processed with SlySoft AnyDVD HD is
+<strong>INFERRED</strong> from the name only.</p>
+</section>
 </section>
 <section id="vtkf-table-3-8-final-0-953">
 <h2>9.3 VTKF: Table 3-8 (Final 0.953)<a class="headerlink" href="#vtkf-table-3-8-final-0-953" title="Link to this heading"></a></h2>
-<p>Size the table from <code class="docutils literal notranslate"><span class="pre">HD_VTKF_SIZE</span></code>, do not assume 2480.</p>
+<p>One Title Key File per playlist: <code class="docutils literal notranslate"><span class="pre">VTKF$$$.AACS</span></code> accompanies <code class="docutils literal notranslate"><span class="pre">VPLST$$$.XPL</span></code>, and two
+playlists may not share one. <code class="docutils literal notranslate"><span class="pre">VTKF.AACS</span></code> (no number) is the Category 1 name
+[4 §3.5]. Each entry holds one encrypted Title Key; which entry decrypts an EVOB
+is chosen by <code class="docutils literal notranslate"><span class="pre">TITLE_KEY_PTR</span></code> in that EVOB’s CPI (§9.6).</p>
 <table class="docutils align-default">
 <thead>
 <tr class="row-odd"><th class="head"><p>Offset</p></th>
 <th class="head"><p>Size</p></th>
 <th class="head"><p>Field</p></th>
+<th class="head"><p>Rule</p></th>
 </tr>
 </thead>
 <tbody>
 <tr class="row-even"><td><p>0</p></td>
 <td><p>12</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">TKF_ID</span></code> = <code class="docutils literal notranslate"><span class="pre">&quot;DVD_HD_V_TKF&quot;</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">TKF_ID</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&quot;DVD_HD_V_TKF&quot;</span></code></p></td>
 </tr>
 <tr class="row-odd"><td><p>12</p></td>
 <td><p>4</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">HD_VTKF_SIZE</span></code></p></td>
+<td><p>end address of the TKF; <strong>shall be 2480</strong></p></td>
 </tr>
 <tr class="row-even"><td><p>16</p></td>
 <td><p>12</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">PLAYLIST_NAME</span></code> = <code class="docutils literal notranslate"><span class="pre">VPLST%%%.XPL</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">PLAYLIST_NAME</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">VPLST%%%.XPL</span></code> / <code class="docutils literal notranslate"><span class="pre">APLST%%%.XPL</span></code>; <code class="docutils literal notranslate"><span class="pre">FF</span></code>×12 for Standard Content</p></td>
 </tr>
 <tr class="row-odd"><td><p>28</p></td>
 <td><p>4</p></td>
 <td><p>reserved</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">00</span></code></p></td>
 </tr>
 <tr class="row-even"><td><p>32</p></td>
-<td><p>4</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">VERN</span></code> shall be 0</p></td>
+<td><p>2</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">VERN</span></code></p></td>
+<td><p>0 (see note)</p></td>
 </tr>
-<tr class="row-odd"><td><p>36</p></td>
-<td><p>92</p></td>
+<tr class="row-odd"><td><p>34</p></td>
+<td><p>94</p></td>
 <td><p>reserved</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">00</span></code></p></td>
 </tr>
 <tr class="row-even"><td><p>128</p></td>
-<td><p>n×36</p></td>
-<td><p>Title Key Entry</p></td>
+<td><p>64 × 36</p></td>
+<td><p>Title Key Entry #1 … #64</p></td>
+<td><p>below</p></td>
 </tr>
-<tr class="row-odd"><td><p>size−48</p></td>
+<tr class="row-odd"><td><p>2432</p></td>
 <td><p>32</p></td>
 <td><p>reserved</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">00</span></code></p></td>
 </tr>
-<tr class="row-even"><td><p>size−16</p></td>
+<tr class="row-even"><td><p>2464</p></td>
 <td><p>16</p></td>
-<td><p>TKF MAC = CMAC(<code class="docutils literal notranslate"><span class="pre">Kvu</span></code>, bytes 0 .. size−17)</p></td>
+<td><p>TKF MAC</p></td>
+<td><p>CMAC(<code class="docutils literal notranslate"><span class="pre">Kvu</span></code>, bytes 0 … 2463)</p></td>
 </tr>
 </tbody>
 </table>
-<p>Nominal: 128 + 64×36 + 32 + 16 = <strong>2480</strong>.<br />
-Pan’s VTKF001/003 = 2516 = 65 slots. Book/Scenarist cap is 64.</p>
+<p><strong>The TKF is a fixed 2480-byte structure with exactly 64 entries</strong> [4 Table 3-8].
+<code class="docutils literal notranslate"><span class="pre">HD_VTKF_SIZE</span></code> = 2480 on <strong>434/434</strong> files (primary + BAK, 104 discs) (<code class="docutils literal notranslate"><span class="pre">e21</span></code>).
+The player compares <code class="docutils literal notranslate"><span class="pre">PLAYLIST_NAME</span></code> with the <strong>active</strong> playlist (including after
+<code class="docutils literal notranslate"><span class="pre">IPlaylist.load</span></code>) and must not use the keys unless they match [4 §3.5].</p>
+<p><strong>Correction: <code class="docutils literal notranslate"><span class="pre">PANS_LABYRINTH</span></code> has no 65th slot.</strong> <code class="docutils literal notranslate"><span class="pre">VTKF001</span></code> / <code class="docutils literal notranslate"><span class="pre">VTKF003</span></code> are 2516-byte
+files: a normal 2480-byte TKF (<code class="docutils literal notranslate"><span class="pre">HD_VTKF_SIZE</span></code> = 2480, 64 entries, reserved zero, TKF MAC
+at 2464) followed by <strong>36 zero bytes</strong>. The padding is exactly one entry wide, which is
+why reading to the file length produced a phantom 65th entry. The book allows trailing
+residue only after <code class="docutils literal notranslate"><span class="pre">MKBROM</span></code>, <code class="docutils literal notranslate"><span class="pre">MKBRECORDABLE</span></code>, <code class="docutils literal notranslate"><span class="pre">SKBF</span></code> and <code class="docutils literal notranslate"><span class="pre">CONTENT_REVOCATION_LIST</span></code>
+[4 p. 21], so this is an authoring deviation. <strong>Parse to <code class="docutils literal notranslate"><span class="pre">HD_VTKF_SIZE</span></code>, never to the
+file length.</strong> <code class="docutils literal notranslate"><span class="pre">[11]</span></code> <strong>VERIFIED</strong> (<code class="docutils literal notranslate"><span class="pre">e21</span></code>, 4/4 files)</p>
+<p><code class="docutils literal notranslate"><span class="pre">VERN</span></code> width: the book’s table gives bytes 32–33, its prose “4 bytes”. Bytes 32–35
+are zero on 434/434, so both readings hold on disc.</p>
 <section id="title-key-entry-36-bytes">
 <h3>Title Key Entry (36 bytes)<a class="headerlink" href="#title-key-entry-36-bytes" title="Link to this heading"></a></h3>
 <table class="docutils align-default">
@@ -495,76 +575,279 @@ Pan’s VTKF001/003 = 2516 = 65 slots. Book/Scenarist cap is 64.</p>
 <tr class="row-odd"><th class="head"><p>Off</p></th>
 <th class="head"><p>Size</p></th>
 <th class="head"><p>Field</p></th>
+<th class="head"><p>Rule</p></th>
 </tr>
 </thead>
 <tbody>
 <tr class="row-even"><td><p>0</p></td>
 <td><p>1</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">BIFO</span></code>. Bit 7 <code class="docutils literal notranslate"><span class="pre">AV_FLG</span></code> = slot occupied</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">BIFO</span></code></p></td>
+<td><p><strong>Binding Information</strong>, Table 3-9 below</p></td>
 </tr>
 <tr class="row-odd"><td><p>1</p></td>
 <td><p>3</p></td>
 <td><p>reserved</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">00</span></code></p></td>
 </tr>
 <tr class="row-even"><td><p>4</p></td>
 <td><p>16</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">Kte</span></code> (encrypted title key)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Kte</span></code></p></td>
+<td><p>encrypted Title Key: <code class="docutils literal notranslate"><span class="pre">Kte</span> <span class="pre">=</span> <span class="pre">AES-128E(Kvu,</span> <span class="pre">Kt)</span></code>, ECB</p></td>
 </tr>
 <tr class="row-odd"><td><p>20</p></td>
 <td><p>16</p></td>
-<td><p>Binding MAC. <code class="docutils literal notranslate"><span class="pre">BIND_TYPE=000b</span></code> → <code class="docutils literal notranslate"><span class="pre">0xFF</span></code>×16 (Volume ID only)</p></td>
+<td><p>Binding MAC</p></td>
+<td><p>per <code class="docutils literal notranslate"><span class="pre">BIND_TYPE</span></code></p></td>
 </tr>
 </tbody>
 </table>
-<p>Match <code class="docutils literal notranslate"><span class="pre">PLAYLIST_NAME</span></code> to the <strong>active</strong> <code class="docutils literal notranslate"><span class="pre">VPLST$$$.XPL</span></code> (including after
-<code class="docutils literal notranslate"><span class="pre">IPlaylist.load</span></code>). Do not use a foreign VTKF.
-Empty slots are skipped, not terminators. <code class="docutils literal notranslate"><span class="pre">TITLE_KEY_PTR</span></code> is <strong>1-based</strong> (1…64).</p>
-<p>A 32-byte stride is a known misparse. Do not use it.</p>
-<p>Three titles have extra VTKF files without a matching VPLST (<code class="docutils literal notranslate"><span class="pre">BALLS_OF_FURY</span></code>,
-<code class="docutils literal notranslate"><span class="pre">CHUCK_AND_LARRY</span></code>, <code class="docutils literal notranslate"><span class="pre">SHREK_THE_THIRD_EU</span></code>).</p>
+<p><code class="docutils literal notranslate"><span class="pre">TITLE_KEY_PTR</span></code> is <strong>1-based</strong> (1…64). Empty slots are skipped, not terminators.
+A 32-byte stride is a known misparse.</p>
+</section>
+<section id="bifo-binding-information-table-3-9">
+<h3>BIFO: Binding Information (Table 3-9)<a class="headerlink" href="#bifo-binding-information-table-3-9" title="Link to this heading"></a></h3>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Bits</p></th>
+<th class="head"><p>Field</p></th>
+<th class="head"><p>Meaning</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>7</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">AV_FLG</span></code></p></td>
+<td><p>1 = Title Key available, 0 = not available</p></td>
+</tr>
+<tr class="row-odd"><td><p>6–4</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">BIND_TYPE</span></code></p></td>
+<td><p>what the key is bound to (below)</p></td>
+</tr>
+<tr class="row-even"><td><p>3–0</p></td>
+<td><p>reserved</p></td>
+<td><p>0</p></td>
+</tr>
+</tbody>
+</table>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p><code class="docutils literal notranslate"><span class="pre">BIND_TYPE</span></code></p></th>
+<th class="head"><p>Bound to</p></th>
+<th class="head"><p>Binding MAC</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">000</span></code></p></td>
+<td><p>Volume ID only</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">FF</span></code>×16</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">001</span></code></p></td>
+<td><p>Pre-recorded Media Serial Number (PMSN)</p></td>
+<td><p>CMAC(<code class="docutils literal notranslate"><span class="pre">Kt</span></code>, PMSN)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">010</span></code></p></td>
+<td><p>Device Unique Nonce (DUN)</p></td>
+<td><p>CMAC(<code class="docutils literal notranslate"><span class="pre">Kt</span></code>, DUN)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">011</span></code></p></td>
+<td><p>PMSN and DUN</p></td>
+<td><p>CMAC(<code class="docutils literal notranslate"><span class="pre">Kt</span></code>, AES-G(DUN, PMSN))</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">100</span></code></p></td>
+<td><p>Temporary Nonce (TN)</p></td>
+<td><p>CMAC(<code class="docutils literal notranslate"><span class="pre">Kt</span></code>, TN)</p></td>
+</tr>
+<tr class="row-odd"><td><p>others</p></td>
+<td><p>reserved</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+<p><code class="docutils literal notranslate"><span class="pre">Kt</span> <span class="pre">=</span> <span class="pre">AES-128D(Kvu,</span> <span class="pre">Kte)</span></code>. Title Keys for content on a pre-recorded disc are
+<code class="docutils literal notranslate"><span class="pre">BIND_TYPE</span> <span class="pre">000</span></code>; the other types protect content copied to persistent storage.
+A player verifies the Binding MAC before using a Title Key [4 §3.5].</p>
+<p>Corpus (<code class="docutils literal notranslate"><span class="pre">e21</span></code>), 217 primary TKFs: <strong>25 662 used slots, every one <code class="docutils literal notranslate"><span class="pre">BIFO</span></code> = <code class="docutils literal notranslate"><span class="pre">0x80</span></code></strong>
+(<code class="docutils literal notranslate"><span class="pre">AV_FLG</span></code> 1, <code class="docutils literal notranslate"><span class="pre">BIND_TYPE</span></code> 000, Binding MAC <code class="docutils literal notranslate"><span class="pre">FF</span></code>×16); 2 114 unused slots, <code class="docutils literal notranslate"><span class="pre">BIFO</span></code> = <code class="docutils literal notranslate"><span class="pre">0x00</span></code>.
+The book does not say how an unused slot is filled: its MAC is <code class="docutils literal notranslate"><span class="pre">FF</span></code>×16 on all 2 114,
+its <code class="docutils literal notranslate"><span class="pre">Kte</span></code> <code class="docutils literal notranslate"><span class="pre">FF</span></code>×16 on 1 844 and <code class="docutils literal notranslate"><span class="pre">00</span></code>×16 on 270. 195 TKFs fill all 64 slots; 22 use
+between 1 and 59. <code class="docutils literal notranslate"><span class="pre">[11]</span></code> <strong>VERIFIED</strong></p>
+<p>Three titles have extra VTKF files without a matching VPLST (<code class="docutils literal notranslate"><span class="pre">BALLS_OF_FURY</span></code>
+<code class="docutils literal notranslate"><span class="pre">VTKF001</span></code>, <code class="docutils literal notranslate"><span class="pre">CHUCK_AND_LARRY</span></code> <code class="docutils literal notranslate"><span class="pre">VTKF016</span></code>, <code class="docutils literal notranslate"><span class="pre">SHREK_THE_THIRD_EU</span></code> <code class="docutils literal notranslate"><span class="pre">VTKF004</span></code>). The book
+forbids two playlists sharing a TKF; it does not address a TKF with no playlist.</p>
 </section>
 </section>
 <section id="dkf-64-bytes-table-6-2">
 <h2>9.4 DKF (64 bytes): Table 6-2<a class="headerlink" href="#dkf-64-bytes-table-6-2" title="Link to this heading"></a></h2>
-<p>Magic <code class="docutils literal notranslate"><span class="pre">DVD_HD_V_DKF</span></code>. Encrypted directory key at offset 48:
-<code class="docutils literal notranslate"><span class="pre">KDIRe</span> <span class="pre">=</span> <span class="pre">AES-128E(Kvu,</span> <span class="pre">KDIR)</span></code>. Not used to decrypt EVO.</p>
+<p><strong>Directory Key File.</strong> It carries the key that names the content provider’s directory
+in persistent storage [4 §6.3]. It is not used to decrypt video. Required on an AACS
+disc; ignored for Category 1.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Offset</p></th>
+<th class="head"><p>Size</p></th>
+<th class="head"><p>Field</p></th>
+<th class="head"><p>Rule</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0</p></td>
+<td><p>12</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">DKF_ID</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&quot;DVD_HD_V_DKF&quot;</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>12</p></td>
+<td><p>4</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">HD_VDKF_SIZE</span></code></p></td>
+<td><p>shall be 64</p></td>
+</tr>
+<tr class="row-even"><td><p>16</p></td>
+<td><p>16</p></td>
+<td><p>reserved</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">00</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>32</p></td>
+<td><p>2</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">VERN</span></code></p></td>
+<td><p>0</p></td>
+</tr>
+<tr class="row-even"><td><p>34</p></td>
+<td><p>14</p></td>
+<td><p>reserved</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">00</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>48</p></td>
+<td><p>16</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">KDIRe</span></code></p></td>
+<td><p>encrypted Directory Key: <code class="docutils literal notranslate"><span class="pre">KDIRe</span> <span class="pre">=</span> <span class="pre">AES-128E(Kvu,</span> <span class="pre">KDIR)</span></code>, ECB</p></td>
+</tr>
+</tbody>
+</table>
+<p><strong>What the Directory Key does</strong> [4 §6.3]. At boot, with <code class="docutils literal notranslate"><span class="pre">SEARCH_FLG</span></code> = 0 (<a class="reference internal" href="02_discid.html"><span class="std std-doc">02</span></a> §2.3), the
+AACS module checks the DKF’s hash against CHT #2 (§9.2), decrypts <code class="docutils literal notranslate"><span class="pre">KDIR</span></code> with <code class="docutils literal notranslate"><span class="pre">Kvu</span></code>,
+and derives the <strong>name of the provider’s directory</strong> from DISCID <code class="docutils literal notranslate"><span class="pre">PROVIDER_ID</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">PROVIDER_DIR</span> <span class="o">=</span> <span class="n">AES</span><span class="o">-</span><span class="n">G</span><span class="p">(</span><span class="n">KDIR</span><span class="p">,</span> <span class="n">PROVIDER_ID</span><span class="p">)</span>      <span class="mi">16</span> <span class="nb">bytes</span><span class="p">,</span> <span class="n">written</span> <span class="k">as</span> <span class="n">a</span> <span class="n">GUID</span>
+</pre></div>
+</div>
+<p>Persistent storage is laid out as:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>/HD_DVD/INFO.TXT                              medium information (player)
+/HD_DVD/&lt;PROVIDER_DIR&gt;/INFO.TXT               provider information (applications)
+/HD_DVD/&lt;PROVIDER_DIR&gt;/&lt;icon images&gt;          not encapsulated; shown by the management screen
+/HD_DVD/&lt;PROVIDER_DIR&gt;/&lt;CONTENT_ID&gt;/INFO.TXT  content information (applications)
+/HD_DVD/&lt;PROVIDER_DIR&gt;/&lt;CONTENT_ID&gt;/…         the disc's files, e.g. VPLST003.XPL
+</pre></div>
+</div>
+<p>So <code class="docutils literal notranslate"><span class="pre">PROVIDER_ID</span></code> never appears on the storage device as written in DISCID; the folder
+name is a keyed transform of it, reproducible only with <code class="docutils literal notranslate"><span class="pre">KDIR</span></code>. The <code class="docutils literal notranslate"><span class="pre">&lt;CONTENT_ID&gt;</span></code>
+folder is the GUID string of DISCID <code class="docutils literal notranslate"><span class="pre">CONTENT_ID</span></code>. <code class="docutils literal notranslate"><span class="pre">[4]</span></code> <strong>SPEC</strong>; 0 on-device
+directory specimens.</p>
+<p>Corpus (<code class="docutils literal notranslate"><span class="pre">e21</span></code>): all fields above hold on <strong>208/208</strong> files (104 discs, primary + BAK);
+<code class="docutils literal notranslate"><span class="pre">KDIRe</span></code> is real data on every disc (never <code class="docutils literal notranslate"><span class="pre">00</span></code>×16 or <code class="docutils literal notranslate"><span class="pre">FF</span></code>×16) and distinct on every
+disc (104 values). Distinct ciphertext is expected even if a provider reused one
+<code class="docutils literal notranslate"><span class="pre">KDIR</span></code>, because <code class="docutils literal notranslate"><span class="pre">Kvu</span></code> differs per disc. <code class="docutils literal notranslate"><span class="pre">[11]</span></code> <strong>VERIFIED</strong></p>
 </section>
 <section id="content-cert-120-bytes-table-3-17">
 <h2>9.5 CONTENT_CERT (120 bytes): Table 3-17<a class="headerlink" href="#content-cert-120-bytes-table-3-17" title="Link to this heading"></a></h2>
+<p>One per disc [4 §3.7]. It signs the two Content Hash Tables, so it authenticates
+every hashed file on the disc.</p>
 <table class="docutils align-default">
 <thead>
 <tr class="row-odd"><th class="head"><p>Off</p></th>
 <th class="head"><p>Size</p></th>
 <th class="head"><p>Field</p></th>
+<th class="head"><p>Rule</p></th>
 </tr>
 </thead>
 <tbody>
 <tr class="row-even"><td><p>0</p></td>
 <td><p>1</p></td>
-<td><p>type <code class="docutils literal notranslate"><span class="pre">00h</span></code></p></td>
+<td><p>Certificate Type</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">00h</span></code></p></td>
 </tr>
 <tr class="row-odd"><td><p>1</p></td>
 <td><p>1</p></td>
-<td><p>bit 7 = bus encryption enabled (<code class="docutils literal notranslate"><span class="pre">BEE</span></code>)</p></td>
+<td><p>bit 7 <code class="docutils literal notranslate"><span class="pre">BEE</span></code>, bits 6–0 reserved</p></td>
+<td><p>Bus Encryption Enabled: 1 = PC hosts must bus-encrypt EVOB reads</p></td>
 </tr>
-<tr class="row-even"><td><p>40</p></td>
+<tr class="row-even"><td><p>2</p></td>
+<td><p>4</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Total_Number_of_HashUnits</span></code></p></td>
+<td><p>hashes in CHT #1 + CHT #2 (§9.2)</p></td>
+</tr>
+<tr class="row-odd"><td><p>6</p></td>
+<td><p>1</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Total_Number_of_Layers</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">01h</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>7</p></td>
+<td><p>1</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Layer_Number</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">00h</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>8</p></td>
+<td><p>4</p></td>
+<td><p>reserved</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">00</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>12</p></td>
+<td><p>2</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Number_of_Digests</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0002h</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>14</p></td>
+<td><p>2</p></td>
+<td><p>Applicant ID</p></td>
+<td><p>with the next field, forms the Content Certificate ID</p></td>
+</tr>
+<tr class="row-even"><td><p>16</p></td>
+<td><p>4</p></td>
+<td><p>Content Sequence Number</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p>20</p></td>
+<td><p>2</p></td>
+<td><p>Minimum CRL Version</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p>22</p></td>
+<td><p>2</p></td>
+<td><p>reserved</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">00</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>24</p></td>
+<td><p>2</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Length_Format_Specific_Section</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">000Eh</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>26</p></td>
+<td><p>14</p></td>
+<td><p>reserved</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">00</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>40</p></td>
 <td><p>20</p></td>
-<td><p>CHT #1 digest</p></td>
+<td><p>CHT Digest #1</p></td>
+<td><p>SHA-1 of <code class="docutils literal notranslate"><span class="pre">CONTENT_HASH_TABLE1.AACS</span></code></p></td>
 </tr>
-<tr class="row-odd"><td><p>60</p></td>
+<tr class="row-even"><td><p>60</p></td>
 <td><p>20</p></td>
-<td><p>CHT #2 digest</p></td>
+<td><p>CHT Digest #2</p></td>
+<td><p>SHA-1 of <code class="docutils literal notranslate"><span class="pre">CONTENT_HASH_TABLE2.AACS</span></code></p></td>
 </tr>
-<tr class="row-even"><td><p>80</p></td>
+<tr class="row-odd"><td><p>80</p></td>
 <td><p>40</p></td>
-<td><p>signature</p></td>
+<td><p>Signature Data</p></td>
+<td><p>AACS LA signature (Pre-recorded Video Book)</p></td>
 </tr>
 </tbody>
 </table>
-<p>Integrity / bus-encryption advertisement, not a title key.
-<code class="docutils literal notranslate"><span class="pre">MATRIX_REVOLUTIONS</span></code> <code class="docutils literal notranslate"><span class="pre">CONTENT_CERT.AACS</span></code>: type <code class="docutils literal notranslate"><span class="pre">00h</span></code>, BEE bit 7 = <strong>0</strong>.
-Archive.org ISOs are not bus-encrypted; a software ISO player ignores BEE.
-<code class="docutils literal notranslate"><span class="pre">[11]</span></code> <strong>SINGLE</strong></p>
+<p>Corpus (<code class="docutils literal notranslate"><span class="pre">e21</span></code>, <code class="docutils literal notranslate"><span class="pre">e22</span></code>), <strong>208/208</strong> files (104 discs): every fixed value above holds;
+<code class="docutils literal notranslate"><span class="pre">BEE</span></code> = 0 and Minimum CRL Version = 0 on all; both digests equal SHA-1 of the saved
+hash tables. <code class="docutils literal notranslate"><span class="pre">[11]</span></code> <strong>VERIFIED</strong></p>
+<p><strong>Applicant ID does not identify the studio.</strong> Values: <code class="docutils literal notranslate"><span class="pre">111</span></code> (53 discs), <code class="docutils literal notranslate"><span class="pre">109</span></code> (22),
+<code class="docutils literal notranslate"><span class="pre">134</span></code> (12), <code class="docutils literal notranslate"><span class="pre">140</span></code> (9), <code class="docutils literal notranslate"><span class="pre">104</span></code> (6), <code class="docutils literal notranslate"><span class="pre">177</span></code>, <code class="docutils literal notranslate"><span class="pre">226</span></code> (1 each). <code class="docutils literal notranslate"><span class="pre">111</span></code> spans Universal,
+Paramount and DreamWorks titles; <code class="docutils literal notranslate"><span class="pre">134</span></code> spans Universal, Paramount, Warner, New Line and
+DreamWorks Animation, all 2007 releases; <code class="docutils literal notranslate"><span class="pre">140</span></code> is German releases; <code class="docutils literal notranslate"><span class="pre">104</span></code> is French and
+Japanese releases. The grouping follows region and release period, consistent with the
+replicator or authoring facility that applied to AACS LA. <strong>INFERRED</strong></p>
 </section>
 <section id="pack-encryption-table-4-7">
 <h2>9.6 Pack encryption: Table 4-7<a class="headerlink" href="#pack-encryption-table-4-7" title="Link to this heading"></a></h2>
@@ -600,8 +883,8 @@ and take CPI from that PES (GCI-payload offset 12 on the observed layout). Corpu
 <strong>VERIFIED</strong></p>
 <p>The first reverse-engineering tool encodes the offset the AACS book and the patents
 both deferred. In the NV_PCK (first pack of an EVOBU), the 16-byte CPI field is at
-<strong>pack byte 0x3C (60)</strong>, inside the GCI packet (<code class="docutils literal notranslate"><span class="pre">0x000001BF</span></code> at 0x2A, substream at
-0x2C). Confirmed byte-for-byte against a real disc: the nav-pack signature
+<strong>pack byte 0x3C (60)</strong>, inside the GCI packet (start code <code class="docutils literal notranslate"><span class="pre">00</span> <span class="pre">00</span> <span class="pre">01</span> <span class="pre">BF</span></code> at 0x29–0x2C,
+<code class="docutils literal notranslate"><span class="pre">sub_stream_id</span></code> <code class="docutils literal notranslate"><span class="pre">0x04</span></code> at 0x2F; CPI = GCI payload byte 13 counting that <code class="docutils literal notranslate"><span class="pre">0x04</span></code>). Confirmed byte-for-byte against a real disc: the nav-pack signature
 (<code class="docutils literal notranslate"><span class="pre">[0x2A]=00</span> <span class="pre">[0x2B]=01</span> <span class="pre">[0x11]=0xBB</span> <span class="pre">[0x2C]=0xBF</span></code>) matches and CPI&#64;0x3C reads all-zero
 on unencrypted <code class="docutils literal notranslate"><span class="pre">RESERVOIR_DOGS</span></code> (<code class="docutils literal notranslate"><span class="pre">KEY_VF=0</span></code>, correct for clear content).</p>
 <p>Content-key math, from the same source (<code class="docutils literal notranslate"><span class="pre">decryptPACK</span></code>):</p>
@@ -640,104 +923,168 @@ at 7.7-7.9 whether or not AES ran.</p>
 copied verbatim; the packs are in the clear. Everything here about <em>file layout</em>
 holds. Nothing about <em>encrypted content</em> can be derived or tested from this corpus.
 The corpus cannot exhibit an encrypted pack, but CPI’s location is no longer OPEN. It was recovered from BackupHDDVD’s source (above), not from these ISOs.</p>
-<p>Table 4-1 / 4-2 (once located):</p>
+<section id="cpi-layout-tables-4-1-to-4-6">
+<h3>CPI layout (Tables 4-1 to 4-6)<a class="headerlink" href="#cpi-layout-tables-4-1-to-4-6" title="Link to this heading"></a></h3>
 <table class="docutils align-default">
 <thead>
 <tr class="row-odd"><th class="head"><p>CPI bytes</p></th>
+<th class="head"><p>Block</p></th>
 <th class="head"><p>Field</p></th>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>0</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">KEY_VF</span></code> in bits 7–6: <code class="docutils literal notranslate"><span class="pre">00</span></code> neither, <code class="docutils literal notranslate"><span class="pre">01</span></code> segment key, <code class="docutils literal notranslate"><span class="pre">10</span></code> title key, <code class="docutils literal notranslate"><span class="pre">11</span></code> reserved</p></td>
-</tr>
-<tr class="row-odd"><td><p>1–2</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">TITLE_KEY_PTR</span></code> (1…64) when <code class="docutils literal notranslate"><span class="pre">KEY_VF=10b</span></code>; else 0</p></td>
-</tr>
-<tr class="row-even"><td><p>3</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">SEG_KEY_PTR</span></code> when <code class="docutils literal notranslate"><span class="pre">KEY_VF=01b</span></code>; else 0</p></td>
+<tr class="row-even"><td><p>0–3</p></td>
+<td><p><strong>KMI</strong> Key Management Information</p></td>
+<td><p>byte 0 bits 7–6 <code class="docutils literal notranslate"><span class="pre">KEY_VF</span></code> (bits 5–0 reserved); bytes 1–2 <code class="docutils literal notranslate"><span class="pre">TITLE_KEY_PTR</span></code> (u16); byte 3 <code class="docutils literal notranslate"><span class="pre">SEG_KEY_PTR</span></code></p></td>
 </tr>
 <tr class="row-odd"><td><p>4–7</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">CH_PTR</span></code> (CHT #1 entry, 1…500000)</p></td>
+<td><p><strong>CHMI</strong> Content Hash Management Information</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">CH_PTR</span></code> (u32): this EVOBU’s entry in CHT #1, 1 … 500 000</p></td>
 </tr>
 <tr class="row-even"><td><p>8–9</p></td>
-<td><p>URMI</p></td>
+<td><p><strong>URMI</strong> Usage Rule Management Information</p></td>
+<td><p>bit 15 <code class="docutils literal notranslate"><span class="pre">UR_VF</span></code>; bits 14–0 <code class="docutils literal notranslate"><span class="pre">UR_PTR</span></code> (Usage Rule Set number in the TUF, 1 … 255); all ones when <code class="docutils literal notranslate"><span class="pre">UR_VF</span></code> = 0</p></td>
 </tr>
 <tr class="row-odd"><td><p>10–11</p></td>
-<td><p>CCI_SS</p></td>
+<td><p><strong>CCI_SS</strong> (status of CCI)</p></td>
+<td><p>byte 10: bit 7 <code class="docutils literal notranslate"><span class="pre">PCCI_VF</span></code>, 6 <code class="docutils literal notranslate"><span class="pre">APS_VF</span></code>, 5 <code class="docutils literal notranslate"><span class="pre">ICT_VF</span></code>, 4 <code class="docutils literal notranslate"><span class="pre">DOT_VF</span></code>, 3–0 reserved; byte 11 reserved</p></td>
 </tr>
 <tr class="row-even"><td><p>12–13</p></td>
-<td><p>CCI</p></td>
+<td><p><strong>CCI</strong> Copy Control Information</p></td>
+<td><p>byte 12: bits 7–5 <code class="docutils literal notranslate"><span class="pre">PCCI</span></code>, 4–2 <code class="docutils literal notranslate"><span class="pre">APSTB</span></code>, 1 <code class="docutils literal notranslate"><span class="pre">ICT</span></code>, 0 <code class="docutils literal notranslate"><span class="pre">DOT</span></code>; byte 13 reserved</p></td>
 </tr>
 <tr class="row-odd"><td><p>14–15</p></td>
-<td><p>reserved <code class="docutils literal notranslate"><span class="pre">00</span></code></p></td>
+<td><p>reserved</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">00</span></code></p></td>
 </tr>
 </tbody>
 </table>
-<p><code class="docutils literal notranslate"><span class="pre">KEY_VF=00b</span></code> → do not decrypt that EVOBU.</p>
+<p><code class="docutils literal notranslate"><span class="pre">KEY_VF</span></code>: <code class="docutils literal notranslate"><span class="pre">00</span></code> no key pointer valid (EVOBU not encrypted), <code class="docutils literal notranslate"><span class="pre">01</span></code> <code class="docutils literal notranslate"><span class="pre">SEG_KEY_PTR</span></code> valid,
+<code class="docutils literal notranslate"><span class="pre">10</span></code> <code class="docutils literal notranslate"><span class="pre">TITLE_KEY_PTR</span></code> valid, <code class="docutils literal notranslate"><span class="pre">11</span></code> reserved. When <code class="docutils literal notranslate"><span class="pre">KEY_VF</span></code> ≠ <code class="docutils literal notranslate"><span class="pre">10</span></code>, <code class="docutils literal notranslate"><span class="pre">TITLE_KEY_PTR</span></code>
+<strong>shall be 0</strong>; when ≠ <code class="docutils literal notranslate"><span class="pre">01</span></code>, <code class="docutils literal notranslate"><span class="pre">SEG_KEY_PTR</span></code> shall be 0.</p>
+<p><code class="docutils literal notranslate"><span class="pre">PCCI</span></code> (primitive copy control): <code class="docutils literal notranslate"><span class="pre">000</span></code> Copy Freely, <code class="docutils literal notranslate"><span class="pre">100</span></code> Copy One Generation, <code class="docutils literal notranslate"><span class="pre">010</span></code>
+No More Copies, <code class="docutils literal notranslate"><span class="pre">110</span></code> Copy Never, <code class="docutils literal notranslate"><span class="pre">011</span></code> Encryption Plus Non-Assertion. <code class="docutils literal notranslate"><span class="pre">APSTB</span></code>
+(analog protection): <code class="docutils literal notranslate"><span class="pre">000</span></code> off, <code class="docutils literal notranslate"><span class="pre">001</span></code>–<code class="docutils literal notranslate"><span class="pre">011</span></code> APS1 types 1–3, <code class="docutils literal notranslate"><span class="pre">110</span></code>/<code class="docutils literal notranslate"><span class="pre">111</span></code> APS2. <code class="docutils literal notranslate"><span class="pre">ICT</span></code>: 1 =
+high-definition analog output only as a constrained image. <code class="docutils literal notranslate"><span class="pre">DOT</span></code>: 1 = no analog output
+of the decoded video. A validity flag of 0 in CCI_SS means its field is read as its
+permissive value. If main and sub video are both shown, the main video’s CCI applies.</p>
+<p><strong>One Title Key per EVOB</strong> [4 §4.3]: <em>“A Title Key shall not be changed within one
+P/S-EVOB. A Title Key may be shared by plural EVOBs.”</em> CCI and <code class="docutils literal notranslate"><span class="pre">UR_PTR</span></code> also stay
+constant within an EVOB. <code class="docutils literal notranslate"><span class="pre">TITLE_KEY_PTR</span></code> is repeated in every EVOBU’s CPI, but the
+key only changes at an EVOB boundary. Because <code class="docutils literal notranslate"><span class="pre">CPI_lsb_96</span></code> contains <code class="docutils literal notranslate"><span class="pre">CH_PTR</span></code>, each
+EVOBU still gets its own content key <code class="docutils literal notranslate"><span class="pre">Kc</span></code>.</p>
+<p><strong>Observed on disc</strong> (<code class="docutils literal notranslate"><span class="pre">e23</span></code>, 24 consecutive EVOBUs on each of 11 AACS discs and the
+unencrypted <code class="docutils literal notranslate"><span class="pre">1408_DC</span></code>; the GCI <code class="docutils literal notranslate"><span class="pre">sub_stream_id</span></code> is at pack offset 47 on all, so CPI is at
+pack <code class="docutils literal notranslate"><span class="pre">0x3C</span></code>):</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">CH_PTR</span></code> rises by exactly 1 per EVOBU and stays within 1 … <code class="docutils literal notranslate"><span class="pre">NHV</span></code> of that disc’s
+CHT #1: <strong>this locates the CPI on the disc itself</strong>, independently of BackupHDDVD.</p></li>
+<li><p>URMI = <code class="docutils literal notranslate"><span class="pre">7FFF</span></code> (<code class="docutils literal notranslate"><span class="pre">UR_VF</span></code> 0, <code class="docutils literal notranslate"><span class="pre">UR_PTR</span></code> all ones, as the book requires); CCI_SS = <code class="docutils literal notranslate"><span class="pre">F000</span></code>
+(all four validity flags set) on 10 of 11, <code class="docutils literal notranslate"><span class="pre">0000</span></code> on <code class="docutils literal notranslate"><span class="pre">HOT_FUZZ</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">KEY_VF</span></code> = <code class="docutils literal notranslate"><span class="pre">00</span></code> and CCI = <code class="docutils literal notranslate"><span class="pre">0000</span></code> on all, yet <code class="docutils literal notranslate"><span class="pre">TITLE_KEY_PTR</span></code> = 1, 3, 7 or 9 remains,
+and every such pointer lands on an occupied slot of that disc’s VTKF. The book forbids a
+non-zero pointer with <code class="docutils literal notranslate"><span class="pre">KEY_VF</span></code> = <code class="docutils literal notranslate"><span class="pre">00</span></code>: CPI bytes 0 and 12 were cleared by the tool
+that decrypted the image (BackupHDDVD documents exactly this, §9.11), and the leftover
+pointers show which Title Key each EVOB was originally encrypted with.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">1408_DC</span></code> (no AACS directory): all 16 CPI bytes are zero.
+<code class="docutils literal notranslate"><span class="pre">[11]</span></code> <strong>VERIFIED</strong></p></li>
+</ul>
 <p>Blu-ray <code class="docutils literal notranslate"><span class="pre">aacs_decrypt_unit</span></code> (6144-byte TS aligned unit) <strong>does not apply</strong>.
 Reusable: MKB walk, AES-G, <code class="docutils literal notranslate"><span class="pre">Kvu</span> <span class="pre">=</span> <span class="pre">AES-G(Km,</span> <span class="pre">VolumeID)</span></code>, <code class="docutils literal notranslate"><span class="pre">Kt</span> <span class="pre">=</span> <span class="pre">AES-128D(Kvu,</span> <span class="pre">Kte)</span></code>.</p>
+</section>
 </section>
 <section id="volume-id">
 <h2>9.7 Volume ID<a class="headerlink" href="#volume-id" title="Link to this heading"></a></h2>
 <p>BCA + Lead-in. MMC <code class="docutils literal notranslate"><span class="pre">READ</span> <span class="pre">DISC</span> <span class="pre">STRUCTURE</span></code> format <strong><code class="docutils literal notranslate"><span class="pre">80h</span></code></strong>, after AACS drive
 authentication. Not <code class="docutils literal notranslate"><span class="pre">DISCID.DAT&#64;12</span></code>. This ISO corpus cannot yield <code class="docutils literal notranslate"><span class="pre">Kvu</span></code>.</p>
 </section>
-<section id="vtuf-144-bytes">
-<h2>9.8 VTUF (144 bytes)<a class="headerlink" href="#vtuf-144-bytes" title="Link to this heading"></a></h2>
-<p>Sample: <code class="docutils literal notranslate"><span class="pre">MYSTERY_MEN</span></code> <code class="docutils literal notranslate"><span class="pre">ANY!/VTUF000.AACS</span></code> (only VTUF saved). Magic
-<code class="docutils literal notranslate"><span class="pre">DVD_HD_V_TUF</span></code>. Usage rules / CCI, not <code class="docutils literal notranslate"><span class="pre">Kc</span></code>. Book Table 3-10 (URS_NUM at <strong>16</strong>,
-HASH_SIZE <strong>17–20</strong>, VERN <strong>21–22</strong>, PLAYLIST_NAME <strong>23–34</strong>). When <code class="docutils literal notranslate"><span class="pre">URS_NUM=0</span></code>
-there is <strong>no</strong> usage-rule body; TUF MAC starts at <strong>128</strong>.</p>
-<p>Do not use <code class="docutils literal notranslate"><span class="pre">spec/clean/09_AACS.md</span></code> “name at 0x18”. That dump folded <code class="docutils literal notranslate"><span class="pre">'V'</span></code> into
-the preceding field. Disc + book agree on <strong>23</strong>.</p>
+<section id="vtuf-table-3-10-final-0-953">
+<h2>9.8 VTUF: Table 3-10 (Final 0.953)<a class="headerlink" href="#vtuf-table-3-10-final-0-953" title="Link to this heading"></a></h2>
+<p><strong>Title Usage File.</strong> Holds the Usage Rules (copy and output permissions) that an
+EVOB’s CPI can point to through <code class="docutils literal notranslate"><span class="pre">UR_PTR</span></code> (§9.6). Optional on a disc; one per
+playlist (<code class="docutils literal notranslate"><span class="pre">VTUF$$$.AACS</span></code> with <code class="docutils literal notranslate"><span class="pre">VPLST$$$.XPL</span></code>), never shared; <code class="docutils literal notranslate"><span class="pre">VTUF.AACS</span></code> is the
+Category 1 name; at most 64 KB [4 §3.6].</p>
 <table class="docutils align-default">
 <thead>
 <tr class="row-odd"><th class="head"><p>Offset</p></th>
 <th class="head"><p>Size</p></th>
 <th class="head"><p>Field</p></th>
+<th class="head"><p>Rule</p></th>
 </tr>
 </thead>
 <tbody>
 <tr class="row-even"><td><p>0</p></td>
 <td><p>12</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">URF_ID</span></code> = <code class="docutils literal notranslate"><span class="pre">&quot;DVD_HD_V_TUF&quot;</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">URF_ID</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&quot;DVD_HD_V_TUF&quot;</span></code></p></td>
 </tr>
 <tr class="row-odd"><td><p>12</p></td>
 <td><p>4</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">HD_VURF_SIZE</span></code> = 144</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">HD_VURF_SIZE</span></code></p></td>
+<td><p>file size in bytes, ≤ 65 536</p></td>
 </tr>
 <tr class="row-even"><td><p>16</p></td>
 <td><p>1</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">URS_NUM</span></code></p></td>
+<td><p>number of Usage Rule Sets, 0…255</p></td>
 </tr>
 <tr class="row-odd"><td><p>17</p></td>
 <td><p>4</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">HASH_SIZE</span></code></p></td>
+<td><p>bytes covered by the CHT #2 hash: the TUF minus the BURS fields and TUF MAC</p></td>
 </tr>
 <tr class="row-even"><td><p>21</p></td>
 <td><p>2</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">VERN</span></code> / reserved</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">VERN</span></code></p></td>
+<td><p>0</p></td>
 </tr>
 <tr class="row-odd"><td><p>23</p></td>
 <td><p>12</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">PLAYLIST_NAME</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">VPLST%%%.XPL</span></code>; <code class="docutils literal notranslate"><span class="pre">FF</span></code>×12 for Standard Content</p></td>
 </tr>
 <tr class="row-even"><td><p>35</p></td>
 <td><p>93</p></td>
 <td><p>reserved</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">00</span></code></p></td>
 </tr>
 <tr class="row-odd"><td><p>128</p></td>
+<td><p>X₁ … Xₙ</p></td>
+<td><p>Usage Rule Set #1 … #N</p></td>
+<td><p>Table 3-12, variable</p></td>
+</tr>
+<tr class="row-even"><td><p>128 + ΣX</p></td>
+<td><p>17 × N</p></td>
+<td><p>BURS #1 … #N</p></td>
+<td><p>1-byte <code class="docutils literal notranslate"><span class="pre">BIFO</span></code> + 16-byte Binding MAC each (Table 3-11)</p></td>
+</tr>
+<tr class="row-odd"><td><p>end − 16</p></td>
 <td><p>16</p></td>
 <td><p>TUF MAC</p></td>
+<td><p>CMAC(<code class="docutils literal notranslate"><span class="pre">Kvu</span></code>, whole TUF except this field)</p></td>
 </tr>
 </tbody>
 </table>
-<p>Book Table 3-12 URS / BURS layout applies only when <code class="docutils literal notranslate"><span class="pre">URS_NUM&gt;0</span></code>. <strong>No such
-body in this corpus:</strong> 217/217 listed <code class="docutils literal notranslate"><span class="pre">VTUF$$$.AACS</span></code> (primary tree, not BAK)
-are <strong>144 bytes</strong>. A non-zero URS list would grow the file. Layout of
-<code class="docutils literal notranslate"><span class="pre">URS_NUM&gt;0</span></code> is therefore <strong>uncloseable</strong> here (book-only).
-<code class="docutils literal notranslate"><span class="pre">[11,</span> <span class="pre">12]</span></code> <strong>VERIFIED</strong> (absence).</p>
+<p>With <code class="docutils literal notranslate"><span class="pre">URS_NUM</span></code> = 0 there are no URS or BURS and the file is exactly <strong>144 bytes</strong>: header
+to 127, TUF MAC at 128. <code class="docutils literal notranslate"><span class="pre">VERN</span></code> is 2 bytes here although the book’s prose says 4; the
+table places <code class="docutils literal notranslate"><span class="pre">PLAYLIST_NAME</span></code> at 23, which only fits a 2-byte <code class="docutils literal notranslate"><span class="pre">VERN</span></code>.</p>
+<p><strong>BURS</strong> (Table 3-11) binds one Usage Rule Set with the same <code class="docutils literal notranslate"><span class="pre">BIND_TYPE</span></code> values as
+§9.3, but its <code class="docutils literal notranslate"><span class="pre">AV_FLG</span></code> is always 0 and its Binding MAC is keyed differently: <code class="docutils literal notranslate"><span class="pre">00</span></code>×16
+for Volume-ID binding, otherwise CMAC(PMSN / DUN / AES-G(DUN, PMSN) / TN, {URS}).
+A mismatched <code class="docutils literal notranslate"><span class="pre">PLAYLIST_NAME</span></code>, TUF MAC or Binding MAC sends the player to Stop State
+before the associated EVOB plays [4 §3.6].</p>
+<p><strong>Usage Rule Set</strong> (Table 3-12): <code class="docutils literal notranslate"><span class="pre">URS_VERSION</span></code> (1), <code class="docutils literal notranslate"><span class="pre">URS_SIZE</span></code> (4), <code class="docutils literal notranslate"><span class="pre">UR_NUM</span></code> (4), then
+<code class="docutils literal notranslate"><span class="pre">UR_NUM</span></code> Usage Rules, each starting <code class="docutils literal notranslate"><span class="pre">UR_ID</span></code> (3) and <code class="docutils literal notranslate"><span class="pre">UR_TYPE</span></code> (1). Rule bodies are
+Tables 3-13 to 3-16 (CCI for update, time-based conditions, REL rules, output control
+bits). A player applies only rules whose <code class="docutils literal notranslate"><span class="pre">UR_ID</span></code> it recognises.</p>
+<p>Corpus (<code class="docutils literal notranslate"><span class="pre">e21</span></code>), <strong>434/434</strong> files (217 primary + BAK): 144 bytes, <code class="docutils literal notranslate"><span class="pre">URS_NUM</span></code> = 0,
+<code class="docutils literal notranslate"><span class="pre">HD_VURF_SIZE</span></code> = length, <code class="docutils literal notranslate"><span class="pre">VERN</span></code> 0, reserved zero, <code class="docutils literal notranslate"><span class="pre">PLAYLIST_NAME</span></code> at <strong>23</strong> matching
+the file number. No disc carries a Usage Rule Set. <code class="docutils literal notranslate"><span class="pre">HASH_SIZE</span></code> is 128 (bytes 0–127)
+on 430 files but <strong>8</strong> on both copies of <code class="docutils literal notranslate"><span class="pre">KING_OF_CALIFORNIA</span></code> and
+<code class="docutils literal notranslate"><span class="pre">RESIDENT_EVIL3_GER</span></code>; see §9.2 for which value CHT #2 actually hashed. <code class="docutils literal notranslate"><span class="pre">[11]</span></code>
+<strong>VERIFIED</strong></p>
+<p>Do not use <code class="docutils literal notranslate"><span class="pre">spec/clean/09_AACS.md</span></code> “name at 0x18”. That dump folded <code class="docutils literal notranslate"><span class="pre">'V'</span></code> into the
+preceding field. Disc and book agree on <strong>23</strong>.</p>
 </section>
 <section id="reusing-libaacs-what-ports-and-what-does-not">
 <h2>9.9 Reusing libaacs: what ports and what does not<a class="headerlink" href="#reusing-libaacs-what-ports-and-what-does-not" title="Link to this heading"></a></h2>

@@ -7,7 +7,7 @@ Claims:
   VTKF/DKF/VTUF use DVD_HD_V_* IDs and size field equals file length.
 
 Falsifier: a VTI without that magic; DISCID not 128 bytes; VTKF size field
-not 2480.
+not 2480; non-zero bytes after the declared size.
 
 ISO URLs: first line of each disc listing.
 """
@@ -38,7 +38,11 @@ for p in CORPUS.rglob("*.AACS"):
     mag = b[:12]
     if mag in checks:
         size = int.from_bytes(b[12:16], "big")
-        assert size == checks[mag] == len(b), (p, mag, size, len(b))
+        # The size field is authoritative. PANS_LABYRINTH VTKF001/003 carry 36
+        # zero bytes after the 2480-byte TKF (book p.21 forbids that residue);
+        # see e21.
+        assert size == checks[mag] <= len(b), (p, mag, size, len(b))
+        assert not any(b[size:]), (p, "non-zero bytes after declared size")
         n += 1
         if mag == b"DVD_HD_V_TKF":
             name = b[16:28]

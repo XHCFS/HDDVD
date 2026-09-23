@@ -148,16 +148,24 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="09_aacs.html">9. AACS overlay (format only)</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="09_aacs.html#directories">9.1 Directories</a></li>
-<li class="toctree-l2"><a class="reference internal" href="09_aacs.html#files">9.2 Files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="09_aacs.html#files">9.2 Files</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="09_aacs.html#content-hash-tables-tables-3-18-3-19">Content Hash Tables (Tables 3-18, 3-19)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="09_aacs.html#sly-discid-rewritten-after-authoring"><code class="docutils literal notranslate"><span class="pre">-SLY</span></code>: DISCID rewritten after authoring</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="09_aacs.html#vtkf-table-3-8-final-0-953">9.3 VTKF: Table 3-8 (Final 0.953)</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="09_aacs.html#title-key-entry-36-bytes">Title Key Entry (36 bytes)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="09_aacs.html#bifo-binding-information-table-3-9">BIFO: Binding Information (Table 3-9)</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="09_aacs.html#dkf-64-bytes-table-6-2">9.4 DKF (64 bytes): Table 6-2</a></li>
 <li class="toctree-l2"><a class="reference internal" href="09_aacs.html#content-cert-120-bytes-table-3-17">9.5 CONTENT_CERT (120 bytes): Table 3-17</a></li>
-<li class="toctree-l2"><a class="reference internal" href="09_aacs.html#pack-encryption-table-4-7">9.6 Pack encryption: Table 4-7</a></li>
+<li class="toctree-l2"><a class="reference internal" href="09_aacs.html#pack-encryption-table-4-7">9.6 Pack encryption: Table 4-7</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="09_aacs.html#cpi-layout-tables-4-1-to-4-6">CPI layout (Tables 4-1 to 4-6)</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="09_aacs.html#volume-id">9.7 Volume ID</a></li>
-<li class="toctree-l2"><a class="reference internal" href="09_aacs.html#vtuf-144-bytes">9.8 VTUF (144 bytes)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="09_aacs.html#vtuf-table-3-10-final-0-953">9.8 VTUF: Table 3-10 (Final 0.953)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="09_aacs.html#reusing-libaacs-what-ports-and-what-does-not">9.9 Reusing libaacs: what ports and what does not</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="09_aacs.html#exact-extension-points-libaacs-master-read-2026-09">Exact extension points (libaacs master, read 2026-09)</a></li>
 </ul>
@@ -827,21 +835,19 @@ directory. Skip P-storage search.
 <code class="docutils literal notranslate"><span class="pre">file:///required/{contentId}/VPLST$$$.XPL</span></code> on every connected required
 device, then <code class="docutils literal notranslate"><span class="pre">ADV_OBJ/VPLST$$$.XPL</span></code> on disc, then pick the highest <code class="docutils literal notranslate"><span class="pre">$$$</span></code>.
 Empty P-storage still boots the disc playlist (106 discs).</p>
-<p><strong>Management-UI directory nesting (resolved [14]).</strong> When a disc first writes to
-persistent storage the player creates a <strong>content folder keyed by DISCID
-<code class="docutils literal notranslate"><span class="pre">CONTENT_ID</span></code>, nested under a provider folder keyed by <code class="docutils literal notranslate"><span class="pre">PROVIDER_ID</span></code></strong>. Those
-folders are labelled by <code class="docutils literal notranslate"><span class="pre">[language]-explanation</span></code> / <code class="docutils literal notranslate"><span class="pre">[language]-icon</span></code> keys (DVD
-HD-Video spec ch.10), set with <code class="docutils literal notranslate"><span class="pre">setProviderInformation(&quot;en-explanation&quot;,</span> <span class="pre">…)</span></code> and
-<code class="docutils literal notranslate"><span class="pre">setContentInformation(contentId,</span> <span class="pre">&quot;en-explanation&quot;,</span> <span class="pre">…)</span></code> on the
-<code class="docutils literal notranslate"><span class="pre">getPersistentStorageDevices(STORAGE_REQUIRED)[0]</span></code> device; unset → “Unknown
-Provider” / “Unknown Content”. This provider/content nesting is the <strong>management
-UI</strong> layout only; it is <strong>not</strong> part of the <code class="docutils literal notranslate"><span class="pre">file:///required/{contentId}/</span></code> script
-URI. ASCII <code class="docutils literal notranslate"><span class="pre">PROVIDER_ID</span></code> tags and binary UUID-shaped IDs are those folder labels,
-not a second URI family.
-<code class="docutils literal notranslate"><span class="pre">[1]</span></code>
-<code class="docutils literal notranslate"><span class="pre">[14]</span></code>
-<strong>INFERRED</strong> (0 on-device directory specimens). Scripts on disc only ever
-write <code class="docutils literal notranslate"><span class="pre">file:///required/{contentId}/</span></code>.</p>
+<p><strong>Persistent-storage directory layout (AACS book [4 §6.3]).</strong> The player creates
+<code class="docutils literal notranslate"><span class="pre">/HD_DVD/</span></code> on the storage medium with <code class="docutils literal notranslate"><span class="pre">INFO.TXT</span></code> (medium information). Each content
+provider gets <code class="docutils literal notranslate"><span class="pre">/HD_DVD/&lt;PROVIDER_DIR&gt;/</span></code>, where <code class="docutils literal notranslate"><span class="pre">PROVIDER_DIR</span> <span class="pre">=</span> <span class="pre">AES-G(KDIR,</span> <span class="pre">PROVIDER_ID)</span></code> is written as a GUID; <code class="docutils literal notranslate"><span class="pre">KDIR</span></code> is unwrapped from the disc’s DKF
+(<a class="reference internal" href="09_aacs.html"><span class="std std-doc">09</span></a> §9.4). So the folder name is a keyed transform of DISCID
+<code class="docutils literal notranslate"><span class="pre">PROVIDER_ID</span></code>, not the ID itself, and isolates one provider’s data from another’s.
+Inside it: <code class="docutils literal notranslate"><span class="pre">INFO.TXT</span></code> (provider information, written by applications), unencapsulated
+icon images for the management screen, and one <code class="docutils literal notranslate"><span class="pre">&lt;CONTENT_ID&gt;</span></code> directory per title (GUID
+of DISCID <code class="docutils literal notranslate"><span class="pre">CONTENT_ID</span></code>) holding that title’s <code class="docutils literal notranslate"><span class="pre">INFO.TXT</span></code> and files such as a downloaded
+<code class="docutils literal notranslate"><span class="pre">VPLST$$$.XPL</span></code>. The <code class="docutils literal notranslate"><span class="pre">[language]-explanation</span></code> / <code class="docutils literal notranslate"><span class="pre">[language]-icon</span></code> keys set with
+<code class="docutils literal notranslate"><span class="pre">setProviderInformation(…)</span></code> / <code class="docutils literal notranslate"><span class="pre">setContentInformation(contentId,</span> <span class="pre">…)</span></code> [14] are what the
+applications write into those <code class="docutils literal notranslate"><span class="pre">INFO.TXT</span></code> files; unset → “Unknown Provider” / “Unknown
+Content”. None of this nesting appears in the script URI <code class="docutils literal notranslate"><span class="pre">file:///required/{contentId}/</span></code>.
+<code class="docutils literal notranslate"><span class="pre">[4]</span></code> <strong>SPEC</strong> (AACS mode); 0 on-device directory specimens.</p>
 </section>
 <section id="raster-focus-cues-used-path">
 <h2>5.9 Raster, focus, cues (used path)<a class="headerlink" href="#raster-focus-cues-used-path" title="Link to this heading"></a></h2>

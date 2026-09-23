@@ -57,7 +57,11 @@ Typical pack prefix:
 
 Order of the three PES packets is GCI/PCI/DSI as listed in the patent; parse by
 substream id, not by order. Some Advanced clips omit PCI: `STALINGRAD`
-`black.EVO` is GCI `0x04` + DSI `0x01` only (35/35 VOBUs).
+`black.EVO` is GCI `0x04` + DSI `0x01` only (35/35 VOBUs). On `RAMBO_1_FRA` the PCI
+slot is still present but **zero-filled, start code included** (983 zero bytes =
+6-byte PES header + 977): the DSI follows at pack offset 1287. A parser that walks PES
+packets back to back stops at the gap, so **scan for the next `00 00 01 BF`** instead
+(`e23`). `[11]` **VERIFIED**
 
 ## 8.3 PCI GI (offsets from the substream id byte)
 
@@ -104,33 +108,25 @@ MAP-based seek.
 
 ## 8.5 GCI (substream `0x04`)
 
-| Off | Size | Field |
-|---|---|---|
-| 0 | 1 | `0x04` |
-| 1 | 16 | `GCI_GI` (TABLE 52) |
-| 17 | 189 | `RECI` (ISRC blocks, TABLE 53) |
-| 206 | 51 | reserved |
+257-byte PES payload. The patent's TABLE 52 field list (`GCI_GI` 16 bytes of
+`GCI_CAT`, reserved, `DCI_CCI_SS`, `DCI`, `CCI`, then `RECI` 189 + reserved 51) **does
+not match the disc**. Observed layout (offsets in the PES payload, `0x04` = byte 0;
+`e23`, 24 EVOBUs on each of 12 discs):
 
-`GCI_GI`:
+| Off | Size | Field | Observed |
+|---|---|---|---|
+| 0 | 1 | `sub_stream_id` | `0x04` |
+| 1 | 1 | `GCI_CAT` | `0x40` on Advanced (AACS and unencrypted); `0x00` on Standard Content (`RESERVOIR_DOGS`) |
+| 2 | 5 | **EVOBU start PTM**, 90 kHz | equals `EVOBI` start PTM ([06](06_vti.md)) at the EVOB's first EVOBU on 12/12 discs, then advances by each EVOBU's duration (45 045, or 87 087 for a longer EVOBU). Top byte 0 on every sample; width 32 vs 40 bits undetermined |
+| 7 | 6 | reserved | zero on every sample |
+| 13 | 16 | **AACS CPI** | Table 4-1 layout, [09](09_aacs.md) §9.6. All zero on the unencrypted `1408_DC` |
+| 29 | 228 | `RECI` and reserved | zero on 10 of 12 discs. `AEON_FLUX` and `TRANSFORMERS` (both Paramount) carry an identical repeating 10-byte record from byte 33, `80 25 23 25 1e 19 20 01 23 40`; undecoded (TABLE 53 names ISRC blocks) |
 
-| Off | Size | Field |
-|---|---|---|
-| 0 | 1 | `GCI_CAT` | `0x40` on Advanced (AACS **and** unencrypted `STALINGRAD`). `0x00` is Standard Content (`RESERVOIR_DOGS`), not “no AACS” |
-| 1 | 3 | reserved / VOBU-related | increments across VOBUs on `STALINGRAD` `black.EVO` |
-| 4 | 2 | `DCI_CCI_SS` | changes every VOBU on the dumps |
-| 6 | 4 | `DCI` |
-| 10 | 4 | `CCI` |
-| 14 | 2 | reserved | `0000` on `STALINGRAD`; `0600` on `SHREK` `BLACK_IDTAG` |
-
-AACS CPI is **16 bytes inside this GCI_PKT** (Final 0.953 Table 4-1). The book
-defers the byte offset to the video spec. **Do not** treat `GCI_GI[0]` as `KEY_VF`
-(`0x40` is Advanced category, and would also decode as segment-key with no SKF).
-The 16-byte CPI field is at **pack offset 0x3C** on the observed NV_PCK framing
-(pack `00 00 01 BA`, system header at `0x11=0xBB`, GCI PES at `0x29` → GCI-payload
-offset 12). Recovered from BackupHDDVD's `EVOBPack.java` and confirmed on a real
-NV_PCK. It reads all-zero (`KEY_VF=0`) on unencrypted clips. **Do not hard-code
-pack `0x3C` if stuffing or a missing `0xBB` system header moves the GCI PES**.
-Locate `sub_stream_id 0x04`, then apply the GCI-relative offset. See [09](09_aacs.md) §9.6.
+The CPI sits at pack **`0x3C`** on the observed framing (pack header 14 bytes, system
+header, GCI start code at `0x29`, `sub_stream_id` at `0x2F`). Locate the GCI by
+`sub_stream_id` rather than hard-coding the pack offset, since stuffing or a missing
+system header moves it. **Do not** read `GCI_CAT` (`0x40`) as the AACS `KEY_VF`: it
+would decode as "segment key". `[11]` **VERIFIED**
 
 ## 8.6 ADV_PCK (`sub_stream_id = 0x80`)
 

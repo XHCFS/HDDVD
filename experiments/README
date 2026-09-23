@@ -8,10 +8,10 @@ and which disc files (or listing URLs) it read. Run:
 
     python3 experiments/run.py
 
-e01–e08 and e11 only read this repository (corpus listings + saved
+e01–e08, e11, e21 and e22 only read this repository (corpus listings + saved
 MAP/VTI/XPL/DISCID/AACS/ACA). They do not decrypt or need a drive.
 
-e09–e10 HTTP-range the Archive.org ISO (UDF walk). e09 caches packs in
+e09–e10 and e23 HTTP-range the Archive.org ISO (UDF walk). e09 caches packs in
 `/tmp/e09_cache.json`. e10 fetches one MAP+EVO (default DOWNFALL EVOB002).
 
 ISO provenance: line 1 of corpus/<DISC>/_listing.txt is the Internet Archive
@@ -36,3 +36,6 @@ URL, of the form https://archive.org/download/hd-dvd_archive_NN/<DISC>.iso
 | e15 | HDi menu census: JS UTF-16BE, size vs listing, jump/load, used iHD attrs |
 | e16 | ADV_PCK `0x80`: `STALINGRAD` `logo.EVO` concat = ACA files; dump offline. `E16_FULL=1` re-fetches |
 | e17 | Deep HDi census on saved ACA (directory, cue kinds, Player.*, object types) |
+| e21 | AACS DKF / VTKF / VTUF / CONTENT_CERT field by field vs book Tables 3-8…3-17, 6-2; Pan's VTKF padding; HASH_SIZE 8 on 2 discs |
+| e22 | Keyless: CHT #1/#2 sizes, certificate digests = SHA-1(CHT), CHT #2 hashes of DISCID / DKF / manifest / VTUF; "-SLY" DISCID rewrites |
+| e23 | CPI and GCI in real NV_PCKs: CPI at pack 0x3C, CH_PTR +1 per EVOBU within NHV, GCI PTM = EVOBI start PTM, zero-filled PCI slot |

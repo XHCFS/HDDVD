@@ -14,7 +14,7 @@ OPEN / UNCLOSEABLE / OUT** are evidence-strength, not citations
 
 ## Standards & specifications
 
-- **[4]** AACS LA, *Advanced Access Content System: HD DVD and DVD Pre-recorded Book*, Final Revision 0.953: pack encryption Table 4-7, CPI Table 4-1/4-2, VTKF Table 3-8, DKF Table 6-2. Specifications index (HD DVD/DVD books withdrawn, available on request; archived copies via the Internet Archive): <https://aacsla.com/aacs-specifications/>
+- **[4]** AACS LA, *Advanced Access Content System (AACS): HD DVD and DVD Pre-recorded Book*, Final Revision 0.953 (154 pages). Tables cited: 3-8 Title Key File, 3-9 Binding Information (BIFO), 3-10 Title Usage File, 3-11 BURS, 3-12 Usage Rule Set, 3-17 Content Certificate, 3-18 / 3-19 Content Hash Tables #1 / #2, 4-1 to 4-6 CPI (KMI, CHMI, URMI, CCI_SS, CCI), 4-7 Encrypted Pack, 6-2 Directory Key File; §4.3 (one Title Key per EVOB), §6.3 (persistent-storage provider directory), p. 21 (trailing residue allowed only after MKB, SKBF and CRL). Withdrawn from the AACS LA site; archived copy captured 2013-01-28: <https://web.archive.org/web/20130128114208/http://www.aacsla.com/specifications/AACS_Spec_HD_DVD_and_DVD_Prerecorded_Final_0.953.pdf> (SHA-256 `bd772c0b2d233412d0a644ab89d3489acf82f3b2907ce13b7f94830bfb38d5f5`). Specifications index: <https://aacsla.com/aacs-specifications/>
 - **[5]** DVD Forum, *HD DVD-Video Advanced Content* XML Schemas v1.0 (16 Jul 2006): `Playlist.xsd`, `Manifest.xsd`, `iHD.xsd`, `iHDstyle.xsd`, `iHDstate.xsd`. Bundled: `spec/raw/adv_obj/v1.0/`. Origin (Scenarist install): <https://archive.org/details/scenarist-hd-dvd-45>
 - **[17]** W3C, *Document Object Model (DOM) Level 2 Core* <https://www.w3.org/TR/DOM-Level-2-Core/> and *DOM Level 2 Events* <https://www.w3.org/TR/DOM-Level-2-Events/>.
 - **[18]** W3C, *Synchronized Multimedia Integration Language (SMIL 2.0)*. <https://www.w3.org/TR/2005/REC-SMIL2-20050107/>
@@ -27,7 +27,7 @@ OPEN / UNCLOSEABLE / OUT** are evidence-strength, not citations
 - **[8]** libaacs, VideoLAN: source. <https://code.videolan.org/videolan/libaacs>
 - **[9]** muslix64, *BackupHDDVD* (2006): source `src/aacs/{decoder/EVOBPack.java, decoder/DecryptEVOB.java, math/AESFunc.java}`. <https://archive.org/details/backup-hddvd>
 - **[10]** Reference-decoder (`HDDVDPLAYDLL`) File Cache / ACA strings, as surfaced by the DumpHD tooling discussed in [16]. <http://forum.doom9.org/archive/index.php/t-123282.html>
-- **[12]** Verification experiments `e01`–`e20` accompanying this specification (`experiments/run.py`).
+- **[12]** Verification experiments `e01`–`e23` accompanying this specification (`experiments/run.py`).
 
 ## Disc & firmware corpus (Internet Archive)
 

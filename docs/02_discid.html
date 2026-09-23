@@ -148,16 +148,24 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="09_aacs.html">9. AACS overlay (format only)</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="09_aacs.html#directories">9.1 Directories</a></li>
-<li class="toctree-l2"><a class="reference internal" href="09_aacs.html#files">9.2 Files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="09_aacs.html#files">9.2 Files</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="09_aacs.html#content-hash-tables-tables-3-18-3-19">Content Hash Tables (Tables 3-18, 3-19)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="09_aacs.html#sly-discid-rewritten-after-authoring"><code class="docutils literal notranslate"><span class="pre">-SLY</span></code>: DISCID rewritten after authoring</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="09_aacs.html#vtkf-table-3-8-final-0-953">9.3 VTKF: Table 3-8 (Final 0.953)</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="09_aacs.html#title-key-entry-36-bytes">Title Key Entry (36 bytes)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="09_aacs.html#bifo-binding-information-table-3-9">BIFO: Binding Information (Table 3-9)</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="09_aacs.html#dkf-64-bytes-table-6-2">9.4 DKF (64 bytes): Table 6-2</a></li>
 <li class="toctree-l2"><a class="reference internal" href="09_aacs.html#content-cert-120-bytes-table-3-17">9.5 CONTENT_CERT (120 bytes): Table 3-17</a></li>
-<li class="toctree-l2"><a class="reference internal" href="09_aacs.html#pack-encryption-table-4-7">9.6 Pack encryption: Table 4-7</a></li>
+<li class="toctree-l2"><a class="reference internal" href="09_aacs.html#pack-encryption-table-4-7">9.6 Pack encryption: Table 4-7</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="09_aacs.html#cpi-layout-tables-4-1-to-4-6">CPI layout (Tables 4-1 to 4-6)</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="09_aacs.html#volume-id">9.7 Volume ID</a></li>
-<li class="toctree-l2"><a class="reference internal" href="09_aacs.html#vtuf-144-bytes">9.8 VTUF (144 bytes)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="09_aacs.html#vtuf-table-3-10-final-0-953">9.8 VTUF: Table 3-10 (Final 0.953)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="09_aacs.html#reusing-libaacs-what-ports-and-what-does-not">9.9 Reusing libaacs: what ports and what does not</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="09_aacs.html#exact-extension-points-libaacs-master-read-2026-09">Exact extension points (libaacs master, read 2026-09)</a></li>
 </ul>
@@ -409,7 +417,7 @@ if they fill the field.</p>
 <tr class="row-even"><td><p>28</p></td>
 <td><p>16</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">PROVIDER_ID</span></code></p></td>
-<td><p>ASCII studio tag or 16-byte binary. Persistent-storage directory key.</p></td>
+<td><p>ASCII studio tag or 16-byte binary. Input to the persistent-storage provider directory name (below).</p></td>
 </tr>
 <tr class="row-odd"><td><p>44</p></td>
 <td><p>16</p></td>
@@ -434,15 +442,22 @@ version. Fail closed.</p>
 <p>Disc ID &#64;12: <code class="docutils literal notranslate"><span class="pre">0xFF</span></code>×16 on <strong>109</strong>, other (UUID-shaped) on <strong>10</strong> (<code class="docutils literal notranslate"><span class="pre">e14</span></code>).
 <code class="docutils literal notranslate"><span class="pre">PROVIDER_ID</span></code>: 9 distinct ASCII tags (95 discs) + <strong>24 binary</strong>. Binary shapes
 include all-<code class="docutils literal notranslate"><span class="pre">FF</span></code>, UUID-like 16 bytes, and mixed (<code class="docutils literal notranslate"><span class="pre">BROTHERS_GRIMM</span></code> ends <code class="docutils literal notranslate"><span class="pre">SLY</span></code>).
-Persistent-storage directory spelling of the binary form is the host’s
-folder label, not the script URI. Scripts use <code class="docutils literal notranslate"><span class="pre">file:///required/{contentId}/</span></code>
-(<a class="reference internal" href="05_manifest_hdi.html"><span class="std std-doc">05</span></a> §5.8).</p>
+On an AACS disc the provider’s persistent-storage directory is <strong>not</strong> named
+<code class="docutils literal notranslate"><span class="pre">PROVIDER_ID</span></code>: it is <code class="docutils literal notranslate"><span class="pre">PROVIDER_DIR</span> <span class="pre">=</span> <span class="pre">AES-G(KDIR,</span> <span class="pre">PROVIDER_ID)</span></code> written as a GUID,
+with <code class="docutils literal notranslate"><span class="pre">KDIR</span></code> from the DKF (<a class="reference internal" href="09_aacs.html"><span class="std std-doc">09</span></a> §9.4, [4 §6.3]). Scripts never see it; they
+use <code class="docutils literal notranslate"><span class="pre">file:///required/{contentId}/</span></code> (<a class="reference internal" href="05_manifest_hdi.html"><span class="std std-doc">05</span></a> §5.8).</p>
 </section>
 <section id="observed-provider-id-tags-ascii">
 <h2>2.2 Observed <code class="docutils literal notranslate"><span class="pre">PROVIDER_ID</span></code> tags (ASCII)<a class="headerlink" href="#observed-provider-id-tags-ascii" title="Link to this heading"></a></h2>
 <p><code class="docutils literal notranslate"><span class="pre">WHV***V1**HD-DVD</span></code> (25), <code class="docutils literal notranslate"><span class="pre">UNIVERSAL_HD-DVD</span></code> (22), <code class="docutils literal notranslate"><span class="pre">UNIVERSAL_HD-SLY</span></code> (18),
 <code class="docutils literal notranslate"><span class="pre">PARAMOUNT_HD-DVD</span></code> (12), <code class="docutils literal notranslate"><span class="pre">PARAMOUNT_HD-SLY</span></code> (8), <code class="docutils literal notranslate"><span class="pre">WHV***V1**HD-SLY</span></code> (7),
 plus <code class="docutils literal notranslate"><span class="pre">NEWLINE_HDDVD_V1</span></code>, <code class="docutils literal notranslate"><span class="pre">DREAMWORKS_HDDVD</span></code>, <code class="docutils literal notranslate"><span class="pre">DW_ANIM___HD-SLY</span></code>, and 24 binary IDs.</p>
+<p><strong><code class="docutils literal notranslate"><span class="pre">SLY</span></code> is not an authored value.</strong> Every <code class="docutils literal notranslate"><span class="pre">PROVIDER_ID</span></code> ending in ASCII <code class="docutils literal notranslate"><span class="pre">SLY</span></code> (33
+discs: the <code class="docutils literal notranslate"><span class="pre">-SLY</span></code> tags and five binary IDs ending <code class="docutils literal notranslate"><span class="pre">534c59</span></code>) differs from the DISCID
+the disc’s AACS hash table committed to; restoring <code class="docutils literal notranslate"><span class="pre">DVD</span></code> (or the recovered original
+bytes) makes the hash match. These DISCIDs were rewritten after authoring, when the
+image was processed; see <a class="reference internal" href="09_aacs.html"><span class="std std-doc">09</span></a> §9.2. Only the other 86 tags are as pressed.
+<code class="docutils literal notranslate"><span class="pre">[11]</span></code> <strong>VERIFIED</strong> (<code class="docutils literal notranslate"><span class="pre">e22</span></code>)</p>
 </section>
 <section id="player-use">
 <h2>2.3 Player use<a class="headerlink" href="#player-use" title="Link to this heading"></a></h2>

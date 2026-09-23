@@ -365,21 +365,20 @@ directory. Skip P-storage search.
 device, then `ADV_OBJ/VPLST$$$.XPL` on disc, then pick the highest `$$$`.
 Empty P-storage still boots the disc playlist (106 discs).
 
-**Management-UI directory nesting (resolved [14]).** When a disc first writes to
-persistent storage the player creates a **content folder keyed by DISCID
-`CONTENT_ID`, nested under a provider folder keyed by `PROVIDER_ID`**. Those
-folders are labelled by `[language]-explanation` / `[language]-icon` keys (DVD
-HD-Video spec ch.10), set with `setProviderInformation("en-explanation", …)` and
-`setContentInformation(contentId, "en-explanation", …)` on the
-`getPersistentStorageDevices(STORAGE_REQUIRED)[0]` device; unset → "Unknown
-Provider" / "Unknown Content". This provider/content nesting is the **management
-UI** layout only; it is **not** part of the `file:///required/{contentId}/` script
-URI. ASCII `PROVIDER_ID` tags and binary UUID-shaped IDs are those folder labels,
-not a second URI family.
-`[1]`
-`[14]`
-**INFERRED** (0 on-device directory specimens). Scripts on disc only ever
-write `file:///required/{contentId}/`.
+**Persistent-storage directory layout (AACS book [4 §6.3]).** The player creates
+`/HD_DVD/` on the storage medium with `INFO.TXT` (medium information). Each content
+provider gets `/HD_DVD/<PROVIDER_DIR>/`, where `PROVIDER_DIR = AES-G(KDIR,
+PROVIDER_ID)` is written as a GUID; `KDIR` is unwrapped from the disc's DKF
+([09](09_aacs.md) §9.4). So the folder name is a keyed transform of DISCID
+`PROVIDER_ID`, not the ID itself, and isolates one provider's data from another's.
+Inside it: `INFO.TXT` (provider information, written by applications), unencapsulated
+icon images for the management screen, and one `<CONTENT_ID>` directory per title (GUID
+of DISCID `CONTENT_ID`) holding that title's `INFO.TXT` and files such as a downloaded
+`VPLST$$$.XPL`. The `[language]-explanation` / `[language]-icon` keys set with
+`setProviderInformation(…)` / `setContentInformation(contentId, …)` [14] are what the
+applications write into those `INFO.TXT` files; unset → "Unknown Provider" / "Unknown
+Content". None of this nesting appears in the script URI `file:///required/{contentId}/`.
+`[4]` **SPEC** (AACS mode); 0 on-device directory specimens.
 
 ## 5.9 Raster, focus, cues (used path)
 

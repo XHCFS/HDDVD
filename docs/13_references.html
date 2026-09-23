@@ -148,16 +148,24 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="09_aacs.html">9. AACS overlay (format only)</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="09_aacs.html#directories">9.1 Directories</a></li>
-<li class="toctree-l2"><a class="reference internal" href="09_aacs.html#files">9.2 Files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="09_aacs.html#files">9.2 Files</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="09_aacs.html#content-hash-tables-tables-3-18-3-19">Content Hash Tables (Tables 3-18, 3-19)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="09_aacs.html#sly-discid-rewritten-after-authoring"><code class="docutils literal notranslate"><span class="pre">-SLY</span></code>: DISCID rewritten after authoring</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="09_aacs.html#vtkf-table-3-8-final-0-953">9.3 VTKF: Table 3-8 (Final 0.953)</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="09_aacs.html#title-key-entry-36-bytes">Title Key Entry (36 bytes)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="09_aacs.html#bifo-binding-information-table-3-9">BIFO: Binding Information (Table 3-9)</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="09_aacs.html#dkf-64-bytes-table-6-2">9.4 DKF (64 bytes): Table 6-2</a></li>
 <li class="toctree-l2"><a class="reference internal" href="09_aacs.html#content-cert-120-bytes-table-3-17">9.5 CONTENT_CERT (120 bytes): Table 3-17</a></li>
-<li class="toctree-l2"><a class="reference internal" href="09_aacs.html#pack-encryption-table-4-7">9.6 Pack encryption: Table 4-7</a></li>
+<li class="toctree-l2"><a class="reference internal" href="09_aacs.html#pack-encryption-table-4-7">9.6 Pack encryption: Table 4-7</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="09_aacs.html#cpi-layout-tables-4-1-to-4-6">CPI layout (Tables 4-1 to 4-6)</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="09_aacs.html#volume-id">9.7 Volume ID</a></li>
-<li class="toctree-l2"><a class="reference internal" href="09_aacs.html#vtuf-144-bytes">9.8 VTUF (144 bytes)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="09_aacs.html#vtuf-table-3-10-final-0-953">9.8 VTUF: Table 3-10 (Final 0.953)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="09_aacs.html#reusing-libaacs-what-ports-and-what-does-not">9.9 Reusing libaacs: what ports and what does not</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="09_aacs.html#exact-extension-points-libaacs-master-read-2026-09">Exact extension points (libaacs master, read 2026-09)</a></li>
 </ul>
@@ -391,7 +399,7 @@ OPEN / UNCLOSEABLE / OUT</strong> are evidence-strength, not citations
 <section id="standards-specifications">
 <h2>Standards &amp; specifications<a class="headerlink" href="#standards-specifications" title="Link to this heading"></a></h2>
 <ul class="simple">
-<li><p><strong>[4]</strong> AACS LA, <em>Advanced Access Content System: HD DVD and DVD Pre-recorded Book</em>, Final Revision 0.953: pack encryption Table 4-7, CPI Table 4-1/4-2, VTKF Table 3-8, DKF Table 6-2. Specifications index (HD DVD/DVD books withdrawn, available on request; archived copies via the Internet Archive): <a class="reference external" href="https://aacsla.com/aacs-specifications/">https://aacsla.com/aacs-specifications/</a></p></li>
+<li><p><strong>[4]</strong> AACS LA, <em>Advanced Access Content System (AACS): HD DVD and DVD Pre-recorded Book</em>, Final Revision 0.953 (154 pages). Tables cited: 3-8 Title Key File, 3-9 Binding Information (BIFO), 3-10 Title Usage File, 3-11 BURS, 3-12 Usage Rule Set, 3-17 Content Certificate, 3-18 / 3-19 Content Hash Tables #1 / #2, 4-1 to 4-6 CPI (KMI, CHMI, URMI, CCI_SS, CCI), 4-7 Encrypted Pack, 6-2 Directory Key File; §4.3 (one Title Key per EVOB), §6.3 (persistent-storage provider directory), p. 21 (trailing residue allowed only after MKB, SKBF and CRL). Withdrawn from the AACS LA site; archived copy captured 2013-01-28: <a class="reference external" href="https://web.archive.org/web/20130128114208/http://www.aacsla.com/specifications/AACS_Spec_HD_DVD_and_DVD_Prerecorded_Final_0.953.pdf">https://web.archive.org/web/20130128114208/http://www.aacsla.com/specifications/AACS_Spec_HD_DVD_and_DVD_Prerecorded_Final_0.953.pdf</a> (SHA-256 <code class="docutils literal notranslate"><span class="pre">bd772c0b2d233412d0a644ab89d3489acf82f3b2907ce13b7f94830bfb38d5f5</span></code>). Specifications index: <a class="reference external" href="https://aacsla.com/aacs-specifications/">https://aacsla.com/aacs-specifications/</a></p></li>
 <li><p><strong>[5]</strong> DVD Forum, <em>HD DVD-Video Advanced Content</em> XML Schemas v1.0 (16 Jul 2006): <code class="docutils literal notranslate"><span class="pre">Playlist.xsd</span></code>, <code class="docutils literal notranslate"><span class="pre">Manifest.xsd</span></code>, <code class="docutils literal notranslate"><span class="pre">iHD.xsd</span></code>, <code class="docutils literal notranslate"><span class="pre">iHDstyle.xsd</span></code>, <code class="docutils literal notranslate"><span class="pre">iHDstate.xsd</span></code>. Bundled: <code class="docutils literal notranslate"><span class="pre">spec/raw/adv_obj/v1.0/</span></code>. Origin (Scenarist install): <a class="reference external" href="https://archive.org/details/scenarist-hd-dvd-45">https://archive.org/details/scenarist-hd-dvd-45</a></p></li>
 <li><p><strong>[17]</strong> W3C, <em>Document Object Model (DOM) Level 2 Core</em> <a class="reference external" href="https://www.w3.org/TR/DOM-Level-2-Core/">https://www.w3.org/TR/DOM-Level-2-Core/</a> and <em>DOM Level 2 Events</em> <a class="reference external" href="https://www.w3.org/TR/DOM-Level-2-Events/">https://www.w3.org/TR/DOM-Level-2-Events/</a>.</p></li>
 <li><p><strong>[18]</strong> W3C, <em>Synchronized Multimedia Integration Language (SMIL 2.0)</em>. <a class="reference external" href="https://www.w3.org/TR/2005/REC-SMIL2-20050107/">https://www.w3.org/TR/2005/REC-SMIL2-20050107/</a></p></li>
@@ -406,7 +414,7 @@ OPEN / UNCLOSEABLE / OUT</strong> are evidence-strength, not citations
 <li><p><strong>[8]</strong> libaacs, VideoLAN: source. <a class="reference external" href="https://code.videolan.org/videolan/libaacs">https://code.videolan.org/videolan/libaacs</a></p></li>
 <li><p><strong>[9]</strong> muslix64, <em>BackupHDDVD</em> (2006): source <code class="docutils literal notranslate"><span class="pre">src/aacs/{decoder/EVOBPack.java,</span> <span class="pre">decoder/DecryptEVOB.java,</span> <span class="pre">math/AESFunc.java}</span></code>. <a class="reference external" href="https://archive.org/details/backup-hddvd">https://archive.org/details/backup-hddvd</a></p></li>
 <li><p><strong>[10]</strong> Reference-decoder (<code class="docutils literal notranslate"><span class="pre">HDDVDPLAYDLL</span></code>) File Cache / ACA strings, as surfaced by the DumpHD tooling discussed in [16]. <a class="reference external" href="http://forum.doom9.org/archive/index.php/t-123282.html">http://forum.doom9.org/archive/index.php/t-123282.html</a></p></li>
-<li><p><strong>[12]</strong> Verification experiments <code class="docutils literal notranslate"><span class="pre">e01</span></code>–<code class="docutils literal notranslate"><span class="pre">e20</span></code> accompanying this specification (<code class="docutils literal notranslate"><span class="pre">experiments/run.py</span></code>).</p></li>
+<li><p><strong>[12]</strong> Verification experiments <code class="docutils literal notranslate"><span class="pre">e01</span></code>–<code class="docutils literal notranslate"><span class="pre">e23</span></code> accompanying this specification (<code class="docutils literal notranslate"><span class="pre">experiments/run.py</span></code>).</p></li>
 </ul>
 </section>
 <section id="disc-firmware-corpus-internet-archive">

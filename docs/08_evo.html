@@ -148,16 +148,24 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="09_aacs.html">9. AACS overlay (format only)</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="09_aacs.html#directories">9.1 Directories</a></li>
-<li class="toctree-l2"><a class="reference internal" href="09_aacs.html#files">9.2 Files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="09_aacs.html#files">9.2 Files</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="09_aacs.html#content-hash-tables-tables-3-18-3-19">Content Hash Tables (Tables 3-18, 3-19)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="09_aacs.html#sly-discid-rewritten-after-authoring"><code class="docutils literal notranslate"><span class="pre">-SLY</span></code>: DISCID rewritten after authoring</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="09_aacs.html#vtkf-table-3-8-final-0-953">9.3 VTKF: Table 3-8 (Final 0.953)</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="09_aacs.html#title-key-entry-36-bytes">Title Key Entry (36 bytes)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="09_aacs.html#bifo-binding-information-table-3-9">BIFO: Binding Information (Table 3-9)</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="09_aacs.html#dkf-64-bytes-table-6-2">9.4 DKF (64 bytes): Table 6-2</a></li>
 <li class="toctree-l2"><a class="reference internal" href="09_aacs.html#content-cert-120-bytes-table-3-17">9.5 CONTENT_CERT (120 bytes): Table 3-17</a></li>
-<li class="toctree-l2"><a class="reference internal" href="09_aacs.html#pack-encryption-table-4-7">9.6 Pack encryption: Table 4-7</a></li>
+<li class="toctree-l2"><a class="reference internal" href="09_aacs.html#pack-encryption-table-4-7">9.6 Pack encryption: Table 4-7</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="09_aacs.html#cpi-layout-tables-4-1-to-4-6">CPI layout (Tables 4-1 to 4-6)</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="09_aacs.html#volume-id">9.7 Volume ID</a></li>
-<li class="toctree-l2"><a class="reference internal" href="09_aacs.html#vtuf-144-bytes">9.8 VTUF (144 bytes)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="09_aacs.html#vtuf-table-3-10-final-0-953">9.8 VTUF: Table 3-10 (Final 0.953)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="09_aacs.html#reusing-libaacs-what-ports-and-what-does-not">9.9 Reusing libaacs: what ports and what does not</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="09_aacs.html#exact-extension-points-libaacs-master-read-2026-09">Exact extension points (libaacs master, read 2026-09)</a></li>
 </ul>
@@ -460,7 +468,11 @@ here use <code class="docutils literal notranslate"><span class="pre">0x04</span
 </div>
 <p>Order of the three PES packets is GCI/PCI/DSI as listed in the patent; parse by
 substream id, not by order. Some Advanced clips omit PCI: <code class="docutils literal notranslate"><span class="pre">STALINGRAD</span></code>
-<code class="docutils literal notranslate"><span class="pre">black.EVO</span></code> is GCI <code class="docutils literal notranslate"><span class="pre">0x04</span></code> + DSI <code class="docutils literal notranslate"><span class="pre">0x01</span></code> only (35/35 VOBUs).</p>
+<code class="docutils literal notranslate"><span class="pre">black.EVO</span></code> is GCI <code class="docutils literal notranslate"><span class="pre">0x04</span></code> + DSI <code class="docutils literal notranslate"><span class="pre">0x01</span></code> only (35/35 VOBUs). On <code class="docutils literal notranslate"><span class="pre">RAMBO_1_FRA</span></code> the PCI
+slot is still present but <strong>zero-filled, start code included</strong> (983 zero bytes =
+6-byte PES header + 977): the DSI follows at pack offset 1287. A parser that walks PES
+packets back to back stops at the gap, so <strong>scan for the next <code class="docutils literal notranslate"><span class="pre">00</span> <span class="pre">00</span> <span class="pre">01</span> <span class="pre">BF</span></code></strong> instead
+(<code class="docutils literal notranslate"><span class="pre">e23</span></code>). <code class="docutils literal notranslate"><span class="pre">[11]</span></code> <strong>VERIFIED</strong></p>
 </section>
 <section id="pci-gi-offsets-from-the-substream-id-byte">
 <h2>8.3 PCI GI (offsets from the substream id byte)<a class="headerlink" href="#pci-gi-offsets-from-the-substream-id-byte" title="Link to this heading"></a></h2>
@@ -568,76 +580,56 @@ MAP-based seek.</p>
 </section>
 <section id="gci-substream-0x04">
 <h2>8.5 GCI (substream <code class="docutils literal notranslate"><span class="pre">0x04</span></code>)<a class="headerlink" href="#gci-substream-0x04" title="Link to this heading"></a></h2>
+<p>257-byte PES payload. The patent’s TABLE 52 field list (<code class="docutils literal notranslate"><span class="pre">GCI_GI</span></code> 16 bytes of
+<code class="docutils literal notranslate"><span class="pre">GCI_CAT</span></code>, reserved, <code class="docutils literal notranslate"><span class="pre">DCI_CCI_SS</span></code>, <code class="docutils literal notranslate"><span class="pre">DCI</span></code>, <code class="docutils literal notranslate"><span class="pre">CCI</span></code>, then <code class="docutils literal notranslate"><span class="pre">RECI</span></code> 189 + reserved 51) <strong>does
+not match the disc</strong>. Observed layout (offsets in the PES payload, <code class="docutils literal notranslate"><span class="pre">0x04</span></code> = byte 0;
+<code class="docutils literal notranslate"><span class="pre">e23</span></code>, 24 EVOBUs on each of 12 discs):</p>
 <table class="docutils align-default">
 <thead>
 <tr class="row-odd"><th class="head"><p>Off</p></th>
 <th class="head"><p>Size</p></th>
 <th class="head"><p>Field</p></th>
+<th class="head"><p>Observed</p></th>
 </tr>
 </thead>
 <tbody>
 <tr class="row-even"><td><p>0</p></td>
 <td><p>1</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">sub_stream_id</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">0x04</span></code></p></td>
 </tr>
 <tr class="row-odd"><td><p>1</p></td>
-<td><p>16</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">GCI_GI</span></code> (TABLE 52)</p></td>
-</tr>
-<tr class="row-even"><td><p>17</p></td>
-<td><p>189</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">RECI</span></code> (ISRC blocks, TABLE 53)</p></td>
-</tr>
-<tr class="row-odd"><td><p>206</p></td>
-<td><p>51</p></td>
-<td><p>reserved</p></td>
-</tr>
-</tbody>
-</table>
-<p><code class="docutils literal notranslate"><span class="pre">GCI_GI</span></code>:</p>
-<table class="docutils align-default">
-<thead>
-<tr class="row-odd"><th class="head"><p>Off</p></th>
-<th class="head"><p>Size</p></th>
-<th class="head"><p>Field</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p>0</p></td>
 <td><p>1</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">GCI_CAT</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0x40</span></code> on Advanced (AACS and unencrypted); <code class="docutils literal notranslate"><span class="pre">0x00</span></code> on Standard Content (<code class="docutils literal notranslate"><span class="pre">RESERVOIR_DOGS</span></code>)</p></td>
 </tr>
-<tr class="row-odd"><td><p>1</p></td>
-<td><p>3</p></td>
-<td><p>reserved / VOBU-related</p></td>
+<tr class="row-even"><td><p>2</p></td>
+<td><p>5</p></td>
+<td><p><strong>EVOBU start PTM</strong>, 90 kHz</p></td>
+<td><p>equals <code class="docutils literal notranslate"><span class="pre">EVOBI</span></code> start PTM (<a class="reference internal" href="06_vti.html"><span class="std std-doc">06</span></a>) at the EVOB’s first EVOBU on 12/12 discs, then advances by each EVOBU’s duration (45 045, or 87 087 for a longer EVOBU). Top byte 0 on every sample; width 32 vs 40 bits undetermined</p></td>
 </tr>
-<tr class="row-even"><td><p>4</p></td>
-<td><p>2</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">DCI_CCI_SS</span></code></p></td>
-</tr>
-<tr class="row-odd"><td><p>6</p></td>
-<td><p>4</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">DCI</span></code></p></td>
-</tr>
-<tr class="row-even"><td><p>10</p></td>
-<td><p>4</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">CCI</span></code></p></td>
-</tr>
-<tr class="row-odd"><td><p>14</p></td>
-<td><p>2</p></td>
+<tr class="row-odd"><td><p>7</p></td>
+<td><p>6</p></td>
 <td><p>reserved</p></td>
+<td><p>zero on every sample</p></td>
+</tr>
+<tr class="row-even"><td><p>13</p></td>
+<td><p>16</p></td>
+<td><p><strong>AACS CPI</strong></p></td>
+<td><p>Table 4-1 layout, <a class="reference internal" href="09_aacs.html"><span class="std std-doc">09</span></a> §9.6. All zero on the unencrypted <code class="docutils literal notranslate"><span class="pre">1408_DC</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>29</p></td>
+<td><p>228</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">RECI</span></code> and reserved</p></td>
+<td><p>zero on 10 of 12 discs. <code class="docutils literal notranslate"><span class="pre">AEON_FLUX</span></code> and <code class="docutils literal notranslate"><span class="pre">TRANSFORMERS</span></code> (both Paramount) carry an identical repeating 10-byte record from byte 33, <code class="docutils literal notranslate"><span class="pre">80</span> <span class="pre">25</span> <span class="pre">23</span> <span class="pre">25</span> <span class="pre">1e</span> <span class="pre">19</span> <span class="pre">20</span> <span class="pre">01</span> <span class="pre">23</span> <span class="pre">40</span></code>; undecoded (TABLE 53 names ISRC blocks)</p></td>
 </tr>
 </tbody>
 </table>
-<p>AACS CPI is <strong>16 bytes inside this GCI_PKT</strong> (Final 0.953 Table 4-1). The book
-defers the byte offset to the video spec. <strong>Do not</strong> treat <code class="docutils literal notranslate"><span class="pre">GCI_GI[0]</span></code> as <code class="docutils literal notranslate"><span class="pre">KEY_VF</span></code>
-(<code class="docutils literal notranslate"><span class="pre">0x40</span></code> is Advanced category, and would also decode as segment-key with no SKF).
-The 16-byte CPI field is at <strong>pack offset 0x3C</strong> on the observed NV_PCK framing
-(pack <code class="docutils literal notranslate"><span class="pre">00</span> <span class="pre">00</span> <span class="pre">01</span> <span class="pre">BA</span></code>, system header at <code class="docutils literal notranslate"><span class="pre">0x11=0xBB</span></code>, GCI PES at <code class="docutils literal notranslate"><span class="pre">0x29</span></code> → GCI-payload
-offset 12). Recovered from BackupHDDVD’s <code class="docutils literal notranslate"><span class="pre">EVOBPack.java</span></code> and confirmed on a real
-NV_PCK. It reads all-zero (<code class="docutils literal notranslate"><span class="pre">KEY_VF=0</span></code>) on unencrypted clips. <strong>Do not hard-code
-pack <code class="docutils literal notranslate"><span class="pre">0x3C</span></code> if stuffing or a missing <code class="docutils literal notranslate"><span class="pre">0xBB</span></code> system header moves the GCI PES</strong>.
-Locate <code class="docutils literal notranslate"><span class="pre">sub_stream_id</span> <span class="pre">0x04</span></code>, then apply the GCI-relative offset. See <a class="reference internal" href="09_aacs.html"><span class="std std-doc">09</span></a> §9.6.</p>
+<p>The CPI sits at pack <strong><code class="docutils literal notranslate"><span class="pre">0x3C</span></code></strong> on the observed framing (pack header 14 bytes, system
+header, GCI start code at <code class="docutils literal notranslate"><span class="pre">0x29</span></code>, <code class="docutils literal notranslate"><span class="pre">sub_stream_id</span></code> at <code class="docutils literal notranslate"><span class="pre">0x2F</span></code>). Locate the GCI by
+<code class="docutils literal notranslate"><span class="pre">sub_stream_id</span></code> rather than hard-coding the pack offset, since stuffing or a missing
+system header moves it. <strong>Do not</strong> read <code class="docutils literal notranslate"><span class="pre">GCI_CAT</span></code> (<code class="docutils literal notranslate"><span class="pre">0x40</span></code>) as the AACS <code class="docutils literal notranslate"><span class="pre">KEY_VF</span></code>: it
+would decode as “segment key”. <code class="docutils literal notranslate"><span class="pre">[11]</span></code> <strong>VERIFIED</strong></p>
 </section>
 <section id="adv-pck-sub-stream-id-0x80">
 <h2>8.6 ADV_PCK (<code class="docutils literal notranslate"><span class="pre">sub_stream_id</span> <span class="pre">=</span> <span class="pre">0x80</span></code>)<a class="headerlink" href="#adv-pck-sub-stream-id-0x80" title="Link to this heading"></a></h2>

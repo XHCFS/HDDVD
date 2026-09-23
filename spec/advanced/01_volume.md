@@ -115,7 +115,8 @@ Patent FIG.20 **drawing** (`US20070091495A1` `pages/page-024.png`) also lists
 prose** writes `file:///fixed/` and `file:///removable/` instead. Playlist.xsd
 `DataSourceType` is `Disc` / `P-Storage` / `Network` / `FileCache`. Corpus `src`
 is all `file:///dvddisc/` (**10 620 / 10 620** playlist `src`, `e12`). The persistent-storage **script** URI form is specified:
-`file:///required/{contentId}/` ([05](05_manifest_hdi.md) §5.8); the host's management-UI
-device-directory nesting is provider/content-ID folders [14] ([05](05_manifest_hdi.md) §5.8).
+`file:///required/{contentId}/` ([05](05_manifest_hdi.md) §5.8); on the storage medium the player
+nests it as `/HD_DVD/<PROVIDER_DIR>/<CONTENT_ID>/`, with `PROVIDER_DIR` derived from
+`PROVIDER_ID` and the DKF key [4 §6.3] ([05](05_manifest_hdi.md) §5.8).
 `[11, 12]` **VERIFIED** (`dvddisc` only)
 `[1]`

@@ -148,16 +148,24 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="09_aacs.html">9. AACS overlay (format only)</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="09_aacs.html#directories">9.1 Directories</a></li>
-<li class="toctree-l2"><a class="reference internal" href="09_aacs.html#files">9.2 Files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="09_aacs.html#files">9.2 Files</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="09_aacs.html#content-hash-tables-tables-3-18-3-19">Content Hash Tables (Tables 3-18, 3-19)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="09_aacs.html#sly-discid-rewritten-after-authoring"><code class="docutils literal notranslate"><span class="pre">-SLY</span></code>: DISCID rewritten after authoring</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="09_aacs.html#vtkf-table-3-8-final-0-953">9.3 VTKF: Table 3-8 (Final 0.953)</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="09_aacs.html#title-key-entry-36-bytes">Title Key Entry (36 bytes)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="09_aacs.html#bifo-binding-information-table-3-9">BIFO: Binding Information (Table 3-9)</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="09_aacs.html#dkf-64-bytes-table-6-2">9.4 DKF (64 bytes): Table 6-2</a></li>
 <li class="toctree-l2"><a class="reference internal" href="09_aacs.html#content-cert-120-bytes-table-3-17">9.5 CONTENT_CERT (120 bytes): Table 3-17</a></li>
-<li class="toctree-l2"><a class="reference internal" href="09_aacs.html#pack-encryption-table-4-7">9.6 Pack encryption: Table 4-7</a></li>
+<li class="toctree-l2"><a class="reference internal" href="09_aacs.html#pack-encryption-table-4-7">9.6 Pack encryption: Table 4-7</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="09_aacs.html#cpi-layout-tables-4-1-to-4-6">CPI layout (Tables 4-1 to 4-6)</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="09_aacs.html#volume-id">9.7 Volume ID</a></li>
-<li class="toctree-l2"><a class="reference internal" href="09_aacs.html#vtuf-144-bytes">9.8 VTUF (144 bytes)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="09_aacs.html#vtuf-table-3-10-final-0-953">9.8 VTUF: Table 3-10 (Final 0.953)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="09_aacs.html#reusing-libaacs-what-ports-and-what-does-not">9.9 Reusing libaacs: what ports and what does not</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="09_aacs.html#exact-extension-points-libaacs-master-read-2026-09">Exact extension points (libaacs master, read 2026-09)</a></li>
 </ul>
@@ -628,8 +636,9 @@ Four <code class="docutils literal notranslate"><span class="pre">*_load.log</sp
 prose</strong> writes <code class="docutils literal notranslate"><span class="pre">file:///fixed/</span></code> and <code class="docutils literal notranslate"><span class="pre">file:///removable/</span></code> instead. Playlist.xsd
 <code class="docutils literal notranslate"><span class="pre">DataSourceType</span></code> is <code class="docutils literal notranslate"><span class="pre">Disc</span></code> / <code class="docutils literal notranslate"><span class="pre">P-Storage</span></code> / <code class="docutils literal notranslate"><span class="pre">Network</span></code> / <code class="docutils literal notranslate"><span class="pre">FileCache</span></code>. Corpus <code class="docutils literal notranslate"><span class="pre">src</span></code>
 is all <code class="docutils literal notranslate"><span class="pre">file:///dvddisc/</span></code> (<strong>10 620 / 10 620</strong> playlist <code class="docutils literal notranslate"><span class="pre">src</span></code>, <code class="docutils literal notranslate"><span class="pre">e12</span></code>). The persistent-storage <strong>script</strong> URI form is specified:
-<code class="docutils literal notranslate"><span class="pre">file:///required/{contentId}/</span></code> (<a class="reference internal" href="05_manifest_hdi.html"><span class="std std-doc">05</span></a> §5.8); the host’s management-UI
-device-directory nesting is provider/content-ID folders [14] (<a class="reference internal" href="05_manifest_hdi.html"><span class="std std-doc">05</span></a> §5.8).
+<code class="docutils literal notranslate"><span class="pre">file:///required/{contentId}/</span></code> (<a class="reference internal" href="05_manifest_hdi.html"><span class="std std-doc">05</span></a> §5.8); on the storage medium the player
+nests it as <code class="docutils literal notranslate"><span class="pre">/HD_DVD/&lt;PROVIDER_DIR&gt;/&lt;CONTENT_ID&gt;/</span></code>, with <code class="docutils literal notranslate"><span class="pre">PROVIDER_DIR</span></code> derived from
+<code class="docutils literal notranslate"><span class="pre">PROVIDER_ID</span></code> and the DKF key [4 §6.3] (<a class="reference internal" href="05_manifest_hdi.html"><span class="std std-doc">05</span></a> §5.8).
 <code class="docutils literal notranslate"><span class="pre">[11,</span> <span class="pre">12]</span></code> <strong>VERIFIED</strong> (<code class="docutils literal notranslate"><span class="pre">dvddisc</span></code> only)
 <code class="docutils literal notranslate"><span class="pre">[1]</span></code></p>
 </section>

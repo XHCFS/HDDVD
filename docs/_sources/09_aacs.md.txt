@@ -24,72 +24,219 @@ BAK: 104/104 AACS discs have a backup. **99** omit only `MKBRECORDABLE.AACS`
 |---|---|---|
 | `MKBROM.AACS` | 1e6 (88), 1 MiB (10), 12628 (5), 20480 (Pan’s) | Media Key Block. Stop at End-of-MKB; listed size may include padding |
 | `MKBRECORDABLE.AACS` | ~1e6 | recorder MKB |
-| `DKF.AACS` | 64 | Directory Key File. Persistent-storage name, not title key |
-| `VTKF$$$.AACS` | 2480; 2516 on two Pan’s files | Title Key File for `VPLST$$$.XPL` |
-| `VTUF$$$.AACS` | 144 | Title Usage File (CCI). Same `$$$` as VTKF |
-| `CONTENT_CERT.AACS` | 120 | Content certificate |
-| `CONTENT_HASH_TABLE1.AACS` / `2` | varies | 208 listed (104+104); sizes not a closed stride (44 676 …). **Bodies not saved; uncloseable** |
+| `DKF.AACS` | 64 | Directory Key File: names the provider's persistent-storage directory (§9.4) |
+| `VTKF$$$.AACS` | 2480 (`HD_VTKF_SIZE`); two Pan’s files add 36 zero bytes (§9.3) | Title Key File for `VPLST$$$.XPL` |
+| `VTUF$$$.AACS` | 144 (all `URS_NUM` 0); format allows ≤ 64 KB | Title Usage File (§9.8). Same `$$$` as VTKF |
+| `CONTENT_CERT.AACS` | 120 | Content Certificate (§9.5) |
+| `CONTENT_HASH_TABLE1.AACS` | 8 + 8 × NHV | CHT #1: low 64 bits of SHA-1 of every EVOBU / TU, indexed by CPI `CH_PTR` |
+| `CONTENT_HASH_TABLE2.AACS` | 40 060 + 8 × NHA | CHT #2: hashes of `DISCID.DAT`, `DKF`, `MNGCPY_MANIFEST`, every VTUF / ATUF, every XML and script file |
 | `CONTENT_REVOCATION_LIST.AACS` | usually 1e6; 61440 on Pan’s | revocation |
 | `MNGCPY_MANIFEST.XML` | ~200–304 | Managed Copy; not playback |
 
 `ATKF` / `SKF` / `APLST`: **0/120**.
 
+**Trailing residue** is permitted only after `MKBROM`, `MKBRECORDABLE`, `SKBF` and
+`CONTENT_REVOCATION_LIST` [4 p. 21]; that is why their listed sizes vary. Every other
+AACS file ends at its declared size.
+
+### Content Hash Tables (Tables 3-18, 3-19)
+
+CHT #1: `NHV` (u32, ≤ 500 000), 4 reserved bytes, then `NHV` 8-byte hashes, one per
+EVOBU / TU, each the **least-significant 64 bits (last 8 bytes) of SHA-1** over the
+EVOBU as stored (encrypted or not). An EVOBU's CPI `CH_PTR` (§9.6) is its 1-based
+index here.
+
+CHT #2 (fixed offsets): 0 `DISCID.DAT` (8), 8 `DKF.AACS` (8), 16 `MNGCPY_MANIFEST.XML`
+(full 20-byte SHA-1), 36 `VTUF.AACS` (20), 56 `VTUF000`–`VTUF999` (20 each), 20 056
+`ATUF000`–`ATUF999` (20 each), 40 056 `NHA` (u32), 40 060 `NHA` 8-byte hashes of XML
+and ECMAScript files. A TUF hash covers its first `HASH_SIZE` bytes. Absent files are
+`FF`-filled. The player checks these before using the file [4 §3.8].
+
+Keyless verification on **104/104** AACS discs (`e22`): both CHT sizes match their
+counts; Content Certificate digest #1 = SHA-1(CHT #1) and #2 = SHA-1(CHT #2); the DKF,
+manifest and all 217 VTUF slots match; absent-TUF slots are `FF`. "Least-significant
+64 bits" is the **last** 8 bytes of the digest (DKF: 104 match last-8, 0 first-8).
+Two VTUFs with `HASH_SIZE` = 8 are hashed over **8** bytes, not 128: the stored field,
+not the book's definition, is what the authoring tool hashed.
+`Total_Number_of_HashUnits` (§9.5) = `NHV` + `NHA` + 3 + (VTUF files present) on
+104/104. Every EVOBU sampled in `e23` has `CH_PTR` within 1 … `NHV`. `[11]` **VERIFIED**
+
+### `-SLY`: DISCID rewritten after authoring
+
+CHT #2 fixes the hash of `DISCID.DAT` at authoring time. It matches the shipped DISCID
+on **71** discs. On the other **33** the DISCID was changed afterwards, and all 33 are
+exactly the discs whose `PROVIDER_ID` ends in ASCII **`SLY`** ([02](02_discid.md) §2.2):
+
+- 28 ASCII tags (`UNIVERSAL_HD-SLY`, `PARAMOUNT_HD-SLY`, `WHV***V1**HD-SLY`,
+  `DW_ANIM___HD-SLY`): the committed hash matches the same file with **`DVD`**
+  restored in place of `SLY`. They were authored as `…HD-DVD`.
+- `HOT_FUZZ`, `PREMONITION_GER` (binary IDs ending `534c59`): the original last three
+  bytes were recovered by exhaustive search against the committed hash: `66 49 2d` and
+  `4d 01 cf`. `HOT_FUZZ`'s restored ID equals the provider ID of `RAMBO_1/2/3_FRA`,
+  `TOTAL_RECALL_FRA` and `ARMY_OF_SHADOWS` byte for byte, which confirms the search.
+- `BROTHERS_GRIMM`, `PHANTOM_OF_THE_OPERA`, `THE_JACKAL` (identical DISCIDs, all-`FF`
+  ID ending `SLY`): original differs in more than the last three bytes; not recovered.
+
+A conforming AACS player verifies this hash at boot, so these images do not carry the
+DISCID that was pressed. `[11]` **VERIFIED** (`e22`, 33/33 rewrites, 0 other
+mismatches). That the suffix marks images processed with SlySoft AnyDVD HD is
+**INFERRED** from the name only.
+
 ## 9.3 VTKF: Table 3-8 (Final 0.953)
 
-Size the table from `HD_VTKF_SIZE`, do not assume 2480.
+One Title Key File per playlist: `VTKF$$$.AACS` accompanies `VPLST$$$.XPL`, and two
+playlists may not share one. `VTKF.AACS` (no number) is the Category 1 name
+[4 §3.5]. Each entry holds one encrypted Title Key; which entry decrypts an EVOB
+is chosen by `TITLE_KEY_PTR` in that EVOB's CPI (§9.6).
 
-| Offset | Size | Field |
-|---|---|---|
-| 0 | 12 | `TKF_ID` = `"DVD_HD_V_TKF"` |
-| 12 | 4 | `HD_VTKF_SIZE` |
-| 16 | 12 | `PLAYLIST_NAME` = `VPLST%%%.XPL` |
-| 28 | 4 | reserved |
-| 32 | 4 | `VERN` shall be 0 |
-| 36 | 92 | reserved |
-| 128 | n×36 | Title Key Entry |
-| size−48 | 32 | reserved |
-| size−16 | 16 | TKF MAC = CMAC(`Kvu`, bytes 0 .. size−17) |
+| Offset | Size | Field | Rule |
+|---|---|---|---|
+| 0 | 12 | `TKF_ID` | `"DVD_HD_V_TKF"` |
+| 12 | 4 | `HD_VTKF_SIZE` | end address of the TKF; **shall be 2480** |
+| 16 | 12 | `PLAYLIST_NAME` | `VPLST%%%.XPL` / `APLST%%%.XPL`; `FF`×12 for Standard Content |
+| 28 | 4 | reserved | `00` |
+| 32 | 2 | `VERN` | 0 (see note) |
+| 34 | 94 | reserved | `00` |
+| 128 | 64 × 36 | Title Key Entry #1 … #64 | below |
+| 2432 | 32 | reserved | `00` |
+| 2464 | 16 | TKF MAC | CMAC(`Kvu`, bytes 0 … 2463) |
 
-Nominal: 128 + 64×36 + 32 + 16 = **2480**.  
-Pan’s VTKF001/003 = 2516 = 65 slots. Book/Scenarist cap is 64.
+**The TKF is a fixed 2480-byte structure with exactly 64 entries** [4 Table 3-8].
+`HD_VTKF_SIZE` = 2480 on **434/434** files (primary + BAK, 104 discs) (`e21`).
+The player compares `PLAYLIST_NAME` with the **active** playlist (including after
+`IPlaylist.load`) and must not use the keys unless they match [4 §3.5].
+
+**Correction: `PANS_LABYRINTH` has no 65th slot.** `VTKF001` / `VTKF003` are 2516-byte
+files: a normal 2480-byte TKF (`HD_VTKF_SIZE` = 2480, 64 entries, reserved zero, TKF MAC
+at 2464) followed by **36 zero bytes**. The padding is exactly one entry wide, which is
+why reading to the file length produced a phantom 65th entry. The book allows trailing
+residue only after `MKBROM`, `MKBRECORDABLE`, `SKBF` and `CONTENT_REVOCATION_LIST`
+[4 p. 21], so this is an authoring deviation. **Parse to `HD_VTKF_SIZE`, never to the
+file length.** `[11]` **VERIFIED** (`e21`, 4/4 files)
+
+`VERN` width: the book's table gives bytes 32–33, its prose "4 bytes". Bytes 32–35
+are zero on 434/434, so both readings hold on disc.
 
 ### Title Key Entry (36 bytes)
 
-| Off | Size | Field |
+| Off | Size | Field | Rule |
+|---|---|---|---|
+| 0 | 1 | `BIFO` | **Binding Information**, Table 3-9 below |
+| 1 | 3 | reserved | `00` |
+| 4 | 16 | `Kte` | encrypted Title Key: `Kte = AES-128E(Kvu, Kt)`, ECB |
+| 20 | 16 | Binding MAC | per `BIND_TYPE` |
+
+`TITLE_KEY_PTR` is **1-based** (1…64). Empty slots are skipped, not terminators.
+A 32-byte stride is a known misparse.
+
+### BIFO: Binding Information (Table 3-9)
+
+| Bits | Field | Meaning |
 |---|---|---|
-| 0 | 1 | `BIFO`. Bit 7 `AV_FLG` = slot occupied |
-| 1 | 3 | reserved |
-| 4 | 16 | `Kte` (encrypted title key) |
-| 20 | 16 | Binding MAC. `BIND_TYPE=000b` → `0xFF`×16 (Volume ID only) |
+| 7 | `AV_FLG` | 1 = Title Key available, 0 = not available |
+| 6–4 | `BIND_TYPE` | what the key is bound to (below) |
+| 3–0 | reserved | 0 |
 
-Match `PLAYLIST_NAME` to the **active** `VPLST$$$.XPL` (including after
-`IPlaylist.load`). Do not use a foreign VTKF.
-Empty slots are skipped, not terminators. `TITLE_KEY_PTR` is **1-based** (1…64).
+| `BIND_TYPE` | Bound to | Binding MAC |
+|---|---|---|
+| `000` | Volume ID only | `FF`×16 |
+| `001` | Pre-recorded Media Serial Number (PMSN) | CMAC(`Kt`, PMSN) |
+| `010` | Device Unique Nonce (DUN) | CMAC(`Kt`, DUN) |
+| `011` | PMSN and DUN | CMAC(`Kt`, AES-G(DUN, PMSN)) |
+| `100` | Temporary Nonce (TN) | CMAC(`Kt`, TN) |
+| others | reserved | |
 
-A 32-byte stride is a known misparse. Do not use it.
+`Kt = AES-128D(Kvu, Kte)`. Title Keys for content on a pre-recorded disc are
+`BIND_TYPE 000`; the other types protect content copied to persistent storage.
+A player verifies the Binding MAC before using a Title Key [4 §3.5].
 
-Three titles have extra VTKF files without a matching VPLST (`BALLS_OF_FURY`,
-`CHUCK_AND_LARRY`, `SHREK_THE_THIRD_EU`).
+Corpus (`e21`), 217 primary TKFs: **25 662 used slots, every one `BIFO` = `0x80`**
+(`AV_FLG` 1, `BIND_TYPE` 000, Binding MAC `FF`×16); 2 114 unused slots, `BIFO` = `0x00`.
+The book does not say how an unused slot is filled: its MAC is `FF`×16 on all 2 114,
+its `Kte` `FF`×16 on 1 844 and `00`×16 on 270. 195 TKFs fill all 64 slots; 22 use
+between 1 and 59. `[11]` **VERIFIED**
+
+Three titles have extra VTKF files without a matching VPLST (`BALLS_OF_FURY`
+`VTKF001`, `CHUCK_AND_LARRY` `VTKF016`, `SHREK_THE_THIRD_EU` `VTKF004`). The book
+forbids two playlists sharing a TKF; it does not address a TKF with no playlist.
 
 ## 9.4 DKF (64 bytes): Table 6-2
 
-Magic `DVD_HD_V_DKF`. Encrypted directory key at offset 48:
-`KDIRe = AES-128E(Kvu, KDIR)`. Not used to decrypt EVO.
+**Directory Key File.** It carries the key that names the content provider's directory
+in persistent storage [4 §6.3]. It is not used to decrypt video. Required on an AACS
+disc; ignored for Category 1.
+
+| Offset | Size | Field | Rule |
+|---|---|---|---|
+| 0 | 12 | `DKF_ID` | `"DVD_HD_V_DKF"` |
+| 12 | 4 | `HD_VDKF_SIZE` | shall be 64 |
+| 16 | 16 | reserved | `00` |
+| 32 | 2 | `VERN` | 0 |
+| 34 | 14 | reserved | `00` |
+| 48 | 16 | `KDIRe` | encrypted Directory Key: `KDIRe = AES-128E(Kvu, KDIR)`, ECB |
+
+**What the Directory Key does** [4 §6.3]. At boot, with `SEARCH_FLG` = 0 ([02](02_discid.md) §2.3), the
+AACS module checks the DKF's hash against CHT #2 (§9.2), decrypts `KDIR` with `Kvu`,
+and derives the **name of the provider's directory** from DISCID `PROVIDER_ID`:
+
+```
+PROVIDER_DIR = AES-G(KDIR, PROVIDER_ID)      16 bytes, written as a GUID
+```
+
+Persistent storage is laid out as:
+
+```
+/HD_DVD/INFO.TXT                              medium information (player)
+/HD_DVD/<PROVIDER_DIR>/INFO.TXT               provider information (applications)
+/HD_DVD/<PROVIDER_DIR>/<icon images>          not encapsulated; shown by the management screen
+/HD_DVD/<PROVIDER_DIR>/<CONTENT_ID>/INFO.TXT  content information (applications)
+/HD_DVD/<PROVIDER_DIR>/<CONTENT_ID>/…         the disc's files, e.g. VPLST003.XPL
+```
+
+So `PROVIDER_ID` never appears on the storage device as written in DISCID; the folder
+name is a keyed transform of it, reproducible only with `KDIR`. The `<CONTENT_ID>`
+folder is the GUID string of DISCID `CONTENT_ID`. `[4]` **SPEC**; 0 on-device
+directory specimens.
+
+Corpus (`e21`): all fields above hold on **208/208** files (104 discs, primary + BAK);
+`KDIRe` is real data on every disc (never `00`×16 or `FF`×16) and distinct on every
+disc (104 values). Distinct ciphertext is expected even if a provider reused one
+`KDIR`, because `Kvu` differs per disc. `[11]` **VERIFIED**
 
 ## 9.5 CONTENT_CERT (120 bytes): Table 3-17
 
-| Off | Size | Field |
-|---|---|---|
-| 0 | 1 | type `00h` |
-| 1 | 1 | bit 7 = bus encryption enabled (`BEE`) |
-| 40 | 20 | CHT #1 digest |
-| 60 | 20 | CHT #2 digest |
-| 80 | 40 | signature |
+One per disc [4 §3.7]. It signs the two Content Hash Tables, so it authenticates
+every hashed file on the disc.
 
-Integrity / bus-encryption advertisement, not a title key.
-`MATRIX_REVOLUTIONS` `CONTENT_CERT.AACS`: type `00h`, BEE bit 7 = **0**.
-Archive.org ISOs are not bus-encrypted; a software ISO player ignores BEE.
-`[11]` **SINGLE**
+| Off | Size | Field | Rule |
+|---|---|---|---|
+| 0 | 1 | Certificate Type | `00h` |
+| 1 | 1 | bit 7 `BEE`, bits 6–0 reserved | Bus Encryption Enabled: 1 = PC hosts must bus-encrypt EVOB reads |
+| 2 | 4 | `Total_Number_of_HashUnits` | hashes in CHT #1 + CHT #2 (§9.2) |
+| 6 | 1 | `Total_Number_of_Layers` | `01h` |
+| 7 | 1 | `Layer_Number` | `00h` |
+| 8 | 4 | reserved | `00` |
+| 12 | 2 | `Number_of_Digests` | `0002h` |
+| 14 | 2 | Applicant ID | with the next field, forms the Content Certificate ID |
+| 16 | 4 | Content Sequence Number | |
+| 20 | 2 | Minimum CRL Version | |
+| 22 | 2 | reserved | `00` |
+| 24 | 2 | `Length_Format_Specific_Section` | `000Eh` |
+| 26 | 14 | reserved | `00` |
+| 40 | 20 | CHT Digest #1 | SHA-1 of `CONTENT_HASH_TABLE1.AACS` |
+| 60 | 20 | CHT Digest #2 | SHA-1 of `CONTENT_HASH_TABLE2.AACS` |
+| 80 | 40 | Signature Data | AACS LA signature (Pre-recorded Video Book) |
+
+Corpus (`e21`, `e22`), **208/208** files (104 discs): every fixed value above holds;
+`BEE` = 0 and Minimum CRL Version = 0 on all; both digests equal SHA-1 of the saved
+hash tables. `[11]` **VERIFIED**
+
+**Applicant ID does not identify the studio.** Values: `111` (53 discs), `109` (22),
+`134` (12), `140` (9), `104` (6), `177`, `226` (1 each). `111` spans Universal,
+Paramount and DreamWorks titles; `134` spans Universal, Paramount, Warner, New Line and
+DreamWorks Animation, all 2007 releases; `140` is German releases; `104` is French and
+Japanese releases. The grouping follows region and release period, consistent with the
+replicator or authoring facility that applied to AACS LA. **INFERRED**
 
 ## 9.6 Pack encryption: Table 4-7
 
@@ -122,8 +269,8 @@ and take CPI from that PES (GCI-payload offset 12 on the observed layout). Corpu
 
 The first reverse-engineering tool encodes the offset the AACS book and the patents
 both deferred. In the NV_PCK (first pack of an EVOBU), the 16-byte CPI field is at
-**pack byte 0x3C (60)**, inside the GCI packet (`0x000001BF` at 0x2A, substream at
-0x2C). Confirmed byte-for-byte against a real disc: the nav-pack signature
+**pack byte 0x3C (60)**, inside the GCI packet (start code `00 00 01 BF` at 0x29–0x2C,
+`sub_stream_id` `0x04` at 0x2F; CPI = GCI payload byte 13 counting that `0x04`). Confirmed byte-for-byte against a real disc: the nav-pack signature
 (`[0x2A]=00 [0x2B]=01 [0x11]=0xBB [0x2C]=0xBF`) matches and CPI@0x3C reads all-zero
 on unencrypted `RESERVOIR_DOGS` (`KEY_VF=0`, correct for clear content).
 
@@ -167,20 +314,49 @@ copied verbatim; the packs are in the clear. Everything here about *file layout*
 holds. Nothing about *encrypted content* can be derived or tested from this corpus.
 The corpus cannot exhibit an encrypted pack, but CPI's location is no longer OPEN. It was recovered from BackupHDDVD's source (above), not from these ISOs.
 
-Table 4-1 / 4-2 (once located):
+### CPI layout (Tables 4-1 to 4-6)
 
-| CPI bytes | Field |
-|---|---|
-| 0 | `KEY_VF` in bits 7–6: `00` neither, `01` segment key, `10` title key, `11` reserved |
-| 1–2 | `TITLE_KEY_PTR` (1…64) when `KEY_VF=10b`; else 0 |
-| 3 | `SEG_KEY_PTR` when `KEY_VF=01b`; else 0 |
-| 4–7 | `CH_PTR` (CHT #1 entry, 1…500000) |
-| 8–9 | URMI |
-| 10–11 | CCI_SS |
-| 12–13 | CCI |
-| 14–15 | reserved `00` |
+| CPI bytes | Block | Field |
+|---|---|---|
+| 0–3 | **KMI** Key Management Information | byte 0 bits 7–6 `KEY_VF` (bits 5–0 reserved); bytes 1–2 `TITLE_KEY_PTR` (u16); byte 3 `SEG_KEY_PTR` |
+| 4–7 | **CHMI** Content Hash Management Information | `CH_PTR` (u32): this EVOBU's entry in CHT #1, 1 … 500 000 |
+| 8–9 | **URMI** Usage Rule Management Information | bit 15 `UR_VF`; bits 14–0 `UR_PTR` (Usage Rule Set number in the TUF, 1 … 255); all ones when `UR_VF` = 0 |
+| 10–11 | **CCI_SS** (status of CCI) | byte 10: bit 7 `PCCI_VF`, 6 `APS_VF`, 5 `ICT_VF`, 4 `DOT_VF`, 3–0 reserved; byte 11 reserved |
+| 12–13 | **CCI** Copy Control Information | byte 12: bits 7–5 `PCCI`, 4–2 `APSTB`, 1 `ICT`, 0 `DOT`; byte 13 reserved |
+| 14–15 | reserved | `00` |
 
-`KEY_VF=00b` → do not decrypt that EVOBU.
+`KEY_VF`: `00` no key pointer valid (EVOBU not encrypted), `01` `SEG_KEY_PTR` valid,
+`10` `TITLE_KEY_PTR` valid, `11` reserved. When `KEY_VF` ≠ `10`, `TITLE_KEY_PTR`
+**shall be 0**; when ≠ `01`, `SEG_KEY_PTR` shall be 0.
+
+`PCCI` (primitive copy control): `000` Copy Freely, `100` Copy One Generation, `010`
+No More Copies, `110` Copy Never, `011` Encryption Plus Non-Assertion. `APSTB`
+(analog protection): `000` off, `001`–`011` APS1 types 1–3, `110`/`111` APS2. `ICT`: 1 =
+high-definition analog output only as a constrained image. `DOT`: 1 = no analog output
+of the decoded video. A validity flag of 0 in CCI_SS means its field is read as its
+permissive value. If main and sub video are both shown, the main video's CCI applies.
+
+**One Title Key per EVOB** [4 §4.3]: *"A Title Key shall not be changed within one
+P/S-EVOB. A Title Key may be shared by plural EVOBs."* CCI and `UR_PTR` also stay
+constant within an EVOB. `TITLE_KEY_PTR` is repeated in every EVOBU's CPI, but the
+key only changes at an EVOB boundary. Because `CPI_lsb_96` contains `CH_PTR`, each
+EVOBU still gets its own content key `Kc`.
+
+**Observed on disc** (`e23`, 24 consecutive EVOBUs on each of 11 AACS discs and the
+unencrypted `1408_DC`; the GCI `sub_stream_id` is at pack offset 47 on all, so CPI is at
+pack `0x3C`):
+
+- `CH_PTR` rises by exactly 1 per EVOBU and stays within 1 … `NHV` of that disc's
+  CHT #1: **this locates the CPI on the disc itself**, independently of BackupHDDVD.
+- URMI = `7FFF` (`UR_VF` 0, `UR_PTR` all ones, as the book requires); CCI_SS = `F000`
+  (all four validity flags set) on 10 of 11, `0000` on `HOT_FUZZ`.
+- `KEY_VF` = `00` and CCI = `0000` on all, yet `TITLE_KEY_PTR` = 1, 3, 7 or 9 remains,
+  and every such pointer lands on an occupied slot of that disc's VTKF. The book forbids a
+  non-zero pointer with `KEY_VF` = `00`: CPI bytes 0 and 12 were cleared by the tool
+  that decrypted the image (BackupHDDVD documents exactly this, §9.11), and the leftover
+  pointers show which Title Key each EVOB was originally encrypted with.
+- `1408_DC` (no AACS directory): all 16 CPI bytes are zero.
+`[11]` **VERIFIED**
 
 Blu-ray `aacs_decrypt_unit` (6144-byte TS aligned unit) **does not apply**.
 Reusable: MKB walk, AES-G, `Kvu = AES-G(Km, VolumeID)`, `Kt = AES-128D(Kvu, Kte)`.
@@ -190,32 +366,50 @@ Reusable: MKB walk, AES-G, `Kvu = AES-G(Km, VolumeID)`, `Kt = AES-128D(Kvu, Kte)
 BCA + Lead-in. MMC `READ DISC STRUCTURE` format **`80h`**, after AACS drive
 authentication. Not `DISCID.DAT@12`. This ISO corpus cannot yield `Kvu`.
 
-## 9.8 VTUF (144 bytes)
+## 9.8 VTUF: Table 3-10 (Final 0.953)
 
-Sample: `MYSTERY_MEN` `ANY!/VTUF000.AACS` (only VTUF saved). Magic
-`DVD_HD_V_TUF`. Usage rules / CCI, not `Kc`. Book Table 3-10 (URS_NUM at **16**,
-HASH_SIZE **17–20**, VERN **21–22**, PLAYLIST_NAME **23–34**). When `URS_NUM=0`
-there is **no** usage-rule body; TUF MAC starts at **128**.
+**Title Usage File.** Holds the Usage Rules (copy and output permissions) that an
+EVOB's CPI can point to through `UR_PTR` (§9.6). Optional on a disc; one per
+playlist (`VTUF$$$.AACS` with `VPLST$$$.XPL`), never shared; `VTUF.AACS` is the
+Category 1 name; at most 64 KB [4 §3.6].
 
-Do not use `spec/clean/09_AACS.md` “name at 0x18”. That dump folded `'V'` into
-the preceding field. Disc + book agree on **23**.
+| Offset | Size | Field | Rule |
+|---|---|---|---|
+| 0 | 12 | `URF_ID` | `"DVD_HD_V_TUF"` |
+| 12 | 4 | `HD_VURF_SIZE` | file size in bytes, ≤ 65 536 |
+| 16 | 1 | `URS_NUM` | number of Usage Rule Sets, 0…255 |
+| 17 | 4 | `HASH_SIZE` | bytes covered by the CHT #2 hash: the TUF minus the BURS fields and TUF MAC |
+| 21 | 2 | `VERN` | 0 |
+| 23 | 12 | `PLAYLIST_NAME` | `VPLST%%%.XPL`; `FF`×12 for Standard Content |
+| 35 | 93 | reserved | `00` |
+| 128 | X₁ … Xₙ | Usage Rule Set #1 … #N | Table 3-12, variable |
+| 128 + ΣX | 17 × N | BURS #1 … #N | 1-byte `BIFO` + 16-byte Binding MAC each (Table 3-11) |
+| end − 16 | 16 | TUF MAC | CMAC(`Kvu`, whole TUF except this field) |
 
-| Offset | Size | Field |
-|---|---|---|
-| 0 | 12 | `URF_ID` = `"DVD_HD_V_TUF"` |
-| 12 | 4 | `HD_VURF_SIZE` = 144 |
-| 16 | 1 | `URS_NUM` | `0` on the sample |
-| 17 | 4 | `HASH_SIZE` | `128`; hash covers bytes 0–127 |
-| 21 | 2 | `VERN` / reserved | `0` |
-| 23 | 12 | `PLAYLIST_NAME` | `"VPLST000.XPL"` |
-| 35 | 93 | reserved | 0 |
-| 128 | 16 | TUF MAC | CMAC(`Kvu`, bytes 0..127) |
+With `URS_NUM` = 0 there are no URS or BURS and the file is exactly **144 bytes**: header
+to 127, TUF MAC at 128. `VERN` is 2 bytes here although the book's prose says 4; the
+table places `PLAYLIST_NAME` at 23, which only fits a 2-byte `VERN`.
 
-Book Table 3-12 URS / BURS layout applies only when `URS_NUM>0`. **No such
-body in this corpus:** 217/217 listed `VTUF$$$.AACS` (primary tree, not BAK)
-are **144 bytes**. A non-zero URS list would grow the file. Layout of
-`URS_NUM>0` is therefore **uncloseable** here (book-only).
-`[11, 12]` **VERIFIED** (absence).
+**BURS** (Table 3-11) binds one Usage Rule Set with the same `BIND_TYPE` values as
+§9.3, but its `AV_FLG` is always 0 and its Binding MAC is keyed differently: `00`×16
+for Volume-ID binding, otherwise CMAC(PMSN / DUN / AES-G(DUN, PMSN) / TN, {URS}).
+A mismatched `PLAYLIST_NAME`, TUF MAC or Binding MAC sends the player to Stop State
+before the associated EVOB plays [4 §3.6].
+
+**Usage Rule Set** (Table 3-12): `URS_VERSION` (1), `URS_SIZE` (4), `UR_NUM` (4), then
+`UR_NUM` Usage Rules, each starting `UR_ID` (3) and `UR_TYPE` (1). Rule bodies are
+Tables 3-13 to 3-16 (CCI for update, time-based conditions, REL rules, output control
+bits). A player applies only rules whose `UR_ID` it recognises.
+
+Corpus (`e21`), **434/434** files (217 primary + BAK): 144 bytes, `URS_NUM` = 0,
+`HD_VURF_SIZE` = length, `VERN` 0, reserved zero, `PLAYLIST_NAME` at **23** matching
+the file number. No disc carries a Usage Rule Set. `HASH_SIZE` is 128 (bytes 0–127)
+on 430 files but **8** on both copies of `KING_OF_CALIFORNIA` and
+`RESIDENT_EVIL3_GER`; see §9.2 for which value CHT #2 actually hashed. `[11]`
+**VERIFIED**
+
+Do not use `spec/clean/09_AACS.md` "name at 0x18". That dump folded `'V'` into the
+preceding field. Disc and book agree on **23**.
 
 ## 9.9 Reusing libaacs: what ports and what does not
 
