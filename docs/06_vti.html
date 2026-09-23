@@ -137,10 +137,11 @@
 <li class="toctree-l3"><a class="reference internal" href="08_evo.html#the-rule-a-demuxer-applies">The rule a demuxer applies</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="08_evo.html#sub-picture-sp-pck-2bitrlc-8bitrlc-decode">8.8 Sub-picture (SP_PCK): <code class="docutils literal notranslate"><span class="pre">2bitRLC</span></code> / <code class="docutils literal notranslate"><span class="pre">8bitRLC</span></code> decode</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="08_evo.html#pixel-values-table-67-68">Pixel values (TABLE 67/68)</a></li>
-<li class="toctree-l3"><a class="reference internal" href="08_evo.html#run-length-rule-eight-patterns-msb-first-bitstream">Run-length rule (eight patterns, MSB-first bitstream)</a></li>
-<li class="toctree-l3"><a class="reference internal" href="08_evo.html#display-control-sequence-sp-dcsqt">Display-control sequence (<code class="docutils literal notranslate"><span class="pre">SP_DCSQT</span></code>)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="08_evo.html#sub-picture-sp-pck-sub-picture-unit">8.8 Sub-picture (SP_PCK): Sub-picture Unit</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="08_evo.html#spuh-patent-table-66">SPUH (patent Table 66)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="08_evo.html#sp-dcsqt-display-control-sequences">SP_DCSQT: display-control sequences</a></li>
+<li class="toctree-l3"><a class="reference internal" href="08_evo.html#display-control-commands">Display-control commands</a></li>
+<li class="toctree-l3"><a class="reference internal" href="08_evo.html#pixel-data-8bitrlc-patent-5-5-4-2-table-6776">Pixel data (8bitRLC, patent §5.5.4.2, TABLE 67–76)</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="08_evo.html#aacs-vs-container">8.9 AACS vs container</a></li>
@@ -562,7 +563,7 @@ are zero through the rest of the 1024-byte slot. 7 ATRIs (<code class="docutils 
 <code class="docutils literal notranslate"><span class="pre">LAST_SAMURAI</span></code>, <code class="docutils literal notranslate"><span class="pre">U2_RATTLE_AND_HUM</span></code>) fill 32×4-byte words from offset <strong>391</strong>
 with <code class="docutils literal notranslate"><span class="pre">7f7f7f00</span></code> (dummy gray, not a Y/Cr/Cb palette). No specimen has a
 DVD-style 16-colour YCrCb palette in the ATRI, and none is needed: the sub-picture
-colour/contrast comes from the <code class="docutils literal notranslate"><span class="pre">SET_COLOR</span></code> / <code class="docutils literal notranslate"><span class="pre">SET_CONTR</span></code> display-control commands in the
+colour/contrast comes from the <code class="docutils literal notranslate"><span class="pre">83h</span></code> colour-table and <code class="docutils literal notranslate"><span class="pre">84h</span></code> contrast-table commands in the
 SP_DCSQ (<a class="reference internal" href="08_evo.html"><span class="std std-doc">08</span></a> §8.8), not from the ATRI. The ATRI palette slot being unused is
 expected, not a decoder gap.
 <code class="docutils literal notranslate"><span class="pre">[11,</span> <span class="pre">12]</span></code> <strong>OPEN</strong> / uncloseable from this corpus.</p>

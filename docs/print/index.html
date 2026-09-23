@@ -128,10 +128,11 @@
 <li class="toctree-l3"><a class="reference internal" href="#document-08_evo#the-rule-a-demuxer-applies">The rule a demuxer applies</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#document-08_evo#sub-picture-sp-pck-2bitrlc-8bitrlc-decode">8.8 Sub-picture (SP_PCK): <code class="docutils literal notranslate"><span class="pre">2bitRLC</span></code> / <code class="docutils literal notranslate"><span class="pre">8bitRLC</span></code> decode</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#document-08_evo#pixel-values-table-67-68">Pixel values (TABLE 67/68)</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#document-08_evo#run-length-rule-eight-patterns-msb-first-bitstream">Run-length rule (eight patterns, MSB-first bitstream)</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#document-08_evo#display-control-sequence-sp-dcsqt">Display-control sequence (<code class="docutils literal notranslate"><span class="pre">SP_DCSQT</span></code>)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#document-08_evo#sub-picture-sp-pck-sub-picture-unit">8.8 Sub-picture (SP_PCK): Sub-picture Unit</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#document-08_evo#spuh-patent-table-66">SPUH (patent Table 66)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#document-08_evo#sp-dcsqt-display-control-sequences">SP_DCSQT: display-control sequences</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#document-08_evo#display-control-commands">Display-control commands</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#document-08_evo#pixel-data-8bitrlc-patent-5-5-4-2-table-6776">Pixel data (8bitRLC, patent §5.5.4.2, TABLE 67–76)</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#document-08_evo#aacs-vs-container">8.9 AACS vs container</a></li>
@@ -2275,7 +2276,7 @@ are zero through the rest of the 1024-byte slot. 7 ATRIs (<code class="docutils 
 <code class="docutils literal notranslate"><span class="pre">LAST_SAMURAI</span></code>, <code class="docutils literal notranslate"><span class="pre">U2_RATTLE_AND_HUM</span></code>) fill 32×4-byte words from offset <strong>391</strong>
 with <code class="docutils literal notranslate"><span class="pre">7f7f7f00</span></code> (dummy gray, not a Y/Cr/Cb palette). No specimen has a
 DVD-style 16-colour YCrCb palette in the ATRI, and none is needed: the sub-picture
-colour/contrast comes from the <code class="docutils literal notranslate"><span class="pre">SET_COLOR</span></code> / <code class="docutils literal notranslate"><span class="pre">SET_CONTR</span></code> display-control commands in the
+colour/contrast comes from the <code class="docutils literal notranslate"><span class="pre">83h</span></code> colour-table and <code class="docutils literal notranslate"><span class="pre">84h</span></code> contrast-table commands in the
 SP_DCSQ (<a class="reference internal" href="#document-08_evo"><span class="std std-doc">08</span></a> §8.8), not from the ATRI. The ATRI palette slot being unused is
 expected, not a decoder gap.
 <code class="docutils literal notranslate"><span class="pre">[11,</span> <span class="pre">12]</span></code> <strong>OPEN</strong> / uncloseable from this corpus.</p>
@@ -3196,167 +3197,184 @@ Sub audio (AS_PCK) uses the TABLE 46 audio ranges. PiP is selected by the clip�
 clip carries it, so those ids are patent-only here. <code class="docutils literal notranslate"><span class="pre">[3]</span></code> <strong>INFERRED</strong>.</p>
 </section>
 </section>
-<section id="sub-picture-sp-pck-2bitrlc-8bitrlc-decode">
-<h4>8.8 Sub-picture (SP_PCK): <code class="docutils literal notranslate"><span class="pre">2bitRLC</span></code> / <code class="docutils literal notranslate"><span class="pre">8bitRLC</span></code> decode<a class="headerlink" href="#sub-picture-sp-pck-2bitrlc-8bitrlc-decode" title="Link to this heading"></a></h4>
-<p>Needed to render subtitles / SP-based menus. Routing is §8.7 (<code class="docutils literal notranslate"><span class="pre">0xBD</span></code> sub
-<code class="docutils literal notranslate"><span class="pre">0x20|(n-1)</span></code>). Payload is a <strong>Sub-picture Unit (SPU)</strong>: header <code class="docutils literal notranslate"><span class="pre">SPUH</span></code>, run-length
-pixel data <code class="docutils literal notranslate"><span class="pre">PXD</span></code>, then a display-control sequence table <code class="docutils literal notranslate"><span class="pre">SP_DCSQT</span></code>. An SPU spans
-one or more SP_PCKs; the last SP_PCK may pad.
-<code class="docutils literal notranslate"><span class="pre">[2]</span></code></p>
-<section id="pixel-values-table-67-68">
-<h5>Pixel values (TABLE 67/68)<a class="headerlink" href="#pixel-values-table-67-68" title="Link to this heading"></a></h5>
-<p>9-bit code. Bit 8 = 0 selects one of the four <em>specified</em> pixels; bit 8 = 1 is an
-8-bit gray/gradation index (<code class="docutils literal notranslate"><span class="pre">8bitRLC</span></code>). <code class="docutils literal notranslate"><span class="pre">2bitRLC</span></code> uses only the specified four.</p>
+<section id="sub-picture-sp-pck-sub-picture-unit">
+<h4>8.8 Sub-picture (SP_PCK): Sub-picture Unit<a class="headerlink" href="#sub-picture-sp-pck-sub-picture-unit" title="Link to this heading"></a></h4>
+<p>Bitmap subtitles. Routing is §8.7 (<code class="docutils literal notranslate"><span class="pre">0xBD</span></code>, <code class="docutils literal notranslate"><span class="pre">sub_stream_id</span></code> <code class="docutils literal notranslate"><span class="pre">0x20</span> <span class="pre">|</span> <span class="pre">(n-1)</span></code>, up to 32
+streams). Each <strong>Sub-picture Unit (SPU)</strong> is one image plus the commands that
+show, colour and hide it: header <code class="docutils literal notranslate"><span class="pre">SPUH</span></code>, run-length pixel data <code class="docutils literal notranslate"><span class="pre">PXD</span></code> (top field,
+then bottom field), then the display-control sequence table <code class="docutils literal notranslate"><span class="pre">SP_DCSQT</span></code>. An SPU
+spans one or more SP_PCKs; reassemble the payload bytes after the
+<code class="docutils literal notranslate"><span class="pre">sub_stream_id</span></code> until <code class="docutils literal notranslate"><span class="pre">SPU_SZ</span></code> bytes are collected. The first SP_PCK of an SPU
+carries the PES PTS, which is the SPU’s time origin.</p>
+<p>Every Advanced title in the corpus uses the <strong>8-bit</strong> SPU of patent §5.5.4. All
+1258 <code class="docutils literal notranslate"><span class="pre">SP_ATR</span></code> words say so (<a class="reference internal" href="#document-06_vti"><span class="std std-doc">06</span></a>), and all SPUs sampled carry the
+10-byte header below. <code class="docutils literal notranslate"><span class="pre">e25</span></code> checks three SPUs saved in <code class="docutils literal notranslate"><span class="pre">spec/raw/evo_samples/</span></code>
+(12_MONKEYS, 1408_DC, STALINGRAD) and, with <code class="docutils literal notranslate"><span class="pre">E25_LIVE=1</span></code>, every SPU in 12 EVOBUs
+from the middle of 12 features: 54 SPUs on 11 discs (1408_DC, 16_BLOCKS,
+40YR_OLD_VIRGIN, DOOM, GOODFELLAS, HOT_FUZZ, MYSTERY_MEN, PANS_LABYRINTH,
+STALINGRAD, TRANSFORMERS, U2_RATTLE_AND_HUM; the 12_MONKEYS window is silent,
+and 18 more SPUs from a window at 40% of it agree). <code class="docutils literal notranslate"><span class="pre">[2,</span> <span class="pre">11,</span> <span class="pre">12]</span></code> <strong>VERIFIED</strong></p>
+<p>The 2-bit, DVD-shaped SPU (patent §5.5.3) starts with a non-zero 2-byte
+<code class="docutils literal notranslate"><span class="pre">PRE_HEAD</span></code> (DVD size field). A <code class="docutils literal notranslate"><span class="pre">0000h</span></code> start selects the long header. No
+Advanced title here uses the 2-bit form.</p>
+<section id="spuh-patent-table-66">
+<h5>SPUH (patent Table 66)<a class="headerlink" href="#spuh-patent-table-66" title="Link to this heading"></a></h5>
 <table class="docutils align-default">
 <thead>
-<tr class="row-odd"><th class="head"><p>Code</p></th>
-<th class="head"><p>Pixel</p></th>
+<tr class="row-odd"><th class="head"><p>Off</p></th>
+<th class="head"><p>Size</p></th>
+<th class="head"><p>Field</p></th>
+<th class="head"><p>On disc</p></th>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">0</span> <span class="pre">0000</span> <span class="pre">0000</span></code></p></td>
-<td><p>Background</p></td>
+<tr class="row-even"><td><p>0</p></td>
+<td><p>2</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">SPU_ID</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0000h</span></code></p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">0</span> <span class="pre">0000</span> <span class="pre">0001</span></code></p></td>
-<td><p>Pattern</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">0</span> <span class="pre">0000</span> <span class="pre">0010</span></code></p></td>
-<td><p>Emphasis-1</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">0</span> <span class="pre">0000</span> <span class="pre">0011</span></code></p></td>
-<td><p>Emphasis-2</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">1</span> <span class="pre">xxxx</span> <span class="pre">xxxx</span></code></p></td>
-<td><p>Pixel-4 … Pixel-255 (<code class="docutils literal notranslate"><span class="pre">1</span> <span class="pre">0000</span> <span class="pre">0000</span></code>..<code class="docutils literal notranslate"><span class="pre">1</span> <span class="pre">0000</span> <span class="pre">0011</span></code> <strong>prohibited</strong>)</p></td>
-</tr>
-</tbody>
-</table>
-<p>Actual RGB/contrast for each index comes from the display-control commands
-(color + contrast), not from the code itself.</p>
-</section>
-<section id="run-length-rule-eight-patterns-msb-first-bitstream">
-<h5>Run-length rule (eight patterns, MSB-first bitstream)<a class="headerlink" href="#run-length-rule-eight-patterns-msb-first-bitstream" title="Link to this heading"></a></h5>
-<p>Specified-4 pixels (2-bit color <code class="docutils literal notranslate"><span class="pre">PIX1</span> <span class="pre">PIX0</span></code>):</p>
-<table class="docutils align-default">
-<thead>
-<tr class="row-odd"><th class="head"><p>Run</p></th>
-<th class="head"><p>Unit bits</p></th>
-<th class="head"><p>Layout</p></th>
-<th class="head"><p>Run value</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p>1</p></td>
+<tr class="row-odd"><td><p>2</p></td>
 <td><p>4</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">Comp=0</span> <span class="pre">PIX2=0</span> <span class="pre">PIX1</span> <span class="pre">PIX0</span></code></p></td>
-<td><p>1</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">SPU_SZ</span></code></p></td>
+<td><p>SPU size in bytes; always even (odd sizes get one <code class="docutils literal notranslate"><span class="pre">FFh</span></code>)</p></td>
 </tr>
-<tr class="row-odd"><td><p>2–9</p></td>
-<td><p>8</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">Comp=1</span> <span class="pre">PIX2=0</span> <span class="pre">PIX1</span> <span class="pre">PIX0</span> <span class="pre">LEXT=0</span> <span class="pre">RUN2..0</span></code></p></td>
-<td><p>RUN+2</p></td>
-</tr>
-<tr class="row-even"><td><p>10–136</p></td>
-<td><p>12</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">Comp=1</span> <span class="pre">PIX2=0</span> <span class="pre">PIX1</span> <span class="pre">PIX0</span> <span class="pre">LEXT=1</span> <span class="pre">RUN6..0</span></code></p></td>
-<td><p>RUN+9</p></td>
-</tr>
-<tr class="row-odd"><td><p>to EOL</p></td>
-<td><p>12</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">Comp=1</span> <span class="pre">PIX2=0</span> <span class="pre">PIX1</span> <span class="pre">PIX0</span> <span class="pre">LEXT=1</span> <span class="pre">RUN=0</span></code></p></td>
-<td><p>to end of line</p></td>
+<tr class="row-even"><td><p>6</p></td>
+<td><p>4</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">SP_DCSQT_SA</span></code></p></td>
+<td><p>offset of <code class="docutils literal notranslate"><span class="pre">SP_DCSQT</span></code> from the first SPU byte</p></td>
 </tr>
 </tbody>
 </table>
-<p>8-bit pixels (<code class="docutils literal notranslate"><span class="pre">8bitRLC</span></code>, color <code class="docutils literal notranslate"><span class="pre">PIX7..PIX0</span></code>):</p>
-<table class="docutils align-default">
-<thead>
-<tr class="row-odd"><th class="head"><p>Run</p></th>
-<th class="head"><p>Unit bits</p></th>
-<th class="head"><p>Layout</p></th>
-<th class="head"><p>Run value</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p>1</p></td>
-<td><p>9</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">Comp=0</span> <span class="pre">PIX7=1</span> <span class="pre">PIX6..0</span></code></p></td>
-<td><p>1</p></td>
-</tr>
-<tr class="row-odd"><td><p>2–9</p></td>
-<td><p>13</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">Comp=1</span> <span class="pre">PIX7=1</span> <span class="pre">PIX6..0</span> <span class="pre">LEXT=0</span> <span class="pre">RUN2..0</span></code></p></td>
-<td><p>RUN+2</p></td>
-</tr>
-<tr class="row-even"><td><p>10–136</p></td>
-<td><p>17</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">Comp=1</span> <span class="pre">PIX7=1</span> <span class="pre">PIX6..0</span> <span class="pre">LEXT=1</span> <span class="pre">RUN6..0</span></code></p></td>
-<td><p>RUN+9</p></td>
-</tr>
-<tr class="row-odd"><td><p>to EOL</p></td>
-<td><p>17</p></td>
-<td><p>same, <code class="docutils literal notranslate"><span class="pre">RUN=0</span></code></p></td>
-<td><p>to end of line</p></td>
-</tr>
-</tbody>
-</table>
-<p>Line width = <code class="docutils literal notranslate"><span class="pre">SET_DAREA2</span></code> display area. PXD is stored per field (top field PXD
-first, then bottom, after <code class="docutils literal notranslate"><span class="pre">SPUH</span></code>); byte-align at each field/line boundary per the
-figure tables (69–76, image-only; the prose above is the authoritative encoding).
-<strong>INFERRED</strong> bit order from prose; TABLE 69–76 pixel layouts are figure images.</p>
+<p><code class="docutils literal notranslate"><span class="pre">PXD</span></code> starts right after the header: the top-field address is <strong>10</strong> on every SPU.</p>
 </section>
-<section id="display-control-sequence-sp-dcsqt">
-<h5>Display-control sequence (<code class="docutils literal notranslate"><span class="pre">SP_DCSQT</span></code>)<a class="headerlink" href="#display-control-sequence-sp-dcsqt" title="Link to this heading"></a></h5>
-<p><code class="docutils literal notranslate"><span class="pre">SP_DCSQ</span></code> entries carry a presentation time (<code class="docutils literal notranslate"><span class="pre">SP_DCSQ_STM</span></code>, relative to SPU PTS)
-and an offset to the next <code class="docutils literal notranslate"><span class="pre">SP_DCSQ</span></code>, then commands. The command set (bit layout in
-a figure table, names per §5.5.4.4):</p>
+<section id="sp-dcsqt-display-control-sequences">
+<h5>SP_DCSQT: display-control sequences<a class="headerlink" href="#sp-dcsqt-display-control-sequences" title="Link to this heading"></a></h5>
+<p>A chain of <code class="docutils literal notranslate"><span class="pre">SP_DCSQ</span></code> entries, starting at <code class="docutils literal notranslate"><span class="pre">SP_DCSQT_SA</span></code>:</p>
 <table class="docutils align-default">
 <thead>
-<tr class="row-odd"><th class="head"><p>Command</p></th>
-<th class="head"><p>Effect</p></th>
+<tr class="row-odd"><th class="head"><p>Off</p></th>
+<th class="head"><p>Size</p></th>
+<th class="head"><p>Field</p></th>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">STA_DSP</span></code> / <code class="docutils literal notranslate"><span class="pre">FSTA_DSP</span></code></p></td>
-<td><p>start (or forced-start) sub-picture display at this time</p></td>
+<tr class="row-even"><td><p>0</p></td>
+<td><p>2</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">SP_DCSQ_STM</span></code>: start time relative to the SPU PTS, in units of 1024 / 90 000 s (≈11.4 ms, DVD parity)</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">STP_DSP</span></code></p></td>
-<td><p>stop display (also used to clear at a Cell boundary)</p></td>
+<tr class="row-odd"><td><p>2</p></td>
+<td><p>4</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">SP_NXT_DCSQ_SA</span></code>: offset of the next <code class="docutils literal notranslate"><span class="pre">SP_DCSQ</span></code> from the first SPU byte. <strong>The last one points at itself</strong></p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">SET_COLOR</span></code></p></td>
-<td><p>4 palette indices for Background/Pattern/Emphasis-1/-2</p></td>
+<tr class="row-even"><td><p>6</p></td>
+<td><p>…</p></td>
+<td><p>commands, ended by <code class="docutils literal notranslate"><span class="pre">FFh</span></code></p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">SET_CONTR</span></code></p></td>
-<td><p>4 contrast (alpha) values, one per specified pixel</p></td>
+</tbody>
+</table>
+<p>DVD uses 2-byte addresses here. HD DVD widens them to 4. The last DCSQ ends the
+SPU (at most <code class="docutils literal notranslate"><span class="pre">FFh</span></code> padding follows). The <code class="docutils literal notranslate"><span class="pre">STM</span></code> unit is checked on disc: every
+<code class="docutils literal notranslate"><span class="pre">STP_DSP</span></code> time × 1024 lands before the next SPU of the same stream, typically
+70–100 ms early (the gap between two subtitles).</p>
+</section>
+<section id="display-control-commands">
+<h5>Display-control commands<a class="headerlink" href="#display-control-commands" title="Link to this heading"></a></h5>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Opcode</p></th>
+<th class="head"><p>Name</p></th>
+<th class="head"><p>Operand</p></th>
+<th class="head"><p>Meaning</p></th>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">SET_DAREA2</span></code></p></td>
-<td><p>display rectangle (line width + top/bottom)</p></td>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">01h</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">STA_DSP</span></code></p></td>
+<td><p>none</p></td>
+<td><p>start display</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">SET_DSPXA</span></code></p></td>
-<td><p>PXD start addresses (top / bottom field)</p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">02h</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">STP_DSP</span></code></p></td>
+<td><p>none</p></td>
+<td><p>stop display</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">CHG_COLCON</span></code></p></td>
-<td><p>change color/contrast mid-display (karaoke wipes)</p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">83h</span></code></p></td>
+<td><p>colour table</p></td>
+<td><p>768 bytes</p></td>
+<td><p>256 × (<code class="docutils literal notranslate"><span class="pre">Y</span></code>, <code class="docutils literal notranslate"><span class="pre">Cr</span></code>, <code class="docutils literal notranslate"><span class="pre">Cb</span></code>), one per pixel value: 0–3 the specified pixels (background, pattern, emphasis-1, emphasis-2), 4–255 the 8-bit pixels (patent Table 61)</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">END</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">84h</span></code></p></td>
+<td><p>contrast table</p></td>
+<td><p>256 bytes</p></td>
+<td><p>one contrast per pixel value (Table 62). <strong><code class="docutils literal notranslate"><span class="pre">FFh</span></code> = fully transparent, lower = more opaque</strong></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">85h</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">SET_DAREA2</span></code></p></td>
+<td><p>6 bytes</p></td>
+<td><p>display area, two 24-bit words of 12-bit start + 12-bit end: x (<code class="docutils literal notranslate"><span class="pre">x0</span> <span class="pre">&lt;&lt;</span> <span class="pre">12</span> <span class="pre">|</span> <span class="pre">x1</span></code>), then y. Width = <code class="docutils literal notranslate"><span class="pre">x1</span> <span class="pre">−</span> <span class="pre">x0</span> <span class="pre">+</span> <span class="pre">1</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">86h</span></code></p></td>
+<td><p>PXD addresses</p></td>
+<td><p>8 bytes</p></td>
+<td><p>top-field and bottom-field <code class="docutils literal notranslate"><span class="pre">PXD</span></code> offsets from the first SPU byte, 4 bytes each</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FFh</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">CMD_END</span></code></p></td>
+<td><p>none</p></td>
 <td><p>end of this <code class="docutils literal notranslate"><span class="pre">SP_DCSQ</span></code></p></td>
 </tr>
 </tbody>
 </table>
-<p><strong>Command opcodes close by DVD parity.</strong> HD DVD sub-picture reuses the DVD-Video
-display-control command set; the opcode bytes are the DVD ones (public: DVD-Video
-spec / ffmpeg <code class="docutils literal notranslate"><span class="pre">dvdsubdec</span></code>): <code class="docutils literal notranslate"><span class="pre">0x00</span></code> FSTA_DSP, <code class="docutils literal notranslate"><span class="pre">0x01</span></code> STA_DSP, <code class="docutils literal notranslate"><span class="pre">0x02</span></code> STP_DSP, <code class="docutils literal notranslate"><span class="pre">0x03</span></code>
-SET_COLOR, <code class="docutils literal notranslate"><span class="pre">0x04</span></code> SET_CONTR, <code class="docutils literal notranslate"><span class="pre">0x05</span></code> SET_DAREA, <code class="docutils literal notranslate"><span class="pre">0x06</span></code> SET_DSPXA, <code class="docutils literal notranslate"><span class="pre">0x07</span></code> CHG_COLCON,
-<code class="docutils literal notranslate"><span class="pre">0xFF</span></code> CMD_END, with HD DVD adding <strong><code class="docutils literal notranslate"><span class="pre">SET_DAREA2</span></code></strong> for the larger HD display area
-(book §5.5.4.4 names it). A DVD sub-picture decoder extended for 8-bit RLC (§8.8
-run-length) and the HD display rectangle handles HD DVD SP. <strong>INFERRED</strong> (opcode
-bytes by DVD parity; <code class="docutils literal notranslate"><span class="pre">SET_DAREA2</span></code> from the book).</p>
-<p>For plain subtitles a decoder needs <code class="docutils literal notranslate"><span class="pre">SET_DAREA2</span></code>, <code class="docutils literal notranslate"><span class="pre">SET_COLOR</span></code>, <code class="docutils literal notranslate"><span class="pre">SET_CONTR</span></code>,
-<code class="docutils literal notranslate"><span class="pre">STA_DSP</span></code>/<code class="docutils literal notranslate"><span class="pre">STP_DSP</span></code>. <code class="docutils literal notranslate"><span class="pre">8bitRLC</span></code> gray indices use a 256-entry CLUT the same commands
-extend. <strong>INFERRED</strong> (command bit layouts are figure-only; names and roles are
-§5.5.4.4 prose). No SP_PCK subtitle appeared in the sampled feature windows.
-Advanced titles usually caption via HDi Advanced Subtitle markup instead, so this
-path is <strong>specified but not corpus-exercised</strong>.</p>
+<p>No other opcode appears on disc. Typical first DCSQ: <code class="docutils literal notranslate"><span class="pre">01</span> <span class="pre">83</span> <span class="pre">84</span> <span class="pre">85</span> <span class="pre">86</span> <span class="pre">FF</span></code>, and the
+last DCSQ: <code class="docutils literal notranslate"><span class="pre">02</span> <span class="pre">FF</span></code> at the stop time. The high bit separates these HD commands from
+the DVD ones they replace (<code class="docutils literal notranslate"><span class="pre">03h</span></code> SET_COLOR, <code class="docutils literal notranslate"><span class="pre">04h</span></code> SET_CONTR, <code class="docutils literal notranslate"><span class="pre">05h</span></code> SET_DAREA,
+<code class="docutils literal notranslate"><span class="pre">06h</span></code> SET_DSPXA with 16-colour, 4-bit fields and 2-byte addresses).</p>
+<p>Contrast direction, from the discs: the clear area around the text is the most-used
+pixel value on every SPU and has contrast <code class="docutils literal notranslate"><span class="pre">FFh</span></code>, and the text itself <code class="docutils literal notranslate"><span class="pre">00h</span></code>.
+STALINGRAD fades a subtitle in and out with contrast-only DCSQs (<code class="docutils literal notranslate"><span class="pre">84</span></code> alone) that
+step every contrast <code class="docutils literal notranslate"><span class="pre">FF</span> <span class="pre">→</span> <span class="pre">F6</span> <span class="pre">→</span> <span class="pre">F2</span> <span class="pre">→</span> <span class="pre">EE</span> <span class="pre">…</span> <span class="pre">88</span></code>, hold, then back to <code class="docutils literal notranslate"><span class="pre">FF</span></code> before
+<code class="docutils literal notranslate"><span class="pre">STP_DSP</span></code>. Most discs use pixel value 0 (background) for the clear area; 1408_DC
+uses 8-bit value 227. <strong>Decide transparency by contrast, not by pixel value.</strong></p>
+</section>
+<section id="pixel-data-8bitrlc-patent-5-5-4-2-table-6776">
+<h5>Pixel data (8bitRLC, patent §5.5.4.2, TABLE 67–76)<a class="headerlink" href="#pixel-data-8bitrlc-patent-5-5-4-2-table-6776" title="Link to this heading"></a></h5>
+<p>MSB-first bit units; each <strong>line</strong> starts on a byte boundary; a line holds exactly
+the display-area width in pixels.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Unit</p></th>
+<th class="head"><p>Bits</p></th>
+<th class="head"><p>Layout</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>1 pixel, specified</p></td>
+<td><p>4</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Comp=0</span></code> <code class="docutils literal notranslate"><span class="pre">flag=0</span></code> <code class="docutils literal notranslate"><span class="pre">PIX1</span> <span class="pre">PIX0</span></code> (value 0–3)</p></td>
+</tr>
+<tr class="row-odd"><td><p>1 pixel, 8-bit</p></td>
+<td><p>10</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Comp=0</span></code> <code class="docutils literal notranslate"><span class="pre">flag=1</span></code> <code class="docutils literal notranslate"><span class="pre">PIX7…PIX0</span></code> (value 4–255; 0–3 prohibited here)</p></td>
+</tr>
+<tr class="row-even"><td><p>run of 2–9</p></td>
+<td><p>+4</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Comp=1</span></code> + pixel as above + <code class="docutils literal notranslate"><span class="pre">LEXT=0</span></code> <code class="docutils literal notranslate"><span class="pre">RUN2…0</span></code>; run = <code class="docutils literal notranslate"><span class="pre">RUN</span> <span class="pre">+</span> <span class="pre">2</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>run of 10–136</p></td>
+<td><p>+8</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Comp=1</span></code> + pixel + <code class="docutils literal notranslate"><span class="pre">LEXT=1</span></code> <code class="docutils literal notranslate"><span class="pre">RUN6…0</span></code>; run = <code class="docutils literal notranslate"><span class="pre">RUN</span> <span class="pre">+</span> <span class="pre">9</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>to end of line</p></td>
+<td><p>+8</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Comp=1</span></code> + pixel + <code class="docutils literal notranslate"><span class="pre">LEXT=1</span></code> <code class="docutils literal notranslate"><span class="pre">RUN</span> <span class="pre">=</span> <span class="pre">0</span></code></p></td>
+</tr>
+</tbody>
+</table>
+<p>The 8-bit value is a full byte after the flag (a 10-bit unit), not 7 bits: with 7,
+every line overruns its width. Top field holds lines 0, 2, 4…, bottom field
+1, 3, 5…; each field is followed by 0–2 zero bytes of padding. An encoder may
+write one extra empty line per field (1408_DC full-frame SPUs: 540 lines per field
+for a 1078-line area); decode the area’s lines and ignore the rest.</p>
 </section>
 </section>
 <section id="aacs-vs-container">
@@ -5151,11 +5169,7 @@ Advanced Subtitle rather than sub-picture (§8.8) would show no subtitles.
 <td><p>conforming titles never overflow; flush order is Scenarist-derived</p></td>
 <td><p>05 §5.7</p></td>
 </tr>
-<tr class="row-even"><td><p>SP display-control command bit layouts</p></td>
-<td><p>RLC decode is exact; DCSQ command <em>encoding</em> is figure-only</p></td>
-<td><p>08 §8.8</p></td>
-</tr>
-<tr class="row-odd"><td><p>ILVU angle interleave beyond Pan’s 4 maps</p></td>
+<tr class="row-even"><td><p>ILVU angle interleave beyond Pan’s 4 maps</p></td>
 <td><p>linear play unaffected; multi-angle walk INFERRED</p></td>
 <td><p>07</p></td>
 </tr>
@@ -5536,7 +5550,7 @@ OPEN / UNCLOSEABLE / OUT</strong> are evidence-strength, not citations
 <li><p><strong>[8]</strong> libaacs, VideoLAN: source. <a class="reference external" href="https://code.videolan.org/videolan/libaacs">https://code.videolan.org/videolan/libaacs</a></p></li>
 <li><p><strong>[9]</strong> muslix64, <em>BackupHDDVD</em> (2006): source <code class="docutils literal notranslate"><span class="pre">src/aacs/{decoder/EVOBPack.java,</span> <span class="pre">decoder/DecryptEVOB.java,</span> <span class="pre">math/AESFunc.java}</span></code>. <a class="reference external" href="https://archive.org/details/backup-hddvd">https://archive.org/details/backup-hddvd</a></p></li>
 <li><p><strong>[10]</strong> Reference-decoder (<code class="docutils literal notranslate"><span class="pre">HDDVDPLAYDLL</span></code>) File Cache / ACA strings, as surfaced by the DumpHD tooling discussed in [16]. <a class="reference external" href="http://forum.doom9.org/archive/index.php/t-123282.html">http://forum.doom9.org/archive/index.php/t-123282.html</a></p></li>
-<li><p><strong>[12]</strong> Verification experiments <code class="docutils literal notranslate"><span class="pre">e01</span></code>–<code class="docutils literal notranslate"><span class="pre">e24</span></code> accompanying this specification (<code class="docutils literal notranslate"><span class="pre">experiments/run.py</span></code>).</p></li>
+<li><p><strong>[12]</strong> Verification experiments <code class="docutils literal notranslate"><span class="pre">e01</span></code>–<code class="docutils literal notranslate"><span class="pre">e25</span></code> accompanying this specification (<code class="docutils literal notranslate"><span class="pre">experiments/run.py</span></code>).</p></li>
 </ul>
 </section>
 <section id="disc-firmware-corpus-internet-archive">

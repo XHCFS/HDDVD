@@ -58,7 +58,7 @@ First offset is always `8 + 4×nr`.
 | 16 | 4×`AST_Ns` | `AST_ATR` | 4-byte words. Bytes `16+4×AST_Ns … 79` are zero on **1131/1131** |
 | 80 | 149 | mid-slot | **zero on 1115/1131**. **16/1131** store `01 1c 00 c4` at offset **193** (BATMAN, PANS, T2 GER, 40YR, TRANSFORMERS, …). Official name **OPEN**. Do not assume 80–228 is unused padding |
 | 229 | 1 | `SP_Ns` | sub-picture count (`0` on 826/1131) |
-| 230 | 5×`SP_Ns` | `SP_ATR` | 5-byte words. Occupied region ~229–321 |
+| 230 | 5×`SP_Ns` | `SP_ATR` | 5-byte words, one per stream: byte 0 = `80h` (bits 7–5 = coding mode `100b`, 8-bit SPU, [08](08_evo.md) §8.8), byte 1 = `20h` + stream index (the stream's `sub_stream_id`), bytes 2–4 zero. 1258/1258 (`e25`) |
 
 `AST_Ns` is **not** at +6 (that slot is usually zero; never the stream count).
 Decoder setup still follows the playlist, not these ATR words.
@@ -69,7 +69,7 @@ are zero through the rest of the 1024-byte slot. 7 ATRIs (`DOOM`, `GOODFELLAS`,
 `LAST_SAMURAI`, `U2_RATTLE_AND_HUM`) fill 32×4-byte words from offset **391**
 with `7f7f7f00` (dummy gray, not a Y/Cr/Cb palette). No specimen has a
 DVD-style 16-colour YCrCb palette in the ATRI, and none is needed: the sub-picture
-colour/contrast comes from the `SET_COLOR` / `SET_CONTR` display-control commands in the
+colour/contrast comes from the `83h` colour-table and `84h` contrast-table commands in the
 SP_DCSQ ([08](08_evo.md) §8.8), not from the ATRI. The ATRI palette slot being unused is
 expected, not a decoder gap.
 `[11, 12]` **OPEN** / uncloseable from this corpus.

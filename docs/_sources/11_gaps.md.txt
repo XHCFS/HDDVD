@@ -93,7 +93,6 @@ Advanced Subtitle rather than sub-picture (§8.8) would show no subtitles.
 | Graphics-plane blend constants | src-over is correct; exact YCbCr matrix / rounding not measured | 05 §5.9 |
 | `jump(time, true)` pause-at-destination | never seen (`false` 258/258); fail-closed rule may differ from firmware | 05 §5.3 |
 | File Cache 64 MB overflow order | conforming titles never overflow; flush order is Scenarist-derived | 05 §5.7 |
-| SP display-control command bit layouts | RLC decode is exact; DCSQ command *encoding* is figure-only | 08 §8.8 |
 | ILVU angle interleave beyond Pan's 4 maps | linear play unaffected; multi-angle walk INFERRED | 07 |
 
 None desync a conforming linear title; all are cosmetic or unused-path.

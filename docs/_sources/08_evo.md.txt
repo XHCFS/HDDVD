@@ -286,87 +286,96 @@ Sub audio (AS_PCK) uses the TABLE 46 audio ranges. PiP is selected by the clip's
 `SubVideo`/`SubAudio` mapping, is not on the linear-playback path, and no sampled
 clip carries it, so those ids are patent-only here. `[3]` **INFERRED**.
 
-## 8.8 Sub-picture (SP_PCK): `2bitRLC` / `8bitRLC` decode
+## 8.8 Sub-picture (SP_PCK): Sub-picture Unit
 
-Needed to render subtitles / SP-based menus. Routing is §8.7 (`0xBD` sub
-`0x20|(n-1)`). Payload is a **Sub-picture Unit (SPU)**: header `SPUH`, run-length
-pixel data `PXD`, then a display-control sequence table `SP_DCSQT`. An SPU spans
-one or more SP_PCKs; the last SP_PCK may pad.
-`[2]`
+Bitmap subtitles. Routing is §8.7 (`0xBD`, `sub_stream_id` `0x20 | (n-1)`, up to 32
+streams). Each **Sub-picture Unit (SPU)** is one image plus the commands that
+show, colour and hide it: header `SPUH`, run-length pixel data `PXD` (top field,
+then bottom field), then the display-control sequence table `SP_DCSQT`. An SPU
+spans one or more SP_PCKs; reassemble the payload bytes after the
+`sub_stream_id` until `SPU_SZ` bytes are collected. The first SP_PCK of an SPU
+carries the PES PTS, which is the SPU's time origin.
 
-### Pixel values (TABLE 67/68)
+Every Advanced title in the corpus uses the **8-bit** SPU of patent §5.5.4. All
+1258 `SP_ATR` words say so ([06](06_vti.md)), and all SPUs sampled carry the
+10-byte header below. `e25` checks three SPUs saved in `spec/raw/evo_samples/`
+(12_MONKEYS, 1408_DC, STALINGRAD) and, with `E25_LIVE=1`, every SPU in 12 EVOBUs
+from the middle of 12 features: 54 SPUs on 11 discs (1408_DC, 16_BLOCKS,
+40YR_OLD_VIRGIN, DOOM, GOODFELLAS, HOT_FUZZ, MYSTERY_MEN, PANS_LABYRINTH,
+STALINGRAD, TRANSFORMERS, U2_RATTLE_AND_HUM; the 12_MONKEYS window is silent,
+and 18 more SPUs from a window at 40% of it agree). `[2, 11, 12]` **VERIFIED**
 
-9-bit code. Bit 8 = 0 selects one of the four *specified* pixels; bit 8 = 1 is an
-8-bit gray/gradation index (`8bitRLC`). `2bitRLC` uses only the specified four.
+The 2-bit, DVD-shaped SPU (patent §5.5.3) starts with a non-zero 2-byte
+`PRE_HEAD` (DVD size field). A `0000h` start selects the long header. No
+Advanced title here uses the 2-bit form.
 
-| Code | Pixel |
-|---|---|
-| `0 0000 0000` | Background |
-| `0 0000 0001` | Pattern |
-| `0 0000 0010` | Emphasis-1 |
-| `0 0000 0011` | Emphasis-2 |
-| `1 xxxx xxxx` | Pixel-4 … Pixel-255 (`1 0000 0000`..`1 0000 0011` **prohibited**) |
+### SPUH (patent Table 66)
 
-Actual RGB/contrast for each index comes from the display-control commands
-(color + contrast), not from the code itself.
-
-### Run-length rule (eight patterns, MSB-first bitstream)
-
-Specified-4 pixels (2-bit color `PIX1 PIX0`):
-
-| Run | Unit bits | Layout | Run value |
+| Off | Size | Field | On disc |
 |---|---|---|---|
-| 1 | 4 | `Comp=0 PIX2=0 PIX1 PIX0` | 1 |
-| 2–9 | 8 | `Comp=1 PIX2=0 PIX1 PIX0 LEXT=0 RUN2..0` | RUN+2 |
-| 10–136 | 12 | `Comp=1 PIX2=0 PIX1 PIX0 LEXT=1 RUN6..0` | RUN+9 |
-| to EOL | 12 | `Comp=1 PIX2=0 PIX1 PIX0 LEXT=1 RUN=0` | to end of line |
+| 0 | 2 | `SPU_ID` | `0000h` |
+| 2 | 4 | `SPU_SZ` | SPU size in bytes; always even (odd sizes get one `FFh`) |
+| 6 | 4 | `SP_DCSQT_SA` | offset of `SP_DCSQT` from the first SPU byte |
 
-8-bit pixels (`8bitRLC`, color `PIX7..PIX0`):
+`PXD` starts right after the header: the top-field address is **10** on every SPU.
 
-| Run | Unit bits | Layout | Run value |
+### SP_DCSQT: display-control sequences
+
+A chain of `SP_DCSQ` entries, starting at `SP_DCSQT_SA`:
+
+| Off | Size | Field |
+|---|---|---|
+| 0 | 2 | `SP_DCSQ_STM`: start time relative to the SPU PTS, in units of 1024 / 90 000 s (≈11.4 ms, DVD parity) |
+| 2 | 4 | `SP_NXT_DCSQ_SA`: offset of the next `SP_DCSQ` from the first SPU byte. **The last one points at itself** |
+| 6 | … | commands, ended by `FFh` |
+
+DVD uses 2-byte addresses here. HD DVD widens them to 4. The last DCSQ ends the
+SPU (at most `FFh` padding follows). The `STM` unit is checked on disc: every
+`STP_DSP` time × 1024 lands before the next SPU of the same stream, typically
+70–100 ms early (the gap between two subtitles).
+
+### Display-control commands
+
+| Opcode | Name | Operand | Meaning |
 |---|---|---|---|
-| 1 | 9 | `Comp=0 PIX7=1 PIX6..0` | 1 |
-| 2–9 | 13 | `Comp=1 PIX7=1 PIX6..0 LEXT=0 RUN2..0` | RUN+2 |
-| 10–136 | 17 | `Comp=1 PIX7=1 PIX6..0 LEXT=1 RUN6..0` | RUN+9 |
-| to EOL | 17 | same, `RUN=0` | to end of line |
+| `01h` | `STA_DSP` | none | start display |
+| `02h` | `STP_DSP` | none | stop display |
+| `83h` | colour table | 768 bytes | 256 × (`Y`, `Cr`, `Cb`), one per pixel value: 0–3 the specified pixels (background, pattern, emphasis-1, emphasis-2), 4–255 the 8-bit pixels (patent Table 61) |
+| `84h` | contrast table | 256 bytes | one contrast per pixel value (Table 62). **`FFh` = fully transparent, lower = more opaque** |
+| `85h` | `SET_DAREA2` | 6 bytes | display area, two 24-bit words of 12-bit start + 12-bit end: x (`x0 << 12 \| x1`), then y. Width = `x1 − x0 + 1` |
+| `86h` | PXD addresses | 8 bytes | top-field and bottom-field `PXD` offsets from the first SPU byte, 4 bytes each |
+| `FFh` | `CMD_END` | none | end of this `SP_DCSQ` |
 
-Line width = `SET_DAREA2` display area. PXD is stored per field (top field PXD
-first, then bottom, after `SPUH`); byte-align at each field/line boundary per the
-figure tables (69–76, image-only; the prose above is the authoritative encoding).
-**INFERRED** bit order from prose; TABLE 69–76 pixel layouts are figure images.
+No other opcode appears on disc. Typical first DCSQ: `01 83 84 85 86 FF`, and the
+last DCSQ: `02 FF` at the stop time. The high bit separates these HD commands from
+the DVD ones they replace (`03h` SET_COLOR, `04h` SET_CONTR, `05h` SET_DAREA,
+`06h` SET_DSPXA with 16-colour, 4-bit fields and 2-byte addresses).
 
-### Display-control sequence (`SP_DCSQT`)
+Contrast direction, from the discs: the clear area around the text is the most-used
+pixel value on every SPU and has contrast `FFh`, and the text itself `00h`.
+STALINGRAD fades a subtitle in and out with contrast-only DCSQs (`84` alone) that
+step every contrast `FF → F6 → F2 → EE … 88`, hold, then back to `FF` before
+`STP_DSP`. Most discs use pixel value 0 (background) for the clear area; 1408_DC
+uses 8-bit value 227. **Decide transparency by contrast, not by pixel value.**
 
-`SP_DCSQ` entries carry a presentation time (`SP_DCSQ_STM`, relative to SPU PTS)
-and an offset to the next `SP_DCSQ`, then commands. The command set (bit layout in
-a figure table, names per §5.5.4.4):
+### Pixel data (8bitRLC, patent §5.5.4.2, TABLE 67–76)
 
-| Command | Effect |
-|---|---|
-| `STA_DSP` / `FSTA_DSP` | start (or forced-start) sub-picture display at this time |
-| `STP_DSP` | stop display (also used to clear at a Cell boundary) |
-| `SET_COLOR` | 4 palette indices for Background/Pattern/Emphasis-1/-2 |
-| `SET_CONTR` | 4 contrast (alpha) values, one per specified pixel |
-| `SET_DAREA2` | display rectangle (line width + top/bottom) |
-| `SET_DSPXA` | PXD start addresses (top / bottom field) |
-| `CHG_COLCON` | change color/contrast mid-display (karaoke wipes) |
-| `END` | end of this `SP_DCSQ` |
+MSB-first bit units; each **line** starts on a byte boundary; a line holds exactly
+the display-area width in pixels.
 
-**Command opcodes close by DVD parity.** HD DVD sub-picture reuses the DVD-Video
-display-control command set; the opcode bytes are the DVD ones (public: DVD-Video
-spec / ffmpeg `dvdsubdec`): `0x00` FSTA_DSP, `0x01` STA_DSP, `0x02` STP_DSP, `0x03`
-SET_COLOR, `0x04` SET_CONTR, `0x05` SET_DAREA, `0x06` SET_DSPXA, `0x07` CHG_COLCON,
-`0xFF` CMD_END, with HD DVD adding **`SET_DAREA2`** for the larger HD display area
-(book §5.5.4.4 names it). A DVD sub-picture decoder extended for 8-bit RLC (§8.8
-run-length) and the HD display rectangle handles HD DVD SP. **INFERRED** (opcode
-bytes by DVD parity; `SET_DAREA2` from the book).
+| Unit | Bits | Layout |
+|---|---|---|
+| 1 pixel, specified | 4 | `Comp=0` `flag=0` `PIX1 PIX0` (value 0–3) |
+| 1 pixel, 8-bit | 10 | `Comp=0` `flag=1` `PIX7…PIX0` (value 4–255; 0–3 prohibited here) |
+| run of 2–9 | +4 | `Comp=1` + pixel as above + `LEXT=0` `RUN2…0`; run = `RUN + 2` |
+| run of 10–136 | +8 | `Comp=1` + pixel + `LEXT=1` `RUN6…0`; run = `RUN + 9` |
+| to end of line | +8 | `Comp=1` + pixel + `LEXT=1` `RUN = 0` |
 
-For plain subtitles a decoder needs `SET_DAREA2`, `SET_COLOR`, `SET_CONTR`,
-`STA_DSP`/`STP_DSP`. `8bitRLC` gray indices use a 256-entry CLUT the same commands
-extend. **INFERRED** (command bit layouts are figure-only; names and roles are
-§5.5.4.4 prose). No SP_PCK subtitle appeared in the sampled feature windows.
-Advanced titles usually caption via HDi Advanced Subtitle markup instead, so this
-path is **specified but not corpus-exercised**.
+The 8-bit value is a full byte after the flag (a 10-bit unit), not 7 bits: with 7,
+every line overruns its width. Top field holds lines 0, 2, 4…, bottom field
+1, 3, 5…; each field is followed by 0–2 zero bytes of padding. An encoder may
+write one extra empty line per field (1408_DC full-frame SPUs: 540 lines per field
+for a 1078-line area); decode the area's lines and ignore the rest.
 
 ## 8.9 AACS vs container
 
