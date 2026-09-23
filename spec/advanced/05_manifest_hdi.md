@@ -142,6 +142,11 @@ on 28 discs, 86 of them ACA members (extracted by offset/length).
 
 ## 5.2 Markup: `.xmu`
 
+**The complete markup reference is [14](14_markup.md)**: every element, style
+and state attribute, the timing model and the path expressions, checked against
+every markup document on disc (`e27`). This section keeps the research notes
+behind it.
+
 Namespace: `http://www.dvdforum.org/2005/ihd`  
 Also: `ihd#style`, `ihd#state`  
 Schema: `spec/raw/adv_obj/v1.0/iHD.xsd`  

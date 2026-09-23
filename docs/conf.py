@@ -21,6 +21,7 @@ for _name in (
     "11_gaps.md",
     "12_hdi_scripting_abi.md",
     "13_references.md",
+    "14_markup.md",
 ):
     shutil.copy(_SPEC / _name, _HERE / _name)
 

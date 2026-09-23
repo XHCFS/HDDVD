@@ -102,6 +102,20 @@
 <li class="toctree-l2"><a class="reference internal" href="#document-05_manifest_hdi#raster-focus-cues-used-path">5.9 Raster, focus, cues (used path)</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="#document-14_markup">14. iHD markup: <code class="docutils literal notranslate"><span class="pre">.xmu</span></code>, <code class="docutils literal notranslate"><span class="pre">.xts</span></code>, <code class="docutils literal notranslate"><span class="pre">.xss</span></code></a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#document-14_markup#files-namespaces-versions">14.1 Files, namespaces, versions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#document-14_markup#document-structure">14.2 Document structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#document-14_markup#data-types">14.3 Data types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#document-14_markup#content-elements">14.4 Content elements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#document-14_markup#styling">14.5 Styling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#document-14_markup#timing">14.6 Timing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#document-14_markup#path-expressions">14.7 Path expressions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#document-14_markup#style-attributes">14.8 Style attributes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#document-14_markup#state-attributes">14.9 State attributes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#document-14_markup#v1-0-and-v1-1">14.10 v1.0 and v1.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#document-14_markup#on-disc">14.11 On disc</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="#document-06_vti">6. HVA00001.VTI: Advanced VTSI</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#document-06_vti#vtsi-mat-first-2048-bytes">6.1 VTSI_MAT (first 2048 bytes)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#document-06_vti#vts-evob-atrt-at-vts-evob-atrt-sa-2048">6.2 VTS_EVOB_ATRT (at <code class="docutils literal notranslate"><span class="pre">VTS_EVOB_ATRT_SA</span></code> × 2048)</a><ul>
@@ -2894,6 +2908,10 @@ resource URIs. The 8 others: the selector manifests of <code class="docutils lit
 </section>
 <section id="markup-xmu">
 <h4>5.2 Markup: <code class="docutils literal notranslate"><span class="pre">.xmu</span></code><a class="headerlink" href="#markup-xmu" title="Link to this heading"></a></h4>
+<p><strong>The complete markup reference is <a class="reference internal" href="#document-14_markup"><span class="std std-doc">14</span></a></strong>: every element, style
+and state attribute, the timing model and the path expressions, checked against
+every markup document on disc (<code class="docutils literal notranslate"><span class="pre">e27</span></code>). This section keeps the research notes
+behind it.</p>
 <p>Namespace: <code class="docutils literal notranslate"><span class="pre">http://www.dvdforum.org/2005/ihd</span></code><br />
 Also: <code class="docutils literal notranslate"><span class="pre">ihd#style</span></code>, <code class="docutils literal notranslate"><span class="pre">ihd#state</span></code><br />
 Schema: <code class="docutils literal notranslate"><span class="pre">spec/raw/adv_obj/v1.0/iHD.xsd</span></code><br />
@@ -3412,6 +3430,1439 @@ screenshot-calibrate hinting.
 (structure).
 <code class="docutils literal notranslate"><span class="pre">[14]</span></code> <strong>INFERRED</strong>
 (em scale; not screenshot-measured).</p>
+</section>
+</section>
+<span id="document-14_markup"></span><section id="ihd-markup-xmu-xts-xss">
+<h3>14. iHD markup: <code class="docutils literal notranslate"><span class="pre">.xmu</span></code>, <code class="docutils literal notranslate"><span class="pre">.xts</span></code>, <code class="docutils literal notranslate"><span class="pre">.xss</span></code><a class="headerlink" href="#ihd-markup-xmu-xts-xss" title="Link to this heading"></a></h3>
+<p><em>Counts written “N/120”, “N/119”, “on N discs”, “listings”, or as named discs are over the reference corpus of 120 archived retail HD DVD images [11]. <code class="docutils literal notranslate"><span class="pre">eNN</span></code> are the reproducible verification experiments [12].</em></p>
+<p>iHD markup is the page language of HDi applications: the menus, pop-up menus,
+bonus screens and in-movie overlays. A markup document lays out elements on the
+graphics plane (boxes with images and text, buttons, text inputs), gives them
+styles and states, and describes in a timing section how those styles and states
+change over time and in response to focus and remote-control keys. Script
+(<a class="reference internal" href="#document-05_manifest_hdi"><span class="std std-doc">05</span></a> §5.3) reads and changes the same document through the
+DOM. A manifest names the application’s first markup page
+(<a class="reference internal" href="#document-05_manifest_hdi"><span class="std std-doc">05</span></a> §5.1).</p>
+<p>This sheet documents every element and attribute of the iHD schemas, grouped as
+the schemas group them: content (§14.4), styling (§14.5), timing (§14.6), then
+the path expressions used by timing (§14.7), every style attribute (§14.8) and
+every state attribute (§14.9). HDi is built from Web standards [15]: the element
+set is XHTML-like, the style attributes take their names and meanings from
+XSL-FO / CSS, and the timing model is SMIL 2.0 [18] over a DOM Level 2 tree
+[17] (<a class="reference internal" href="#document-12_hdi_scripting_abi"><span class="std std-doc">12</span></a> §12.4). Where this sheet says “XSL-FO
+semantics”, those standards give the meaning; the iHD book chapters that restate
+them (Spec. 7.5–7.8) are not among the available sources.</p>
+<p>Sources: the DVD Forum schemas [5] (v1.0 and v1.1), the HDi Jumpstart posts
+[14], the patent [1] for page switching and clocks, and the corpus, checked by
+<code class="docutils literal notranslate"><span class="pre">e27</span></code> (every markup document) with the earlier <code class="docutils literal notranslate"><span class="pre">e15</span></code> / <code class="docutils literal notranslate"><span class="pre">e17</span></code>.</p>
+<section id="files-namespaces-versions">
+<h4>14.1 Files, namespaces, versions<a class="headerlink" href="#files-namespaces-versions" title="Link to this heading"></a></h4>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>File</p></th>
+<th class="head"><p>Root element</p></th>
+<th class="head"><p>What it holds</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">.xmu</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">root</span></code></p></td>
+<td><p>A markup page: head (styles, timing) and body (content)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">.xts</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">timing</span></code></p></td>
+<td><p>A timing section on its own, pulled into a page’s <code class="docutils literal notranslate"><span class="pre">head</span></code> by <code class="docutils literal notranslate"><span class="pre">include</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">.xss</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">styling</span></code> (inferred)</p></td>
+<td><p>A styling section on its own, pulled into <code class="docutils literal notranslate"><span class="pre">head</span></code> by <code class="docutils literal notranslate"><span class="pre">include</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">.xas</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">root</span></code></p></td>
+<td><p>Advanced Subtitle markup (<a class="reference internal" href="#document-11_gaps"><span class="std std-doc">11</span></a> B3); same document model</p></td>
+</tr>
+</tbody>
+</table>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Namespace</p></th>
+<th class="head"><p>Prefix used here</p></th>
+<th class="head"><p>Contains</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">http://www.dvdforum.org/2005/ihd</span></code></p></td>
+<td><p>(none)</p></td>
+<td><p>elements and their plain attributes</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">http://www.dvdforum.org/2005/ihd#style</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">style:</span></code></p></td>
+<td><p>the style attributes (§14.8)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">http://www.dvdforum.org/2005/ihd#state</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">state:</span></code></p></td>
+<td><p>the state attributes (§14.9)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">http://www.w3.org/XML/1998/namespace</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">xml:</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">xml:lang</span></code>, <code class="docutils literal notranslate"><span class="pre">xml:base</span></code>, <code class="docutils literal notranslate"><span class="pre">xml:space</span></code></p></td>
+</tr>
+</tbody>
+</table>
+<p>Schemas: <code class="docutils literal notranslate"><span class="pre">spec/raw/adv_obj/v1.1/iHD.xsd</span></code> (imports <code class="docutils literal notranslate"><span class="pre">iHDstyle.xsd</span></code> and
+<code class="docutils literal notranslate"><span class="pre">iHDstate.xsd</span></code>); v1.0 for reference. Differences in §14.10. The corpus
+validates against both except for one document (§14.11).</p>
+<p><strong>Reading rules.</strong></p>
+<ul class="simple">
+<li><p>UTF-8 XML. Match by namespace and local name, never by prefix.</p></li>
+<li><p>Ignore comments and <code class="docutils literal notranslate"><span class="pre">xsi:schemaLocation</span></code> (24 roots carry one).</p></li>
+<li><p><strong>Attributes in other namespaces</strong>: keep them on the DOM node (script can read
+them) and ignore them for rendering. <code class="docutils literal notranslate"><span class="pre">SHREK_THE_THIRD_EU</span></code> puts 305 such
+attributes (<code class="docutils literal notranslate"><span class="pre">onaction</span></code>, <code class="docutils literal notranslate"><span class="pre">onup</span></code>, … in <code class="docutils literal notranslate"><span class="pre">http://sampleext</span></code>) on buttons for its own
+script; the schema only allows foreign attributes on <code class="docutils literal notranslate"><span class="pre">meta</span></code>.</p></li>
+<li><p>Apply the defaults below when an attribute is absent.</p></li>
+<li><p>An <code class="docutils literal notranslate"><span class="pre">id</span></code> is an XML ID: unique in the document, used by <code class="docutils literal notranslate"><span class="pre">nav*</span></code>, <code class="docutils literal notranslate"><span class="pre">style</span></code>,
+<code class="docutils literal notranslate"><span class="pre">id()</span></code> paths and script.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">include</span></code> is resolved before anything else (§14.4).</p></li>
+</ul>
+</section>
+<section id="document-structure">
+<h4>14.2 Document structure<a class="headerlink" href="#document-structure" title="Link to this heading"></a></h4>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>root                     xml:lang (required)
+├── head?
+│   ├── meta*
+│   └── (include | styling | timing)*
+│       styling  → style*                              §14.5
+│       timing   → defs*, then (par | seq)*            §14.6
+│                  defs → (g | animate | set | event | link)*
+│                  par / seq → (cue | par | seq)*
+│                  cue → (animate | set | event)* or one link
+└── body?
+    ├── meta*
+    └── (div | object | include)*                      §14.4
+        div   → meta*, (button | object | input | div | p)*
+        p     → text and (object | button | input | br | span)*
+        span  → text and (object | button | input | br | span)*
+        button, input → meta*, p?
+        object → meta*, param*, area*, p?
+</pre></div>
+</div>
+<p>Every content element gets common attributes from its <strong>base type</strong>:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Base</p></th>
+<th class="head"><p>Adds</p></th>
+<th class="head"><p>Elements</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>NonDisplay</p></td>
+<td><p>(nothing)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">root</span></code>, <code class="docutils literal notranslate"><span class="pre">head</span></code>, <code class="docutils literal notranslate"><span class="pre">meta</span></code>, <code class="docutils literal notranslate"><span class="pre">include</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>Display</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">class</span></code>, <code class="docutils literal notranslate"><span class="pre">state:enabled</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">body</span></code>, <code class="docutils literal notranslate"><span class="pre">br</span></code>, <code class="docutils literal notranslate"><span class="pre">object</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>Navigable</p></td>
+<td><p>+ <code class="docutils literal notranslate"><span class="pre">style</span></code> (IDREFS), <code class="docutils literal notranslate"><span class="pre">state:pointer</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">div</span></code>, <code class="docutils literal notranslate"><span class="pre">p</span></code>, <code class="docutils literal notranslate"><span class="pre">span</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>Activateable</p></td>
+<td><p>+ <code class="docutils literal notranslate"><span class="pre">state:focused</span></code>, <code class="docutils literal notranslate"><span class="pre">state:actioned</span></code></p></td>
+<td><p>(base only)</p></td>
+</tr>
+<tr class="row-even"><td><p>Stateful</p></td>
+<td><p>+ <code class="docutils literal notranslate"><span class="pre">state:value</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">area</span></code>, <code class="docutils literal notranslate"><span class="pre">button</span></code>, <code class="docutils literal notranslate"><span class="pre">input</span></code></p></td>
+</tr>
+</tbody>
+</table>
+<p>All elements also accept <code class="docutils literal notranslate"><span class="pre">xml:base</span></code>, <code class="docutils literal notranslate"><span class="pre">xml:lang</span></code>, <code class="docutils literal notranslate"><span class="pre">xml:space</span></code> and <code class="docutils literal notranslate"><span class="pre">id</span></code>.</p>
+</section>
+<section id="data-types">
+<h4>14.3 Data types<a class="headerlink" href="#data-types" title="Link to this heading"></a></h4>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Type</p></th>
+<th class="head"><p>Syntax</p></th>
+<th class="head"><p>Meaning</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>time</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">HH:MM:SS</span></code> or <code class="docutils literal notranslate"><span class="pre">HH:MM:SS:FF</span></code> (clock value, hours may exceed two digits), or a number with a unit: <code class="docutils literal notranslate"><span class="pre">h</span></code>, <code class="docutils literal notranslate"><span class="pre">m</span></code>, <code class="docutils literal notranslate"><span class="pre">s</span></code>, <code class="docutils literal notranslate"><span class="pre">ms</span></code>, <code class="docutils literal notranslate"><span class="pre">f</span></code> (<code class="docutils literal notranslate"><span class="pre">0.5s</span></code>, <code class="docutils literal notranslate"><span class="pre">500ms</span></code>, <code class="docutils literal notranslate"><span class="pre">9f</span></code>)</p></td>
+<td><p>A time or duration on the element’s clock (§14.6). <code class="docutils literal notranslate"><span class="pre">f</span></code> counts frames: the title timeline’s frame rate on the title clock, the tick rate on page and application clocks (<strong>INFERRED</strong>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>time or path</p></td>
+<td><p>a time, or a path expression (§14.7)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">begin</span></code> / <code class="docutils literal notranslate"><span class="pre">end</span></code> on timing elements: a time, or a condition that becomes true</p></td>
+</tr>
+<tr class="row-even"><td><p>length</p></td>
+<td><p>integer + <code class="docutils literal notranslate"><span class="pre">px</span></code>, <code class="docutils literal notranslate"><span class="pre">em</span></code> or <code class="docutils literal notranslate"><span class="pre">%</span></code> (<code class="docutils literal notranslate"><span class="pre">-12px</span></code> allowed where the type allows negatives)</p></td>
+<td><p>Pixels are graphics-plane pixels (the playlist <code class="docutils literal notranslate"><span class="pre">Aperture</span></code>, normally 1920×1080)</p></td>
+</tr>
+<tr class="row-odd"><td><p>colour</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">#rgb</span></code>, <code class="docutils literal notranslate"><span class="pre">#rrggbb</span></code>, <code class="docutils literal notranslate"><span class="pre">rgb(r,g,b)</span></code>, <code class="docutils literal notranslate"><span class="pre">rgba(r,g,b,a)</span></code> (0–255 or %), one of 16 names (<code class="docutils literal notranslate"><span class="pre">aqua</span> <span class="pre">black</span> <span class="pre">blue</span> <span class="pre">fuchsia</span> <span class="pre">gray</span> <span class="pre">green</span> <span class="pre">lime</span> <span class="pre">maroon</span> <span class="pre">navy</span> <span class="pre">olive</span> <span class="pre">purple</span> <span class="pre">red</span> <span class="pre">silver</span> <span class="pre">teal</span> <span class="pre">white</span> <span class="pre">yellow</span></code>), <code class="docutils literal notranslate"><span class="pre">transparent</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p>animated value</p></td>
+<td><p>several values separated by <code class="docutils literal notranslate"><span class="pre">;</span></code> (<code class="docutils literal notranslate"><span class="pre">1;0.8;0.5</span></code>)</p></td>
+<td><p>Keyframes for <code class="docutils literal notranslate"><span class="pre">animate</span></code> (§14.6); a style attribute that allows it lists “animatable” in §14.8</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">inherit</span></code></p></td>
+<td><p>the token</p></td>
+<td><p>Take the parent’s value</p></td>
+</tr>
+<tr class="row-even"><td><p>access key list</p></td>
+<td><p>space-separated: <code class="docutils literal notranslate"><span class="pre">U+XXXX</span></code> (a Unicode character) or a virtual key <code class="docutils literal notranslate"><span class="pre">VK_…</span></code></p></td>
+<td><p>Remote keys that activate the element directly</p></td>
+</tr>
+<tr class="row-odd"><td><p>URI</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">anyURI</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">file:///dvddisc/…</span></code>, an ACA member <code class="docutils literal notranslate"><span class="pre">…/x.aca/member</span></code>, or a relative URI (against <code class="docutils literal notranslate"><span class="pre">xml:base</span></code> then the document’s location)</p></td>
+</tr>
+</tbody>
+</table>
+<p>Virtual keys (<code class="docutils literal notranslate"><span class="pre">VirtualKeyType</span></code>): <code class="docutils literal notranslate"><span class="pre">VK_PLAY</span> <span class="pre">VK_PAUSE</span> <span class="pre">VK_FF</span> <span class="pre">VK_FR</span> <span class="pre">VK_SF</span> <span class="pre">VK_SR</span> <span class="pre">VK_STEP_PREV</span> <span class="pre">VK_STEP_NEXT</span> <span class="pre">VK_SKIP_PREV</span> <span class="pre">VK_SKIP_NEXT</span> <span class="pre">VK_SUBTITLE_SWITCH</span> <span class="pre">VK_SUBTITLE</span> <span class="pre">VK_CC</span> <span class="pre">VK_ANGLE</span> <span class="pre">VK_AUDIO</span> <span class="pre">VK_MENU</span> <span class="pre">VK_TOP_MENU</span> <span class="pre">VK_BACK</span> <span class="pre">VK_RESUME</span> <span class="pre">VK_LEFT</span> <span class="pre">VK_UP</span> <span class="pre">VK_RIGHT</span> <span class="pre">VK_DOWN</span> <span class="pre">VK_LEFTUP</span> <span class="pre">VK_RIGHTUP</span> <span class="pre">VK_LEFTDOWN</span> <span class="pre">VK_RIGHTDOWN</span> <span class="pre">VK_TAB</span> <span class="pre">VK_A_BUTTON</span></code>…<code class="docutils literal notranslate"><span class="pre">VK_L_BUTTON</span> <span class="pre">VK_ENTER</span> <span class="pre">VK_ESC</span> <span class="pre">VK_0</span></code>…<code class="docutils literal notranslate"><span class="pre">VK_9</span> <span class="pre">VK_MOUSE_1</span></code>…<code class="docutils literal notranslate"><span class="pre">VK_MOUSE_5</span> <span class="pre">VK_VECTOR_1</span></code>…<code class="docutils literal notranslate"><span class="pre">VK_VECTOR_4</span></code>.</p>
+</section>
+<section id="content-elements">
+<h4>14.4 Content elements<a class="headerlink" href="#content-elements" title="Link to this heading"></a></h4>
+<p><strong><code class="docutils literal notranslate"><span class="pre">root</span></code></strong> (Spec. 7.5.3.1.13). The document element. Children: <code class="docutils literal notranslate"><span class="pre">head?</span></code>, <code class="docutils literal notranslate"><span class="pre">body?</span></code>.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Attribute</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Req.</p></th>
+<th class="head"><p>What it is for</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">xml:lang</span></code></p></td>
+<td><p>language</p></td>
+<td><p><strong>yes</strong></p></td>
+<td><p>Language of the page’s text (<code class="docutils literal notranslate"><span class="pre">en</span></code>, <code class="docutils literal notranslate"><span class="pre">en-us</span></code> on disc)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">xml:base</span></code></p></td>
+<td><p>URI</p></td>
+<td><p>no</p></td>
+<td><p>Base for relative URIs in the page</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">xml:space</span></code>, <code class="docutils literal notranslate"><span class="pre">id</span></code></p></td>
+<td><p></p></td>
+<td><p>no</p></td>
+<td><p>XML standard</p></td>
+</tr>
+</tbody>
+</table>
+<p><strong><code class="docutils literal notranslate"><span class="pre">head</span></code></strong> (7.5.3.1.6). Non-visual part: <code class="docutils literal notranslate"><span class="pre">meta*</span></code>, then any number of <code class="docutils literal notranslate"><span class="pre">include</span></code>,
+<code class="docutils literal notranslate"><span class="pre">styling</span></code>, <code class="docutils literal notranslate"><span class="pre">timing</span></code>.</p>
+<p><strong><code class="docutils literal notranslate"><span class="pre">body</span></code></strong> (7.5.3.1.2). The visible page; its box is the application’s region
+(the manifest <code class="docutils literal notranslate"><span class="pre">Region</span></code>). Children: <code class="docutils literal notranslate"><span class="pre">meta*</span></code>, then <code class="docutils literal notranslate"><span class="pre">div</span></code>, <code class="docutils literal notranslate"><span class="pre">object</span></code>, <code class="docutils literal notranslate"><span class="pre">include</span></code>.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Attribute</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>What it is for</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">timeContainer</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">par</span></code> | <code class="docutils literal notranslate"><span class="pre">seq</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">seq</span></code></p></td>
+<td><p>How the body’s timed children are scheduled (§14.6)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">begin</span></code>, <code class="docutils literal notranslate"><span class="pre">dur</span></code>, <code class="docutils literal notranslate"><span class="pre">end</span></code></p></td>
+<td><p>time</p></td>
+<td><p></p></td>
+<td><p>When the body is active on its clock</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">style</span></code></p></td>
+<td><p>IDREFS</p></td>
+<td><p></p></td>
+<td><p>Named styles to apply (§14.5)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">state:foreground</span></code></p></td>
+<td><p>boolean</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">false</span></code></p></td>
+<td><p>Whether this page’s application is the foreground application, the one that receives the remote keys (<strong>INFERRED</strong> from the name)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">class</span></code>, <code class="docutils literal notranslate"><span class="pre">state:enabled</span></code></p></td>
+<td><p></p></td>
+<td><p></p></td>
+<td><p>From Display base</p></td>
+</tr>
+<tr class="row-odd"><td><p>body style attributes</p></td>
+<td><p></p></td>
+<td><p></p></td>
+<td><p>§14.8</p></td>
+</tr>
+</tbody>
+</table>
+<p><strong><code class="docutils literal notranslate"><span class="pre">div</span></code></strong> (7.5.3.1.5). A box: the building block of every menu. Children:
+<code class="docutils literal notranslate"><span class="pre">meta*</span></code>, then <code class="docutils literal notranslate"><span class="pre">button</span></code>, <code class="docutils literal notranslate"><span class="pre">object</span></code>, <code class="docutils literal notranslate"><span class="pre">input</span></code>, <code class="docutils literal notranslate"><span class="pre">div</span></code>, <code class="docutils literal notranslate"><span class="pre">p</span></code>.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Attribute</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>What it is for</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">timeContainer</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">par</span></code> | <code class="docutils literal notranslate"><span class="pre">seq</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">par</span></code></p></td>
+<td><p>Scheduling of timed children</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">begin</span></code>, <code class="docutils literal notranslate"><span class="pre">dur</span></code>, <code class="docutils literal notranslate"><span class="pre">end</span></code></p></td>
+<td><p>time</p></td>
+<td><p></p></td>
+<td><p>Active interval</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">class</span></code>, <code class="docutils literal notranslate"><span class="pre">style</span></code>, <code class="docutils literal notranslate"><span class="pre">state:enabled</span></code>, <code class="docutils literal notranslate"><span class="pre">state:pointer</span></code></p></td>
+<td><p></p></td>
+<td><p></p></td>
+<td><p>From Navigable base</p></td>
+</tr>
+<tr class="row-odd"><td><p>div style attributes</p></td>
+<td><p></p></td>
+<td><p></p></td>
+<td><p>§14.8</p></td>
+</tr>
+</tbody>
+</table>
+<p><strong><code class="docutils literal notranslate"><span class="pre">p</span></code></strong> (7.5.3.1.11) and <strong><code class="docutils literal notranslate"><span class="pre">span</span></code></strong> (7.5.3.1.14). A paragraph and an inline run
+of text (mixed content). Children: text, <code class="docutils literal notranslate"><span class="pre">meta</span></code>, <code class="docutils literal notranslate"><span class="pre">object</span></code>, <code class="docutils literal notranslate"><span class="pre">button</span></code>, <code class="docutils literal notranslate"><span class="pre">input</span></code>,
+<code class="docutils literal notranslate"><span class="pre">br</span></code>, <code class="docutils literal notranslate"><span class="pre">span</span></code>. Attributes: <code class="docutils literal notranslate"><span class="pre">timeContainer</span></code> (default <code class="docutils literal notranslate"><span class="pre">par</span></code>), <code class="docutils literal notranslate"><span class="pre">begin</span></code> / <code class="docutils literal notranslate"><span class="pre">dur</span></code> / <code class="docutils literal notranslate"><span class="pre">end</span></code>,
+the Navigable base, and their style attributes. On disc every <code class="docutils literal notranslate"><span class="pre">p</span></code> is inside a
+<code class="docutils literal notranslate"><span class="pre">div</span></code>, and the text styling (<code class="docutils literal notranslate"><span class="pre">font</span></code>, <code class="docutils literal notranslate"><span class="pre">fontSize</span></code>, <code class="docutils literal notranslate"><span class="pre">color</span></code>, <code class="docutils literal notranslate"><span class="pre">lineHeight</span></code>) is on
+that <code class="docutils literal notranslate"><span class="pre">div</span></code> (<a class="reference internal" href="#document-05_manifest_hdi"><span class="std std-doc">05</span></a> §5.9).</p>
+<p><strong><code class="docutils literal notranslate"><span class="pre">br</span></code></strong> (7.5.3.1.3). A line break inside <code class="docutils literal notranslate"><span class="pre">p</span></code> / <code class="docutils literal notranslate"><span class="pre">span</span></code>. Display base, <code class="docutils literal notranslate"><span class="pre">br</span></code> style
+attributes.</p>
+<p><strong><code class="docutils literal notranslate"><span class="pre">button</span></code></strong> (7.5.3.1.4). A focusable, activatable element. Children: <code class="docutils literal notranslate"><span class="pre">meta*</span></code>,
+<code class="docutils literal notranslate"><span class="pre">p?</span></code> (its label).</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Attribute</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>What it is for</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">accessKey</span></code></p></td>
+<td><p>access key list</p></td>
+<td><p>Remote keys that activate the button directly, wherever focus is (<code class="docutils literal notranslate"><span class="pre">VK_MENU</span></code>, <code class="docutils literal notranslate"><span class="pre">VK_TOP_MENU</span></code>, <code class="docutils literal notranslate"><span class="pre">VK_A_BUTTON</span></code> on disc). Pressing one sets <code class="docutils literal notranslate"><span class="pre">state:actioned</span></code> on it</p></td>
+</tr>
+<tr class="row-odd"><td><p>Stateful base</p></td>
+<td><p></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">class</span></code>, <code class="docutils literal notranslate"><span class="pre">style</span></code>, <code class="docutils literal notranslate"><span class="pre">state:enabled</span></code>, <code class="docutils literal notranslate"><span class="pre">state:pointer</span></code>, <code class="docutils literal notranslate"><span class="pre">state:focused</span></code>, <code class="docutils literal notranslate"><span class="pre">state:actioned</span></code>, <code class="docutils literal notranslate"><span class="pre">state:value</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>button style attributes</p></td>
+<td><p></p></td>
+<td><p>§14.8, including the <code class="docutils literal notranslate"><span class="pre">nav*</span></code> focus graph</p></td>
+</tr>
+</tbody>
+</table>
+<p><strong><code class="docutils literal notranslate"><span class="pre">input</span></code></strong> (7.5.3.1.8). A text field. Children: <code class="docutils literal notranslate"><span class="pre">meta*</span></code>, <code class="docutils literal notranslate"><span class="pre">p?</span></code>.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Attribute</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>What it is for</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">mode</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">password</span></code> | <code class="docutils literal notranslate"><span class="pre">singleline</span></code> | <code class="docutils literal notranslate"><span class="pre">multiline</span></code> | <code class="docutils literal notranslate"><span class="pre">display</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">singleline</span></code></p></td>
+<td><p>Kind of field; <code class="docutils literal notranslate"><span class="pre">display</span></code> shows text without editing</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">state:value</span></code></p></td>
+<td><p>string</p></td>
+<td><p></p></td>
+<td><p>The text</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">accessKey</span></code></p></td>
+<td><p>access key list</p></td>
+<td><p></p></td>
+<td><p>As <code class="docutils literal notranslate"><span class="pre">button</span></code></p></td>
+</tr>
+</tbody>
+</table>
+<p><strong><code class="docutils literal notranslate"><span class="pre">object</span></code></strong> (7.5.3.1.10). Embedded media. Children: <code class="docutils literal notranslate"><span class="pre">meta*</span></code>, <code class="docutils literal notranslate"><span class="pre">param*</span></code>,
+<code class="docutils literal notranslate"><span class="pre">area*</span></code>, <code class="docutils literal notranslate"><span class="pre">p?</span></code>.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Attribute</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Req.</p></th>
+<th class="head"><p>What it is for</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">type</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">image/jpeg</span></code> | <code class="docutils literal notranslate"><span class="pre">image/png</span></code> | <code class="docutils literal notranslate"><span class="pre">image/cvi</span></code> | <code class="docutils literal notranslate"><span class="pre">image/cdw</span></code> | <code class="docutils literal notranslate"><span class="pre">image/mng</span></code> | <code class="docutils literal notranslate"><span class="pre">audio/x-wav</span></code> | <code class="docutils literal notranslate"><span class="pre">application/x-clearrect</span></code> | <code class="docutils literal notranslate"><span class="pre">application/x-graphic</span></code></p></td>
+<td><p>yes</p></td>
+<td><p>What the object is. <code class="docutils literal notranslate"><span class="pre">application/x-clearrect</span></code> clears its box on the graphics plane so video shows through; <code class="docutils literal notranslate"><span class="pre">audio/x-wav</span></code> is an effect sound</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">src</span></code></p></td>
+<td><p>URI</p></td>
+<td><p>no</p></td>
+<td><p>The media file</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">content</span></code></p></td>
+<td><p>IDREF</p></td>
+<td><p>no</p></td>
+<td><p>Element whose content the object presents</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">style</span></code></p></td>
+<td><p>IDREFS</p></td>
+<td><p>no</p></td>
+<td><p>Named styles</p></td>
+</tr>
+<tr class="row-even"><td><p>object style attributes</p></td>
+<td><p></p></td>
+<td><p></p></td>
+<td><p>§14.8</p></td>
+</tr>
+</tbody>
+</table>
+<p><strong><code class="docutils literal notranslate"><span class="pre">param</span></code></strong> (7.5.3.1.12). A named value for its parent <code class="docutils literal notranslate"><span class="pre">object</span></code> or <code class="docutils literal notranslate"><span class="pre">event</span></code>:
+<code class="docutils literal notranslate"><span class="pre">name</span></code> (required), <code class="docutils literal notranslate"><span class="pre">value</span></code>; the element may also have text content.</p>
+<p><strong><code class="docutils literal notranslate"><span class="pre">area</span></code></strong> (7.5.3.1.1). A clickable region of an <code class="docutils literal notranslate"><span class="pre">object</span></code> (image map):</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Attribute</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>What it is for</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">shape</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">circle</span></code> | <code class="docutils literal notranslate"><span class="pre">poly</span></code> | <code class="docutils literal notranslate"><span class="pre">rect</span></code> | <code class="docutils literal notranslate"><span class="pre">default</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">default</span></code></p></td>
+<td><p>Region shape; <code class="docutils literal notranslate"><span class="pre">default</span></code> = the whole object</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">coords</span></code></p></td>
+<td><p>list of non-negative integers</p></td>
+<td><p></p></td>
+<td><p>Shape coordinates (HTML image-map convention)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">accessKey</span></code></p></td>
+<td><p>access key list</p></td>
+<td><p></p></td>
+<td><p>As <code class="docutils literal notranslate"><span class="pre">button</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>Stateful base, area style attributes</p></td>
+<td><p></p></td>
+<td><p></p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+<p><strong><code class="docutils literal notranslate"><span class="pre">meta</span></code></strong> (7.5.3.1.9). Author metadata: any elements and attributes from other
+namespaces; ignored by rendering. On disc always empty (329).</p>
+<p><strong><code class="docutils literal notranslate"><span class="pre">include</span></code></strong> (7.5.3.1.7). Pulls another document into this one at this point.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Attribute</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Req.</p></th>
+<th class="head"><p>What it is for</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">href</span></code></p></td>
+<td><p>URI</p></td>
+<td><p>yes</p></td>
+<td><p>The document: <code class="docutils literal notranslate"><span class="pre">.xmu</span></code> fragment in <code class="docutils literal notranslate"><span class="pre">body</span></code>, <code class="docutils literal notranslate"><span class="pre">.xts</span></code> (a <code class="docutils literal notranslate"><span class="pre">timing</span></code>) or <code class="docutils literal notranslate"><span class="pre">.xss</span></code> (a <code class="docutils literal notranslate"><span class="pre">styling</span></code>) in <code class="docutils literal notranslate"><span class="pre">head</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">condition</span></code></p></td>
+<td><p>string</p></td>
+<td><p>no</p></td>
+<td><p>Condition for including it (unused on disc)</p></td>
+</tr>
+</tbody>
+</table>
+<p>On disc: <code class="docutils literal notranslate"><span class="pre">body</span></code> includes <code class="docutils literal notranslate"><span class="pre">.xmu</span></code> 23, <code class="docutils literal notranslate"><span class="pre">head</span></code> includes <code class="docutils literal notranslate"><span class="pre">.xss</span></code> 11 and <code class="docutils literal notranslate"><span class="pre">.xts</span></code> 2.</p>
+</section>
+<section id="styling">
+<h4>14.5 Styling<a class="headerlink" href="#styling" title="Link to this heading"></a></h4>
+<p>Styles can be written three ways, all with the same <code class="docutils literal notranslate"><span class="pre">style:</span></code> attributes (§14.8):</p>
+<ol class="arabic simple">
+<li><p><strong>Inline</strong>: <code class="docutils literal notranslate"><span class="pre">style:</span></code> attributes on the element itself.</p></li>
+<li><p><strong>Named styles</strong>: a <code class="docutils literal notranslate"><span class="pre">style</span></code> element with an <code class="docutils literal notranslate"><span class="pre">id</span></code> in <code class="docutils literal notranslate"><span class="pre">head/styling</span></code>; an element
+lists the ids it uses in its <code class="docutils literal notranslate"><span class="pre">style</span></code> attribute (space-separated IDREFS; <code class="docutils literal notranslate"><span class="pre">style</span></code>
+elements can also reference others the same way).</p></li>
+<li><p><strong>Selected styles</strong>: a <code class="docutils literal notranslate"><span class="pre">style</span></code> element with <code class="docutils literal notranslate"><span class="pre">select</span></code> (a path expression,
+§14.7) applies to every element the path matches.</p></li>
+</ol>
+<p><strong><code class="docutils literal notranslate"><span class="pre">styling</span></code></strong> (7.6.3.1.1): <code class="docutils literal notranslate"><span class="pre">meta*</span></code>, <code class="docutils literal notranslate"><span class="pre">style*</span></code>.</p>
+<p><strong><code class="docutils literal notranslate"><span class="pre">style</span></code></strong> (7.6.3.1.2): children <code class="docutils literal notranslate"><span class="pre">meta*</span></code>.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Attribute</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>What it is for</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">id</span></code></p></td>
+<td><p>ID</p></td>
+<td><p>Name other elements use in their <code class="docutils literal notranslate"><span class="pre">style</span></code> attribute</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">style</span></code></p></td>
+<td><p>IDREFS</p></td>
+<td><p>Other named styles this one builds on</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">select</span></code></p></td>
+<td><p>path</p></td>
+<td><p>Elements this style applies to</p></td>
+</tr>
+<tr class="row-odd"><td><p>any <code class="docutils literal notranslate"><span class="pre">style:</span></code> attribute</p></td>
+<td><p></p></td>
+<td><p>The style values (all 61 allowed)</p></td>
+</tr>
+</tbody>
+</table>
+<p>Precedence between the three is not in the available sources. Apply them in the
+CSS order that HDi’s model follows [15]: named or selected styles first, in
+document order, then inline attributes, which win. <strong>INFERRED</strong>. On disc: 88
+<code class="docutils literal notranslate"><span class="pre">style</span></code> elements, named styles referenced 387 times (<code class="docutils literal notranslate"><span class="pre">defaultStyles</span></code>,
+<code class="docutils literal notranslate"><span class="pre">defaultStyles</span> <span class="pre">keyStyle</span></code>, …); <code class="docutils literal notranslate"><span class="pre">select</span></code> on <code class="docutils literal notranslate"><span class="pre">style</span></code> is unused.</p>
+</section>
+<section id="timing">
+<h4>14.6 Timing<a class="headerlink" href="#timing" title="Link to this heading"></a></h4>
+<p>Timing makes the page change over time and react to input. It lives in
+<code class="docutils literal notranslate"><span class="pre">head/timing</span></code> (or an included <code class="docutils literal notranslate"><span class="pre">.xts</span></code>), separately from the content it acts on.</p>
+<p><strong>Clocks.</strong> Every timing section runs on one clock (<code class="docutils literal notranslate"><span class="pre">timing&#64;clock</span></code>):</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Clock</p></th>
+<th class="head"><p>Runs</p></th>
+<th class="head"><p>Used for</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">title</span></code> (default)</p></td>
+<td><p>locked to the title timeline (media time): pauses and seeks with the video</p></td>
+<td><p>cues at specific movie times (in-movie overlays)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">page</span></code></p></td>
+<td><p>from when the page is loaded, independent of the video</p></td>
+<td><p>menus: effects keep playing while the video is paused</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">application</span></code></p></td>
+<td><p>for the application’s whole active life</p></td>
+<td><p>timers shared across pages</p></td>
+</tr>
+</tbody>
+</table>
+<p>Page and application clocks tick at <code class="docutils literal notranslate"><span class="pre">TitleSet&#64;tickBase</span></code>, reduced by
+<code class="docutils literal notranslate"><span class="pre">Title&#64;tickBaseDivisor</span></code> (<a class="reference internal" href="#document-03_playlist"><span class="std std-doc">03</span></a> §3.7, §3.8). On disc: <code class="docutils literal notranslate"><span class="pre">page</span></code> 68,
+<code class="docutils literal notranslate"><span class="pre">application</span></code> 9, <code class="docutils literal notranslate"><span class="pre">title</span></code> 3, omitted 8. (<a class="reference internal" href="#document-05_manifest_hdi"><span class="std std-doc">05</span></a> §5.2.)</p>
+<p><strong><code class="docutils literal notranslate"><span class="pre">timing</span></code></strong> (7.7.2.9.10). Children: <code class="docutils literal notranslate"><span class="pre">defs*</span></code>, then <code class="docutils literal notranslate"><span class="pre">par</span></code> / <code class="docutils literal notranslate"><span class="pre">seq</span></code>.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Attribute</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>What it is for</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">clock</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">title</span></code> | <code class="docutils literal notranslate"><span class="pre">application</span></code> | <code class="docutils literal notranslate"><span class="pre">page</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">title</span></code></p></td>
+<td><p>The clock (above)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">timeContainer</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">par</span></code> | <code class="docutils literal notranslate"><span class="pre">seq</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">par</span></code></p></td>
+<td><p>How the top-level containers run</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">begin</span></code>, <code class="docutils literal notranslate"><span class="pre">dur</span></code>, <code class="docutils literal notranslate"><span class="pre">end</span></code></p></td>
+<td><p>time or path</p></td>
+<td><p></p></td>
+<td><p>Active interval of the whole section</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">clockDivisor</span></code> (v1.0 only)</p></td>
+<td><p>positive integer</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">1</span></code></p></td>
+<td><p>Removed in v1.1</p></td>
+</tr>
+</tbody>
+</table>
+<p><strong><code class="docutils literal notranslate"><span class="pre">par</span></code></strong> and <strong><code class="docutils literal notranslate"><span class="pre">seq</span></code></strong> (7.7.2.9.7–8). Time containers, as SMIL: the children of
+<code class="docutils literal notranslate"><span class="pre">par</span></code> run in parallel; the children of <code class="docutils literal notranslate"><span class="pre">seq</span></code> one after another. Children: <code class="docutils literal notranslate"><span class="pre">cue</span></code>,
+<code class="docutils literal notranslate"><span class="pre">par</span></code>, <code class="docutils literal notranslate"><span class="pre">seq</span></code>. Attributes: <code class="docutils literal notranslate"><span class="pre">begin</span></code>, <code class="docutils literal notranslate"><span class="pre">dur</span></code>, <code class="docutils literal notranslate"><span class="pre">end</span></code> (time or path).</p>
+<p><strong><code class="docutils literal notranslate"><span class="pre">cue</span></code></strong> (7.7.2.9.2). The unit of action: while its interval is active, it applies
+its effects to the elements it selects.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Attribute</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>What it is for</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">select</span></code></p></td>
+<td><p>path</p></td>
+<td><p></p></td>
+<td><p>The elements the cue acts on. Absent: the element its <code class="docutils literal notranslate"><span class="pre">begin</span></code> path matched (see <code class="docutils literal notranslate"><span class="pre">defaultNode()</span></code>, §14.7)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">begin</span></code></p></td>
+<td><p>time or path</p></td>
+<td><p></p></td>
+<td><p>When the cue starts: a time, or the moment a condition becomes true (<code class="docutils literal notranslate"><span class="pre">id('BT_play')[state:focused()=true()]</span></code>)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">end</span></code></p></td>
+<td><p>time or path</p></td>
+<td><p></p></td>
+<td><p>When it stops</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">dur</span></code></p></td>
+<td><p>time</p></td>
+<td><p></p></td>
+<td><p>Its length (instead of <code class="docutils literal notranslate"><span class="pre">end</span></code>)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">use</span></code></p></td>
+<td><p>IDREFS</p></td>
+<td><p></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">g</span></code> elements from <code class="docutils literal notranslate"><span class="pre">defs</span></code> whose effects to apply, as if they were written inside the cue</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">fill</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">remove</span></code> | <code class="docutils literal notranslate"><span class="pre">hold</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">remove</span></code></p></td>
+<td><p>After the cue ends: <code class="docutils literal notranslate"><span class="pre">remove</span></code> undoes its effects, <code class="docutils literal notranslate"><span class="pre">hold</span></code> keeps the final values</p></td>
+</tr>
+</tbody>
+</table>
+<p>Children: any number of <code class="docutils literal notranslate"><span class="pre">animate</span></code>, <code class="docutils literal notranslate"><span class="pre">set</span></code>, <code class="docutils literal notranslate"><span class="pre">event</span></code>; <strong>or</strong> a single <code class="docutils literal notranslate"><span class="pre">link</span></code>.</p>
+<p><strong><code class="docutils literal notranslate"><span class="pre">defs</span></code></strong> (7.7.2.9.3) holds reusable effects: <code class="docutils literal notranslate"><span class="pre">g</span></code>, <code class="docutils literal notranslate"><span class="pre">animate</span></code>, <code class="docutils literal notranslate"><span class="pre">set</span></code>, <code class="docutils literal notranslate"><span class="pre">event</span></code>,
+<code class="docutils literal notranslate"><span class="pre">link</span></code>. <strong><code class="docutils literal notranslate"><span class="pre">g</span></code></strong> (7.7.2.9.5) groups them under an <code class="docutils literal notranslate"><span class="pre">id</span></code> for <code class="docutils literal notranslate"><span class="pre">cue&#64;use</span></code>; children
+<code class="docutils literal notranslate"><span class="pre">g</span></code>, <code class="docutils literal notranslate"><span class="pre">animate</span></code>, <code class="docutils literal notranslate"><span class="pre">set</span></code>, <code class="docutils literal notranslate"><span class="pre">event</span></code>.</p>
+<p><strong><code class="docutils literal notranslate"><span class="pre">set</span></code></strong> (7.7.2.9.9). While active, sets style and state attributes of the
+selected elements to the given values. Allowed: every animatable style attribute
+and <code class="docutils literal notranslate"><span class="pre">state:enabled</span></code>, <code class="docutils literal notranslate"><span class="pre">state:focused</span></code>, <code class="docutils literal notranslate"><span class="pre">state:value</span></code> (v1.1). Example:
+<code class="docutils literal notranslate"><span class="pre">&lt;set</span> <span class="pre">style:backgroundFrame=&quot;1&quot;/&gt;</span></code> shows the focused image.</p>
+<p><strong><code class="docutils literal notranslate"><span class="pre">animate</span></code></strong> (7.7.2.9.1). Changes attributes over the cue’s duration through a
+list of keyframes (<code class="docutils literal notranslate"><span class="pre">style:opacity=&quot;0;0.5;1&quot;</span></code>), spread evenly across the duration.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Attribute</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>What it is for</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">calcMode</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">linear</span></code> | <code class="docutils literal notranslate"><span class="pre">discrete</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">linear</span></code></p></td>
+<td><p>Interpolate between keyframes, or jump</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">additive</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">replace</span></code> | <code class="docutils literal notranslate"><span class="pre">sum</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">replace</span></code></p></td>
+<td><p>Replace the attribute’s value, or add to it</p></td>
+</tr>
+<tr class="row-even"><td><p>animatable style / state attributes</p></td>
+<td><p>animated value</p></td>
+<td><p></p></td>
+<td><p>The keyframes</p></td>
+</tr>
+</tbody>
+</table>
+<p><strong><code class="docutils literal notranslate"><span class="pre">event</span></code></strong> (7.7.2.9.4). Fires a DOM event named <code class="docutils literal notranslate"><span class="pre">name</span></code> (required) when the cue
+starts, targeted at the cue’s selected elements (<strong>INFERRED</strong>); script receives it through
+<code class="docutils literal notranslate"><span class="pre">addEventListener(name,</span> <span class="pre">…)</span></code>. Children: <code class="docutils literal notranslate"><span class="pre">param*</span></code>, the event’s data.</p>
+<p><strong><code class="docutils literal notranslate"><span class="pre">link</span></code></strong> (7.7.2.9.6). Switches the application to another markup page:
+<code class="docutils literal notranslate"><span class="pre">href</span></code> (required, the <code class="docutils literal notranslate"><span class="pre">.xmu</span></code>), <code class="docutils literal notranslate"><span class="pre">xml:base</span></code>, <code class="docutils literal notranslate"><span class="pre">id</span></code> (v1.1). The current page is
+replaced; the application and its File Cache stay [1]. On disc: 12, all in
+<code class="docutils literal notranslate"><span class="pre">OLIVER_TWIST_JPN</span></code> menus.</p>
+<p><strong>Rules</strong> (SMIL 2.0 [18], <a class="reference internal" href="#document-12_hdi_scripting_abi"><span class="std std-doc">12</span></a> §12.4):</p>
+<ul class="simple">
+<li><p>A cue whose <code class="docutils literal notranslate"><span class="pre">begin</span></code> is a path starts when the path becomes true and ends when
+its <code class="docutils literal notranslate"><span class="pre">end</span></code> becomes true (or after <code class="docutils literal notranslate"><span class="pre">dur</span></code>); it can start again when <code class="docutils literal notranslate"><span class="pre">begin</span></code> is
+next true.</p></li>
+<li><p>Evaluate path conditions on every clock tick and on every focus, action or
+state change.</p></li>
+<li><p>A cue’s timing never outlives its application: the application’s valid period
+on the title timeline (<a class="reference internal" href="#document-03_playlist"><span class="std std-doc">03</span></a> §3.13) gates everything.</p></li>
+</ul>
+<p>On disc: <code class="docutils literal notranslate"><span class="pre">cue</span></code> 1239, <code class="docutils literal notranslate"><span class="pre">set</span></code> 579, <code class="docutils literal notranslate"><span class="pre">event</span></code> 510, <code class="docutils literal notranslate"><span class="pre">animate</span></code> 483, <code class="docutils literal notranslate"><span class="pre">par</span></code> 204, <code class="docutils literal notranslate"><span class="pre">seq</span></code> 33,
+<code class="docutils literal notranslate"><span class="pre">defs</span></code> 54, <code class="docutils literal notranslate"><span class="pre">g</span></code> 8, <code class="docutils literal notranslate"><span class="pre">link</span></code> 12; <code class="docutils literal notranslate"><span class="pre">fill</span></code> only <code class="docutils literal notranslate"><span class="pre">hold</span></code> (176); <code class="docutils literal notranslate"><span class="pre">calcMode</span></code> only <code class="docutils literal notranslate"><span class="pre">linear</span></code>
+(24); <code class="docutils literal notranslate"><span class="pre">additive</span></code> only <code class="docutils literal notranslate"><span class="pre">sum</span></code> (12).</p>
+</section>
+<section id="path-expressions">
+<h4>14.7 Path expressions<a class="headerlink" href="#path-expressions" title="Link to this heading"></a></h4>
+<p><code class="docutils literal notranslate"><span class="pre">begin</span></code>, <code class="docutils literal notranslate"><span class="pre">end</span></code> and <code class="docutils literal notranslate"><span class="pre">select</span></code> on timing elements, and <code class="docutils literal notranslate"><span class="pre">select</span></code> on <code class="docutils literal notranslate"><span class="pre">style</span></code>, take a
+path expression (<code class="docutils literal notranslate"><span class="pre">PathExpressionType</span></code>, Spec. 7.5.2.4). It is <strong>XPath 1.0</strong>
+evaluated over the markup document, with the <code class="docutils literal notranslate"><span class="pre">state:</span></code> and <code class="docutils literal notranslate"><span class="pre">style:</span></code> namespaces
+bound, the page’s variables, and these functions:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Function</p></th>
+<th class="head"><p>Returns</p></th>
+<th class="head"><p>Meaning</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">id('x')</span></code>, <code class="docutils literal notranslate"><span class="pre">id($v)</span></code></p></td>
+<td><p>node-set</p></td>
+<td><p>The element with that <code class="docutils literal notranslate"><span class="pre">id</span></code> (XPath standard)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">class('c')</span></code>, <code class="docutils literal notranslate"><span class="pre">class($v)</span></code></p></td>
+<td><p>node-set</p></td>
+<td><p>Every element whose <code class="docutils literal notranslate"><span class="pre">class</span></code> contains <code class="docutils literal notranslate"><span class="pre">c</span></code> (iHD extension)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">defaultNode()</span></code></p></td>
+<td><p>node-set</p></td>
+<td><p>The cue’s default node: the element its <code class="docutils literal notranslate"><span class="pre">begin</span></code> matched. On disc it appears only in the <code class="docutils literal notranslate"><span class="pre">end</span></code> of timing elements (192 <code class="docutils literal notranslate"><span class="pre">cue</span></code>, 1 <code class="docutils literal notranslate"><span class="pre">par</span></code>) that have no <code class="docutils literal notranslate"><span class="pre">select</span></code> and whose <code class="docutils literal notranslate"><span class="pre">begin</span></code> names one element, as <code class="docutils literal notranslate"><span class="pre">defaultNode()[state:focused()=false()]</span></code>: “end when that element loses focus”. <strong>INFERRED</strong></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">state:focused()</span></code>, <code class="docutils literal notranslate"><span class="pre">state:actioned()</span></code>, <code class="docutils literal notranslate"><span class="pre">state:enabled()</span></code>, <code class="docutils literal notranslate"><span class="pre">state:pointer()</span></code>, <code class="docutils literal notranslate"><span class="pre">state:value()</span></code>, <code class="docutils literal notranslate"><span class="pre">state:foreground()</span></code></p></td>
+<td><p>boolean or string</p></td>
+<td><p>The state attribute (§14.9) of the context node</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">style:x()</span></code>, <code class="docutils literal notranslate"><span class="pre">style:opacity()</span></code>, … (one per style attribute)</p></td>
+<td><p>string</p></td>
+<td><p>The current value of that style attribute of the context node; with a node argument (<code class="docutils literal notranslate"><span class="pre">style:x(id('focusToggle'))</span></code>) of that node</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">true()</span></code>, <code class="docutils literal notranslate"><span class="pre">false()</span></code>, <code class="docutils literal notranslate"><span class="pre">not()</span></code>, <code class="docutils literal notranslate"><span class="pre">boolean()</span></code></p></td>
+<td><p>boolean</p></td>
+<td><p>XPath standard</p></td>
+</tr>
+</tbody>
+</table>
+<p>Plus: location paths (<code class="docutils literal notranslate"><span class="pre">//button</span></code>, <code class="docutils literal notranslate"><span class="pre">//body</span></code>), predicates <code class="docutils literal notranslate"><span class="pre">[…]</span></code>, attribute tests
+(<code class="docutils literal notranslate"><span class="pre">&#64;state:focused='true'</span></code>, <code class="docutils literal notranslate"><span class="pre">&#64;id=$focus</span></code>), unions <code class="docutils literal notranslate"><span class="pre">|</span></code>, comparisons <code class="docutils literal notranslate"><span class="pre">=</span></code> <code class="docutils literal notranslate"><span class="pre">!=</span></code>, <code class="docutils literal notranslate"><span class="pre">and</span></code>,
+number and string literals, and <code class="docutils literal notranslate"><span class="pre">$name</span></code> variables that script sets with
+<code class="docutils literal notranslate"><span class="pre">document.setXPathVariable(name,</span> <span class="pre">value)</span></code> (<a class="reference internal" href="#document-05_manifest_hdi"><span class="std std-doc">05</span></a> §5.3).</p>
+<p>A path in <code class="docutils literal notranslate"><span class="pre">begin</span></code> / <code class="docutils literal notranslate"><span class="pre">end</span></code> is true when it yields a non-empty node-set or boolean
+true. A path that cannot be evaluated is false (the cue does not fire).
+<strong>INFERRED</strong> (XPath 1.0 plus enumerated extensions; Spec. 7.5.2.4 unpublished).</p>
+<p>On disc (every <code class="docutils literal notranslate"><span class="pre">begin</span></code>, <code class="docutils literal notranslate"><span class="pre">end</span></code> and <code class="docutils literal notranslate"><span class="pre">select</span></code>): <code class="docutils literal notranslate"><span class="pre">id</span></code> 1664 uses,
+<code class="docutils literal notranslate"><span class="pre">state:focused</span></code> 680, <code class="docutils literal notranslate"><span class="pre">true</span></code> 589, <code class="docutils literal notranslate"><span class="pre">state:actioned</span></code> 302, <code class="docutils literal notranslate"><span class="pre">false</span></code> 277,
+<code class="docutils literal notranslate"><span class="pre">defaultNode</span></code> 193, <code class="docutils literal notranslate"><span class="pre">class</span></code> 31, <code class="docutils literal notranslate"><span class="pre">style:display</span></code> 25, <code class="docutils literal notranslate"><span class="pre">style:y</span></code> 21,
+<code class="docutils literal notranslate"><span class="pre">style:opacity</span></code> 18, <code class="docutils literal notranslate"><span class="pre">not</span></code> 8, <code class="docutils literal notranslate"><span class="pre">boolean</span></code> 8, <code class="docutils literal notranslate"><span class="pre">state:pointer</span></code> 4, <code class="docutils literal notranslate"><span class="pre">style:x</span></code> 1;
+88 distinct path shapes. The commonest:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">select</span><span class="o">=</span><span class="s2">"id('BT_scenes')"</span>
+<span class="n">begin</span><span class="o">=</span><span class="s2">"id('BT_scenes')[state:focused()=true()]"</span>
+<span class="n">end</span><span class="o">=</span><span class="s2">"defaultNode()[state:focused()=false()]"</span>
+<span class="n">begin</span><span class="o">=</span><span class="s2">"//button[state:actioned()=true()]"</span>
+<span class="n">begin</span><span class="o">=</span><span class="s2">"(boolean($sw01) and boolean($set01))"</span>
+</pre></div>
+</div>
+</section>
+<section id="style-attributes">
+<h4>14.8 Style attributes<a class="headerlink" href="#style-attributes" title="Link to this heading"></a></h4>
+<p>All in the <code class="docutils literal notranslate"><span class="pre">ihd#style</span></code> namespace (Spec. 7.6.3.3.2.*). <strong>Animatable</strong> attributes
+may take a <code class="docutils literal notranslate"><span class="pre">;</span></code> keyframe list and may be used in <code class="docutils literal notranslate"><span class="pre">set</span></code> / <code class="docutils literal notranslate"><span class="pre">animate</span></code>. <strong>Allowed on</strong>
+is from the element’s style group in the v1.1 schema; every attribute is also
+allowed on <code class="docutils literal notranslate"><span class="pre">style</span></code>. <strong>Used</strong> counts the attribute on any element in the corpus.
+Meanings marked “XSL-FO semantics” follow that standard; the rest are verified
+on disc or follow directly from the name and values
+(<a class="reference internal" href="#document-05_manifest_hdi"><span class="std std-doc">05</span></a> §5.9 for the used rendering rules).</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Attribute</p></th>
+<th class="head"><p>Values</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Animatable</p></th>
+<th class="head"><p>Allowed on</p></th>
+<th class="head"><p>Used</p></th>
+<th class="head"><p>What it is for</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">anchor</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">startBefore</span></code> | <code class="docutils literal notranslate"><span class="pre">centerBefore</span></code> | <code class="docutils literal notranslate"><span class="pre">endBefore</span></code> | <code class="docutils literal notranslate"><span class="pre">startCenter</span></code> | <code class="docutils literal notranslate"><span class="pre">center</span></code> | <code class="docutils literal notranslate"><span class="pre">endCenter</span></code> | <code class="docutils literal notranslate"><span class="pre">startAfter</span></code> | <code class="docutils literal notranslate"><span class="pre">centerAfter</span></code> | <code class="docutils literal notranslate"><span class="pre">endAfter</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">startBefore</span></code></p></td>
+<td><p>yes</p></td>
+<td><p>button, div, object</p></td>
+<td><p>31</p></td>
+<td><p>Which point of the element’s box is placed at (<code class="docutils literal notranslate"><span class="pre">x</span></code>, <code class="docutils literal notranslate"><span class="pre">y</span></code>): <code class="docutils literal notranslate"><span class="pre">start</span></code>/<code class="docutils literal notranslate"><span class="pre">center</span></code>/<code class="docutils literal notranslate"><span class="pre">end</span></code> across × <code class="docutils literal notranslate"><span class="pre">Before</span></code>/<code class="docutils literal notranslate"><span class="pre">Center</span></code>/<code class="docutils literal notranslate"><span class="pre">After</span></code> down (in <code class="docutils literal notranslate"><span class="pre">lr-tb</span></code>, start = left, before = top); <code class="docutils literal notranslate"><span class="pre">center</span></code> is the middle</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">backgroundColor</span></code></p></td>
+<td><p>colour</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">transparent</span></code></p></td>
+<td><p>yes</p></td>
+<td><p>area, body, br, button, div, input, object, p, span</p></td>
+<td><p>4</p></td>
+<td><p>Colour filling the box behind its content</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">backgroundFrame</span></code></p></td>
+<td><p>integer</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0</span></code></p></td>
+<td><p>yes</p></td>
+<td><p>area, body, button, div, input, object</p></td>
+<td><p>114</p></td>
+<td><p>Which image of the <code class="docutils literal notranslate"><span class="pre">backgroundImage</span></code> list is shown, counting from 0. Menus use 0 normal, 1 focused, 2 actioned</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">backgroundImage</span></code></p></td>
+<td><p>list of <code class="docutils literal notranslate"><span class="pre">url('…')</span></code> | <code class="docutils literal notranslate"><span class="pre">none</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">none</span></code></p></td>
+<td><p>yes</p></td>
+<td><p>area, body, button, div, input, object</p></td>
+<td><p>1357</p></td>
+<td><p>The box’s image(s): a space-separated list of <code class="docutils literal notranslate"><span class="pre">url('…')</span></code>; one is shown at a time, chosen by <code class="docutils literal notranslate"><span class="pre">backgroundFrame</span></code>. Long lists are animation strips</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">backgroundPositionHorizontal</span></code></p></td>
+<td><p>length | % | <code class="docutils literal notranslate"><span class="pre">left</span></code> | <code class="docutils literal notranslate"><span class="pre">center</span></code> | <code class="docutils literal notranslate"><span class="pre">right</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0%</span></code></p></td>
+<td><p>yes</p></td>
+<td><p>area, body, button, div, input, object</p></td>
+<td><p>6</p></td>
+<td><p>Horizontal position of the background image in the box</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">backgroundPositionVertical</span></code></p></td>
+<td><p>length | % | <code class="docutils literal notranslate"><span class="pre">top</span></code> | <code class="docutils literal notranslate"><span class="pre">center</span></code> | <code class="docutils literal notranslate"><span class="pre">bottom</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0%</span></code></p></td>
+<td><p>yes</p></td>
+<td><p>area, body, button, div, input, object</p></td>
+<td><p>3</p></td>
+<td><p>Vertical position of the background image in the box</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">backgroundRepeat</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">repeat</span></code> | <code class="docutils literal notranslate"><span class="pre">no-repeat</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">no-repeat</span></code></p></td>
+<td><p></p></td>
+<td><p>area, body, button, div, input, object</p></td>
+<td><p>0</p></td>
+<td><p>Whether the background image is tiled</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">blockProgressionDimension</span></code></p></td>
+<td><p>length | % | <code class="docutils literal notranslate"><span class="pre">auto</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">auto</span></code></p></td>
+<td><p>yes</p></td>
+<td><p>area, body, button, div, input, object, p</p></td>
+<td><p>0</p></td>
+<td><p>Size along the block direction (the height in <code class="docutils literal notranslate"><span class="pre">lr-tb</span></code>); XSL-FO name for <code class="docutils literal notranslate"><span class="pre">height</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">border</span></code></p></td>
+<td><p>border string</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p></td>
+<td><p>yes</p></td>
+<td><p>area, body, button, div, input, object, p</p></td>
+<td><p>0</p></td>
+<td><p>Border on all four sides, as one string (CSS-like width, style, colour)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">borderAfter</span></code></p></td>
+<td><p>border string</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p></td>
+<td><p>yes</p></td>
+<td><p>area, body, button, div, input, object, p</p></td>
+<td><p>0</p></td>
+<td><p>Border on the after side (bottom in <code class="docutils literal notranslate"><span class="pre">lr-tb</span></code>)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">borderBefore</span></code></p></td>
+<td><p>border string</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p></td>
+<td><p>yes</p></td>
+<td><p>area, body, button, div, input, object, p</p></td>
+<td><p>0</p></td>
+<td><p>Border on the before side (top in <code class="docutils literal notranslate"><span class="pre">lr-tb</span></code>)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">borderEnd</span></code></p></td>
+<td><p>border string</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p></td>
+<td><p>yes</p></td>
+<td><p>area, body, button, div, input, object, p</p></td>
+<td><p>0</p></td>
+<td><p>Border on the end side (right in <code class="docutils literal notranslate"><span class="pre">lr-tb</span></code>)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">borderStart</span></code></p></td>
+<td><p>border string</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p></td>
+<td><p>yes</p></td>
+<td><p>area, body, button, div, input, object, p</p></td>
+<td><p>0</p></td>
+<td><p>Border on the start side (left in <code class="docutils literal notranslate"><span class="pre">lr-tb</span></code>)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">breakAfter</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">auto</span></code> | <code class="docutils literal notranslate"><span class="pre">line</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">auto</span></code></p></td>
+<td><p></p></td>
+<td><p>br, button, input, object, span</p></td>
+<td><p>0</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">line</span></code> forces a line break after this inline element</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">breakBefore</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">auto</span></code> | <code class="docutils literal notranslate"><span class="pre">line</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">auto</span></code></p></td>
+<td><p></p></td>
+<td><p>br, button, input, object, span</p></td>
+<td><p>0</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">line</span></code> forces a line break before this inline element</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">color</span></code></p></td>
+<td><p></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">white</span></code></p></td>
+<td><p>yes</p></td>
+<td><p>area, body, div, input, p, span</p></td>
+<td><p>50</p></td>
+<td><p>Text colour</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">contentWidth</span></code></p></td>
+<td><p>length | % | <code class="docutils literal notranslate"><span class="pre">auto</span></code> | <code class="docutils literal notranslate"><span class="pre">scale-to-fit</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">auto</span></code></p></td>
+<td><p>yes</p></td>
+<td><p>area, body, button, div, input, object</p></td>
+<td><p>116</p></td>
+<td><p>Width of the image drawn inside the box (as <code class="docutils literal notranslate"><span class="pre">contentHeight</span></code>)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">contentHeight</span></code></p></td>
+<td><p>length | % | <code class="docutils literal notranslate"><span class="pre">auto</span></code> | <code class="docutils literal notranslate"><span class="pre">scale-to-fit</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">auto</span></code></p></td>
+<td><p>yes</p></td>
+<td><p>area, body, button, div, input, object</p></td>
+<td><p>115</p></td>
+<td><p>Height of the image drawn inside the box: <code class="docutils literal notranslate"><span class="pre">auto</span></code> = its own size, <code class="docutils literal notranslate"><span class="pre">scale-to-fit</span></code> = fit the box</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">crop</span></code></p></td>
+<td><p>four integers | <code class="docutils literal notranslate"><span class="pre">auto</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">auto</span></code></p></td>
+<td><p>yes</p></td>
+<td><p>area, body, button, div, input, object</p></td>
+<td><p>0</p></td>
+<td><p>Part of the source image to use, four integers; <code class="docutils literal notranslate"><span class="pre">auto</span></code> = all of it. Order of the four numbers not in the sources</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">direction</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">ltr</span></code> | <code class="docutils literal notranslate"><span class="pre">rtl</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">ltr</span></code></p></td>
+<td><p></p></td>
+<td><p>body, div, input, p, span</p></td>
+<td><p>0</p></td>
+<td><p>Text direction, left-to-right or right-to-left</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">display</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">auto</span></code> | <code class="docutils literal notranslate"><span class="pre">none</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">auto</span></code></p></td>
+<td><p>yes</p></td>
+<td><p>area, body, br, button, div, input, object, p, span</p></td>
+<td><p>1641</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">none</span></code> removes the element and its children from rendering (it stays in the navigation graph); <code class="docutils literal notranslate"><span class="pre">auto</span></code> shows it</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">displayAlign</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">auto</span></code> | <code class="docutils literal notranslate"><span class="pre">before</span></code> | <code class="docutils literal notranslate"><span class="pre">center</span></code> | <code class="docutils literal notranslate"><span class="pre">after</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">auto</span></code></p></td>
+<td><p>yes</p></td>
+<td><p>area, body, button, div, input, object, p</p></td>
+<td><p>0</p></td>
+<td><p>Alignment of the content along the block direction (top / middle / bottom in <code class="docutils literal notranslate"><span class="pre">lr-tb</span></code>)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">flip</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">none</span></code> | <code class="docutils literal notranslate"><span class="pre">inlineProgression</span></code> | <code class="docutils literal notranslate"><span class="pre">blockProgression</span></code> | <code class="docutils literal notranslate"><span class="pre">both</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">none</span></code></p></td>
+<td><p>yes</p></td>
+<td><p>area, body, button, div, input, object</p></td>
+<td><p>0</p></td>
+<td><p>Mirror the content across the inline axis, the block axis, or both</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">font</span></code></p></td>
+<td><p>font URI</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p></td>
+<td><p>yes</p></td>
+<td><p>body, div, input, p, span</p></td>
+<td><p>47</p></td>
+<td><p>The font: URI of an OpenType file in the File Cache (players have no built-in fonts), optionally followed by a quoted family name</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">fontSize</span></code></p></td>
+<td><p>1 or 2 lengths | <code class="docutils literal notranslate"><span class="pre">xx-small</span></code> | <code class="docutils literal notranslate"><span class="pre">x-small</span></code> | <code class="docutils literal notranslate"><span class="pre">small</span></code> | <code class="docutils literal notranslate"><span class="pre">medium</span></code> | <code class="docutils literal notranslate"><span class="pre">large</span></code> | <code class="docutils literal notranslate"><span class="pre">x-large</span></code> | <code class="docutils literal notranslate"><span class="pre">xx-large</span></code> | <code class="docutils literal notranslate"><span class="pre">smaller</span></code> | <code class="docutils literal notranslate"><span class="pre">larger</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">medium</span></code></p></td>
+<td><p>yes</p></td>
+<td><p>body, div, input, p, span</p></td>
+<td><p>55</p></td>
+<td><p>Text size; two lengths give horizontal and vertical size separately</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">fontStyle</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">normal</span></code> | <code class="docutils literal notranslate"><span class="pre">italic</span></code> | <code class="docutils literal notranslate"><span class="pre">oblique</span></code> | <code class="docutils literal notranslate"><span class="pre">backslant</span></code> | <code class="docutils literal notranslate"><span class="pre">reverse-oblique</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">normal</span></code></p></td>
+<td><p>yes</p></td>
+<td><p>body, div, input, p, span</p></td>
+<td><p>0</p></td>
+<td><p>Upright, italic or slanted text</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">height</span></code></p></td>
+<td><p>length | % | <code class="docutils literal notranslate"><span class="pre">auto</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">auto</span></code></p></td>
+<td><p>yes</p></td>
+<td><p>area, body, button, div, input, object, p</p></td>
+<td><p>1665</p></td>
+<td><p>Box height</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">inlineProgressionDimension</span></code></p></td>
+<td><p>length | % | <code class="docutils literal notranslate"><span class="pre">auto</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">auto</span></code></p></td>
+<td><p>yes</p></td>
+<td><p>area, body, button, div, input, object, p</p></td>
+<td><p>0</p></td>
+<td><p>Size along the inline direction (the width in <code class="docutils literal notranslate"><span class="pre">lr-tb</span></code>); XSL-FO name for <code class="docutils literal notranslate"><span class="pre">width</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">linefeedTreatment</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">ignore</span></code> | <code class="docutils literal notranslate"><span class="pre">preserve</span></code> | <code class="docutils literal notranslate"><span class="pre">treat-as-space</span></code> | <code class="docutils literal notranslate"><span class="pre">treat-as-zero-width-space</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">treat-as-space</span></code></p></td>
+<td><p></p></td>
+<td><p>body, div, input, p, span</p></td>
+<td><p>0</p></td>
+<td><p>What a line feed in the text does (XSL-FO semantics)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">lineHeight</span></code></p></td>
+<td><p>length | % | <code class="docutils literal notranslate"><span class="pre">auto</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">auto</span></code></p></td>
+<td><p>yes</p></td>
+<td><p>body, div, input, p</p></td>
+<td><p>37</p></td>
+<td><p>Height of each line of text</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">navDown</span></code></p></td>
+<td><p>element id | <code class="docutils literal notranslate"><span class="pre">none</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">none</span></code></p></td>
+<td><p>yes</p></td>
+<td><p>area, button, input</p></td>
+<td><p>405</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">id</span></code> of the element that gets focus when the user presses down; <code class="docutils literal notranslate"><span class="pre">none</span></code> = focus stays</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">navIndex</span></code></p></td>
+<td><p>two integers | <code class="docutils literal notranslate"><span class="pre">auto</span></code> | <code class="docutils literal notranslate"><span class="pre">none</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">auto</span></code></p></td>
+<td><p>yes</p></td>
+<td><p>area, button, input</p></td>
+<td><p>2</p></td>
+<td><p>Sequential navigation order; <code class="docutils literal notranslate"><span class="pre">none</span></code> removes the element from remote navigation, <code class="docutils literal notranslate"><span class="pre">auto</span></code> = document order</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">navLeft</span></code></p></td>
+<td><p>element id | <code class="docutils literal notranslate"><span class="pre">none</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">none</span></code></p></td>
+<td><p>yes</p></td>
+<td><p>area, button, input</p></td>
+<td><p>405</p></td>
+<td><p>As <code class="docutils literal notranslate"><span class="pre">navDown</span></code>, for left</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">navLeftDown</span></code></p></td>
+<td><p>element id | <code class="docutils literal notranslate"><span class="pre">none</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">none</span></code></p></td>
+<td><p>yes</p></td>
+<td><p>area, button, input</p></td>
+<td><p>5</p></td>
+<td><p>As <code class="docutils literal notranslate"><span class="pre">navDown</span></code>, for the diagonal key</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">navLeftUp</span></code></p></td>
+<td><p>element id | <code class="docutils literal notranslate"><span class="pre">none</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">none</span></code></p></td>
+<td><p>yes</p></td>
+<td><p>area, button, input</p></td>
+<td><p>5</p></td>
+<td><p>As <code class="docutils literal notranslate"><span class="pre">navDown</span></code>, for the diagonal key</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">navRight</span></code></p></td>
+<td><p>element id | <code class="docutils literal notranslate"><span class="pre">none</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">none</span></code></p></td>
+<td><p>yes</p></td>
+<td><p>area, button, input</p></td>
+<td><p>405</p></td>
+<td><p>As <code class="docutils literal notranslate"><span class="pre">navDown</span></code>, for right</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">navRightDown</span></code></p></td>
+<td><p>element id | <code class="docutils literal notranslate"><span class="pre">none</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">none</span></code></p></td>
+<td><p>yes</p></td>
+<td><p>area, button, input</p></td>
+<td><p>5</p></td>
+<td><p>As <code class="docutils literal notranslate"><span class="pre">navDown</span></code>, for the diagonal key</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">navRightUp</span></code></p></td>
+<td><p>element id | <code class="docutils literal notranslate"><span class="pre">none</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">none</span></code></p></td>
+<td><p>yes</p></td>
+<td><p>area, button, input</p></td>
+<td><p>5</p></td>
+<td><p>As <code class="docutils literal notranslate"><span class="pre">navDown</span></code>, for the diagonal key</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">navUp</span></code></p></td>
+<td><p>element id | <code class="docutils literal notranslate"><span class="pre">none</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">none</span></code></p></td>
+<td><p>yes</p></td>
+<td><p>area, button, input</p></td>
+<td><p>405</p></td>
+<td><p>As <code class="docutils literal notranslate"><span class="pre">navDown</span></code>, for up</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">opacity</span></code></p></td>
+<td><p>number 0–1</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">1.0</span></code></p></td>
+<td><p>yes</p></td>
+<td><p>area, body, br, button, div, input, object, p, span</p></td>
+<td><p>1526</p></td>
+<td><p>Alpha multiplied into the element and its children: 0 invisible, 1 opaque</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">padding</span></code></p></td>
+<td><p>1–4 lengths</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0px</span></code></p></td>
+<td><p>yes</p></td>
+<td><p>area, body, button, div, input, object, p</p></td>
+<td><p>0</p></td>
+<td><p>Space between border and content on all sides (1–4 values, CSS order)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">paddingAfter</span></code></p></td>
+<td><p>length | %</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0px</span></code></p></td>
+<td><p>yes</p></td>
+<td><p>area, body, button, div, input, object, p</p></td>
+<td><p>0</p></td>
+<td><p>Padding on the after side</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">paddingBefore</span></code></p></td>
+<td><p>length | %</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0px</span></code></p></td>
+<td><p>yes</p></td>
+<td><p>area, body, button, div, input, object, p</p></td>
+<td><p>0</p></td>
+<td><p>Padding on the before side</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">paddingEnd</span></code></p></td>
+<td><p>length | %</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0px</span></code></p></td>
+<td><p>yes</p></td>
+<td><p>area, body, button, div, input, object, p</p></td>
+<td><p>0</p></td>
+<td><p>Padding on the end side</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">paddingStart</span></code></p></td>
+<td><p>length | %</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0px</span></code></p></td>
+<td><p>yes</p></td>
+<td><p>area, body, button, div, input, object, p</p></td>
+<td><p>0</p></td>
+<td><p>Padding on the start side</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">position</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">static</span></code> | <code class="docutils literal notranslate"><span class="pre">relative</span></code> | <code class="docutils literal notranslate"><span class="pre">absolute</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">static</span></code></p></td>
+<td><p></p></td>
+<td><p>button, div, object</p></td>
+<td><p>1462</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">absolute</span></code>: the box is placed at <code class="docutils literal notranslate"><span class="pre">x</span></code>, <code class="docutils literal notranslate"><span class="pre">y</span></code> in its parent. <code class="docutils literal notranslate"><span class="pre">static</span></code> / <code class="docutils literal notranslate"><span class="pre">relative</span></code> follow flow layout</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">scaling</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">uniform</span></code> | <code class="docutils literal notranslate"><span class="pre">non-uniform</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">non-uniform</span></code></p></td>
+<td><p></p></td>
+<td><p>area, body, button, div, input, object</p></td>
+<td><p>1</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">uniform</span></code> keeps the image aspect ratio when fitting; <code class="docutils literal notranslate"><span class="pre">non-uniform</span></code> stretches</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">suppressAtLineBreak</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">auto</span></code> | <code class="docutils literal notranslate"><span class="pre">suppress</span></code> | <code class="docutils literal notranslate"><span class="pre">retain</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">auto</span></code></p></td>
+<td><p></p></td>
+<td><p>input, span</p></td>
+<td><p>0</p></td>
+<td><p>Whether this inline content is dropped at a line break (XSL-FO semantics)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">textAlign</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">start</span></code> | <code class="docutils literal notranslate"><span class="pre">center</span></code> | <code class="docutils literal notranslate"><span class="pre">end</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">start</span></code></p></td>
+<td><p>yes</p></td>
+<td><p>body, div, input, p</p></td>
+<td><p>0</p></td>
+<td><p>Alignment of lines: start, centre or end</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">textAltitude</span></code></p></td>
+<td><p>length | % | <code class="docutils literal notranslate"><span class="pre">auto</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">auto</span></code></p></td>
+<td><p>yes</p></td>
+<td><p>input, p, span</p></td>
+<td><p>0</p></td>
+<td><p>Height of the text area above the baseline</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">textDepth</span></code></p></td>
+<td><p>length | % | <code class="docutils literal notranslate"><span class="pre">auto</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">auto</span></code></p></td>
+<td><p>yes</p></td>
+<td><p>input, p, span</p></td>
+<td><p>0</p></td>
+<td><p>Depth of the text area below the baseline</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">textIndent</span></code></p></td>
+<td><p>length | %</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0px</span></code></p></td>
+<td><p>yes</p></td>
+<td><p>body, div, input, p</p></td>
+<td><p>0</p></td>
+<td><p>Indent of the first line</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">visibility</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">visible</span></code> | <code class="docutils literal notranslate"><span class="pre">hidden</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">visible</span></code></p></td>
+<td><p>yes</p></td>
+<td><p>area, body, br, button, div, input, object, p, span</p></td>
+<td><p>11</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">hidden</span></code> hides the element but keeps its space and navigation</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">whiteSpaceCollapse</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">true</span></code> | <code class="docutils literal notranslate"><span class="pre">false</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">true</span></code></p></td>
+<td><p></p></td>
+<td><p>body, div, input, p</p></td>
+<td><p>0</p></td>
+<td><p>Whether runs of spaces collapse to one (XSL-FO semantics)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">whiteSpaceTreatment</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">ignore</span></code> | <code class="docutils literal notranslate"><span class="pre">preserve</span></code> | <code class="docutils literal notranslate"><span class="pre">ignore-before</span></code> | <code class="docutils literal notranslate"><span class="pre">ignore-after</span></code> | <code class="docutils literal notranslate"><span class="pre">ignore-around</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">ignore-around</span></code></p></td>
+<td><p></p></td>
+<td><p>body, div, input, p</p></td>
+<td><p>0</p></td>
+<td><p>Which spaces around line breaks are removed (XSL-FO semantics)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">width</span></code></p></td>
+<td><p>length | % | <code class="docutils literal notranslate"><span class="pre">auto</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">auto</span></code></p></td>
+<td><p>yes</p></td>
+<td><p>area, body, button, div, input, object, p</p></td>
+<td><p>1668</p></td>
+<td><p>Box width</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">wrapOption</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">wrap</span></code> | <code class="docutils literal notranslate"><span class="pre">no-wrap</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">wrap</span></code></p></td>
+<td><p>yes</p></td>
+<td><p>body, div, input, p, span</p></td>
+<td><p>0</p></td>
+<td><p>Whether long lines wrap</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">writingMode</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">lr-tb</span></code> | <code class="docutils literal notranslate"><span class="pre">rl-tb</span></code> | <code class="docutils literal notranslate"><span class="pre">tb-rl</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">lr-tb</span></code></p></td>
+<td><p></p></td>
+<td><p>body, div, input</p></td>
+<td><p>0</p></td>
+<td><p>Line and page direction: <code class="docutils literal notranslate"><span class="pre">lr-tb</span></code> left-to-right, top-to-bottom; <code class="docutils literal notranslate"><span class="pre">rl-tb</span></code>; <code class="docutils literal notranslate"><span class="pre">tb-rl</span></code> vertical (Japanese)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">x</span></code></p></td>
+<td><p>length | % | <code class="docutils literal notranslate"><span class="pre">auto</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0px</span></code></p></td>
+<td><p>yes</p></td>
+<td><p>button, div, object</p></td>
+<td><p>1763</p></td>
+<td><p>Horizontal position of the anchor point, relative to the parent</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">y</span></code></p></td>
+<td><p>length | % | <code class="docutils literal notranslate"><span class="pre">auto</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0px</span></code></p></td>
+<td><p>yes</p></td>
+<td><p>button, div, object</p></td>
+<td><p>1913</p></td>
+<td><p>Vertical position of the anchor point, relative to the parent</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">zIndex</span></code></p></td>
+<td><p>integer | <code class="docutils literal notranslate"><span class="pre">auto</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">auto</span></code></p></td>
+<td><p>yes</p></td>
+<td><p>button, div, object</p></td>
+<td><p>19</p></td>
+<td><p>Stacking order among siblings; higher is drawn on top</p></td>
+</tr>
+</tbody>
+</table>
+<p>On disc: <code class="docutils literal notranslate"><span class="pre">position</span></code> is always <code class="docutils literal notranslate"><span class="pre">absolute</span></code> (1462/1462); <code class="docutils literal notranslate"><span class="pre">display</span></code> <code class="docutils literal notranslate"><span class="pre">inherit</span></code> 1054,
+<code class="docutils literal notranslate"><span class="pre">auto</span></code> 473, <code class="docutils literal notranslate"><span class="pre">none</span></code> 114; <code class="docutils literal notranslate"><span class="pre">opacity</span></code> <code class="docutils literal notranslate"><span class="pre">inherit</span></code> 1043 and keyframe lists on
+<code class="docutils literal notranslate"><span class="pre">animate</span></code>; <code class="docutils literal notranslate"><span class="pre">contentWidth</span></code> / <code class="docutils literal notranslate"><span class="pre">contentHeight</span></code> <code class="docutils literal notranslate"><span class="pre">scale-to-fit</span></code> 41 / 40.
+<code class="docutils literal notranslate"><span class="pre">writingMode</span></code>, <code class="docutils literal notranslate"><span class="pre">padding*</span></code>, <code class="docutils literal notranslate"><span class="pre">border*</span></code>, <code class="docutils literal notranslate"><span class="pre">direction</span></code>, <code class="docutils literal notranslate"><span class="pre">displayAlign</span></code>, <code class="docutils literal notranslate"><span class="pre">whiteSpace*</span></code>,
+<code class="docutils literal notranslate"><span class="pre">textAlign</span></code> and the text-metric attributes are never used; implement them from
+the schema and XSL-FO when a disc needs them.</p>
+<p><code class="docutils literal notranslate"><span class="pre">[5,</span> <span class="pre">11,</span> <span class="pre">12]</span></code> <strong>VERIFIED</strong> (names, values, defaults, placement); meanings of the
+unused attributes <strong>INFERRED</strong> (XSL-FO / CSS).</p>
+</section>
+<section id="state-attributes">
+<h4>14.9 State attributes<a class="headerlink" href="#state-attributes" title="Link to this heading"></a></h4>
+<p>In the <code class="docutils literal notranslate"><span class="pre">ihd#state</span></code> namespace (Spec. 7.6.3.4.2.*). They describe what the user is
+doing to an element. The player maintains them; markup can set initial values;
+<code class="docutils literal notranslate"><span class="pre">set</span></code> / <code class="docutils literal notranslate"><span class="pre">animate</span></code> and script can change the animatable ones; path expressions
+read them with <code class="docutils literal notranslate"><span class="pre">state:…()</span></code>.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Attribute</p></th>
+<th class="head"><p>Values</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Animatable</p></th>
+<th class="head"><p>On</p></th>
+<th class="head"><p>What it is for</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">enabled</span></code></p></td>
+<td><p>boolean</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">true</span></code></p></td>
+<td><p>yes</p></td>
+<td><p>Display elements and up</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">false</span></code>: the element cannot be focused or activated</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">focused</span></code></p></td>
+<td><p>boolean</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">false</span></code></p></td>
+<td><p>yes</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">area</span></code>, <code class="docutils literal notranslate"><span class="pre">button</span></code>, <code class="docutils literal notranslate"><span class="pre">input</span></code></p></td>
+<td><p>The element has the focus. One element on a page is focused; moving focus sets the old one <code class="docutils literal notranslate"><span class="pre">false</span></code> and the new one <code class="docutils literal notranslate"><span class="pre">true</span></code>. May be set <code class="docutils literal notranslate"><span class="pre">true</span></code> in markup to choose the initial focus; otherwise the first focusable element in document order</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">actioned</span></code></p></td>
+<td><p>boolean</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">false</span></code></p></td>
+<td><p>no (v1.1)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">area</span></code>, <code class="docutils literal notranslate"><span class="pre">button</span></code>, <code class="docutils literal notranslate"><span class="pre">input</span></code></p></td>
+<td><p>The element is being activated: Enter on the focused element, one of its <code class="docutils literal notranslate"><span class="pre">accessKey</span></code> keys, or a pointer click. True while the activation lasts</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">pointer</span></code></p></td>
+<td><p>boolean</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">false</span></code></p></td>
+<td><p>no</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">div</span></code>, <code class="docutils literal notranslate"><span class="pre">p</span></code>, <code class="docutils literal notranslate"><span class="pre">span</span></code> and up</p></td>
+<td><p>A pointer (cursor) is over the element</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">value</span></code></p></td>
+<td><p>boolean or string</p></td>
+<td><p></p></td>
+<td><p>yes</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">area</span></code>, <code class="docutils literal notranslate"><span class="pre">button</span></code>, <code class="docutils literal notranslate"><span class="pre">input</span></code></p></td>
+<td><p>The element’s value: the text of an <code class="docutils literal notranslate"><span class="pre">input</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">foreground</span></code></p></td>
+<td><p>boolean</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">false</span></code></p></td>
+<td><p>no</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">body</span></code></p></td>
+<td><p>See <code class="docutils literal notranslate"><span class="pre">body</span></code> (§14.4)</p></td>
+</tr>
+</tbody>
+</table>
+<p>On disc: <code class="docutils literal notranslate"><span class="pre">state:value</span></code> 113 (all on <code class="docutils literal notranslate"><span class="pre">input</span></code>), <code class="docutils literal notranslate"><span class="pre">state:focused</span></code> 33 (initial focus),
+<code class="docutils literal notranslate"><span class="pre">state:enabled</span></code> 1.</p>
+</section>
+<section id="v1-0-and-v1-1">
+<h4>14.10 v1.0 and v1.1<a class="headerlink" href="#v1-0-and-v1-1" title="Link to this heading"></a></h4>
+<p>Retail discs validate against both schema versions (§14.11); read against v1.1
+and accept the v1.0-only forms below.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Change in v1.1</p></th>
+<th class="head"><p>v1.0 had</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">timing&#64;clockDivisor</span></code> removed</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">clockDivisor</span></code> (positive integer, default 1)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">set</span></code> takes only animatable style and state attributes</p></td>
+<td><p>all style attributes and all state attributes, plus a <code class="docutils literal notranslate"><span class="pre">value</span></code> attribute</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">animate</span></code> loses its <code class="docutils literal notranslate"><span class="pre">value</span></code> attribute</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (string)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">cue</span></code> no longer takes style attributes directly</p></td>
+<td><p>all style attributes on <code class="docutils literal notranslate"><span class="pre">cue</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">link&#64;id</span></code> added</p></td>
+<td><p>no <code class="docutils literal notranslate"><span class="pre">id</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">state:actioned</span></code> is a plain boolean and not animatable</p></td>
+<td><p>animated boolean, animatable</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">style:startIndent</span></code>, <code class="docutils literal notranslate"><span class="pre">style:endIndent</span></code> removed</p></td>
+<td><p>both, on block elements</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">anchor</span></code>, <code class="docutils literal notranslate"><span class="pre">backgroundPositionHorizontal</span></code>, <code class="docutils literal notranslate"><span class="pre">backgroundPositionVertical</span></code> accept <code class="docutils literal notranslate"><span class="pre">;</span></code> keyframe lists</p></td>
+<td><p>single values</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">opacity</span></code> values restricted to 0–1</p></td>
+<td><p>values from −1 to 1 allowed by the pattern</p></td>
+</tr>
+<tr class="row-odd"><td><p>Per-element style sets: <code class="docutils literal notranslate"><span class="pre">area</span></code> gains the size attributes and <code class="docutils literal notranslate"><span class="pre">flip</span></code>, loses <code class="docutils literal notranslate"><span class="pre">breakBefore</span></code> / <code class="docutils literal notranslate"><span class="pre">breakAfter</span></code>; <code class="docutils literal notranslate"><span class="pre">body</span></code> gains the size attributes and <code class="docutils literal notranslate"><span class="pre">flip</span></code>; <code class="docutils literal notranslate"><span class="pre">p</span></code> gains the size attributes; <code class="docutils literal notranslate"><span class="pre">input</span></code> gains <code class="docutils literal notranslate"><span class="pre">flip</span></code>; <code class="docutils literal notranslate"><span class="pre">suppressAtLineBreak</span></code> moves from all inline elements to <code class="docutils literal notranslate"><span class="pre">span</span></code> and <code class="docutils literal notranslate"><span class="pre">input</span></code>; <code class="docutils literal notranslate"><span class="pre">body</span></code> and <code class="docutils literal notranslate"><span class="pre">div</span></code> lose <code class="docutils literal notranslate"><span class="pre">textAltitude</span></code> / <code class="docutils literal notranslate"><span class="pre">textDepth</span></code></p></td>
+<td><p>the v1.0 sets</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="on-disc">
+<h4>14.11 On disc<a class="headerlink" href="#on-disc" title="Link to this heading"></a></h4>
+<p><code class="docutils literal notranslate"><span class="pre">e27</span></code>: 88 markup documents on the saved discs: 84 <code class="docutils literal notranslate"><span class="pre">.xmu</span></code>, 2 <code class="docutils literal notranslate"><span class="pre">.xts</span></code>, 2 <code class="docutils literal notranslate"><span class="pre">.xas</span></code>
+(both empty stubs), extracted from ACAs and loose files. 87 validate against
+both v1.1 and v1.0. The one that does not, <code class="docutils literal notranslate"><span class="pre">SHREK_THE_THIRD_EU</span></code>
+<code class="docutils literal notranslate"><span class="pre">iHD_Markup.xmu</span></code>, fails only because of its 305 foreign-namespace attributes
+(§14.1). <code class="docutils literal notranslate"><span class="pre">.xss</span></code> files are referenced 11 times but none is among the saved
+archives.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Element</p></th>
+<th class="head"><p>N</p></th>
+<th class="head"><p>Element</p></th>
+<th class="head"><p>N</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">p</span></code></p></td>
+<td><p>1390</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">div</span></code></p></td>
+<td><p>1339</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">cue</span></code></p></td>
+<td><p>1239</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">set</span></code></p></td>
+<td><p>579</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">event</span></code></p></td>
+<td><p>510</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">button</span></code></p></td>
+<td><p>492</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">animate</span></code></p></td>
+<td><p>483</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">param</span></code></p></td>
+<td><p>366</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">meta</span></code></p></td>
+<td><p>329</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">par</span></code></p></td>
+<td><p>204</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">input</span></code></p></td>
+<td><p>113</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">timing</span></code> / <code class="docutils literal notranslate"><span class="pre">style</span></code></p></td>
+<td><p>88 / 88</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">root</span></code> / <code class="docutils literal notranslate"><span class="pre">head</span></code> / <code class="docutils literal notranslate"><span class="pre">body</span></code></p></td>
+<td><p>86 each</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">styling</span></code></p></td>
+<td><p>67</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">defs</span></code></p></td>
+<td><p>54</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">include</span></code></p></td>
+<td><p>36</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">seq</span></code></p></td>
+<td><p>33</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">link</span></code></p></td>
+<td><p>12</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">g</span></code></p></td>
+<td><p>8</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">object</span></code></p></td>
+<td><p>7</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">span</span></code>, <code class="docutils literal notranslate"><span class="pre">br</span></code>, <code class="docutils literal notranslate"><span class="pre">area</span></code></p></td>
+<td><p>0</p></td>
+<td><p></p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+<p><code class="docutils literal notranslate"><span class="pre">[5,</span> <span class="pre">11,</span> <span class="pre">12,</span> <span class="pre">14]</span></code></p>
 </section>
 </section>
 <span id="document-06_vti"></span><section id="hva00001-vti-advanced-vtsi">
@@ -6639,7 +8090,7 @@ RESEARCH-closeable. No open-source player has ever crossed even the linear bar.<
 </section>
 <section id="complete-ihd-markup-surface-xsd">
 <h4>12.3 Complete iHD markup surface (XSD)<a class="headerlink" href="#complete-ihd-markup-surface-xsd" title="Link to this heading"></a></h4>
-<p>So a general parser accepts every conforming construct, not only the corpus-used subset (<a class="reference internal" href="#document-05_manifest_hdi"><span class="std std-doc">05</span></a> §5.9 covers the <em>used</em> attrs; this is the <em>full</em> set). Authoritative source: the v1.0 schemas.</p>
+<p>So a general parser accepts every conforming construct, not only the corpus-used subset (<a class="reference internal" href="#document-05_manifest_hdi"><span class="std std-doc">05</span></a> §5.9 covers the <em>used</em> attrs; this is the <em>full</em> set). The full per-element and per-attribute reference, with types, defaults and meanings, is <a class="reference internal" href="#document-14_markup"><span class="std std-doc">14</span></a>; the lists below are the v1.0 name sets.</p>
 <p><code class="docutils literal notranslate"><span class="pre">[5]</span></code> <strong>VERIFIED</strong></p>
 <p><strong>Elements</strong> (<code class="docutils literal notranslate"><span class="pre">iHD.xsd</span></code>, 26): <code class="docutils literal notranslate"><span class="pre">animate</span></code>, <code class="docutils literal notranslate"><span class="pre">area</span></code>, <code class="docutils literal notranslate"><span class="pre">body</span></code>, <code class="docutils literal notranslate"><span class="pre">br</span></code>, <code class="docutils literal notranslate"><span class="pre">button</span></code>, <code class="docutils literal notranslate"><span class="pre">cue</span></code>, <code class="docutils literal notranslate"><span class="pre">defs</span></code>, <code class="docutils literal notranslate"><span class="pre">div</span></code>, <code class="docutils literal notranslate"><span class="pre">event</span></code>, <code class="docutils literal notranslate"><span class="pre">g</span></code>, <code class="docutils literal notranslate"><span class="pre">head</span></code>, <code class="docutils literal notranslate"><span class="pre">include</span></code>, <code class="docutils literal notranslate"><span class="pre">input</span></code>, <code class="docutils literal notranslate"><span class="pre">link</span></code>, <code class="docutils literal notranslate"><span class="pre">meta</span></code>, <code class="docutils literal notranslate"><span class="pre">object</span></code>, <code class="docutils literal notranslate"><span class="pre">p</span></code>, <code class="docutils literal notranslate"><span class="pre">par</span></code>, <code class="docutils literal notranslate"><span class="pre">param</span></code>, <code class="docutils literal notranslate"><span class="pre">root</span></code>, <code class="docutils literal notranslate"><span class="pre">seq</span></code>, <code class="docutils literal notranslate"><span class="pre">set</span></code>, <code class="docutils literal notranslate"><span class="pre">span</span></code>, <code class="docutils literal notranslate"><span class="pre">style</span></code>, <code class="docutils literal notranslate"><span class="pre">styling</span></code>, <code class="docutils literal notranslate"><span class="pre">timing</span></code></p>
 <p><strong>Structural attributes</strong> (<code class="docutils literal notranslate"><span class="pre">iHD.xsd</span></code>, timing/id/nav core): <code class="docutils literal notranslate"><span class="pre">ExtendableElement</span></code>, <code class="docutils literal notranslate"><span class="pre">InlineTimingAttributes</span></code>, <code class="docutils literal notranslate"><span class="pre">OutOfLineTimingAttributes</span></code>, <code class="docutils literal notranslate"><span class="pre">accessKey</span></code>, <code class="docutils literal notranslate"><span class="pre">additive</span></code>, <code class="docutils literal notranslate"><span class="pre">begin</span></code>, <code class="docutils literal notranslate"><span class="pre">calcMode</span></code>, <code class="docutils literal notranslate"><span class="pre">class</span></code>, <code class="docutils literal notranslate"><span class="pre">clock</span></code>, <code class="docutils literal notranslate"><span class="pre">clockDivisor</span></code>, <code class="docutils literal notranslate"><span class="pre">condition</span></code>, <code class="docutils literal notranslate"><span class="pre">content</span></code>, <code class="docutils literal notranslate"><span class="pre">coords</span></code>, <code class="docutils literal notranslate"><span class="pre">dur</span></code>, <code class="docutils literal notranslate"><span class="pre">end</span></code>, <code class="docutils literal notranslate"><span class="pre">fill</span></code>, <code class="docutils literal notranslate"><span class="pre">href</span></code>, <code class="docutils literal notranslate"><span class="pre">id</span></code>, <code class="docutils literal notranslate"><span class="pre">mode</span></code>, <code class="docutils literal notranslate"><span class="pre">name</span></code>, <code class="docutils literal notranslate"><span class="pre">select</span></code>, <code class="docutils literal notranslate"><span class="pre">shape</span></code>, <code class="docutils literal notranslate"><span class="pre">src</span></code>, <code class="docutils literal notranslate"><span class="pre">style</span></code>, <code class="docutils literal notranslate"><span class="pre">timeContainer</span></code>, <code class="docutils literal notranslate"><span class="pre">type</span></code>, <code class="docutils literal notranslate"><span class="pre">use</span></code>, <code class="docutils literal notranslate"><span class="pre">value</span></code>, <code class="docutils literal notranslate"><span class="pre">xmlNamespace</span></code></p>
@@ -6810,6 +8261,7 @@ still resolved by the SMIL rules, not by a guess.</p>
 <h4>12.6 Cue-predicate grammar (<code class="docutils literal notranslate"><span class="pre">PathExpressionType</span></code>)<a class="headerlink" href="#cue-predicate-grammar-pathexpressiontype" title="Link to this heading"></a></h4>
 <p>iHD.xsd annotates <code class="docutils literal notranslate"><span class="pre">PathExpressionType</span></code> only as “Spec 7.5.2.4” (unpublished book), but the grammar is closeable: <strong>XPath 1.0</strong> boolean/node-set over the markup DOM, extended with two function namespaces whose functions are exactly the <code class="docutils literal notranslate"><span class="pre">ihd#state</span></code> / <code class="docutils literal notranslate"><span class="pre">ihd#style</span></code> attribute local-names [5], plus <code class="docutils literal notranslate"><span class="pre">$name</span></code> vars (<code class="docutils literal notranslate"><span class="pre">document.setXPathVariable</span></code>, §5.3) and time/duration literals.</p>
 <p>Namespaces: <code class="docutils literal notranslate"><span class="pre">state=&quot;http://www.dvdforum.org/2005/ihd#state&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">style=&quot;http://www.dvdforum.org/2005/ihd#style&quot;</span></code>.</p>
+<p><strong>Node functions</strong> used on disc besides XPath’s own <code class="docutils literal notranslate"><span class="pre">id()</span></code>: <code class="docutils literal notranslate"><span class="pre">class('c')</span></code> (elements whose <code class="docutils literal notranslate"><span class="pre">class</span></code> contains <code class="docutils literal notranslate"><span class="pre">c</span></code>) and <code class="docutils literal notranslate"><span class="pre">defaultNode()</span></code> (the cue’s default node, the element its <code class="docutils literal notranslate"><span class="pre">begin</span></code> matched); see <a class="reference internal" href="#document-14_markup"><span class="std std-doc">14</span></a> §14.7 for the full list with counts.</p>
 <p><strong><code class="docutils literal notranslate"><span class="pre">state:</span></code> functions</strong> (one per <code class="docutils literal notranslate"><span class="pre">ihd#state</span></code> attribute [5]): <code class="docutils literal notranslate"><span class="pre">state:actioned()</span></code>, <code class="docutils literal notranslate"><span class="pre">state:enabled()</span></code>, <code class="docutils literal notranslate"><span class="pre">state:focused()</span></code>, <code class="docutils literal notranslate"><span class="pre">state:foreground()</span></code>, <code class="docutils literal notranslate"><span class="pre">state:pointer()</span></code>, <code class="docutils literal notranslate"><span class="pre">state:value()</span></code>.</p>
 <p><strong><code class="docutils literal notranslate"><span class="pre">style:</span></code> functions</strong> (one per <code class="docutils literal notranslate"><span class="pre">ihd#style</span></code> attribute [5]; used <code class="docutils literal notranslate"><span class="pre">style:opacity()</span></code>): <code class="docutils literal notranslate"><span class="pre">style:</span></code> + any §12.3 style attribute.</p>
 <p>With <code class="docutils literal notranslate"><span class="pre">id('X')</span></code>, comparisons (<code class="docutils literal notranslate"><span class="pre">=0</span></code>/<code class="docutils literal notranslate"><span class="pre">=1</span></code>/<code class="docutils literal notranslate"><span class="pre">=true()</span></code>), <code class="docutils literal notranslate"><span class="pre">$var</span></code>, and time literals (<code class="docutils literal notranslate"><span class="pre">HH:MM:SS:FF</span></code>, <code class="docutils literal notranslate"><span class="pre">NNms</span></code>) this covers every observed predicate (§5.9) and any conforming one a future disc forms. The function set is enumerated, not sampled. Unknown/ill-typed path evaluates to boolean false (the cue does not fire). <strong>INFERRED</strong> (XPath 1.0 + enumerated extension functions).</p>
@@ -6869,7 +8321,7 @@ OPEN / UNCLOSEABLE / OUT</strong> are evidence-strength, not citations
 <li><p><strong>[8]</strong> libaacs, VideoLAN: source. <a class="reference external" href="https://code.videolan.org/videolan/libaacs">https://code.videolan.org/videolan/libaacs</a></p></li>
 <li><p><strong>[9]</strong> muslix64, <em>BackupHDDVD</em> (2006): source <code class="docutils literal notranslate"><span class="pre">src/aacs/{decoder/EVOBPack.java,</span> <span class="pre">decoder/DecryptEVOB.java,</span> <span class="pre">math/AESFunc.java}</span></code>. <a class="reference external" href="https://archive.org/details/backup-hddvd">https://archive.org/details/backup-hddvd</a></p></li>
 <li><p><strong>[10]</strong> Reference-decoder (<code class="docutils literal notranslate"><span class="pre">HDDVDPLAYDLL</span></code>) File Cache / ACA strings, as surfaced by the DumpHD tooling discussed in [16]. <a class="reference external" href="http://forum.doom9.org/archive/index.php/t-123282.html">http://forum.doom9.org/archive/index.php/t-123282.html</a></p></li>
-<li><p><strong>[12]</strong> Verification experiments <code class="docutils literal notranslate"><span class="pre">e01</span></code>–<code class="docutils literal notranslate"><span class="pre">e26</span></code> accompanying this specification (<code class="docutils literal notranslate"><span class="pre">experiments/run.py</span></code>).</p></li>
+<li><p><strong>[12]</strong> Verification experiments <code class="docutils literal notranslate"><span class="pre">e01</span></code>–<code class="docutils literal notranslate"><span class="pre">e27</span></code> accompanying this specification (<code class="docutils literal notranslate"><span class="pre">experiments/run.py</span></code>).</p></li>
 </ul>
 </section>
 <section id="disc-firmware-corpus-internet-archive">

@@ -101,7 +101,7 @@ Grouped by the interface that declares them. These are the literal values disc E
 
 ## 12.3 Complete iHD markup surface (XSD)
 
-So a general parser accepts every conforming construct, not only the corpus-used subset ([05](05_manifest_hdi.md) §5.9 covers the *used* attrs; this is the *full* set). Authoritative source: the v1.0 schemas.
+So a general parser accepts every conforming construct, not only the corpus-used subset ([05](05_manifest_hdi.md) §5.9 covers the *used* attrs; this is the *full* set). The full per-element and per-attribute reference, with types, defaults and meanings, is [14](14_markup.md); the lists below are the v1.0 name sets.
 
 `[5]` **VERIFIED**
 
@@ -206,6 +206,8 @@ Member **names** of the script host graph and its control surface are the type l
 iHD.xsd annotates `PathExpressionType` only as "Spec 7.5.2.4" (unpublished book), but the grammar is closeable: **XPath 1.0** boolean/node-set over the markup DOM, extended with two function namespaces whose functions are exactly the `ihd#state` / `ihd#style` attribute local-names [5], plus `$name` vars (`document.setXPathVariable`, §5.3) and time/duration literals.
 
 Namespaces: `state="http://www.dvdforum.org/2005/ihd#state"`, `style="http://www.dvdforum.org/2005/ihd#style"`.
+
+**Node functions** used on disc besides XPath's own `id()`: `class('c')` (elements whose `class` contains `c`) and `defaultNode()` (the cue's default node, the element its `begin` matched); see [14](14_markup.md) §14.7 for the full list with counts.
 
 **`state:` functions** (one per `ihd#state` attribute [5]): `state:actioned()`, `state:enabled()`, `state:focused()`, `state:foreground()`, `state:pointer()`, `state:value()`.
 
