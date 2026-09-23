@@ -1073,10 +1073,14 @@ table places <code class="docutils literal notranslate"><span class="pre">PLAYLI
 for Volume-ID binding, otherwise CMAC(PMSN / DUN / AES-G(DUN, PMSN) / TN, {URS}).
 A mismatched <code class="docutils literal notranslate"><span class="pre">PLAYLIST_NAME</span></code>, TUF MAC or Binding MAC sends the player to Stop State
 before the associated EVOB plays [4 §3.6].</p>
-<p><strong>Usage Rule Set</strong> (Table 3-12): <code class="docutils literal notranslate"><span class="pre">URS_VERSION</span></code> (1), <code class="docutils literal notranslate"><span class="pre">URS_SIZE</span></code> (4), <code class="docutils literal notranslate"><span class="pre">UR_NUM</span></code> (4), then
-<code class="docutils literal notranslate"><span class="pre">UR_NUM</span></code> Usage Rules, each starting <code class="docutils literal notranslate"><span class="pre">UR_ID</span></code> (3) and <code class="docutils literal notranslate"><span class="pre">UR_TYPE</span></code> (1). Rule bodies are
-Tables 3-13 to 3-16 (CCI for update, time-based conditions, REL rules, output control
-bits). A player applies only rules whose <code class="docutils literal notranslate"><span class="pre">UR_ID</span></code> it recognises.</p>
+<p><strong>Usage Rule Set</strong> (Table 3-12): a 10-byte header, <code class="docutils literal notranslate"><span class="pre">URS_VERSION</span></code> (2), <code class="docutils literal notranslate"><span class="pre">URS_SIZE</span></code> (4,
+the whole set including this header), <code class="docutils literal notranslate"><span class="pre">UR_NUM</span></code> (4), then <code class="docutils literal notranslate"><span class="pre">UR_NUM</span></code> Usage Rules. Each rule
+is <code class="docutils literal notranslate"><span class="pre">UR_ID</span></code> (3), <code class="docutils literal notranslate"><span class="pre">UR_TYPE</span></code> (1), <code class="docutils literal notranslate"><span class="pre">UR_SIZE</span></code> (4, the whole rule including these 8 bytes) and
+a <code class="docutils literal notranslate"><span class="pre">UR_BODY</span></code> of <code class="docutils literal notranslate"><span class="pre">UR_SIZE</span></code> − 8 bytes. <code class="docutils literal notranslate"><span class="pre">URS_VERSION</span></code> tells apart two sets with identical
+rules but different bindings. A player processes rules whose <code class="docutils literal notranslate"><span class="pre">UR_ID</span></code> it recognises; for
+an unknown one, <code class="docutils literal notranslate"><span class="pre">UR_TYPE</span></code> decides: <code class="docutils literal notranslate"><span class="pre">00h</span></code> ignore it and play, <code class="docutils literal notranslate"><span class="pre">10h</span></code> go to Stop State.
+Rule bodies are Tables 3-13 to 3-16 (CCI for update, time-based conditions, REL rules,
+output control bits).</p>
 <p>Corpus (<code class="docutils literal notranslate"><span class="pre">e21</span></code>), <strong>434/434</strong> files (217 primary + BAK): 144 bytes, <code class="docutils literal notranslate"><span class="pre">URS_NUM</span></code> = 0,
 <code class="docutils literal notranslate"><span class="pre">HD_VURF_SIZE</span></code> = length, <code class="docutils literal notranslate"><span class="pre">VERN</span></code> 0, reserved zero, <code class="docutils literal notranslate"><span class="pre">PLAYLIST_NAME</span></code> at <strong>23</strong> matching
 the file number. No disc carries a Usage Rule Set. <code class="docutils literal notranslate"><span class="pre">HASH_SIZE</span></code> is 128 (bytes 0–127)

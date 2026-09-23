@@ -396,10 +396,14 @@ for Volume-ID binding, otherwise CMAC(PMSN / DUN / AES-G(DUN, PMSN) / TN, {URS})
 A mismatched `PLAYLIST_NAME`, TUF MAC or Binding MAC sends the player to Stop State
 before the associated EVOB plays [4 §3.6].
 
-**Usage Rule Set** (Table 3-12): `URS_VERSION` (1), `URS_SIZE` (4), `UR_NUM` (4), then
-`UR_NUM` Usage Rules, each starting `UR_ID` (3) and `UR_TYPE` (1). Rule bodies are
-Tables 3-13 to 3-16 (CCI for update, time-based conditions, REL rules, output control
-bits). A player applies only rules whose `UR_ID` it recognises.
+**Usage Rule Set** (Table 3-12): a 10-byte header, `URS_VERSION` (2), `URS_SIZE` (4,
+the whole set including this header), `UR_NUM` (4), then `UR_NUM` Usage Rules. Each rule
+is `UR_ID` (3), `UR_TYPE` (1), `UR_SIZE` (4, the whole rule including these 8 bytes) and
+a `UR_BODY` of `UR_SIZE` − 8 bytes. `URS_VERSION` tells apart two sets with identical
+rules but different bindings. A player processes rules whose `UR_ID` it recognises; for
+an unknown one, `UR_TYPE` decides: `00h` ignore it and play, `10h` go to Stop State.
+Rule bodies are Tables 3-13 to 3-16 (CCI for update, time-based conditions, REL rules,
+output control bits).
 
 Corpus (`e21`), **434/434** files (217 primary + BAK): 144 bytes, `URS_NUM` = 0,
 `HD_VURF_SIZE` = length, `VERN` 0, reserved zero, `PLAYLIST_NAME` at **23** matching
