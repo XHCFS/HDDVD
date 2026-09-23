@@ -44,8 +44,8 @@ WO FIG.121 (`pages/page-378.png`) only names PCI `0x00` / DSI `0x01` / provider 
 for `private_stream2`. GCI is “others.” 98219 Tables 50–51 and every Advanced NV_PCK
 here use `0x04`. **Disc + 98219 win.**
 
-PES length 257 = 1 byte substream id + 256 bytes GCI
-(`GCI_GI` 16 + `RECI` 189 + reserved 51). Patent Tables 50–51.
+PES length 257 = 1 byte substream id + 256 bytes GCI. The patent's split of those
+256 bytes (Tables 50–51) does not match the disc; the observed layout is §8.5.
 
 Typical pack prefix:
 
@@ -207,18 +207,6 @@ The demux rule: an EVOBU's first pack is NV_PCK; thereafter route by
 `[2]`
 `[11]`
 
-## 8.7 AACS vs container
-
-Encrypted packs (not NV_PCK, not ADV_PCK):
-
-| Bytes | Content |
-|---|---|
-| 0–127 | clear (pack/PES headers, `Dtk` at 84–87) |
-| 128–2047 | AES-CBC payload |
-
-`PES_scrambling_control` at pack byte 20: `01b` = Encrypted Portion present.
-See [09](09_aacs.md).
-
 ## 8.7 Elementary-stream routing (TABLE 45 / 46): how `@streamNumber` finds its PES
 
 This is what a player uses to demux the track the playlist selected. A clip's
@@ -379,3 +367,15 @@ extend. **INFERRED** (command bit layouts are figure-only; names and roles are
 §5.5.4.4 prose). No SP_PCK subtitle appeared in the sampled feature windows.
 Advanced titles usually caption via HDi Advanced Subtitle markup instead, so this
 path is **specified but not corpus-exercised**.
+
+## 8.9 AACS vs container
+
+Encrypted packs (not NV_PCK, not ADV_PCK):
+
+| Bytes | Content |
+|---|---|
+| 0–127 | clear (pack/PES headers, `Dtk` at 84–87) |
+| 128–2047 | AES-CBC payload |
+
+`PES_scrambling_control` at pack byte 20: `01b` = Encrypted Portion present.
+See [09](09_aacs.md).

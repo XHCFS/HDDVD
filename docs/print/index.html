@@ -122,7 +122,6 @@
 <li class="toctree-l3"><a class="reference internal" href="#document-08_evo#pack-grammar-e16-stalingrad-logo-evo-n-2383">Pack grammar (<code class="docutils literal notranslate"><span class="pre">e16</span></code>, <code class="docutils literal notranslate"><span class="pre">STALINGRAD</span></code> <code class="docutils literal notranslate"><span class="pre">logo.EVO</span></code>, N=2383)</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#document-08_evo#aacs-vs-container">8.7 AACS vs container</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#document-08_evo#elementary-stream-routing-table-45-46-how-streamnumber-finds-its-pes">8.7 Elementary-stream routing (TABLE 45 / 46): how <code class="docutils literal notranslate"><span class="pre">&#64;streamNumber</span></code> finds its PES</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#document-08_evo#stream-id-stream-id-extension-table-45">stream_id / stream_id_extension (TABLE 45)</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#document-08_evo#sub-stream-id-for-private-stream-1-0xbd-table-46">sub_stream_id for private_stream_1 = <code class="docutils literal notranslate"><span class="pre">0xBD</span></code> (TABLE 46)</a></li>
@@ -135,6 +134,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#document-08_evo#display-control-sequence-sp-dcsqt">Display-control sequence (<code class="docutils literal notranslate"><span class="pre">SP_DCSQT</span></code>)</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="#document-08_evo#aacs-vs-container">8.9 AACS vs container</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="#document-09_aacs">9. AACS overlay (format only)</a><ul>
@@ -2766,8 +2766,8 @@ not PCI buttons.</p>
 WO FIG.121 (<code class="docutils literal notranslate"><span class="pre">pages/page-378.png</span></code>) only names PCI <code class="docutils literal notranslate"><span class="pre">0x00</span></code> / DSI <code class="docutils literal notranslate"><span class="pre">0x01</span></code> / provider <code class="docutils literal notranslate"><span class="pre">0xFF</span></code>
 for <code class="docutils literal notranslate"><span class="pre">private_stream2</span></code>. GCI is “others.” 98219 Tables 50–51 and every Advanced NV_PCK
 here use <code class="docutils literal notranslate"><span class="pre">0x04</span></code>. <strong>Disc + 98219 win.</strong></p>
-<p>PES length 257 = 1 byte substream id + 256 bytes GCI
-(<code class="docutils literal notranslate"><span class="pre">GCI_GI</span></code> 16 + <code class="docutils literal notranslate"><span class="pre">RECI</span></code> 189 + reserved 51). Patent Tables 50–51.</p>
+<p>PES length 257 = 1 byte substream id + 256 bytes GCI. The patent’s split of those
+256 bytes (Tables 50–51) does not match the disc; the observed layout is §8.5.</p>
 <p>Typical pack prefix:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>00 00 01 BA &lt;14-byte pack header&gt;
 00 00 01 BB &lt;system header&gt;
@@ -3041,27 +3041,6 @@ despite the name).</p>
 <p><code class="docutils literal notranslate"><span class="pre">[2]</span></code>
 <code class="docutils literal notranslate"><span class="pre">[11]</span></code></p>
 </section>
-</section>
-<section id="aacs-vs-container">
-<h4>8.7 AACS vs container<a class="headerlink" href="#aacs-vs-container" title="Link to this heading"></a></h4>
-<p>Encrypted packs (not NV_PCK, not ADV_PCK):</p>
-<table class="docutils align-default">
-<thead>
-<tr class="row-odd"><th class="head"><p>Bytes</p></th>
-<th class="head"><p>Content</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p>0–127</p></td>
-<td><p>clear (pack/PES headers, <code class="docutils literal notranslate"><span class="pre">Dtk</span></code> at 84–87)</p></td>
-</tr>
-<tr class="row-odd"><td><p>128–2047</p></td>
-<td><p>AES-CBC payload</p></td>
-</tr>
-</tbody>
-</table>
-<p><code class="docutils literal notranslate"><span class="pre">PES_scrambling_control</span></code> at pack byte 20: <code class="docutils literal notranslate"><span class="pre">01b</span></code> = Encrypted Portion present.
-See <a class="reference internal" href="#document-09_aacs"><span class="std std-doc">09</span></a>.</p>
 </section>
 <section id="elementary-stream-routing-table-45-46-how-streamnumber-finds-its-pes">
 <h4>8.7 Elementary-stream routing (TABLE 45 / 46): how <code class="docutils literal notranslate"><span class="pre">&#64;streamNumber</span></code> finds its PES<a class="headerlink" href="#elementary-stream-routing-table-45-46-how-streamnumber-finds-its-pes" title="Link to this heading"></a></h4>
@@ -3355,6 +3334,27 @@ extend. <strong>INFERRED</strong> (command bit layouts are figure-only; names an
 Advanced titles usually caption via HDi Advanced Subtitle markup instead, so this
 path is <strong>specified but not corpus-exercised</strong>.</p>
 </section>
+</section>
+<section id="aacs-vs-container">
+<h4>8.9 AACS vs container<a class="headerlink" href="#aacs-vs-container" title="Link to this heading"></a></h4>
+<p>Encrypted packs (not NV_PCK, not ADV_PCK):</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Bytes</p></th>
+<th class="head"><p>Content</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0–127</p></td>
+<td><p>clear (pack/PES headers, <code class="docutils literal notranslate"><span class="pre">Dtk</span></code> at 84–87)</p></td>
+</tr>
+<tr class="row-odd"><td><p>128–2047</p></td>
+<td><p>AES-CBC payload</p></td>
+</tr>
+</tbody>
+</table>
+<p><code class="docutils literal notranslate"><span class="pre">PES_scrambling_control</span></code> at pack byte 20: <code class="docutils literal notranslate"><span class="pre">01b</span></code> = Encrypted Portion present.
+See <a class="reference internal" href="#document-09_aacs"><span class="std std-doc">09</span></a>.</p>
 </section>
 </section>
 <span id="document-09_aacs"></span><section id="aacs-overlay-format-only">
