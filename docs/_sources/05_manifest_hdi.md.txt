@@ -51,51 +51,88 @@ them.
 
 ## 5.1 Manifest: `.xmf`
 
-Namespace: `http://www.dvdforum.org/2005/HDDVDVideo/Manifest`  
-Schema: `spec/raw/adv_obj/v1.0/Manifest.xsd`  
-Root element: `Application`
+A manifest describes **one HDi application**: where on screen it draws, which
+script and markup to run, and which files must be in the File Cache before it
+starts. The playlist starts an application by pointing at its manifest
+(`ApplicationSegment@src` or `PlaylistApplication@src`, [03](03_playlist.md)).
+Manifests are usually members of an ACA ([04](04_aca.md)).
 
-| Element | Occurs | Attributes |
-|---|---|---|
-| `Application` | 1 (root) | `@id` optional; `@xml:base` optional |
-| `Region` | 1, first | `@x @y @width @height` required, non-negative integers (pixels) |
-| `Script` | 0..n, after `Region` | `@src` URI of a `.js` (required); `@id` optional |
-| `Markup` | 0..1, after the `Script`s | `@src` URI of an `.xmu` (required); `@id` optional |
-| `Resource` | 1..n, last | `@src` URI of any asset the application needs (required); `@id` optional |
+| | |
+|---|---|
+| Namespace | `http://www.dvdforum.org/2005/HDDVDVideo/Manifest` |
+| Schema | `spec/raw/adv_obj/v1.0/Manifest.xsd` (Spec. 6.2.4.2) |
+| Root element | `Application` |
+| Encoding | UTF-8, optionally with a byte-order mark |
 
-Children appear in exactly that order (the XSD is a `sequence`).
+### Elements
 
-**On disc** (`e24`, every `.xmf` in the corpus: 89 manifests on 28 discs, 86 of
-them ACA members, extracted by offset/length):
+Children appear in exactly this order (the XSD is a `sequence`):
+`Region`, `Script`*, `Markup`?, `Resource`+.
 
-- All 89 match the XSD: order `Region Script* Markup? Resource+`, no undeclared
-  attributes. 26 roots also carry `xsi:schemaLocation`, which describes the file
-  rather than the application.
-- `Region` is `0,0,1920,1080` on all 89: the application covers the whole graphics plane.
-- 72 have `Markup`. 17 are script-only (no markup, for example a loader or logo
-  application). `Script` count runs 0–17 per manifest (71 have exactly one).
-- `@id` appears on `Application` (6), `Script` (14) and `Markup` (5), never on
-  `Resource`. `xml:base` never appears.
-- `@src` is `file:///dvddisc/…` on 440 references. The other 12 are a bare
-  relative name (`UniLoad.js`, `script.js`), always on a `Script`, always in a
-  manifest that is itself an ACA member, and always naming a member of that same
-  ACA. A relative `src` resolves against the manifest's own location (inside its
-  archive), per `xml:base` / RFC 3986 rules.
-- Encoding is UTF-8 on all 89; 6 start with a UTF-8 byte-order mark.
+| Element | Occurs | Attribute | XSD type | Required | What it is for |
+|---|---|---|---|---|---|
+| `Application` | 1, root | `id` | `xs:ID` | no | Name of the application, unique in the document |
+| | | `xml:base` | URI | no | Base for resolving relative `src` values |
+| `Region` | 1, first | `x`, `y` | `xs:nonNegativeInteger` | yes | Top-left corner of the application's area on the graphics plane, in pixels |
+| | | `width`, `height` | `xs:nonNegativeInteger` | yes | Size of that area, in pixels |
+| `Script` | 0..n | `src` | `xs:anyURI` | yes | An ECMAScript (`.js`) file the application runs |
+| | | `id` | `xs:ID` | no | Name of this entry |
+| `Markup` | 0..1 | `src` | `xs:anyURI` | yes | The iHD markup (`.xmu`) the application displays (§5.2). Absent for script-only applications |
+| | | `id` | `xs:ID` | no | Name of this entry |
+| `Resource` | 1..n, last | `src` | `xs:anyURI` | yes | A file loaded into the File Cache before the application starts: markup, scripts, images, fonts, or a whole `.aca` |
+| | | `id` | `xs:ID` | no | Name of this entry |
 
-`[5, 11, 12]` **VERIFIED**
+`Script` and `Markup` say **what to run**; `Resource` says **what to load**. The
+file a `Script` or `Markup` names is always loadable through the `Resource` list:
+listed directly, inside a listed archive (`…/menus.aca/script.js` when
+`…/menus.aca` is a Resource), or a relative name inside the manifest's own archive.
 
-Example (`1408` `extras.xmf`):
+### Reading rules
+
+- Match elements by namespace and local name, never by prefix.
+- Reject the document if the root is not `Application` in the Manifest
+  namespace, the children are out of order, `Region` or every `Resource` is
+  missing, or a required attribute is missing.
+- Accept and ignore attributes that describe the file rather than the
+  application: `xsi:schemaLocation` on the root, and a leading byte-order mark.
+- Keep `src` exactly as written. A relative `src` (a bare name such as
+  `UniLoad.js`) resolves against the manifest's own location, which for a
+  manifest inside an ACA is that archive (RFC 3986, `xml:base` if present).
+
+### Example (`1408_DC` `popupMenu.xmf`)
 
 ```xml
 <Application xmlns="http://www.dvdforum.org/2005/HDDVDVideo/Manifest">
   <Region x="0" y="0" width="1920" height="1080" />
-  <Script src="file:///dvddisc/ADV_OBJ/script-extras.js" />
-  <Resource src="file:///dvddisc/ADV_OBJ/script-extras.js" />
+  <Script src="file:///dvddisc/ADV_OBJ/script.js" />
+  <Markup src="file:///dvddisc/ADV_OBJ/menu.xmu" />
+  <Resource src="file:///dvddisc/ADV_OBJ/menu.xmu" />
+  <Resource src="file:///dvddisc/ADV_OBJ/script.js" />
+  <Resource src="file:///dvddisc/ADV_OBJ/popupMenu.aca" />
+  <Resource src="file:///dvddisc/ADV_OBJ/font.ttf" />
 </Application>
 ```
 
-Playlist points here via `ApplicationSegment@src` or `PlaylistApplication@src`.
+### On disc
+
+`e24` checks every `.xmf` in the corpus against the rules above: 89 manifests
+on 28 discs, 86 of them ACA members (extracted by offset/length).
+
+- All 89 follow the XSD order with no undeclared attributes. 26 roots also
+  carry `xsi:schemaLocation`.
+- `Region` is `0,0,1920,1080` on all 89: applications cover the whole graphics plane.
+- 72 have `Markup`; 17 are script-only (loader or logo applications). `Script`
+  count runs 0–17 per manifest (71 have exactly one).
+- `id` appears on `Application` (6), `Script` (14) and `Markup` (5), never on
+  `Resource`. `xml:base` never appears.
+- `src` is `file:///dvddisc/…` on 440 references. The other 12 are bare
+  relative names, always on a `Script`, always in a manifest inside an ACA, and
+  always naming a member of that ACA.
+- All 229 `Script` / `Markup` files are loadable through `Resource`: 7 listed
+  directly, 210 inside a listed `.aca`, 12 relative inside the manifest's own ACA.
+- Encoding is UTF-8 on all 89; 6 start with a byte-order mark.
+
+`[5, 11, 12]` **VERIFIED**
 
 ## 5.2 Markup: `.xmu`
 

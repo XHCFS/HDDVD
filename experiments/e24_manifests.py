@@ -16,6 +16,9 @@ Claims (falsifier in brackets):
     appears in a manifest stored inside an ACA, and names a member of that
     same ACA: it resolves against the manifest's own location.   [else]
   Encoding is UTF-8; some files start with a UTF-8 BOM.           [other encoding]
+  Every Script / Markup src is loadable through the Resource list: listed
+    as a Resource itself, inside a listed .aca (x.aca/member), or a relative
+    name inside the manifest's own ACA.                             [uncovered src]
 """
 import re
 import xml.etree.ElementTree as ET
@@ -66,6 +69,13 @@ for disc, name, d, aca in docs:
             assert not rel or (aca is not None and u in aca), (disc, name, u)
             c["relative src"] += rel
     assert "Resource@id" not in c, (disc, name)
+    res = {x.get("src") for x in r if x.tag == NS + "Resource"}
+    for x in r:
+        if x.tag in (NS + "Script", NS + "Markup"):
+            u = x.get("src")
+            k = u.lower().find(".aca/")
+            assert u in res or (k >= 0 and u[:k + 4] in res) or ("://" not in u and aca is not None), (disc, name, u)
+            c["script/markup covered by Resource"] += 1
 
 print(f"manifests={len(docs)} discs={len({d for d, *_ in docs})}")
 print(dict(sorted(c.items())))
