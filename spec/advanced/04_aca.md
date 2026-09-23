@@ -39,7 +39,7 @@ Big-endian. Total header before the directory is 32 bytes.
 | 0 | 8 | magic | `"HDDVDACA"` |
 | 8 | 2 | `VERN` | `0x0010` (1.0) |
 | 10 | 2 | encoding type | `1` |
-| 12 | 2 | `N` entry count | 2–10 on saved files (`archive2.aca` = 10) |
+| 12 | 2 | `N` entry count | 2–40 on the 97 saved archives |
 | 14 | 4 | total size | equals file length |
 | 18 | 14 | remainder of 32-byte header | file type `0`; zero on all 97 |
 | 32 | … | directory | then member payloads |
