@@ -19,6 +19,11 @@ Claims (falsifier in brackets):
   Every Script / Markup src is loadable through the Resource list: listed
     as a Resource itself, inside a listed .aca (x.aca/member), or a relative
     name inside the manifest's own ACA.                             [uncovered src]
+  Specification [1]: every Resource src is one of the playlist's resource
+    URIs (ApplicationResource / TitleResource / PlaylistApplicationResource
+    src on the same disc). Holds for all but 8, all known: the selector
+    manifests of BLADE_RUNNER and TRAINING_DAY (selector/script.js) and
+    SHREK_THE_THIRD_EU iHD_Manifest.xmf (6 archives no saved playlist lists). [other]
 """
 import re
 import xml.etree.ElementTree as ET
@@ -77,6 +82,25 @@ for disc, name, d, aca in docs:
             assert u in res or (k >= 0 and u[:k + 4] in res) or ("://" not in u and aca is not None), (disc, name, u)
             c["script/markup covered by Resource"] += 1
 
+from lxml import etree
+PNS = "{http://www.dvdforum.org/2005/HDDVDVideo/Playlist}"
+pres = {}
+for pl in CORPUS.glob("*/ADV_OBJ__VPLST*.XPL"):
+    r = etree.parse(str(pl)).getroot()
+    for t in ("ApplicationResource", "TitleResource", "PlaylistApplicationResource"):
+        pres.setdefault(pl.parent.name, set()).update(e.get("src") for e in r.iter(PNS + t))
+KNOWN = {("BLADE_RUNNER", "file:///dvddisc/ADV_OBJ/selector/script.js"),
+         ("TRAINING_DAY", "file:///dvddisc/ADV_OBJ/selector/script.js")}
+for disc, name, d, aca in docs:
+    for x in ET.fromstring(d):
+        if x.tag != NS + "Resource":
+            continue
+        u = x.get("src")
+        if u in pres.get(disc, ()):
+            c["Resource is a playlist resource"] += 1
+        else:
+            assert (disc, u) in KNOWN or (disc == "SHREK_THE_THIRD_EU" and name == "iHD_Manifest.xmf"), (disc, name, u)
+            c["Resource not in any saved playlist (known)"] += 1
 print(f"manifests={len(docs)} discs={len({d for d, *_ in docs})}")
 print(dict(sorted(c.items())))
 print("E24 PASS")

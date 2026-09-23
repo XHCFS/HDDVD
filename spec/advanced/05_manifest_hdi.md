@@ -51,16 +51,17 @@ them.
 
 ## 5.1 Manifest: `.xmf`
 
-A manifest describes **one HDi application**: where on screen it draws, which
-script and markup to run, and which files must be in the File Cache before it
-starts. The playlist starts an application by pointing at its manifest
+A manifest is the **initialization information of one HDi application**:
+where on screen it draws, which markup page it opens with, which scripts run at
+start-up, and which files it uses. The player launches the application from
+it [1]. The playlist starts an application by pointing at its manifest
 (`ApplicationSegment@src` or `PlaylistApplication@src`, [03](03_playlist.md)).
 Manifests are usually members of an ACA ([04](04_aca.md)).
 
 | | |
 |---|---|
 | Namespace | `http://www.dvdforum.org/2005/HDDVDVideo/Manifest` |
-| Schema | `spec/raw/adv_obj/v1.0/Manifest.xsd` (Spec. 6.2.4.2) |
+| Schema | `spec/raw/adv_obj/v1.0/Manifest.xsd` (Spec. 6.2.4.2); v1.1 is identical |
 | Root element | `Application` |
 | Encoding | UTF-8, optionally with a byte-order mark |
 
@@ -71,15 +72,15 @@ Children appear in exactly this order (the XSD is a `sequence`):
 
 | Element | Occurs | Attribute | XSD type | Required | What it is for |
 |---|---|---|---|---|---|
-| `Application` | 1, root | `id` | `xs:ID` | no | Name of the application, unique in the document |
+| `Application` | 1, root | `id` | `xs:ID` | no | Name of the application; script can refer to it |
 | | | `xml:base` | URI | no | Base for resolving relative `src` values |
-| `Region` | 1, first | `x`, `y` | `xs:nonNegativeInteger` | yes | Top-left corner of the application's area on the graphics plane, in pixels |
-| | | `width`, `height` | `xs:nonNegativeInteger` | yes | Size of that area, in pixels |
-| `Script` | 0..n | `src` | `xs:anyURI` | yes | An ECMAScript (`.js`) file the application runs |
+| `Region` | 1, first | `x`, `y` | `xs:nonNegativeInteger` | yes | Initial position (top-left) of the application's region on the canvas, in canvas coordinates (pixels of the graphics plane, sized by the playlist's `Aperture`, [03](03_playlist.md) §3.5) |
+| | | `width`, `height` | `xs:nonNegativeInteger` | yes | Size of that region, in canvas coordinates |
+| `Script` | 0..n | `src` | `xs:anyURI` | yes | An ECMAScript (`.js`) file evaluated as global code during the application's start-up |
 | | | `id` | `xs:ID` | no | Name of this entry |
-| `Markup` | 0..1 | `src` | `xs:anyURI` | yes | The iHD markup (`.xmu`) the application displays (§5.2). Absent for script-only applications |
+| `Markup` | 0..1 | `src` | `xs:anyURI` | yes | The **initial** markup page (`.xmu`, §5.2); later pages are loaded by script. Absent for script-only applications |
 | | | `id` | `xs:ID` | no | Name of this entry |
-| `Resource` | 1..n, last | `src` | `xs:anyURI` | yes | A file loaded into the File Cache before the application starts: markup, scripts, images, fonts, or a whole `.aca` |
+| `Resource` | 1..n, last | `src` | `xs:anyURI` | yes | A file the application uses: markup, scripts, images, fonts, or a whole `.aca`. **Every** file the application uses must be listed, except files in the script-managed (API Managed) area of the File Cache. Must be the absolute URI of one of the playlist's resources (`ApplicationResource`, `TitleResource` or `PlaylistApplicationResource` `src`, [03](03_playlist.md) §3.14): the playlist decides when files are loaded, the manifest says which of them this application uses |
 | | | `id` | `xs:ID` | no | Name of this entry |
 
 `Script` and `Markup` say **what to run**; `Resource` says **what to load**. The
@@ -95,9 +96,10 @@ listed directly, inside a listed archive (`…/menus.aca/script.js` when
   missing, or a required attribute is missing.
 - Accept and ignore attributes that describe the file rather than the
   application: `xsi:schemaLocation` on the root, and a leading byte-order mark.
-- Keep `src` exactly as written. A relative `src` (a bare name such as
-  `UniLoad.js`) resolves against the manifest's own location, which for a
-  manifest inside an ACA is that archive (RFC 3986, `xml:base` if present).
+- Keep `src` exactly as written. The specification requires absolute URIs for
+  `Resource`; discs also use relative names on `Script` (a bare `UniLoad.js`),
+  which resolve against the manifest's own location, for a manifest inside an
+  ACA that archive (RFC 3986, `xml:base` if present). Accept both.
 
 ### Example (`1408_DC` `popupMenu.xmf`)
 
@@ -130,9 +132,13 @@ on 28 discs, 86 of them ACA members (extracted by offset/length).
   always naming a member of that ACA.
 - All 229 `Script` / `Markup` files are loadable through `Resource`: 7 listed
   directly, 210 inside a listed `.aca`, 12 relative inside the manifest's own ACA.
+- 215 of 223 `Resource` URIs are exactly one of the same disc's playlist
+  resource URIs. The 8 others: the selector manifests of `BLADE_RUNNER` and
+  `TRAINING_DAY` list `…/selector/script.js`, and `SHREK_THE_THIRD_EU`
+  `iHD_Manifest.xmf` lists 6 archives that no saved playlist schedules.
 - Encoding is UTF-8 on all 89; 6 start with a byte-order mark.
 
-`[5, 11, 12]` **VERIFIED**
+`[1, 5, 11, 12]` **VERIFIED**
 
 ## 5.2 Markup: `.xmu`
 

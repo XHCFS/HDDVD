@@ -616,7 +616,7 @@ timecode, `$vars`, `style:opacity()=1`. Implement that subset. An unknown
 `PathExpressionType` is false. The cue does **not** fire. This is not a general
 XPath 1.0 engine. Enter sets `state:actioned`; Jumpstart + `1408` run a
 short `seq` then `event`. Arrows follow `nav*`. `accessKey` `VK_*` →
-`actioned`. A `Title`'s `ScheduledControlList` ([03](03_playlist.md) §3.9a)
+`actioned`. A `Title`'s `ScheduledControlList` ([03](03_playlist.md) §3.18)
 fires `Event@id` to script and freezes the timeline at `PauseAt@titleTime`
 (menu-loop hold) when the Title-Timeline clock crosses that time.
 `include@href` loads `.xmu` / `.xts` / `.xss`. `.xul` is Mozilla

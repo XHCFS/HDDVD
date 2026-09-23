@@ -61,18 +61,28 @@
 </ul>
 </li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">3. Playlist: VPLST$$$.XPL</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#time">3.1 Time</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#tree">3.2 Tree</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#title">3.3 Title</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#primaryaudiovideoclip">3.4 PrimaryAudioVideoClip</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#applicationsegment">3.5 ApplicationSegment</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#playlistapplication">3.6 PlaylistApplication</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#chapter">3.7 Chapter</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#tracknavigationlist">3.8 TrackNavigationList</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#uri-of-a-clip-map">3.9 URI of a clip MAP</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#a-scheduledcontrollist-timeline-pauses-and-events">3.9a ScheduledControlList: timeline pauses and events</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#which-playlist-to-open">3.10 Which playlist to open</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#elements-in-the-xsd-unused-in-this-corpus">3.11 Elements in the XSD, unused in this corpus</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#file-versions-schema">3.1 File, versions, schema</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#data-types">3.2 Data types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#document-tree">3.3 Document tree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#playlist">3.4 Playlist</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#configuration">3.5 Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#mediaattributelist">3.6 MediaAttributeList</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#titleset">3.7 TitleSet</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#title">3.8 Title</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#firstplaytitle">3.9 FirstPlayTitle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#presentation-clips">3.10 Presentation clips</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#networksource">3.11 NetworkSource</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#track-number-assignment">3.12 Track number assignment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#applicationsegment-and-advancedsubtitlesegment">3.13 ApplicationSegment and AdvancedSubtitleSegment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#resources">3.14 Resources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#playlistapplication">3.15 PlaylistApplication</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#chapterlist">3.16 ChapterList</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#tracknavigationlist">3.17 TrackNavigationList</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#scheduledcontrollist">3.18 ScheduledControlList</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#uri-of-a-clip-s-map">3.19 URI of a clip’s MAP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#which-playlist-to-open">3.20 Which playlist to open</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#specification-text-versus-schema-and-discs">3.21 Specification text versus schema and discs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#on-disc">3.22 On disc</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="04_aca.html">4. ACA: Advanced Content Archive</a><ul>
@@ -391,424 +401,1515 @@
   <section id="playlist-vplst-xpl">
 <h1>3. Playlist: VPLST$$$.XPL<a class="headerlink" href="#playlist-vplst-xpl" title="Link to this heading"></a></h1>
 <p><em>Counts written “N/120”, “N/119”, “on N discs”, “listings”, or as named discs are over the reference corpus of 120 archived retail HD DVD images [11]. <code class="docutils literal notranslate"><span class="pre">eNN</span></code> are the reproducible verification experiments [12].</em></p>
-<p>Path: <code class="docutils literal notranslate"><span class="pre">ADV_OBJ/VPLST$$$.XPL</span></code> with <code class="docutils literal notranslate"><span class="pre">$$$</span></code> = <code class="docutils literal notranslate"><span class="pre">000</span></code>…<code class="docutils literal notranslate"><span class="pre">999</span></code>.<br />
-247 files, 0 parse failures, all <code class="docutils literal notranslate"><span class="pre">majorVersion=&quot;1&quot;</span></code> <code class="docutils literal notranslate"><span class="pre">minorVersion=&quot;0&quot;</span></code>.
-<code class="docutils literal notranslate"><span class="pre">[11,</span> <span class="pre">12]</span></code> <strong>VERIFIED</strong></p>
-<p>Namespace (required):</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">www</span><span class="o">.</span><span class="n">dvdforum</span><span class="o">.</span><span class="n">org</span><span class="o">/</span><span class="mi">2005</span><span class="o">/</span><span class="n">HDDVDVideo</span><span class="o">/</span><span class="n">Playlist</span>
-</pre></div>
-</div>
-<p>Schema: <code class="docutils literal notranslate"><span class="pre">spec/raw/adv_obj/v1.0/Playlist.xsd</span></code> (DVD Forum, 16 Jul 2006, HD DVD 1.0).
-<code class="docutils literal notranslate"><span class="pre">xsi:schemaLocation</span></code> URLs on discs are authoring debris and are often dead; parse
-against the local XSD.</p>
-<p>Boot file: <strong>highest <code class="docutils literal notranslate"><span class="pre">$$$</span></code> present</strong> (patent FIG.50, Scenarist: “The highest-numbered
-Playlist is loaded first”). <code class="docutils literal notranslate"><span class="pre">.BAK</span></code> playlists are not searched.</p>
-<p>This XML <strong>is</strong> the title/clip/chapter/stream model. There is no PGC.</p>
-<section id="time">
-<h2>3.1 Time<a class="headerlink" href="#time" title="Link to this heading"></a></h2>
-<p>Type <code class="docutils literal notranslate"><span class="pre">TimeExpressionType</span></code>: <code class="docutils literal notranslate"><span class="pre">HH:MM:SS:FF</span></code>.</p>
-<p><code class="docutils literal notranslate"><span class="pre">TitleSet&#64;timeBase</span></code> is <code class="docutils literal notranslate"><span class="pre">60fps</span></code> or <code class="docutils literal notranslate"><span class="pre">50fps</span></code> (<strong>247/247 are <code class="docutils literal notranslate"><span class="pre">60fps</span></code></strong>, <code class="docutils literal notranslate"><span class="pre">e12</span></code>/<code class="docutils literal notranslate"><span class="pre">e14</span></code>).
-XSD still allows <code class="docutils literal notranslate"><span class="pre">50fps</span></code>. FF≥50 appears <strong>3590</strong> times on <code class="docutils literal notranslate"><span class="pre">60fps</span></code> titles (<code class="docutils literal notranslate"><span class="pre">e14</span></code>). Do
-not clamp 00–49.
-<code class="docutils literal notranslate"><span class="pre">TitleSet&#64;tickBase</span></code> is <code class="docutils literal notranslate"><span class="pre">24fps</span></code> / <code class="docutils literal notranslate"><span class="pre">50fps</span></code> / <code class="docutils literal notranslate"><span class="pre">60fps</span></code> (application clock).
-Convert a title time to a frame count with <code class="docutils literal notranslate"><span class="pre">timeBase</span></code>, not wall-clock seconds.</p>
-<p><code class="docutils literal notranslate"><span class="pre">00:00:01:00</span></code> at <code class="docutils literal notranslate"><span class="pre">60fps</span></code> = 60 frames. At 29.97 video this is <strong>not</strong> 1.000 s of
-pictures; it is 60 ticks of the title timeline.</p>
-</section>
-<section id="tree">
-<h2>3.2 Tree<a class="headerlink" href="#tree" title="Link to this heading"></a></h2>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>Playlist
-  @majorVersion @minorVersion  required
-  @displayName @type           optional, type default "Advanced"
-  Configuration                required
-    StreamingBuffer @size      even integer, **pack/sector units** (2048 B); "0"×246, "1024"×1
-    Aperture @size             "1920x1080" | "1280x720" (247/247 are 1920x1080)
-    MainVideoDefaultColor @color  6 hex YCbCr; outer frame around scaled main video
-    NetworkTimeout @timeout    optional, **milliseconds** (14 playlists, all "0")
-  MediaAttributeList           optional
-    VideoAttributeItem @index @codec
-    AudioAttributeItem @index @codec [@channels …]
-    SubpictureAttributeItem @index @codec
-  TitleSet
-    @timeBase required   @tickBase @defaultLanguage optional
-    FirstPlayTitle?      logo / FBI; no titleNumber
-    Title+               @titleNumber required, max 999 titles
-    PlaylistApplication* @src = Manifest (.xmf or .aca/….xmf)
-</pre></div>
-</div>
-</section>
-<section id="title">
-<h2>3.3 Title<a class="headerlink" href="#title" title="Link to this heading"></a></h2>
+<p>The playlist is the disc’s table of contents and its schedule. It says which
+titles exist, which video clips play on each title’s timeline and when, which
+audio and subtitle streams become which user-visible tracks, which HDi
+applications run (and which files they need loaded first), where the chapters
+are, and where playback pauses or fires events. There is no PGC and no binary
+navigation table on Advanced Content: this XML file <strong>is</strong> the navigation model.</p>
+<p>This sheet documents every element and attribute the schema allows, in document
+order. Each element section gives its content model, then one table of
+attributes (type, required, default, what it is for), then the rules that
+connect it to other elements, then what the discs carry.</p>
+<p>Sources: the DVD Forum schemas [5] (v1.0, 16 Jul 2006, and v1.1, 5 Nov 2007);
+the specification text quoted in US 2007/0091495 [1] (every “Describes …”
+attribute definition below comes from there); the Scenarist AC 4.5 User Guide
+[7]; and the corpus, checked by <code class="docutils literal notranslate"><span class="pre">e26</span></code> (all 247 playlists) together with the
+earlier <code class="docutils literal notranslate"><span class="pre">e12</span></code> / <code class="docutils literal notranslate"><span class="pre">e14</span></code>.</p>
+<section id="file-versions-schema">
+<h2>3.1 File, versions, schema<a class="headerlink" href="#file-versions-schema" title="Link to this heading"></a></h2>
 <table class="docutils align-default">
 <thead>
-<tr class="row-odd"><th class="head"><p>Attribute</p></th>
-<th class="head"><p>Required</p></th>
-<th class="head"><p>Notes</p></th>
+<tr class="row-odd"><th class="head"><p></p></th>
+<th class="head"><p></p></th>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">titleNumber</span></code></p></td>
-<td><p>yes</p></td>
-<td><p>positive integer</p></td>
+<tr class="row-even"><td><p>Path</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">ADV_OBJ/VPLST$$$.XPL</span></code>, <code class="docutils literal notranslate"><span class="pre">$$$</span></code> = <code class="docutils literal notranslate"><span class="pre">000</span></code>…<code class="docutils literal notranslate"><span class="pre">999</span></code> (see §3.20 for which one plays)</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">titleDuration</span></code></p></td>
-<td><p>yes</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">HH:MM:SS:FF</span></code></p></td>
+<tr class="row-odd"><td><p>Namespace</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">http://www.dvdforum.org/2005/HDDVDVideo/Playlist</span></code></p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">id</span></code></p></td>
-<td><p>no</p></td>
-<td><p>XML ID; <code class="docutils literal notranslate"><span class="pre">onEnd</span></code> targets this</p></td>
+<tr class="row-even"><td><p>Root element</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Playlist</span></code> (one per file)</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">onEnd</span></code></p></td>
-<td><p>no</p></td>
-<td><p>IDREF of next Title (3192/3196 titles have it). <strong>Omitted → stop</strong> after the title (script may still <code class="docutils literal notranslate"><span class="pre">IPlaylist.load</span></code> / <code class="docutils literal notranslate"><span class="pre">jump</span></code>). Not a loop and not a hidden menu.</p></td>
+<tr class="row-odd"><td><p>Encoding</p></td>
+<td><p>UTF-8 XML</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">selectable</span></code></p></td>
-<td><p>no</p></td>
-<td><p>default true</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">displayName</span></code></p></td>
-<td><p>no</p></td>
-<td><p>UI string</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">alternativeSDDisplayMode</span></code></p></td>
-<td><p>no</p></td>
-<td><p>default <code class="docutils literal notranslate"><span class="pre">panscanOrLetterbox</span></code></p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">tickBaseDivisor</span></code></p></td>
-<td><p>no</p></td>
-<td><p>default 1</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">parentalLevel</span></code></p></td>
-<td><p>no</p></td>
-<td><p>default <code class="docutils literal notranslate"><span class="pre">*:1</span></code></p></td>
+<tr class="row-even"><td><p>Schema</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">spec/raw/adv_obj/v1.1/Playlist.xsd</span></code> (use this one); <code class="docutils literal notranslate"><span class="pre">v1.0/Playlist.xsd</span></code> for reference</p></td>
 </tr>
 </tbody>
 </table>
-<p><code class="docutils literal notranslate"><span class="pre">titleDuration</span></code> vs last clip <code class="docutils literal notranslate"><span class="pre">titleTimeEnd</span></code> (<code class="docutils literal notranslate"><span class="pre">e14</span></code>, titles+FPT with clips):
-<strong>3237</strong> equal, <strong>70</strong> duration longer (unmapped tail: aperture colour), <strong>1</strong>
-shorter: <code class="docutils literal notranslate"><span class="pre">THE_SEARCHERS</span></code> FirstPlayTitle <code class="docutils literal notranslate"><span class="pre">00:00:23:00</span></code> vs last clip end
-<code class="docutils literal notranslate"><span class="pre">00:00:23:55</span></code>. Timeline length is <code class="docutils literal notranslate"><span class="pre">titleDuration</span></code>; do not extend the title past
-it. That extra 55 ticks is authoring error.</p>
-<p>Child sequence (0–299 mapping objects, then optional lists):</p>
+<p><strong>Two schema versions.</strong> Every playlist in the corpus declares
+<code class="docutils literal notranslate"><span class="pre">majorVersion=&quot;1&quot;</span> <span class="pre">minorVersion=&quot;0&quot;</span></code>, but all 247 validate against the <strong>v1.1</strong>
+schema and 33 of them fail v1.0 (<code class="docutils literal notranslate"><span class="pre">e26</span></code>). The failures are exactly the v1.1
+additions, so discs were authored with the 1.1 tools. Read against v1.1. The
+differences:</p>
 <table class="docutils align-default">
 <thead>
-<tr class="row-odd"><th class="head"><p>Element</p></th>
-<th class="head"><p><code class="docutils literal notranslate"><span class="pre">src</span></code> points at</p></th>
-<th class="head"><p>Corpus</p></th>
+<tr class="row-odd"><th class="head"><p>v1.1 change</p></th>
+<th class="head"><p>Effect</p></th>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">PrimaryAudioVideoClip</span></code></p></td>
-<td><p><strong><code class="docutils literal notranslate"><span class="pre">.MAP</span></code> only</strong></p></td>
-<td><p>4847</p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">Title&#64;outputFrameRate</span></code>, <code class="docutils literal notranslate"><span class="pre">FirstPlayTitle&#64;outputFrameRate</span></code> added</p></td>
+<td><p>182 Titles and 3 FirstPlayTitles carry it (§3.8)</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ApplicationSegment</span></code></p></td>
-<td><p><strong><code class="docutils literal notranslate"><span class="pre">.XMF</span></code> only</strong> (often inside ACA)</p></td>
-<td><p>2529</p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">VideoAttributeItem&#64;sourcePictureProgressiveMode</span></code> added</p></td>
+<td><p>0 on disc (§3.6)</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">SecondaryAudioVideoClip</span></code></p></td>
-<td><p></p></td>
-<td><p>0</p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">AudioAttributeItem&#64;codec</span></code> gains <code class="docutils literal notranslate"><span class="pre">HEAACV2</span></code>, <code class="docutils literal notranslate"><span class="pre">MP3</span></code>, <code class="docutils literal notranslate"><span class="pre">WMAPRO</span></code>, <code class="docutils literal notranslate"><span class="pre">HEAAC</span></code></p></td>
+<td><p>0 on disc</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">SubstituteAudioVideoClip</span></code></p></td>
-<td><p></p></td>
-<td><p>0</p></td>
+<tr class="row-odd"><td><p>A <code class="docutils literal notranslate"><span class="pre">Title</span></code> may have no presentation clip (<code class="docutils literal notranslate"><span class="pre">choice</span> <span class="pre">minOccurs=&quot;0&quot;</span></code>)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">MATRIX_REVOLUTIONS</span></code> <code class="docutils literal notranslate"><span class="pre">VPLST099</span></code> has a clip-less title</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">SubstituteAudioClip</span></code></p></td>
-<td><p></p></td>
-<td><p>0</p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FirstPlayTitle</span></code> needs at least one clip; clips need at least one <code class="docutils literal notranslate"><span class="pre">Video</span></code></p></td>
+<td><p>(v1.0 allowed none)</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">AdvancedSubtitleSegment</span></code></p></td>
-<td><p></p></td>
-<td><p>0</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">TitleResource</span></code></p></td>
-<td><p></p></td>
-<td><p>rare</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ScheduledControlList</span></code> / <code class="docutils literal notranslate"><span class="pre">Event</span></code></p></td>
-<td><p>no src; <code class="docutils literal notranslate"><span class="pre">&#64;titleTime</span></code> cue</p></td>
-<td><p>used</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ChapterList</span></code> / <code class="docutils literal notranslate"><span class="pre">Chapter</span></code></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">&#64;titleTimeBegin</span></code></p></td>
-<td><p>7665</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">TrackNavigationList</span></code></p></td>
-<td><p>language / selectable tracks</p></td>
-<td><p>used</p></td>
+<tr class="row-odd"><td><p>Language type renamed <code class="docutils literal notranslate"><span class="pre">ISO639-2</span></code> → <code class="docutils literal notranslate"><span class="pre">ISO639-1</span></code></p></td>
+<td><p>same two-letter values</p></td>
 </tr>
 </tbody>
 </table>
-<p><code class="docutils literal notranslate"><span class="pre">FirstPlayTitle</span></code> is the same clip mapping as a Title but <strong>without</strong> <code class="docutils literal notranslate"><span class="pre">titleNumber</span></code>.
-Present on 119 of 247 playlists. It is <strong>not</strong> the boot playlist.
-Patent (c)(d): play <strong>start→end of the title timeline at normal speed
-only</strong>, video track 1 + audio track 1. Ignore user title-nav (Next / Prev /
-FF / FR / time-search / <code class="docutils literal notranslate"><span class="pre">jump</span></code>) until FPT ends, then Title 1. Next is <strong>not</strong>
-“skip to Title 1.”
-<code class="docutils literal notranslate"><span class="pre">[1]</span></code> <strong>INFERRED</strong>
-(fail-closed; skip key not demonstrated).
-Missing File Cache resource during FPT: <strong>keep playing FPT video</strong>, skip that
-resource (same as 64 MB overflow skip). Do not abort the playlist.</p>
+<p><strong>Reading rules.</strong></p>
+<ul class="simple">
+<li><p>Match elements and attributes by namespace and local name, never by prefix.</p></li>
+<li><p>Ignore XML comments (discs put them inside lists) and <code class="docutils literal notranslate"><span class="pre">xsi:schemaLocation</span></code>
+(170 roots carry one; the URLs are dead authoring debris).</p></li>
+<li><p>Apply the defaults in the tables below when an optional attribute is absent;
+the defaults are part of the meaning.</p></li>
+<li><p>Keep URIs exactly as written (§3.2, §3.19).</p></li>
+</ul>
 </section>
-<section id="primaryaudiovideoclip">
-<h2>3.4 PrimaryAudioVideoClip<a class="headerlink" href="#primaryaudiovideoclip" title="Link to this heading"></a></h2>
-<p>Extends <code class="docutils literal notranslate"><span class="pre">ClipMappingType</span></code>:</p>
+<section id="data-types">
+<h2>3.2 Data types<a class="headerlink" href="#data-types" title="Link to this heading"></a></h2>
 <table class="docutils align-default">
 <thead>
-<tr class="row-odd"><th class="head"><p>Attribute</p></th>
-<th class="head"><p>Required</p></th>
-<th class="head"><p>Default</p></th>
+<tr class="row-odd"><th class="head"><p>Type</p></th>
+<th class="head"><p>Syntax</p></th>
 <th class="head"><p>Meaning</p></th>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">src</span></code></p></td>
-<td><p>yes</p></td>
+<tr class="row-even"><td><p>time expression</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">HH:MM:SS:FF</span></code>; HH <code class="docutils literal notranslate"><span class="pre">00</span></code>–<code class="docutils literal notranslate"><span class="pre">23</span></code>, MM and SS <code class="docutils literal notranslate"><span class="pre">00</span></code>–<code class="docutils literal notranslate"><span class="pre">59</span></code>, FF <code class="docutils literal notranslate"><span class="pre">00</span></code>–<code class="docutils literal notranslate"><span class="pre">49</span></code> at 50 fps or <code class="docutils literal notranslate"><span class="pre">00</span></code>–<code class="docutils literal notranslate"><span class="pre">59</span></code> at 60 fps</p></td>
+<td><p>A <strong>non-drop frame count</strong> on a title timeline: <code class="docutils literal notranslate"><span class="pre">(3600·HH</span> <span class="pre">+</span> <span class="pre">60·MM</span> <span class="pre">+</span> <span class="pre">SS)</span> <span class="pre">·</span> <span class="pre">rate</span> <span class="pre">+</span> <span class="pre">FF</span></code>, where <code class="docutils literal notranslate"><span class="pre">rate</span></code> is <code class="docutils literal notranslate"><span class="pre">TitleSet&#64;timeBase</span></code>. <code class="docutils literal notranslate"><span class="pre">00:00:01:00</span></code> at 60 fps is 60 counts, not one second of 29.97 video. FF ≥ 50 appears 3590 times on 60 fps titles (<code class="docutils literal notranslate"><span class="pre">e14</span></code>): do not clamp to 49.</p></td>
+</tr>
+<tr class="row-odd"><td><p>frame rate</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">50fps</span></code> | <code class="docutils literal notranslate"><span class="pre">60fps</span></code></p></td>
+<td><p>Rate of the title timeline (the media clock)</p></td>
+</tr>
+<tr class="row-even"><td><p>tick rate</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">24fps</span></code> | <code class="docutils literal notranslate"><span class="pre">50fps</span></code> | <code class="docutils literal notranslate"><span class="pre">60fps</span></code></p></td>
+<td><p>Rate of the application tick clock (page and application clocks). Must be <code class="docutils literal notranslate"><span class="pre">50fps</span></code> or <code class="docutils literal notranslate"><span class="pre">24fps</span></code> when the frame rate is 50, <code class="docutils literal notranslate"><span class="pre">60fps</span></code> or <code class="docutils literal notranslate"><span class="pre">24fps</span></code> when it is 60</p></td>
+</tr>
+<tr class="row-odd"><td><p>language</p></td>
+<td><p>two lowercase letters, ISO 639-1 (<code class="docutils literal notranslate"><span class="pre">en</span></code>, <code class="docutils literal notranslate"><span class="pre">fr</span></code>, <code class="docutils literal notranslate"><span class="pre">ja</span></code>, …)</p></td>
+<td><p>A menu / application language. The v1.0 type is <em>named</em> <code class="docutils literal notranslate"><span class="pre">ISO639-2</span></code> but its values are two-letter codes; match two letters</p></td>
+</tr>
+<tr class="row-even"><td><p>langCode</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">xx:NN</span></code> or <code class="docutils literal notranslate"><span class="pre">*:NN</span></code>; <code class="docutils literal notranslate"><span class="pre">xx</span></code> ISO 639-1, <code class="docutils literal notranslate"><span class="pre">NN</span></code> two hex digits</p></td>
+<td><p>Track language plus <strong>code extension</strong> (what kind of track in that language). <code class="docutils literal notranslate"><span class="pre">*</span></code> = language not specified. Table below</p></td>
+</tr>
+<tr class="row-odd"><td><p>parentalList</p></td>
+<td><p>space-separated <code class="docutils literal notranslate"><span class="pre">CC:n</span></code> or <code class="docutils literal notranslate"><span class="pre">*:n</span></code>; <code class="docutils literal notranslate"><span class="pre">CC</span></code> ISO 3166 alpha-2 country, <code class="docutils literal notranslate"><span class="pre">n</span></code> <code class="docutils literal notranslate"><span class="pre">1</span></code>–<code class="docutils literal notranslate"><span class="pre">8</span></code></p></td>
+<td><p>Minimum parental level needed to play, per country. <code class="docutils literal notranslate"><span class="pre">*</span></code> = every country not listed. Each country (and <code class="docutils literal notranslate"><span class="pre">*</span></code>) at most once</p></td>
+</tr>
+<tr class="row-even"><td><p>multiplexed</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">false</span></code> or a non-negative integer</p></td>
+<td><p>How a resource reaches the File Cache (§3.14)</p></td>
+</tr>
+<tr class="row-odd"><td><p>URI</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">anyURI</span></code>, at most 1024 bytes</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">file:///dvddisc/…</span></code> (the disc), <code class="docutils literal notranslate"><span class="pre">file:///filecache/…</span></code> (File Cache), <code class="docutils literal notranslate"><span class="pre">file:///fixed/…</span></code> and <code class="docutils literal notranslate"><span class="pre">file:///removable/…</span></code> (persistent storage), <code class="docutils literal notranslate"><span class="pre">http://…</span></code> / <code class="docutils literal notranslate"><span class="pre">https://…</span></code> (network). An ACA member is addressed as <code class="docutils literal notranslate"><span class="pre">…/name.aca/member</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>boolean</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">true</span></code> | <code class="docutils literal notranslate"><span class="pre">false</span></code></p></td>
 <td><p></p></td>
-<td><p>URI of the <strong><code class="docutils literal notranslate"><span class="pre">.MAP</span></code></strong></p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">titleTimeBegin</span></code></p></td>
-<td><p>yes</p></td>
-<td><p></p></td>
-<td><p>when this clip occupies the title timeline</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">titleTimeEnd</span></code></p></td>
-<td><p>yes</p></td>
-<td><p></p></td>
-<td><p>exclusive end (<code class="docutils literal notranslate"><span class="pre">[begin,end)</span></code>). 1527 abutting pairs, <strong>0</strong> overlaps</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">clipTimeBegin</span></code></p></td>
-<td><p>no</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">00:00:00:00</span></code></p></td>
-<td><p>offset into the MAP/EVO</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">dataSource</span></code></p></td>
-<td><p>no</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">Disc</span></code></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">Disc</span></code> only for this element</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">seamless</span></code></p></td>
-<td><p>no</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">false</span></code></p></td>
-<td><p>decoder connection; not a second MAP format</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">id</span></code></p></td>
-<td><p>no</p></td>
-<td><p></p></td>
-<td><p></p></td>
+<tr class="row-odd"><td><p>ID / IDREF</p></td>
+<td><p>XML name</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">id</span></code> values are unique in the document; <code class="docutils literal notranslate"><span class="pre">onEnd</span></code> refers to one</p></td>
 </tr>
 </tbody>
 </table>
-<p>Children:</p>
+<p><strong>Language code extension</strong> (<code class="docutils literal notranslate"><span class="pre">NN</span></code> in langCode). The table is the
+specification’s Annex B, which is not among the available sources. The one
+value the sources quote, <strong><code class="docutils literal notranslate"><span class="pre">09</span></code> = Forced Caption</strong> for sub-pictures [2], matches
+DVD-Video’s code-extension numbering, and the values on disc fit that numbering:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>NN</p></th>
+<th class="head"><p>Audio</p></th>
+<th class="head"><p>Subtitle</p></th>
+<th class="head"><p>On disc (audio / subtitle tracks)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">00</span></code></p></td>
+<td><p>not specified</p></td>
+<td><p>not specified</p></td>
+<td><p>866 / 606</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">01</span></code></p></td>
+<td><p>normal</p></td>
+<td><p>normal</p></td>
+<td><p>2336 / 9305</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">02</span></code></p></td>
+<td><p>for the visually impaired</p></td>
+<td><p>large characters</p></td>
+<td><p>23 / 23</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">03</span></code></p></td>
+<td><p>director’s comments</p></td>
+<td><p>for children</p></td>
+<td><p>210 / 271</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">04</span></code></p></td>
+<td><p>alternate director’s comments</p></td>
+<td><p></p></td>
+<td><p>14 / 0</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">05</span></code></p></td>
+<td><p></p></td>
+<td><p>normal captions</p></td>
+<td><p>1 / 601</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">09</span></code></p></td>
+<td><p></p></td>
+<td><p><strong>forced</strong> caption</p></td>
+<td><p>0 / 97</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">0D</span></code></p></td>
+<td><p></p></td>
+<td><p>director’s comments</p></td>
+<td><p>0 / 356</p></td>
+</tr>
+</tbody>
+</table>
+<p><code class="docutils literal notranslate"><span class="pre">[2,</span> <span class="pre">11,</span> <span class="pre">12]</span></code> <strong>INFERRED</strong> (DVD parity; <code class="docutils literal notranslate"><span class="pre">09</span></code> quoted).</p>
+</section>
+<section id="document-tree">
+<h2>3.3 Document tree<a class="headerlink" href="#document-tree" title="Link to this heading"></a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">?</span></code> = optional, <code class="docutils literal notranslate"><span class="pre">*</span></code> = any number, <code class="docutils literal notranslate"><span class="pre">+</span></code> = at least one. Children appear in exactly
+this order.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>Playlist                                  §3.4
+├── Configuration                         §3.5
+│   ├── StreamingBuffer
+│   ├── Aperture
+│   ├── MainVideoDefaultColor
+│   └── NetworkTimeout?
+├── MediaAttributeList?                   §3.6
+│   ├── VideoAttributeItem*
+│   ├── AudioAttributeItem*
+│   └── SubpictureAttributeItem*
+└── TitleSet                              §3.7
+    ├── FirstPlayTitle?                   §3.9
+    │   └── (PrimaryAudioVideoClip | SubstituteAudioVideoClip)+
+    ├── Title  (1–999)                    §3.8
+    │   ├── (PrimaryAudioVideoClip        §3.10  ┐
+    │   │   | SecondaryAudioVideoClip     §3.10  │
+    │   │   | SubstituteAudioVideoClip    §3.10  │ 0–299, any order
+    │   │   | SubstituteAudioClip         §3.10  │ (the object mapping)
+    │   │   | AdvancedSubtitleSegment     §3.13  │
+    │   │   | ApplicationSegment)         §3.13  ┘
+    │   ├── TitleResource*                §3.14
+    │   ├── ScheduledControlList?         §3.18
+    │   ├── ChapterList?                  §3.16
+    │   └── TrackNavigationList?          §3.17
+    └── PlaylistApplication*              §3.15
+        └── PlaylistApplicationResource*  §3.14
+</pre></div>
+</div>
+<p>Inside the clips and segments:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>PrimaryAudioVideoClip     Video+ Audio* Subtitle* SubVideo? SubAudio*     §3.12
+SecondaryAudioVideoClip   NetworkSource* SubVideo? SubAudio*               §3.11 §3.12
+SubstituteAudioVideoClip  NetworkSource* Video Audio*                      §3.11 §3.12
+SubstituteAudioClip       NetworkSource* Audio+                            §3.11 §3.12
+AdvancedSubtitleSegment   Subtitle+ ApplicationResource*                   §3.12 §3.14
+ApplicationSegment        ApplicationResource*                             §3.14
+ApplicationResource       NetworkSource*                                   §3.11
+TitleResource             NetworkSource*                                   §3.11
+</pre></div>
+</div>
+<p>The XSD builds several elements from shared base types; each attribute below
+is listed once per element with the base type named:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Base type</p></th>
+<th class="head"><p>Attributes</p></th>
+<th class="head"><p>Used by</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ClipMappingType</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">titleTimeBegin</span></code>, <code class="docutils literal notranslate"><span class="pre">titleTimeEnd</span></code>, <code class="docutils literal notranslate"><span class="pre">clipTimeBegin</span></code>, <code class="docutils literal notranslate"><span class="pre">src</span></code>, <code class="docutils literal notranslate"><span class="pre">id</span></code>, <code class="docutils literal notranslate"><span class="pre">description</span></code></p></td>
+<td><p>the four <code class="docutils literal notranslate"><span class="pre">…Clip</span></code> elements</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ObjectMappingType</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">titleTimeBegin</span></code>, <code class="docutils literal notranslate"><span class="pre">titleTimeEnd</span></code>, <code class="docutils literal notranslate"><span class="pre">src</span></code>, <code class="docutils literal notranslate"><span class="pre">id</span></code>, <code class="docutils literal notranslate"><span class="pre">description</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">ApplicationSegment</span></code>, <code class="docutils literal notranslate"><span class="pre">AdvancedSubtitleSegment</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ResourceType</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">src</span></code>, <code class="docutils literal notranslate"><span class="pre">size</span></code>, <code class="docutils literal notranslate"><span class="pre">priority</span></code>, <code class="docutils literal notranslate"><span class="pre">multiplexed</span></code>, <code class="docutils literal notranslate"><span class="pre">loadingBegin</span></code>, <code class="docutils literal notranslate"><span class="pre">noCache</span></code>, <code class="docutils literal notranslate"><span class="pre">description</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">ApplicationResource</span></code>, <code class="docutils literal notranslate"><span class="pre">TitleResource</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">TrackNumberAssignmentType</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">mediaAttr</span></code>, <code class="docutils literal notranslate"><span class="pre">description</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Video</span></code>, <code class="docutils literal notranslate"><span class="pre">Audio</span></code>, <code class="docutils literal notranslate"><span class="pre">Subtitle</span></code>, <code class="docutils literal notranslate"><span class="pre">SubVideo</span></code>, <code class="docutils literal notranslate"><span class="pre">SubAudio</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">TrackNavigationType</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">selectable</span></code>, <code class="docutils literal notranslate"><span class="pre">description</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">VideoTrack</span></code>, <code class="docutils literal notranslate"><span class="pre">AudioTrack</span></code>, <code class="docutils literal notranslate"><span class="pre">SubtitleTrack</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="playlist">
+<h2>3.4 Playlist<a class="headerlink" href="#playlist" title="Link to this heading"></a></h2>
+<p>The root. One per file.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Attribute</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Req.</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>What it is for</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">majorVersion</span></code></p></td>
+<td><p>non-negative integer</p></td>
+<td><p>yes</p></td>
+<td><p></p></td>
+<td><p>Integer part of the Advanced Content version (<code class="docutils literal notranslate"><span class="pre">1</span></code>)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">minorVersion</span></code></p></td>
+<td><p>non-negative integer</p></td>
+<td><p>yes</p></td>
+<td><p></p></td>
+<td><p>Fractional part (<code class="docutils literal notranslate"><span class="pre">0</span></code>; see §3.1)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">type</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Advanced</span></code> | <code class="docutils literal notranslate"><span class="pre">Interoperable</span></code></p></td>
+<td><p>no</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Advanced</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Interoperable</span></code> marks content recorded in the user-recordable HD DVD video format rather than authored Advanced Content</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">displayName</span></code></p></td>
+<td><p>string</p></td>
+<td><p>no</p></td>
+<td><p></p></td>
+<td><p>Human-readable name</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">description</span></code></p></td>
+<td><p>string</p></td>
+<td><p>no</p></td>
+<td><p></p></td>
+<td><p>Free text</p></td>
+</tr>
+</tbody>
+</table>
+<p>On disc: <code class="docutils literal notranslate"><span class="pre">1</span></code>/<code class="docutils literal notranslate"><span class="pre">0</span></code> on 247/247; <code class="docutils literal notranslate"><span class="pre">type=&quot;Advanced&quot;</span></code> on 79, absent on the rest;
+<code class="docutils literal notranslate"><span class="pre">displayName</span></code> on 96 (often <code class="docutils literal notranslate"><span class="pre">Dummy</span></code>).</p>
+</section>
+<section id="configuration">
+<h2>3.5 Configuration<a class="headerlink" href="#configuration" title="Link to this heading"></a></h2>
+<p>System settings the player applies before any title starts. Children, in order:</p>
 <table class="docutils align-default">
 <thead>
 <tr class="row-odd"><th class="head"><p>Element</p></th>
-<th class="head"><p>Attributes</p></th>
+<th class="head"><p>Occurs</p></th>
+<th class="head"><p>Attribute</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Req.</p></th>
+<th class="head"><p>What it is for</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">StreamingBuffer</span></code></p></td>
+<td><p>1</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">size</span></code></p></td>
+<td><p>even integer</p></td>
+<td><p>yes</p></td>
+<td><p>Size of the Streaming Buffer carved out of the Data Cache, <strong>in 2048-byte packs</strong> (<code class="docutils literal notranslate"><span class="pre">1024</span></code> = 2 MB). It holds network-streamed secondary video. <code class="docutils literal notranslate"><span class="pre">0</span></code> = none. The File Cache gets what remains</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">Aperture</span></code></p></td>
+<td><p>1</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">size</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">1920x1080</span></code> | <code class="docutils literal notranslate"><span class="pre">1280x720</span></code></p></td>
+<td><p>yes</p></td>
+<td><p>Full visible image size: the size of the graphics plane that applications draw on</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">MainVideoDefaultColor</span></code></p></td>
+<td><p>1</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">color</span></code></p></td>
+<td><p>six hex digits <code class="docutils literal notranslate"><span class="pre">YYCrCb</span></code></p></td>
+<td><p>yes</p></td>
+<td><p>Colour of the main-video plane outside the (scaled) main video. Y 16–235, Cr and Cb 16–240</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">NetworkTimeout</span></code></p></td>
+<td><p>0–1</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">timeout</span></code></p></td>
+<td><p>non-negative integer</p></td>
+<td><p>yes</p></td>
+<td><p>Network request timeout, in milliseconds</p></td>
+</tr>
+</tbody>
+</table>
+<p>The Data Cache is at least 64 MB; the Streaming Buffer comes out of it, and
+applications’ resources must fit in the rest (§3.14).</p>
+<p>On disc: <code class="docutils literal notranslate"><span class="pre">StreamingBuffer</span></code> <code class="docutils literal notranslate"><span class="pre">0</span></code> on 246, <code class="docutils literal notranslate"><span class="pre">1024</span></code> on 1; <code class="docutils literal notranslate"><span class="pre">Aperture</span></code> <code class="docutils literal notranslate"><span class="pre">1920x1080</span></code> on
+247/247; <code class="docutils literal notranslate"><span class="pre">MainVideoDefaultColor</span></code> <code class="docutils literal notranslate"><span class="pre">108080</span></code> (112) or <code class="docutils literal notranslate"><span class="pre">107F7F</span></code> (135), both black;
+<code class="docutils literal notranslate"><span class="pre">NetworkTimeout</span></code> on 14 playlists, all <code class="docutils literal notranslate"><span class="pre">0</span></code> (the meaning of 0 is not defined in
+the sources).</p>
+</section>
+<section id="mediaattributelist">
+<h2>3.6 MediaAttributeList<a class="headerlink" href="#mediaattributelist" title="Link to this heading"></a></h2>
+<p>Codec and format of the elementary streams the clips use, indexed so that track
+elements can point at them (<code class="docutils literal notranslate"><span class="pre">&#64;mediaAttr</span></code>, §3.12). Children, in order: any number
+of <code class="docutils literal notranslate"><span class="pre">VideoAttributeItem</span></code>, then <code class="docutils literal notranslate"><span class="pre">AudioAttributeItem</span></code>, then
+<code class="docutils literal notranslate"><span class="pre">SubpictureAttributeItem</span></code>. <code class="docutils literal notranslate"><span class="pre">index</span></code> is unique per item type (a video item and an
+audio item can both be <code class="docutils literal notranslate"><span class="pre">1</span></code>). Values should match the stream attributes in the
+VTI; in practice the <strong>playlist is the source of the codec</strong> because the VTI
+<code class="docutils literal notranslate"><span class="pre">V_ATR</span></code> codec field is unreliable (<a class="reference internal" href="06_vti.html"><span class="std std-doc">06</span></a>).</p>
+<p><strong><code class="docutils literal notranslate"><span class="pre">VideoAttributeItem</span></code></strong> (main and sub video):</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Attribute</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Req.</p></th>
+<th class="head"><p>What it is for</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">index</span></code></p></td>
+<td><p>positive integer</p></td>
+<td><p>yes</p></td>
+<td><p>Number that <code class="docutils literal notranslate"><span class="pre">Video&#64;mediaAttr</span></code> / <code class="docutils literal notranslate"><span class="pre">SubVideo&#64;mediaAttr</span></code> refer to</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">codec</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">MPEG-2</span></code> | <code class="docutils literal notranslate"><span class="pre">VC-1</span></code> | <code class="docutils literal notranslate"><span class="pre">AVC</span></code> | <code class="docutils literal notranslate"><span class="pre">MPEG-1</span></code></p></td>
+<td><p>yes</p></td>
+<td><p>Video codec. <code class="docutils literal notranslate"><span class="pre">MPEG-1</span></code> only in Interoperable content</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">sampleAspectRatio</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">16:9</span></code> | <code class="docutils literal notranslate"><span class="pre">4:3</span></code></p></td>
+<td><p>no</p></td>
+<td><p>Shape of the encoded samples (“pixels”)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">horizontalResolution</span></code></p></td>
+<td><p>positive integer</p></td>
+<td><p>no</p></td>
+<td><p>Encoded samples per line (not the displayed pixel count)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">verticalResolution</span></code></p></td>
+<td><p>positive integer</p></td>
+<td><p>no</p></td>
+<td><p>Encoded lines</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">encodedFrameRate</span></code></p></td>
+<td><p>positive integer</p></td>
+<td><p>no</p></td>
+<td><p>Encoded frame rate, in frames (30 interlaced frames, not 60 fields)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">sourceFrameRate</span></code></p></td>
+<td><p>positive integer</p></td>
+<td><p>no</p></td>
+<td><p>Approximate frame rate of the source: <code class="docutils literal notranslate"><span class="pre">24</span></code> for film even when it is 23.976 and encoded with repeat-field flags at 29.97</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">bitrate</span></code></p></td>
+<td><p>positive integer</p></td>
+<td><p>no</p></td>
+<td><p>Approximate average bit rate, kbit/s, for choosing between streams by bandwidth</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">activeAreaX1</span></code>, <code class="docutils literal notranslate"><span class="pre">activeAreaY1</span></code>, <code class="docutils literal notranslate"><span class="pre">activeAreaX2</span></code>, <code class="docutils literal notranslate"><span class="pre">activeAreaY2</span></code></p></td>
+<td><p>non-negative integer</p></td>
+<td><p>no</p></td>
+<td><p>The active image rectangle, in full-screen coordinates, when a solid colour fills the rest of the encoded frame</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">sourcePictureProgressiveMode</span></code> (v1.1)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Progressive</span></code> | <code class="docutils literal notranslate"><span class="pre">Interlaced</span></code> | <code class="docutils literal notranslate"><span class="pre">Unspecified</span></code></p></td>
+<td><p>no</p></td>
+<td><p>Whether the source pictures are progressive</p></td>
+</tr>
+</tbody>
+</table>
+<p><strong><code class="docutils literal notranslate"><span class="pre">AudioAttributeItem</span></code></strong> (main and sub audio):</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Attribute</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Req.</p></th>
+<th class="head"><p>What it is for</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">index</span></code></p></td>
+<td><p>positive integer</p></td>
+<td><p>yes</p></td>
+<td><p>Number that <code class="docutils literal notranslate"><span class="pre">Audio&#64;mediaAttr</span></code> / <code class="docutils literal notranslate"><span class="pre">SubAudio&#64;mediaAttr</span></code> refer to</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">codec</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">LPCM</span></code> | <code class="docutils literal notranslate"><span class="pre">DD+</span></code> | <code class="docutils literal notranslate"><span class="pre">DTS-HD</span></code> | <code class="docutils literal notranslate"><span class="pre">MLP</span></code> | <code class="docutils literal notranslate"><span class="pre">MPEG</span></code> | <code class="docutils literal notranslate"><span class="pre">AC-3</span></code>; v1.1 adds <code class="docutils literal notranslate"><span class="pre">HEAACV2</span></code>, <code class="docutils literal notranslate"><span class="pre">MP3</span></code>, <code class="docutils literal notranslate"><span class="pre">WMAPRO</span></code>, <code class="docutils literal notranslate"><span class="pre">HEAAC</span></code></p></td>
+<td><p>yes</p></td>
+<td><p>Audio codec. The v1.1 schema notes: <code class="docutils literal notranslate"><span class="pre">AC-3</span></code> and <code class="docutils literal notranslate"><span class="pre">HEAAC</span></code> only in Interoperable content; <code class="docutils literal notranslate"><span class="pre">LPCM</span></code>, <code class="docutils literal notranslate"><span class="pre">MLP</span></code>, <code class="docutils literal notranslate"><span class="pre">MPEG</span></code> only for main audio; <code class="docutils literal notranslate"><span class="pre">HEAACV2</span></code>, <code class="docutils literal notranslate"><span class="pre">MP3</span></code>, <code class="docutils literal notranslate"><span class="pre">WMAPRO</span></code> optional, sub audio only</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">sampleRate</span></code></p></td>
+<td><p>positive integer</p></td>
+<td><p>no</p></td>
+<td><p>Sampling rate, <strong>kHz</strong></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">sampleDepth</span></code></p></td>
+<td><p>positive integer</p></td>
+<td><p>no</p></td>
+<td><p>Bits per sample</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">channels</span></code></p></td>
+<td><p>positive integer</p></td>
+<td><p>no</p></td>
+<td><p>Channel count; the “.1” counts as one (5.1 → <code class="docutils literal notranslate"><span class="pre">6</span></code>)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">bitrate</span></code></p></td>
+<td><p>positive integer</p></td>
+<td><p>no</p></td>
+<td><p>Bit rate, kbit/s</p></td>
+</tr>
+</tbody>
+</table>
+<p><strong><code class="docutils literal notranslate"><span class="pre">SubpictureAttributeItem</span></code></strong>:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Attribute</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Req.</p></th>
+<th class="head"><p>What it is for</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">index</span></code></p></td>
+<td><p>positive integer</p></td>
+<td><p>yes</p></td>
+<td><p>Number that <code class="docutils literal notranslate"><span class="pre">Subtitle&#64;mediaAttr</span></code> refers to</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">codec</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">2bitRLC</span></code> | <code class="docutils literal notranslate"><span class="pre">8bitRLC</span></code></p></td>
+<td><p>yes</p></td>
+<td><p>Sub-picture coding: 2 or 8 bits per pixel (<a class="reference internal" href="08_evo.html"><span class="std std-doc">08</span></a> §8.8)</p></td>
+</tr>
+</tbody>
+</table>
+<p>On disc: the list is present in 244 playlists. Only <code class="docutils literal notranslate"><span class="pre">index</span></code> and <code class="docutils literal notranslate"><span class="pre">codec</span></code> are used,
+plus <code class="docutils literal notranslate"><span class="pre">channels</span></code> on 107 audio items (<code class="docutils literal notranslate"><span class="pre">6</span></code>, <code class="docutils literal notranslate"><span class="pre">2</span></code>, <code class="docutils literal notranslate"><span class="pre">1</span></code>, <code class="docutils literal notranslate"><span class="pre">8</span></code>). Video codecs: <code class="docutils literal notranslate"><span class="pre">MPEG-2</span></code>
+269, <code class="docutils literal notranslate"><span class="pre">VC-1</span></code> 251, <code class="docutils literal notranslate"><span class="pre">AVC</span></code> 124. Audio: <code class="docutils literal notranslate"><span class="pre">DD+</span></code> 344, <code class="docutils literal notranslate"><span class="pre">DTS-HD</span></code> 85, <code class="docutils literal notranslate"><span class="pre">MLP</span></code> 71, <code class="docutils literal notranslate"><span class="pre">AC-3</span></code> 21
+(despite the Interoperable-only note), <code class="docutils literal notranslate"><span class="pre">LPCM</span></code> 11. Sub-picture: <code class="docutils literal notranslate"><span class="pre">8bitRLC</span></code> 302/302.</p>
+</section>
+<section id="titleset">
+<h2>3.7 TitleSet<a class="headerlink" href="#titleset" title="Link to this heading"></a></h2>
+<p>The set of titles, in order: an optional <code class="docutils literal notranslate"><span class="pre">FirstPlayTitle</span></code>, then 1–999 <code class="docutils literal notranslate"><span class="pre">Title</span></code>,
+then any number of <code class="docutils literal notranslate"><span class="pre">PlaylistApplication</span></code>.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Attribute</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Req.</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>What it is for</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">timeBase</span></code></p></td>
+<td><p>frame rate</p></td>
+<td><p>yes</p></td>
+<td><p></p></td>
+<td><p>Rate of every title timeline; every time expression in the playlist counts at this rate</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">tickBase</span></code></p></td>
+<td><p>tick rate</p></td>
+<td><p>no</p></td>
+<td><p>same as <code class="docutils literal notranslate"><span class="pre">timeBase</span></code></p></td>
+<td><p>Rate of the application tick clock used by markup (page and application clocks). Independent of the media clock, so menus animate at normal speed while video is paused or fast-forwarded</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">defaultLanguage</span></code></p></td>
+<td><p>language</p></td>
+<td><p>no</p></td>
+<td><p></p></td>
+<td><p>Fallback menu language: when a title has no <code class="docutils literal notranslate"><span class="pre">ApplicationSegment</span></code> whose <code class="docutils literal notranslate"><span class="pre">language</span></code> matches the player’s menu language, the one with this language is activated (§3.13)</p></td>
+</tr>
+</tbody>
+</table>
+<p>On disc: <code class="docutils literal notranslate"><span class="pre">timeBase=&quot;60fps&quot;</span></code> 247/247; <code class="docutils literal notranslate"><span class="pre">tickBase</span></code> <code class="docutils literal notranslate"><span class="pre">60fps</span></code> 148, <code class="docutils literal notranslate"><span class="pre">24fps</span></code> 29, absent
+70; <code class="docutils literal notranslate"><span class="pre">defaultLanguage</span></code> <code class="docutils literal notranslate"><span class="pre">en</span></code> 190, <code class="docutils literal notranslate"><span class="pre">de</span></code> 31, <code class="docutils literal notranslate"><span class="pre">ja</span></code> 23, <code class="docutils literal notranslate"><span class="pre">fr</span></code> 3.</p>
+</section>
+<section id="title">
+<h2>3.8 Title<a class="headerlink" href="#title" title="Link to this heading"></a></h2>
+<p>One title: a timeline (the <strong>title timeline</strong>) of length <code class="docutils literal notranslate"><span class="pre">titleDuration</span></code>, the
+objects mapped onto it, the resources they need, and its chapters, tracks and
+scheduled controls. Titles are <strong>numbered by document order from 1</strong>.</p>
+<p>Children, in order: 0–299 presentation clips and segments in any mix (the
+<strong>object mapping</strong>, §3.10 and §3.13), then <code class="docutils literal notranslate"><span class="pre">TitleResource*</span></code> (§3.14),
+<code class="docutils literal notranslate"><span class="pre">ScheduledControlList?</span></code> (§3.18), <code class="docutils literal notranslate"><span class="pre">ChapterList?</span></code> (§3.16),
+<code class="docutils literal notranslate"><span class="pre">TrackNavigationList?</span></code> (§3.17).</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Attribute</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Req.</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>What it is for</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">titleNumber</span></code></p></td>
+<td><p>positive integer</p></td>
+<td><p>yes</p></td>
+<td><p></p></td>
+<td><p>The title’s number. Must equal its position among the <code class="docutils literal notranslate"><span class="pre">Title</span></code> elements (1, 2, …)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">id</span></code></p></td>
+<td><p>ID</p></td>
+<td><p>no</p></td>
+<td><p></p></td>
+<td><p>Name used by <code class="docutils literal notranslate"><span class="pre">onEnd</span></code> and by script</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">type</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Advanced</span></code> | <code class="docutils literal notranslate"><span class="pre">Original</span></code> | <code class="docutils literal notranslate"><span class="pre">UserDefined</span></code></p></td>
+<td><p>no</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Advanced</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Original</span></code> / <code class="docutils literal notranslate"><span class="pre">UserDefined</span></code>: original or user-edited title of Interoperable (recorded) content</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">selectable</span></code></p></td>
+<td><p>boolean</p></td>
+<td><p>no</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">true</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">false</span></code>: the user cannot navigate to this title (title menu, title search, next/previous title); script still can</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">titleDuration</span></code></p></td>
+<td><p>time expression</p></td>
+<td><p>yes</p></td>
+<td><p></p></td>
+<td><p>Length of the title timeline. Every mapped object ends at or before it</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">onEnd</span></code></p></td>
+<td><p>IDREF</p></td>
+<td><p>no</p></td>
+<td><p></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">id</span></code> of the title to play when this one ends. <strong>Absent: stop</strong> after the title (script may still continue)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">tickBaseDivisor</span></code></p></td>
+<td><p>positive integer</p></td>
+<td><p>no</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">1</span></code></p></td>
+<td><p>Reduces the application tick rate for this title: with <code class="docutils literal notranslate"><span class="pre">3</span></code>, the Advanced Application Manager processes one tick in three and ignores the rest</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">parentalLevel</span></code></p></td>
+<td><p>parentalList</p></td>
+<td><p>no</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">*:1</span></code></p></td>
+<td><p>Minimum parental level to play the title, per country</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">alternativeSDDisplayMode</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">panscanOrLetterbox</span></code> | <code class="docutils literal notranslate"><span class="pre">panscan</span></code> | <code class="docutils literal notranslate"><span class="pre">letterbox</span></code></p></td>
+<td><p>no</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">panscanOrLetterbox</span></code></p></td>
+<td><p>Display modes allowed when outputting to a 4:3 monitor; the player must use an allowed one</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">displayName</span></code></p></td>
+<td><p>string</p></td>
+<td><p>no</p></td>
+<td><p></p></td>
+<td><p>Title name a player may show</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">description</span></code></p></td>
+<td><p>string</p></td>
+<td><p>no</p></td>
+<td><p></p></td>
+<td><p>Free text</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">xml:base</span></code></p></td>
+<td><p>URI</p></td>
+<td><p>no</p></td>
+<td><p></p></td>
+<td><p>Base URI for relative URIs inside this title (XML Base)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">outputFrameRate</span></code> (v1.1)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">24p</span></code> | <code class="docutils literal notranslate"><span class="pre">Other</span></code> | <code class="docutils literal notranslate"><span class="pre">Unspecified</span></code></p></td>
+<td><p>no</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Unspecified</span></code></p></td>
+<td><p>Declares whether the title is 24-frame content, so a player can choose 24 Hz output. Meaning beyond the value names is not in the sources</p></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Rules.</strong></p>
+<ul class="simple">
+<li><p>Presentation objects on one title timeline must not overlap within a kind:
+no two <code class="docutils literal notranslate"><span class="pre">PrimaryAudioVideoClip</span></code>, no two <code class="docutils literal notranslate"><span class="pre">SecondaryAudioVideoClip</span></code>, no two
+<code class="docutils literal notranslate"><span class="pre">SubstituteAudioClip</span></code>, no two <code class="docutils literal notranslate"><span class="pre">SubstituteAudioVideoClip</span></code>, and a
+<code class="docutils literal notranslate"><span class="pre">PrimaryAudioVideoClip</span></code> must not overlap a <code class="docutils literal notranslate"><span class="pre">SubstituteAudioVideoClip</span></code>.
+There is one main-video decoder and one sub-video decoder.</p></li>
+<li><p>Where no clip is mapped, the timeline still runs and the main-video plane shows
+<code class="docutils literal notranslate"><span class="pre">MainVideoDefaultColor</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">titleDuration</span></code> is authoritative. On disc (<code class="docutils literal notranslate"><span class="pre">e14</span></code>, titles with clips): last
+clip end equals <code class="docutils literal notranslate"><span class="pre">titleDuration</span></code> 3237 times, is shorter 70 times (the tail
+shows the default colour), and longer once (<code class="docutils literal notranslate"><span class="pre">THE_SEARCHERS</span></code> FirstPlayTitle,
+<code class="docutils literal notranslate"><span class="pre">00:00:23:55</span></code> vs <code class="docutils literal notranslate"><span class="pre">00:00:23:00</span></code>: authoring error; stop at <code class="docutils literal notranslate"><span class="pre">titleDuration</span></code>).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">onEnd</span></code> omitted means stop; it is not a loop and not a hidden menu.</p></li>
+</ul>
+<p>On disc (3196 titles): <code class="docutils literal notranslate"><span class="pre">titleNumber</span></code> equals document order 3196/3196; <code class="docutils literal notranslate"><span class="pre">onEnd</span></code>
+on 3192, all resolving to a title <code class="docutils literal notranslate"><span class="pre">id</span></code>; <code class="docutils literal notranslate"><span class="pre">selectable</span></code> only ever <code class="docutils literal notranslate"><span class="pre">true</span></code> (265);
+<code class="docutils literal notranslate"><span class="pre">tickBaseDivisor</span></code> <code class="docutils literal notranslate"><span class="pre">4</span></code> 399, <code class="docutils literal notranslate"><span class="pre">1</span></code> 303, <code class="docutils literal notranslate"><span class="pre">3</span></code> 36, <code class="docutils literal notranslate"><span class="pre">2</span></code> 33; <code class="docutils literal notranslate"><span class="pre">alternativeSDDisplayMode</span></code>
+<code class="docutils literal notranslate"><span class="pre">letterbox</span></code> 2226; <code class="docutils literal notranslate"><span class="pre">outputFrameRate</span></code> <code class="docutils literal notranslate"><span class="pre">Other</span></code> 116, <code class="docutils literal notranslate"><span class="pre">24p</span></code> 66; <code class="docutils literal notranslate"><span class="pre">type</span></code> only
+<code class="docutils literal notranslate"><span class="pre">Advanced</span></code> (183).</p>
+<p><code class="docutils literal notranslate"><span class="pre">[1,</span> <span class="pre">5,</span> <span class="pre">11,</span> <span class="pre">12]</span></code> <strong>VERIFIED</strong></p>
+</section>
+<section id="firstplaytitle">
+<h2>3.9 FirstPlayTitle<a class="headerlink" href="#firstplaytitle" title="Link to this heading"></a></h2>
+<p>A title played once, before Title 1, when the playlist starts: logos, warnings.
+It has no number and cannot be navigated to.</p>
+<p>Children: <code class="docutils literal notranslate"><span class="pre">PrimaryAudioVideoClip</span></code> and <code class="docutils literal notranslate"><span class="pre">SubstituteAudioVideoClip</span></code>, any order
+(v1.1: at least one). Only video track 1 and audio track 1 may be assigned;
+no subtitle, sub-video or sub-audio.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Attribute</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Req.</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>What it is for</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">titleDuration</span></code></p></td>
+<td><p>time expression</p></td>
+<td><p>yes</p></td>
+<td><p></p></td>
+<td><p>Length of its timeline; every object ends before it</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">alternativeSDDisplayMode</span></code></p></td>
+<td><p>as <code class="docutils literal notranslate"><span class="pre">Title</span></code></p></td>
+<td><p>no</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">panscanOrLetterbox</span></code></p></td>
+<td><p>As <code class="docutils literal notranslate"><span class="pre">Title</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">xml:base</span></code></p></td>
+<td><p>URI</p></td>
+<td><p>no</p></td>
+<td><p></p></td>
+<td><p>As <code class="docutils literal notranslate"><span class="pre">Title</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">outputFrameRate</span></code> (v1.1)</p></td>
+<td><p>as <code class="docutils literal notranslate"><span class="pre">Title</span></code></p></td>
+<td><p>no</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Unspecified</span></code></p></td>
+<td><p>As <code class="docutils literal notranslate"><span class="pre">Title</span></code></p></td>
+</tr>
+</tbody>
+</table>
+<p>Playback rules [1]: play it start to end at normal speed, video track 1 and audio
+track 1; ignore user title navigation (next, previous, fast-forward, rewind, time
+search, <code class="docutils literal notranslate"><span class="pre">jump</span></code>) until it ends; then play Title 1. <code class="docutils literal notranslate"><span class="pre">PlaylistApplication</span></code> is not
+active during it. If a File Cache resource is missing, keep playing the video and
+skip the resource. <code class="docutils literal notranslate"><span class="pre">[1]</span></code> <strong>INFERRED</strong> (fail-closed; skip key not demonstrated).</p>
+<p>On disc: 119 of 247 playlists; <code class="docutils literal notranslate"><span class="pre">alternativeSDDisplayMode</span></code> <code class="docutils literal notranslate"><span class="pre">letterbox</span></code> 90.</p>
+</section>
+<section id="presentation-clips">
+<h2>3.10 Presentation clips<a class="headerlink" href="#presentation-clips" title="Link to this heading"></a></h2>
+<p>A clip maps a stretch of a video object onto the title timeline. All four clip
+elements share <code class="docutils literal notranslate"><span class="pre">ClipMappingType</span></code>:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Attribute</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Req.</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>What it is for</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">src</span></code></p></td>
+<td><p>URI</p></td>
+<td><p>yes</p></td>
+<td><p></p></td>
+<td><p>The object’s <strong>index file</strong>, the time map (<code class="docutils literal notranslate"><span class="pre">.MAP</span></code>, <a class="reference internal" href="07_map.html"><span class="std std-doc">07</span></a>), not the <code class="docutils literal notranslate"><span class="pre">.EVO</span></code> (§3.19)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">titleTimeBegin</span></code></p></td>
+<td><p>time expression</p></td>
+<td><p>yes</p></td>
+<td><p></p></td>
+<td><p>Where the clip starts on the title timeline</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">titleTimeEnd</span></code></p></td>
+<td><p>time expression</p></td>
+<td><p>yes</p></td>
+<td><p></p></td>
+<td><p>Where it ends; <strong>exclusive</strong> (<code class="docutils literal notranslate"><span class="pre">[begin,</span> <span class="pre">end)</span></code>)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">clipTimeBegin</span></code></p></td>
+<td><p>time expression</p></td>
+<td><p>no</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">00:00:00:00</span></code></p></td>
+<td><p>Where playback starts <strong>inside</strong> the object, on the object’s own clock. Must be the PTS of a coded video frame</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">id</span></code></p></td>
+<td><p>ID</p></td>
+<td><p>no</p></td>
+<td><p></p></td>
+<td><p>Name for script</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">description</span></code></p></td>
+<td><p>string</p></td>
+<td><p>no</p></td>
+<td><p></p></td>
+<td><p>Free text</p></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Time model.</strong> At title time <code class="docutils literal notranslate"><span class="pre">t</span></code> in <code class="docutils literal notranslate"><span class="pre">[titleTimeBegin,</span> <span class="pre">titleTimeEnd)</span></code> the clip
+shows object time <code class="docutils literal notranslate"><span class="pre">clipTimeBegin</span> <span class="pre">+</span> <span class="pre">(t</span> <span class="pre">−</span> <span class="pre">titleTimeBegin)</span></code>. The span must fit in
+the object: <code class="docutils literal notranslate"><span class="pre">clipTimeBegin</span> <span class="pre">+</span> <span class="pre">titleTimeEnd</span> <span class="pre">−</span> <span class="pre">titleTimeBegin</span></code> ≤ the object’s
+length. The object time converts to a disc address through the time map.</p>
+<p>The four clip elements:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Element</p></th>
+<th class="head"><p>Plays</p></th>
+<th class="head"><p>Object</p></th>
+<th class="head"><p>Children</p></th>
+<th class="head"><p><code class="docutils literal notranslate"><span class="pre">dataSource</span></code> (default)</p></th>
+<th class="head"><p><code class="docutils literal notranslate"><span class="pre">sync</span></code> (default)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">PrimaryAudioVideoClip</span></code></p></td>
+<td><p>main video, main audio, sub-pictures, and the P-EVOB’s sub video / sub audio</p></td>
+<td><p>P-EVOB, or an interleaved block of P-EVOBs (angles)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Video+</span> <span class="pre">Audio*</span> <span class="pre">Subtitle*</span> <span class="pre">SubVideo?</span> <span class="pre">SubAudio*</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Disc</span></code> only (<code class="docutils literal notranslate"><span class="pre">Disc</span></code>)</p></td>
+<td><p>always synchronised</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">SecondaryAudioVideoClip</span></code></p></td>
+<td><p>sub video and/or sub audio (picture-in-picture, commentary)</p></td>
+<td><p>S-EVOB of the Secondary Video Set</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">NetworkSource*</span> <span class="pre">SubVideo?</span> <span class="pre">SubAudio*</span></code></p></td>
+<td><p>any (<code class="docutils literal notranslate"><span class="pre">P-Storage</span></code>)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">hard</span></code> | <code class="docutils literal notranslate"><span class="pre">soft</span></code> | <code class="docutils literal notranslate"><span class="pre">none</span></code> (<code class="docutils literal notranslate"><span class="pre">soft</span></code>)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">SubstituteAudioVideoClip</span></code></p></td>
+<td><p>main video and main audio, replacing the primary clip</p></td>
+<td><p>S-EVOB</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">NetworkSource*</span> <span class="pre">Video</span> <span class="pre">Audio*</span></code></p></td>
+<td><p>any (<code class="docutils literal notranslate"><span class="pre">P-Storage</span></code>)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">hard</span></code> | <code class="docutils literal notranslate"><span class="pre">none</span></code> (<code class="docutils literal notranslate"><span class="pre">hard</span></code>)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">SubstituteAudioClip</span></code></p></td>
+<td><p>main audio, replacing the primary audio</p></td>
+<td><p>S-EVOB</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">NetworkSource*</span> <span class="pre">Audio+</span></code></p></td>
+<td><p>any (<code class="docutils literal notranslate"><span class="pre">P-Storage</span></code>)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">hard</span></code> | <code class="docutils literal notranslate"><span class="pre">soft</span></code> (<code class="docutils literal notranslate"><span class="pre">soft</span></code>)</p></td>
+</tr>
+</tbody>
+</table>
+<p>Extra attributes:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Attribute</p></th>
+<th class="head"><p>On</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Req.</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>What it is for</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">dataSource</span></code></p></td>
+<td><p>all four</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Disc</span></code> | <code class="docutils literal notranslate"><span class="pre">P-Storage</span></code> | <code class="docutils literal notranslate"><span class="pre">Network</span></code> | <code class="docutils literal notranslate"><span class="pre">FileCache</span></code></p></td>
+<td><p>no</p></td>
+<td><p>see table</p></td>
+<td><p>Where the object lives: the disc, persistent storage (pre-downloaded), streamed from a server, or already in the File Cache. <code class="docutils literal notranslate"><span class="pre">PrimaryAudioVideoClip</span></code> allows only <code class="docutils literal notranslate"><span class="pre">Disc</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">seamless</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">PrimaryAudioVideoClip</span></code></p></td>
+<td><p>boolean</p></td>
+<td><p>no</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">false</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">true</span></code>: this clip and the one mapped directly before it meet the seamless-connection conditions, so the decoder must not break between them</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">sync</span></code></p></td>
+<td><p>the three secondary / substitute clips</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">hard</span></code> | <code class="docutils literal notranslate"><span class="pre">soft</span></code> | <code class="docutils literal notranslate"><span class="pre">none</span></code></p></td>
+<td><p>no</p></td>
+<td><p>see table</p></td>
+<td><p>What happens if the object is not ready at <code class="docutils literal notranslate"><span class="pre">titleTimeBegin</span></code>. <strong>hard</strong>: the title timeline stops until it is. <strong>soft</strong>: the timeline keeps running and the object starts late. <strong>none</strong>: the object is not synchronised to the timeline</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">preload</span></code></p></td>
+<td><p>the three</p></td>
+<td><p>time expression</p></td>
+<td><p>no</p></td>
+<td><p></p></td>
+<td><p>Title time at which the player should start prefetching the object</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">noCache</span></code></p></td>
+<td><p>the three</p></td>
+<td><p>boolean</p></td>
+<td><p>no</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">false</span></code></p></td>
+<td><p>Only with <code class="docutils literal notranslate"><span class="pre">dataSource=&quot;Network&quot;</span></code> (otherwise absent): <code class="docutils literal notranslate"><span class="pre">true</span></code> adds <code class="docutils literal notranslate"><span class="pre">no-cache</span></code> to both <code class="docutils literal notranslate"><span class="pre">Cache-Control</span></code> and <code class="docutils literal notranslate"><span class="pre">Pragma</span></code> in the HTTP request; <code class="docutils literal notranslate"><span class="pre">false</span></code> adds it to neither</p></td>
+</tr>
+</tbody>
+</table>
+<p>Streaming (<code class="docutils literal notranslate"><span class="pre">Network</span></code>) objects go through the Streaming Buffer (§3.5);
+<code class="docutils literal notranslate"><span class="pre">P-Storage</span></code>, <code class="docutils literal notranslate"><span class="pre">FileCache</span></code> and some <code class="docutils literal notranslate"><span class="pre">Disc</span></code> objects are read from the Data Cache so
+the disc head is not shared with the primary clip.</p>
+<p>On disc: only <code class="docutils literal notranslate"><span class="pre">PrimaryAudioVideoClip</span></code> (4847; the other three 0). Every <code class="docutils literal notranslate"><span class="pre">src</span></code> is
+a <code class="docutils literal notranslate"><span class="pre">.MAP</span></code> whose <code class="docutils literal notranslate"><span class="pre">.EVO</span></code> has an EVOBI in the VTI (4847/4847). <code class="docutils literal notranslate"><span class="pre">seamless</span></code> on 1379:
+<code class="docutils literal notranslate"><span class="pre">true</span></code> 614, and all 614 start exactly at the previous clip’s <code class="docutils literal notranslate"><span class="pre">titleTimeEnd</span></code>.
+<code class="docutils literal notranslate"><span class="pre">clipTimeBegin</span></code> on 558 (<code class="docutils literal notranslate"><span class="pre">00:00:00:00</span></code> 425). Clip end-to-start abutting pairs
+1527, overlaps 0 (<code class="docutils literal notranslate"><span class="pre">e14</span></code>). <code class="docutils literal notranslate"><span class="pre">dataSource=&quot;Disc&quot;</span></code> written on 3933.</p>
+<p><code class="docutils literal notranslate"><span class="pre">[1,</span> <span class="pre">5,</span> <span class="pre">11,</span> <span class="pre">12]</span></code> <strong>VERIFIED</strong> (disc-side); network and substitute clips
+specified only.</p>
+</section>
+<section id="networksource">
+<h2>3.11 NetworkSource<a class="headerlink" href="#networksource" title="Link to this heading"></a></h2>
+<p>Alternative network locations for one object or resource, chosen by the
+player’s network throughput.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Attribute</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Req.</p></th>
+<th class="head"><p>What it is for</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">src</span></code></p></td>
+<td><p>URI (<code class="docutils literal notranslate"><span class="pre">http</span></code>/<code class="docutils literal notranslate"><span class="pre">https</span></code>)</p></td>
+<td><p>yes</p></td>
+<td><p>In a clip: the time map of the alternative stream. In a resource: the alternative archive or file</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">networkThroughput</span></code></p></td>
+<td><p>non-negative integer</p></td>
+<td><p>yes</p></td>
+<td><p>Minimum network throughput needed to use this source, in <strong>1000 bit/s</strong> units. Unique within the parent</p></td>
+</tr>
+</tbody>
+</table>
+<p>Allowed in a clip only when its <code class="docutils literal notranslate"><span class="pre">dataSource=&quot;Network&quot;</span></code> and its <code class="docutils literal notranslate"><span class="pre">src</span></code> is
+<code class="docutils literal notranslate"><span class="pre">http</span></code>/<code class="docutils literal notranslate"><span class="pre">https</span></code>; in <code class="docutils literal notranslate"><span class="pre">ApplicationResource</span></code> / <code class="docutils literal notranslate"><span class="pre">TitleResource</span></code> only when their <code class="docutils literal notranslate"><span class="pre">src</span></code>
+is <code class="docutils literal notranslate"><span class="pre">http</span></code>/<code class="docutils literal notranslate"><span class="pre">https</span></code>.</p>
+<p>Selection, done once while the title timeline is being set up: take the
+<code class="docutils literal notranslate"><span class="pre">NetworkSource</span></code> entries whose <code class="docutils literal notranslate"><span class="pre">networkThroughput</span></code> ≤ the player’s Network
+Throughput parameter. If exactly one qualifies, use it; if several, use the one
+with the largest <code class="docutils literal notranslate"><span class="pre">networkThroughput</span></code>; if none, use the parent’s own <code class="docutils literal notranslate"><span class="pre">src</span></code>. For
+resources, the file is still <strong>referred to</strong> by the parent’s <code class="docutils literal notranslate"><span class="pre">src</span></code> URI whichever
+source it was fetched from.</p>
+<p>On disc: 0.</p>
+</section>
+<section id="track-number-assignment">
+<h2>3.12 Track number assignment<a class="headerlink" href="#track-number-assignment" title="Link to this heading"></a></h2>
+<p>Inside a clip, these elements say which elementary streams exist and which
+<strong>track number</strong> each becomes. Track numbers are what the user and script select
+(<code class="docutils literal notranslate"><span class="pre">TrackNavigationList</span></code>, §3.17); stream numbers are what the demuxer filters on
+(<a class="reference internal" href="08_evo.html"><span class="std std-doc">08</span></a> §8.7). All share <code class="docutils literal notranslate"><span class="pre">TrackNumberAssignmentType</span></code>:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Attribute</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Req.</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>What it is for</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">mediaAttr</span></code></p></td>
+<td><p>positive integer</p></td>
+<td><p>no</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">1</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">index</span></code> of the matching item in <code class="docutils literal notranslate"><span class="pre">MediaAttributeList</span></code> (§3.6): <code class="docutils literal notranslate"><span class="pre">VideoAttributeItem</span></code> for <code class="docutils literal notranslate"><span class="pre">Video</span></code> / <code class="docutils literal notranslate"><span class="pre">SubVideo</span></code>, <code class="docutils literal notranslate"><span class="pre">AudioAttributeItem</span></code> for <code class="docutils literal notranslate"><span class="pre">Audio</span></code> / <code class="docutils literal notranslate"><span class="pre">SubAudio</span></code>, <code class="docutils literal notranslate"><span class="pre">SubpictureAttributeItem</span></code> for <code class="docutils literal notranslate"><span class="pre">Subtitle</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">description</span></code></p></td>
+<td><p>string</p></td>
+<td><p>no</p></td>
+<td><p></p></td>
+<td><p>Free text (<code class="docutils literal notranslate"><span class="pre">English</span> <span class="pre">5.1</span></code>, <code class="docutils literal notranslate"><span class="pre">Director's</span> <span class="pre">Commentary</span></code>)</p></td>
+</tr>
+</tbody>
+</table>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Element</p></th>
+<th class="head"><p><code class="docutils literal notranslate"><span class="pre">track</span></code></p></th>
+<th class="head"><p>Stream attribute</p></th>
+<th class="head"><p>Maps to</p></th>
 </tr>
 </thead>
 <tbody>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">Video</span></code></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">&#64;track</span></code> 1–9, <code class="docutils literal notranslate"><span class="pre">&#64;mediaAttr</span></code> → <code class="docutils literal notranslate"><span class="pre">VideoAttributeItem&#64;index</span></code>, <code class="docutils literal notranslate"><span class="pre">&#64;angleNumber</span></code> 1–9 default 1</p></td>
+<td><p>1–9</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">angleNumber</span></code> 1–9, default <code class="docutils literal notranslate"><span class="pre">1</span></code></p></td>
+<td><p>Main video (VM_PCK). <code class="docutils literal notranslate"><span class="pre">angleNumber</span></code> is used only when the clip’s <code class="docutils literal notranslate"><span class="pre">src</span></code> is an <strong>interleaved block</strong>: it picks which P-EVOB of the block (which angle) this track is. Otherwise omit it; main video is track 1</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">Audio</span></code></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">&#64;track</span></code> 1–8, <code class="docutils literal notranslate"><span class="pre">&#64;streamNumber</span></code> 1–8 default 1, <code class="docutils literal notranslate"><span class="pre">&#64;mediaAttr</span></code></p></td>
+<td><p>1–8</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">streamNumber</span></code> 1–8, default <code class="docutils literal notranslate"><span class="pre">1</span></code></p></td>
+<td><p>Main audio (AM_PCK). <code class="docutils literal notranslate"><span class="pre">streamNumber</span></code> = audio stream number <strong>+ 1</strong>: the low 3 bits of <code class="docutils literal notranslate"><span class="pre">sub_stream_id</span></code> for LPCM / DD+ / DTS-HD / MLP, of <code class="docutils literal notranslate"><span class="pre">stream_id</span></code> for MPEG audio</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">Subtitle</span></code></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">&#64;track</span></code> 1–32, <code class="docutils literal notranslate"><span class="pre">&#64;streamNumber</span></code> 1–32, <code class="docutils literal notranslate"><span class="pre">&#64;mediaAttr</span></code></p></td>
+<td><p>1–32</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">streamNumber</span></code> 1–32, default <code class="docutils literal notranslate"><span class="pre">1</span></code></p></td>
+<td><p>Sub-picture (SP_PCK). <code class="docutils literal notranslate"><span class="pre">streamNumber</span></code> = sub-picture stream number <strong>+ 1</strong>; the stream number converts to the decoding stream through the VTI <code class="docutils literal notranslate"><span class="pre">SP_ATR</span></code> table, whose entry gives the <code class="docutils literal notranslate"><span class="pre">sub_stream_id</span></code> (<a class="reference internal" href="06_vti.html"><span class="std std-doc">06</span></a>). In <code class="docutils literal notranslate"><span class="pre">AdvancedSubtitleSegment</span></code>: <code class="docutils literal notranslate"><span class="pre">streamNumber</span></code> omitted, <code class="docutils literal notranslate"><span class="pre">mediaAttr</span></code> ignored</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">SubVideo</span></code></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">&#64;track</span></code> fixed 1</p></td>
+<td><p>fixed <code class="docutils literal notranslate"><span class="pre">1</span></code></p></td>
+<td><p></p></td>
+<td><p>Sub video (VS_PCK) of the P-EVOB, or of the S-EVOB in a secondary clip. Present = enabled</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">SubAudio</span></code></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">&#64;track</span></code> 1–8, <code class="docutils literal notranslate"><span class="pre">&#64;streamNumber</span></code></p></td>
+<td><p>1–8</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">streamNumber</span></code> 1–8, default <code class="docutils literal notranslate"><span class="pre">1</span></code></p></td>
+<td><p>Sub audio (AS_PCK); <code class="docutils literal notranslate"><span class="pre">streamNumber</span></code> = audio stream number + 1</p></td>
 </tr>
 </tbody>
 </table>
-<p><strong>Decoder codec comes from <code class="docutils literal notranslate"><span class="pre">MediaAttributeList</span></code>, not from VTI <code class="docutils literal notranslate"><span class="pre">V_ATR</span></code>.</strong>
-<code class="docutils literal notranslate"><span class="pre">VideoAttributeItem&#64;codec</span></code>: <code class="docutils literal notranslate"><span class="pre">MPEG-2</span></code> | <code class="docutils literal notranslate"><span class="pre">VC-1</span></code> | <code class="docutils literal notranslate"><span class="pre">AVC</span></code> | <code class="docutils literal notranslate"><span class="pre">MPEG-1</span></code>.
-<code class="docutils literal notranslate"><span class="pre">AudioAttributeItem&#64;codec</span></code>: <code class="docutils literal notranslate"><span class="pre">LPCM</span></code> | <code class="docutils literal notranslate"><span class="pre">DD+</span></code> | <code class="docutils literal notranslate"><span class="pre">DTS-HD</span></code> | <code class="docutils literal notranslate"><span class="pre">MLP</span></code> | <code class="docutils literal notranslate"><span class="pre">MPEG</span></code> | <code class="docutils literal notranslate"><span class="pre">AC-3</span></code>.
-<code class="docutils literal notranslate"><span class="pre">SubpictureAttributeItem&#64;codec</span></code>: <code class="docutils literal notranslate"><span class="pre">2bitRLC</span></code> | <code class="docutils literal notranslate"><span class="pre">8bitRLC</span></code>.</p>
-<p><code class="docutils literal notranslate"><span class="pre">&#64;mediaAttr</span></code> default 1 (1-based index into that list).</p>
+<p>Only streams listed here are available in that clip. The assignment can change
+from clip to clip, so a track number means “whatever stream the current clip
+maps to it”.</p>
+<p>On disc: <code class="docutils literal notranslate"><span class="pre">Video</span></code> 4869, <code class="docutils literal notranslate"><span class="pre">track</span></code> 1 on 4847 (the rest are Pan’s Labyrinth angles
+2–4 with <code class="docutils literal notranslate"><span class="pre">angleNumber</span></code> 2–4); <code class="docutils literal notranslate"><span class="pre">Audio</span></code> 6399; <code class="docutils literal notranslate"><span class="pre">Subtitle</span></code> 19992; <code class="docutils literal notranslate"><span class="pre">SubVideo</span></code> 84;
+<code class="docutils literal notranslate"><span class="pre">SubAudio</span></code> 38. Every <code class="docutils literal notranslate"><span class="pre">Audio&#64;streamNumber</span></code> and <code class="docutils literal notranslate"><span class="pre">Subtitle&#64;streamNumber</span></code> is within
+the stream count of the EVOB’s VTI record (<code class="docutils literal notranslate"><span class="pre">AST_Ns</span></code>, <code class="docutils literal notranslate"><span class="pre">SP_Ns</span></code>). Every <code class="docutils literal notranslate"><span class="pre">mediaAttr</span></code>
+names an existing item <strong>except</strong> two authoring errors: <code class="docutils literal notranslate"><span class="pre">DOWNFALL</span></code> <code class="docutils literal notranslate"><span class="pre">VPLST000</span></code>
+(<code class="docutils literal notranslate"><span class="pre">Subtitle&#64;mediaAttr</span></code> 3–18, only items 1–2 exist) and <code class="docutils literal notranslate"><span class="pre">U2_RATTLE_AND_HUM</span></code>
+<code class="docutils literal notranslate"><span class="pre">VPLST000</span></code> (subtitles with no <code class="docutils literal notranslate"><span class="pre">SubpictureAttributeItem</span></code>). A reader should fall
+back to the one sub-picture codec Advanced Content uses, <code class="docutils literal notranslate"><span class="pre">8bitRLC</span></code>.</p>
+<p><code class="docutils literal notranslate"><span class="pre">[1,</span> <span class="pre">5,</span> <span class="pre">11,</span> <span class="pre">12]</span></code> <strong>VERIFIED</strong></p>
 </section>
-<section id="applicationsegment">
-<h2>3.5 ApplicationSegment<a class="headerlink" href="#applicationsegment" title="Link to this heading"></a></h2>
-<p>Extends <code class="docutils literal notranslate"><span class="pre">ObjectMappingType</span></code> (<code class="docutils literal notranslate"><span class="pre">titleTimeBegin</span></code>, <code class="docutils literal notranslate"><span class="pre">titleTimeEnd</span></code>, <code class="docutils literal notranslate"><span class="pre">src</span></code>).</p>
+<section id="applicationsegment-and-advancedsubtitlesegment">
+<h2>3.13 ApplicationSegment and AdvancedSubtitleSegment<a class="headerlink" href="#applicationsegment-and-advancedsubtitlesegment" title="Link to this heading"></a></h2>
+<p>A segment maps an HDi application (or an Advanced Subtitle) onto the title
+timeline. Both share <code class="docutils literal notranslate"><span class="pre">ObjectMappingType</span></code>:</p>
 <table class="docutils align-default">
 <thead>
 <tr class="row-odd"><th class="head"><p>Attribute</p></th>
-<th class="head"><p>Required</p></th>
-<th class="head"><p>Default</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Req.</p></th>
+<th class="head"><p>What it is for</p></th>
 </tr>
 </thead>
 <tbody>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">src</span></code></p></td>
+<td><p>URI</p></td>
 <td><p>yes</p></td>
-<td><p>Manifest URI</p></td>
+<td><p>The application’s <strong>manifest</strong> (<code class="docutils literal notranslate"><span class="pre">.xmf</span></code>, <a class="reference internal" href="05_manifest_hdi.html"><span class="std std-doc">05</span></a> §5.1), usually inside an ACA</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">zOrder</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">titleTimeBegin</span></code></p></td>
+<td><p>time expression</p></td>
 <td><p>yes</p></td>
-<td><p></p></td>
+<td><p>Start of the <strong>valid period</strong></p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">autorun</span></code></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">titleTimeEnd</span></code></p></td>
+<td><p>time expression</p></td>
+<td><p>yes</p></td>
+<td><p>End of the valid period (exclusive)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">id</span></code></p></td>
+<td><p>ID</p></td>
 <td><p>no</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">true</span></code></p></td>
+<td><p>Name for script</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">sync</span></code></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">description</span></code></p></td>
+<td><p>string</p></td>
+<td><p>no</p></td>
+<td><p>Free text</p></td>
+</tr>
+</tbody>
+</table>
+<p><strong><code class="docutils literal notranslate"><span class="pre">ApplicationSegment</span></code></strong> (children: <code class="docutils literal notranslate"><span class="pre">ApplicationResource*</span></code>, §3.14):</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Attribute</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Req.</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>What it is for</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">sync</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">hard</span></code> | <code class="docutils literal notranslate"><span class="pre">soft</span></code></p></td>
 <td><p>no</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">hard</span></code></p></td>
+<td><p>Start-up mode. <strong>hard</strong>: the title timeline holds until the resources are loaded and the application has started. <strong>soft</strong>: the timeline keeps running; the application appears late, or not at all if its window passes</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">language</span></code> <code class="docutils literal notranslate"><span class="pre">group</span></code> <code class="docutils literal notranslate"><span class="pre">appBlock</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">zOrder</span></code></p></td>
+<td><p>non-negative integer</p></td>
+<td><p>yes</p></td>
+<td><p></p></td>
+<td><p>Stacking order of this application on the graphics plane relative to other applications</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">language</span></code></p></td>
+<td><p>language</p></td>
 <td><p>no</p></td>
 <td><p></p></td>
+<td><p>The application’s language. Absent: any language</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">appBlock</span></code></p></td>
+<td><p>positive integer</p></td>
+<td><p>no</p></td>
+<td><p></p></td>
+<td><p>Application Block this segment belongs to (see below)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">group</span></code></p></td>
+<td><p>positive integer</p></td>
+<td><p>no</p></td>
+<td><p></p></td>
+<td><p>Application Group this segment belongs to (see below)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">autorun</span></code></p></td>
+<td><p>boolean</p></td>
+<td><p>no</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">true</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">true</span></code>: becomes active when the timeline enters the valid period. <code class="docutils literal notranslate"><span class="pre">false</span></code>: stays inactive until script activates it</p></td>
 </tr>
 </tbody>
 </table>
-<p>Children: <code class="docutils literal notranslate"><span class="pre">ApplicationResource</span></code> (<code class="docutils literal notranslate"><span class="pre">src</span></code>, <code class="docutils literal notranslate"><span class="pre">size</span></code>, <code class="docutils literal notranslate"><span class="pre">priority</span></code>, <code class="docutils literal notranslate"><span class="pre">multiplexed</span></code> required).</p>
-<p><code class="docutils literal notranslate"><span class="pre">loadingBegin</span></code> is present on <strong>110</strong> <code class="docutils literal notranslate"><span class="pre">ApplicationResource</span></code> rows (7 discs). Every
-value is <code class="docutils literal notranslate"><span class="pre">00:00:00:00</span></code> (<code class="docutils literal notranslate"><span class="pre">e14</span></code>). Treat as “pull at title start”, not a delayed
-clock. <code class="docutils literal notranslate"><span class="pre">noCache=&quot;true&quot;</span></code> is <strong>0/247</strong>. <code class="docutils literal notranslate"><span class="pre">ApplicationSegment&#64;sync</span></code>: <code class="docutils literal notranslate"><span class="pre">hard</span></code> 2120,
-<code class="docutils literal notranslate"><span class="pre">omit</span></code> 105 (= default hard), <code class="docutils literal notranslate"><span class="pre">soft</span></code> 304, <strong><code class="docutils literal notranslate"><span class="pre">none</span></code> 0</strong>.
-<strong>Hard</strong> holds the Title Timeline until File Cache load + startup finish.
-<strong>Soft</strong> lets the timeline run; the app may appear after <code class="docutils literal notranslate"><span class="pre">titleTimeBegin</span></code> or
-miss the window (jump-in / trick-play). Page / application clocks are
-independent of the media clock: a mapped <code class="docutils literal notranslate"><span class="pre">timing&#64;clock=&quot;page&quot;</span></code> menu <strong>keeps
-ticking</strong> when the user pauses video. Unmap at exclusive <code class="docutils literal notranslate"><span class="pre">titleTimeEnd</span></code>
-anyway.
-<code class="docutils literal notranslate"><span class="pre">[1]</span></code>
-<strong>VERIFIED</strong> (load). Pause <strong>INFERRED</strong> (independent clocks).</p>
-<p><code class="docutils literal notranslate"><span class="pre">multiplexed</span></code> is XSD type <code class="docutils literal notranslate"><span class="pre">false</span> <span class="pre">|</span> <span class="pre">nonNegativeInteger</span></code>, <strong>not</strong> a boolean <code class="docutils literal notranslate"><span class="pre">true</span></code>.
-<code class="docutils literal notranslate"><span class="pre">false</span></code> = File Cache loads the resource from <code class="docutils literal notranslate"><span class="pre">ADV_OBJ</span></code> (ACA or loose file).
-A positive integer is a multiplex slot (ADV_PCK in <strong>some</strong> EVO,
-<a class="reference internal" href="08_evo.html"><span class="std std-doc">08</span></a> §8.6). Always load <code class="docutils literal notranslate"><span class="pre">src</span></code>; packs may be missing from that
-title’s clip (OLIVER <code class="docutils literal notranslate"><span class="pre">LoopMenu.EVO</span></code>).
-Saved playlists: <code class="docutils literal notranslate"><span class="pre">ApplicationResource&#64;multiplexed</span></code> is <code class="docutils literal notranslate"><span class="pre">false</span></code> on <strong>2495</strong> rows
-and a positive integer on <strong>11</strong> (<code class="docutils literal notranslate"><span class="pre">&quot;1&quot;</span></code> ×8, <code class="docutils literal notranslate"><span class="pre">&quot;2&quot;</span></code> ×3).
-<code class="docutils literal notranslate"><span class="pre">PlaylistApplicationResource&#64;multiplexed</span></code> is mixed: <code class="docutils literal notranslate"><span class="pre">false</span></code> (126), <code class="docutils literal notranslate"><span class="pre">&quot;0&quot;</span></code> (12),
-and slot indices <code class="docutils literal notranslate"><span class="pre">&quot;1&quot;</span></code>…<code class="docutils literal notranslate"><span class="pre">&quot;19&quot;</span></code> (the rest of 455). <code class="docutils literal notranslate"><span class="pre">&quot;0&quot;</span></code> is the XSD integer 0,
-not the token <code class="docutils literal notranslate"><span class="pre">false</span></code>. No ADV_PCK uses slot 0 (<code class="docutils literal notranslate"><span class="pre">e16</span></code> slots start at 1). The
-12 rows are URI ACA files (<code class="docutils literal notranslate"><span class="pre">menu.aca</span></code>, <code class="docutils literal notranslate"><span class="pre">ime.aca</span></code>, <code class="docutils literal notranslate"><span class="pre">Black.aca</span></code>, …). <strong>Always
-load <code class="docutils literal notranslate"><span class="pre">src</span></code></strong>, same as <code class="docutils literal notranslate"><span class="pre">false</span></code>. Do not skip the file because the attribute is
-numeric.</p>
-<p>Corpus <code class="docutils literal notranslate"><span class="pre">ApplicationResource&#64;src</span></code>: ACA 2354, PNG 114, XMF 17, JS 17, …</p>
+<p><code class="docutils literal notranslate"><span class="pre">language</span></code>, <code class="docutils literal notranslate"><span class="pre">appBlock</span></code>, <code class="docutils literal notranslate"><span class="pre">group</span></code> and <code class="docutils literal notranslate"><span class="pre">autorun</span></code> are the <strong>Application Activation
+Information</strong>: they decide whether the application runs in its valid period.</p>
+<ul class="simple">
+<li><p><strong>Application Block</strong>: the segments of one title with the same <code class="docutils literal notranslate"><span class="pre">appBlock</span></code>
+value, the same application in different languages. Only the one whose
+<code class="docutils literal notranslate"><span class="pre">language</span></code> matches the player’s menu language is activated; if none matches,
+the one matching <code class="docutils literal notranslate"><span class="pre">TitleSet&#64;defaultLanguage</span></code>. In a block: every segment has a
+<code class="docutils literal notranslate"><span class="pre">language</span></code>, languages are unique, valid periods are identical, <code class="docutils literal notranslate"><span class="pre">autorun</span></code> is
+identical, and <code class="docutils literal notranslate"><span class="pre">group</span></code> is absent. A segment with <code class="docutils literal notranslate"><span class="pre">language</span></code> must have <code class="docutils literal notranslate"><span class="pre">appBlock</span></code>
+(a block of one is allowed).</p></li>
+<li><p><strong>Application Group</strong>: segments with the same <code class="docutils literal notranslate"><span class="pre">group</span></code> value that script
+activates and deactivates together (for example a row of buttons).</p></li>
+<li><p><strong>Decision</strong> (per segment, when the timeline enters its valid period; patent
+FIG.58 [1]):</p>
+<ol class="arabic simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">autorun=&quot;false&quot;</span></code> → inactive. Script may activate it later.</p></li>
+<li><p>Else, if <code class="docutils literal notranslate"><span class="pre">group</span></code> is present → active only while that group is the selected
+(valid) group. Script can change which group is selected.</p></li>
+<li><p>Else, if <code class="docutils literal notranslate"><span class="pre">appBlock</span></code> and <code class="docutils literal notranslate"><span class="pre">language</span></code> are present → active if <code class="docutils literal notranslate"><span class="pre">language</span></code>
+equals the player’s menu language; if no segment of the block matches the
+menu language, the one whose <code class="docutils literal notranslate"><span class="pre">language</span></code> equals <code class="docutils literal notranslate"><span class="pre">TitleSet&#64;defaultLanguage</span></code>
+is active; the others are inactive.</p></li>
+<li><p>Else (no activation information) → <strong>active</strong>. The patent’s prose for this
+branch says “invalid”, which contradicts its own resource rule (“loads the
+Resource … if these Application Segments do not have any Application
+Activation Information”) and every disc: 2275 segments with no activation
+information (or only <code class="docutils literal notranslate"><span class="pre">autorun=&quot;true&quot;</span></code>) are the discs’ working menus.</p></li>
+</ol>
+</li>
+<li><p>Resources are loaded only for segments that will run: no activation
+information, or selected and <code class="docutils literal notranslate"><span class="pre">autorun=&quot;true&quot;</span></code>.</p></li>
+</ul>
+<p>Timing: the title timeline keeps counting while a soft application’s resources
+load; the application’s execution period starts at or after <code class="docutils literal notranslate"><span class="pre">titleTimeBegin</span></code>.
+Page and application clocks are independent of the media clock, so a markup
+page with <code class="docutils literal notranslate"><span class="pre">timing&#64;clock=&quot;page&quot;</span></code> keeps ticking while the user pauses video.
+Unmap at the exclusive <code class="docutils literal notranslate"><span class="pre">titleTimeEnd</span></code>.</p>
+<p>On disc: 2529 <code class="docutils literal notranslate"><span class="pre">ApplicationSegment</span></code>; <code class="docutils literal notranslate"><span class="pre">sync</span></code> <code class="docutils literal notranslate"><span class="pre">hard</span></code> 2120, <code class="docutils literal notranslate"><span class="pre">soft</span></code> 304, absent 105
+(= hard); <code class="docutils literal notranslate"><span class="pre">autorun</span></code> <code class="docutils literal notranslate"><span class="pre">true</span></code> 2168, <code class="docutils literal notranslate"><span class="pre">false</span></code> 136; <code class="docutils literal notranslate"><span class="pre">zOrder</span></code> <code class="docutils literal notranslate"><span class="pre">0</span></code> on 2227; <code class="docutils literal notranslate"><span class="pre">group</span></code> on
+118 (values 1–8); <code class="docutils literal notranslate"><span class="pre">language</span></code> and <code class="docutils literal notranslate"><span class="pre">appBlock</span></code> on 0 (no disc uses Application Blocks;
+language-specific menus appear as <code class="docutils literal notranslate"><span class="pre">PlaylistApplication</span></code> languages, §3.15, and
+as separate playlists chosen by a selector, §3.20). <code class="docutils literal notranslate"><span class="pre">titleTimeBegin</span></code>
+<code class="docutils literal notranslate"><span class="pre">00:00:00:00</span></code> on 2366. <code class="docutils literal notranslate"><span class="pre">[1,</span> <span class="pre">11,</span> <span class="pre">12]</span></code> <strong>VERIFIED</strong> (load); pause behaviour
+<strong>INFERRED</strong> (independent clocks).</p>
+<p><strong><code class="docutils literal notranslate"><span class="pre">AdvancedSubtitleSegment</span></code></strong> maps an Advanced Subtitle (timed-text markup)
+onto the timeline. <code class="docutils literal notranslate"><span class="pre">src</span></code> is the Advanced Subtitle’s manifest. Extra attribute
+<code class="docutils literal notranslate"><span class="pre">sync</span></code> (<code class="docutils literal notranslate"><span class="pre">hard</span></code> | <code class="docutils literal notranslate"><span class="pre">soft</span></code>, default <code class="docutils literal notranslate"><span class="pre">hard</span></code>). Children: <code class="docutils literal notranslate"><span class="pre">Subtitle+</span></code> (which subtitle
+track numbers this segment provides; <code class="docutils literal notranslate"><span class="pre">streamNumber</span></code> omitted), then
+<code class="docutils literal notranslate"><span class="pre">ApplicationResource*</span></code>. On disc: 0 (<a class="reference internal" href="11_gaps.html"><span class="std std-doc">11</span></a> B3).</p>
 </section>
-<section id="playlistapplication">
-<h2>3.6 PlaylistApplication<a class="headerlink" href="#playlistapplication" title="Link to this heading"></a></h2>
-<p>Lives under <code class="docutils literal notranslate"><span class="pre">TitleSet</span></code>, not inside a Title. Language-specific app for the whole playlist.</p>
+<section id="resources">
+<h2>3.14 Resources<a class="headerlink" href="#resources" title="Link to this heading"></a></h2>
+<p>A resource is a file (usually an ACA archive) that must be in the File Cache
+before something uses it. Three elements:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Element</p></th>
+<th class="head"><p>Belongs to</p></th>
+<th class="head"><p>Lifetime</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ApplicationResource</span></code></p></td>
+<td><p>one <code class="docutils literal notranslate"><span class="pre">ApplicationSegment</span></code> or <code class="docutils literal notranslate"><span class="pre">AdvancedSubtitleSegment</span></code></p></td>
+<td><p>that application’s valid period</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">TitleResource</span></code></p></td>
+<td><p>one <code class="docutils literal notranslate"><span class="pre">Title</span></code> (shared by its applications)</p></td>
+<td><p>its own <code class="docutils literal notranslate"><span class="pre">titleTimeBegin</span></code>–<code class="docutils literal notranslate"><span class="pre">titleTimeEnd</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">PlaylistApplicationResource</span></code></p></td>
+<td><p>one <code class="docutils literal notranslate"><span class="pre">PlaylistApplication</span></code></p></td>
+<td><p>every title except FirstPlayTitle</p></td>
+</tr>
+</tbody>
+</table>
+<p><code class="docutils literal notranslate"><span class="pre">ApplicationResource</span></code> and <code class="docutils literal notranslate"><span class="pre">TitleResource</span></code> share <code class="docutils literal notranslate"><span class="pre">ResourceType</span></code> (children:
+<code class="docutils literal notranslate"><span class="pre">NetworkSource*</span></code>, §3.11):</p>
 <table class="docutils align-default">
 <thead>
 <tr class="row-odd"><th class="head"><p>Attribute</p></th>
-<th class="head"><p>Required</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Req.</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>What it is for</p></th>
 </tr>
 </thead>
 <tbody>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">src</span></code></p></td>
-<td><p>Manifest URI (<code class="docutils literal notranslate"><span class="pre">.xmf</span></code> or <code class="docutils literal notranslate"><span class="pre">something.aca/manifest.xmf</span></code>)</p></td>
+<td><p>URI</p></td>
+<td><p>yes</p></td>
+<td><p></p></td>
+<td><p>The file to load. With <code class="docutils literal notranslate"><span class="pre">NetworkSource</span></code>, the file is still referred to by this URI</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">language</span></code></p></td>
-<td><p>ISO 639-1 <strong>two-letter</strong> (<code class="docutils literal notranslate"><span class="pre">en</span></code>, <code class="docutils literal notranslate"><span class="pre">fr</span></code>, …). XSD type is <em>named</em> <code class="docutils literal notranslate"><span class="pre">ISO639-2</span></code> but the enumeration is two letters. A 3-letter lookup will miss <code class="docutils literal notranslate"><span class="pre">Player.menuLanguage</span></code>.</p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">size</span></code></p></td>
+<td><p>positive integer</p></td>
+<td><p>yes</p></td>
+<td><p></p></td>
+<td><p>Size in bytes to reserve. May be larger than the file, <strong>must not be smaller</strong> (<a class="reference internal" href="05_manifest_hdi.html"><span class="std std-doc">05</span></a> §5.7)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">priority</span></code></p></td>
+<td><p>non-negative integer</p></td>
+<td><p>yes</p></td>
+<td><p></p></td>
+<td><p>Removal priority when the File Cache needs space and the resource is no longer used by an active application or title. <code class="docutils literal notranslate"><span class="pre">ApplicationResource</span></code> ≥ 1, <code class="docutils literal notranslate"><span class="pre">TitleResource</span></code> ≥ 0, so application resources are removed before title resources</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">multiplexed</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">false</span></code> | non-negative integer</p></td>
+<td><p>yes</p></td>
+<td><p></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">false</span></code>: load from <code class="docutils literal notranslate"><span class="pre">src</span></code>. An integer: the resource is also multiplexed into the video as ADV_PCK packs with that slot number (<a class="reference internal" href="08_evo.html"><span class="std std-doc">08</span></a> §8.6)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">loadingBegin</span></code></p></td>
+<td><p>time expression</p></td>
+<td><p>no</p></td>
+<td><p>application: its <code class="docutils literal notranslate"><span class="pre">titleTimeBegin</span></code>; title resource: <code class="docutils literal notranslate"><span class="pre">00:00:00:00</span></code></p></td>
+<td><p>When loading starts on the title timeline</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">noCache</span></code></p></td>
+<td><p>boolean</p></td>
+<td><p>no</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">false</span></code></p></td>
+<td><p>Only when <code class="docutils literal notranslate"><span class="pre">src</span></code> is <code class="docutils literal notranslate"><span class="pre">http</span></code>/<code class="docutils literal notranslate"><span class="pre">https</span></code>: <code class="docutils literal notranslate"><span class="pre">true</span></code> adds <code class="docutils literal notranslate"><span class="pre">no-cache</span></code> to <code class="docutils literal notranslate"><span class="pre">Cache-Control</span></code> and <code class="docutils literal notranslate"><span class="pre">Pragma</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">description</span></code></p></td>
+<td><p>string</p></td>
+<td><p>no</p></td>
+<td><p></p></td>
+<td><p>Free text</p></td>
 </tr>
 </tbody>
 </table>
-<p>Children: <code class="docutils literal notranslate"><span class="pre">PlaylistApplicationResource</span></code> (<code class="docutils literal notranslate"><span class="pre">src</span></code>, <code class="docutils literal notranslate"><span class="pre">size</span></code>, <code class="docutils literal notranslate"><span class="pre">multiplexed</span></code>).</p>
-<p>203 playlists have this. 455 resources: ACA 409, PNG 46.</p>
-</section>
-<section id="chapter">
-<h2>3.7 Chapter<a class="headerlink" href="#chapter" title="Link to this heading"></a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">TitleResource</span></code> adds <code class="docutils literal notranslate"><span class="pre">titleTimeBegin</span></code> and <code class="docutils literal notranslate"><span class="pre">titleTimeEnd</span></code> (required): the
+resource’s valid period.</p>
+<p><code class="docutils literal notranslate"><span class="pre">PlaylistApplicationResource</span></code>:</p>
 <table class="docutils align-default">
 <thead>
 <tr class="row-odd"><th class="head"><p>Attribute</p></th>
-<th class="head"><p>Required</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Req.</p></th>
+<th class="head"><p>What it is for</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">src</span></code></p></td>
+<td><p>URI</p></td>
+<td><p>yes</p></td>
+<td><p>File to load; must be on the disc or in persistent storage (not the network, not the script-managed File Cache area)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">size</span></code></p></td>
+<td><p>positive integer</p></td>
+<td><p>yes</p></td>
+<td><p>Bytes to reserve (as above)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">multiplexed</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">false</span></code> | non-negative integer</p></td>
+<td><p>yes</p></td>
+<td><p>As above</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">description</span></code></p></td>
+<td><p>string</p></td>
+<td><p>no</p></td>
+<td><p>Free text</p></td>
+</tr>
+</tbody>
+</table>
+<p><strong><code class="docutils literal notranslate"><span class="pre">multiplexed</span></code> is not a boolean.</strong> An integer is an ADV_PCK slot, and the packs
+may be absent from the clip that plays (OLIVER_TWIST_JPN <code class="docutils literal notranslate"><span class="pre">LoopMenu.EVO</span></code>), so
+<strong>always load <code class="docutils literal notranslate"><span class="pre">src</span></code></strong>. <code class="docutils literal notranslate"><span class="pre">&quot;0&quot;</span></code> is the integer 0, not <code class="docutils literal notranslate"><span class="pre">false</span></code>; no ADV_PCK uses slot 0,
+and the 12 rows with <code class="docutils literal notranslate"><span class="pre">&quot;0&quot;</span></code> are ordinary ACA files. Load them from <code class="docutils literal notranslate"><span class="pre">src</span></code> like
+<code class="docutils literal notranslate"><span class="pre">false</span></code>.</p>
+<p><strong>File Cache state machine.</strong> Each resource is in one of five states:
+non-exist → loading → ready (loaded, application not yet active) → used (at least
+one active application uses it) → available (loaded, no valid application uses
+it) → non-exist when the File Cache Manager discards it. Loading starts at
+<code class="docutils literal notranslate"><span class="pre">loadingBegin</span></code> (or <code class="docutils literal notranslate"><span class="pre">titleTimeBegin</span></code>), is skipped for applications with
+<code class="docutils literal notranslate"><span class="pre">autorun=&quot;false&quot;</span></code> or not selected, and is cancelled if <code class="docutils literal notranslate"><span class="pre">autorun</span></code> turns false
+during loading. When several applications share a resource the strongest state
+wins: used &gt; ready &gt; available &gt; loading &gt; non-exist; a resource already loaded
+or loading is never loaded twice. On a jump to another title, every resource the
+new title does not use becomes available, with the new title’s priorities. On a
+jump inside a title, every resource whose valid period (or loading period)
+contains the target time must be fully loaded before playback resumes there.
+Resources in the loading, ready and used states must fit in 64 MB minus the
+Streaming Buffer; that is the author’s obligation (<a class="reference internal" href="05_manifest_hdi.html"><span class="std std-doc">05</span></a> §5.7).</p>
+<p>On disc: <code class="docutils literal notranslate"><span class="pre">ApplicationResource</span></code> 2506 (<code class="docutils literal notranslate"><span class="pre">multiplexed</span></code> <code class="docutils literal notranslate"><span class="pre">false</span></code> 2495, <code class="docutils literal notranslate"><span class="pre">1</span></code> 8, <code class="docutils literal notranslate"><span class="pre">2</span></code> 3;
+<code class="docutils literal notranslate"><span class="pre">priority</span></code> <code class="docutils literal notranslate"><span class="pre">1</span></code> 2440, <code class="docutils literal notranslate"><span class="pre">2</span></code> 32, <code class="docutils literal notranslate"><span class="pre">3</span></code> 34; <code class="docutils literal notranslate"><span class="pre">loadingBegin</span></code> on 30, all <code class="docutils literal notranslate"><span class="pre">00:00:00:00</span></code>;
+<code class="docutils literal notranslate"><span class="pre">noCache</span></code> 0; <code class="docutils literal notranslate"><span class="pre">src</span></code> ACA 2354, PNG 114, XMF 17, JS 17, …). <code class="docutils literal notranslate"><span class="pre">TitleResource</span></code> 80
+(<code class="docutils literal notranslate"><span class="pre">priority</span></code> <code class="docutils literal notranslate"><span class="pre">0</span></code>, <code class="docutils literal notranslate"><span class="pre">multiplexed</span></code> <code class="docutils literal notranslate"><span class="pre">false</span></code>, <code class="docutils literal notranslate"><span class="pre">loadingBegin</span></code> <code class="docutils literal notranslate"><span class="pre">00:00:00:00</span></code> on all).
+<code class="docutils literal notranslate"><span class="pre">PlaylistApplicationResource</span></code> 455 (<code class="docutils literal notranslate"><span class="pre">multiplexed</span></code> <code class="docutils literal notranslate"><span class="pre">false</span></code> 126, <code class="docutils literal notranslate"><span class="pre">&quot;0&quot;</span></code> 12, slots
+<code class="docutils literal notranslate"><span class="pre">1</span></code>–<code class="docutils literal notranslate"><span class="pre">19</span></code> on the rest; ACA 409, PNG 46).</p>
+<p><code class="docutils literal notranslate"><span class="pre">[1,</span> <span class="pre">5,</span> <span class="pre">11,</span> <span class="pre">12]</span></code> <strong>VERIFIED</strong> (attributes); state machine from [1].</p>
+</section>
+<section id="playlistapplication">
+<h2>3.15 PlaylistApplication<a class="headerlink" href="#playlistapplication" title="Link to this heading"></a></h2>
+<p>An application that lives for the whole playlist: it is active on every title
+except FirstPlayTitle, typically the persistent menu bar. Children:
+<code class="docutils literal notranslate"><span class="pre">PlaylistApplicationResource*</span></code> (§3.14).</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Attribute</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Req.</p></th>
+<th class="head"><p>What it is for</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">src</span></code></p></td>
+<td><p>URI</p></td>
+<td><p>yes</p></td>
+<td><p>Its manifest (<code class="docutils literal notranslate"><span class="pre">.xmf</span></code>, or <code class="docutils literal notranslate"><span class="pre">something.aca/manifest.xmf</span></code>)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">language</span></code></p></td>
+<td><p>language</p></td>
+<td><p>yes</p></td>
+<td><p>Its language. Unique among the playlist’s <code class="docutils literal notranslate"><span class="pre">PlaylistApplication</span></code> elements</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">id</span></code></p></td>
+<td><p>ID</p></td>
+<td><p>no</p></td>
+<td><p>Name for script</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">description</span></code></p></td>
+<td><p>string</p></td>
+<td><p>no</p></td>
+<td><p>Free text</p></td>
+</tr>
+</tbody>
+</table>
+<p>Rules [1]: all <code class="docutils literal notranslate"><span class="pre">PlaylistApplication</span></code> elements form one Application Block; only
+the one matching the player’s menu language is activated. It is always
+hard-synchronised; its resources come from the disc or persistent storage; its
+markup must not use the title clock. Match <code class="docutils literal notranslate"><span class="pre">language</span></code> as two letters (script
+compares <code class="docutils literal notranslate"><span class="pre">Player.menuLanguage</span></code>, sometimes after <code class="docutils literal notranslate"><span class="pre">.slice(0,2)</span></code>).</p>
+<p>On disc: 203 playlists; <code class="docutils literal notranslate"><span class="pre">language</span></code> <code class="docutils literal notranslate"><span class="pre">en</span></code> 186, <code class="docutils literal notranslate"><span class="pre">de</span></code> 11, <code class="docutils literal notranslate"><span class="pre">ja</span></code> 3, <code class="docutils literal notranslate"><span class="pre">fr</span></code> 3, unique in
+every playlist.</p>
+</section>
+<section id="chapterlist">
+<h2>3.16 ChapterList<a class="headerlink" href="#chapterlist" title="Link to this heading"></a></h2>
+<p>The title’s chapters. Children: <code class="docutils literal notranslate"><span class="pre">Chapter</span></code> (1–1999). Chapters are <strong>numbered by
+document order from 1</strong>.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Attribute</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Req.</p></th>
+<th class="head"><p>What it is for</p></th>
 </tr>
 </thead>
 <tbody>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">titleTimeBegin</span></code></p></td>
+<td><p>time expression</p></td>
 <td><p>yes</p></td>
+<td><p>Where the chapter starts on the title timeline</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">id</span></code> <code class="docutils literal notranslate"><span class="pre">displayName</span></code> <code class="docutils literal notranslate"><span class="pre">description</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">displayName</span></code></p></td>
+<td><p>string</p></td>
 <td><p>no</p></td>
+<td><p>Chapter name a player may show</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">id</span></code></p></td>
+<td><p>ID</p></td>
+<td><p>no</p></td>
+<td><p>Name for script</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">description</span></code></p></td>
+<td><p>string</p></td>
+<td><p>no</p></td>
+<td><p>Free text</p></td>
 </tr>
 </tbody>
 </table>
-<p>UI chapter list. Pack-accurate seek still uses the MAP (<a class="reference internal" href="07_map.html"><span class="std std-doc">07</span></a>).</p>
+<p>Seeking to a chapter goes title time → clip (§3.10) → object time → time map
+(<a class="reference internal" href="07_map.html"><span class="std std-doc">07</span></a>).</p>
+<p>On disc: 1014 lists, 7665 chapters, <code class="docutils literal notranslate"><span class="pre">titleTimeBegin</span></code> never decreasing in a list.</p>
 </section>
 <section id="tracknavigationlist">
-<h2>3.8 TrackNavigationList<a class="headerlink" href="#tracknavigationlist" title="Link to this heading"></a></h2>
+<h2>3.17 TrackNavigationList<a class="headerlink" href="#tracknavigationlist" title="Link to this heading"></a></h2>
+<p>The user-visible description of the title’s tracks: languages, whether the user
+may select them, forced subtitles. Children, in order: <code class="docutils literal notranslate"><span class="pre">VideoTrack</span></code> (0–9),
+<code class="docutils literal notranslate"><span class="pre">AudioTrack</span></code> (0–8), <code class="docutils literal notranslate"><span class="pre">SubtitleTrack</span></code> (0–32). All share <code class="docutils literal notranslate"><span class="pre">TrackNavigationType</span></code>:</p>
 <table class="docutils align-default">
 <thead>
-<tr class="row-odd"><th class="head"><p>Child</p></th>
-<th class="head"><p>Max</p></th>
-<th class="head"><p>Extra</p></th>
+<tr class="row-odd"><th class="head"><p>Attribute</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Req.</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>What it is for</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">selectable</span></code></p></td>
+<td><p>boolean</p></td>
+<td><p>no</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">true</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">false</span></code>: the user cannot select this track (script still can)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">description</span></code></p></td>
+<td><p>string</p></td>
+<td><p>no</p></td>
+<td><p></p></td>
+<td><p>Free text</p></td>
+</tr>
+</tbody>
+</table>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Element</p></th>
+<th class="head"><p>Attribute</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Req.</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>What it is for</p></th>
 </tr>
 </thead>
 <tbody>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">VideoTrack</span></code></p></td>
-<td><p>9</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">&#64;track</span></code>, <code class="docutils literal notranslate"><span class="pre">&#64;selectable</span></code> default true</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">track</span></code></p></td>
+<td><p>1–9</p></td>
+<td><p>yes</p></td>
+<td><p></p></td>
+<td><p>The video track number (§3.12) described</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">AudioTrack</span></code></p></td>
-<td><p>8</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">&#64;track</span></code>, <code class="docutils literal notranslate"><span class="pre">&#64;langcode</span></code> ISO 639-1 <code class="docutils literal notranslate"><span class="pre">xx</span></code> + hex extension <code class="docutils literal notranslate"><span class="pre">NN</span></code> (<code class="docutils literal notranslate"><span class="pre">LangCodeType</span></code>)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">track</span></code></p></td>
+<td><p>1–8</p></td>
+<td><p>yes</p></td>
+<td><p></p></td>
+<td><p>The audio track number described</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">SubtitleTrack</span></code></p></td>
-<td><p>32</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">&#64;track</span></code>, <code class="docutils literal notranslate"><span class="pre">&#64;langcode</span></code>, <code class="docutils literal notranslate"><span class="pre">&#64;forced</span></code></p></td>
+<tr class="row-even"><td><p></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">langcode</span></code></p></td>
+<td><p>langCode</p></td>
+<td><p>yes</p></td>
+<td><p></p></td>
+<td><p>Language and code extension (§3.2)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">SubtitleTrack</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">track</span></code></p></td>
+<td><p>1–32</p></td>
+<td><p>yes</p></td>
+<td><p></p></td>
+<td><p>The subtitle track number described</p></td>
+</tr>
+<tr class="row-even"><td><p></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">langcode</span></code></p></td>
+<td><p>langCode</p></td>
+<td><p>yes</p></td>
+<td><p></p></td>
+<td><p>Language and code extension</p></td>
+</tr>
+<tr class="row-odd"><td><p></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">forced</span></code></p></td>
+<td><p>boolean</p></td>
+<td><p>no</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">false</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">true</span></code>: display this subtitle track even when the user has subtitles off</p></td>
 </tr>
 </tbody>
 </table>
-<p>Of 3196 Title elements: 2463 carry a non-empty <code class="docutils literal notranslate"><span class="pre">TrackNavigationList</span></code>, <strong>718 omit
-it entirely, and 15 more carry an empty one</strong> (733 with no usable track list).
-For those 733: use the first mapped <code class="docutils literal notranslate"><span class="pre">Audio</span></code> child, else track 1. In the corpus
-these never diverge. All 493 TNL-less titles that have an <code class="docutils literal notranslate"><span class="pre">Audio</span></code> child give
-first <code class="docutils literal notranslate"><span class="pre">Audio&#64;track=&quot;1&quot;</span></code>, and the remaining 240 have no <code class="docutils literal notranslate"><span class="pre">Audio</span></code> element, so the
-rule resolves to <strong>track 1</strong> in every case. Video track 1. Do not invent a
-<code class="docutils literal notranslate"><span class="pre">defaultLanguage</span></code> match until a disc needs it.
-<code class="docutils literal notranslate"><span class="pre">[11,</span> <span class="pre">12]</span></code> <strong>VERIFIED</strong> (fail-closed; rule and lowest-track never differ).</p>
+<p><code class="docutils literal notranslate"><span class="pre">forced</span></code> and the langCode extension <code class="docutils literal notranslate"><span class="pre">09</span></code> (forced caption) are separate signals:
+95 of the 97 <code class="docutils literal notranslate"><span class="pre">…:09</span></code> subtitle tracks do not set <code class="docutils literal notranslate"><span class="pre">forced</span></code>.</p>
+<p>When a title has no usable list (718 omit it, 15 have an empty one): use the
+first mapped <code class="docutils literal notranslate"><span class="pre">Audio</span></code> track, else track 1, and video track 1. On disc these never
+differ from track 1 (all 493 list-less titles with an <code class="docutils literal notranslate"><span class="pre">Audio</span></code> child start with
+track 1). Do not invent a <code class="docutils literal notranslate"><span class="pre">defaultLanguage</span></code> match. <code class="docutils literal notranslate"><span class="pre">[11,</span> <span class="pre">12]</span></code> <strong>VERIFIED</strong>
+(fail-closed).</p>
+<p>On disc: 2478 lists; <code class="docutils literal notranslate"><span class="pre">AudioTrack</span></code> 3450 (<code class="docutils literal notranslate"><span class="pre">selectable=&quot;false&quot;</span></code> 59), <code class="docutils literal notranslate"><span class="pre">SubtitleTrack</span></code>
+11259 (<code class="docutils literal notranslate"><span class="pre">selectable=&quot;false&quot;</span></code> 260; <code class="docutils literal notranslate"><span class="pre">forced</span></code> only ever <code class="docutils literal notranslate"><span class="pre">false</span></code>), <code class="docutils literal notranslate"><span class="pre">VideoTrack</span></code> 956.</p>
 </section>
-<section id="uri-of-a-clip-map">
-<h2>3.9 URI of a clip MAP<a class="headerlink" href="#uri-of-a-clip-map" title="Link to this heading"></a></h2>
-<p>Example from <code class="docutils literal notranslate"><span class="pre">MYSTERY_MEN</span></code> <code class="docutils literal notranslate"><span class="pre">VPLST000.XPL</span></code>:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">src</span><span class="o">=</span><span class="s2">"file:///dvddisc/HVDVD_TS/UNILOGO.MAP"</span>
-</pre></div>
-</div>
-<p>Resolve: volume root + <code class="docutils literal notranslate"><span class="pre">HVDVD_TS/UNILOGO.MAP</span></code>.
-Sibling EVO: <code class="docutils literal notranslate"><span class="pre">HVDVD_TS/UNILOGO.EVO</span></code>.
-Confirm with EVOBI filename in <a class="reference internal" href="06_vti.html"><span class="std std-doc">06</span></a>.</p>
-</section>
-<section id="a-scheduledcontrollist-timeline-pauses-and-events">
-<h2>3.9a ScheduledControlList: timeline pauses and events<a class="headerlink" href="#a-scheduledcontrollist-timeline-pauses-and-events" title="Link to this heading"></a></h2>
-<p>Child of <code class="docutils literal notranslate"><span class="pre">Title</span></code> (435 lists across the corpus). Two element types. <code class="docutils literal notranslate"><span class="pre">&#64;titleTime</span></code> (<code class="docutils literal notranslate"><span class="pre">HH:MM:SS:FF</span></code> on the Title Timeline) is required
-(2788/2788); <code class="docutils literal notranslate"><span class="pre">&#64;id</span></code> is optional (56 entries omit it; an anonymous <code class="docutils literal notranslate"><span class="pre">PauseAt</span></code> still
-pauses; an <code class="docutils literal notranslate"><span class="pre">Event</span></code> with no <code class="docutils literal notranslate"><span class="pre">id</span></code> has no script listener and is a no-op):</p>
+<section id="scheduledcontrollist">
+<h2>3.18 ScheduledControlList<a class="headerlink" href="#scheduledcontrollist" title="Link to this heading"></a></h2>
+<p>Frame-accurate pauses and script events on the title timeline. Children:
+<code class="docutils literal notranslate"><span class="pre">PauseAt</span></code> and <code class="docutils literal notranslate"><span class="pre">Event</span></code>, any mix, at least one, in <strong>strictly increasing</strong>
+<code class="docutils literal notranslate"><span class="pre">titleTime</span></code> order (no two at the same time).</p>
 <table class="docutils align-default">
 <thead>
 <tr class="row-odd"><th class="head"><p>Element</p></th>
-<th class="head"><p>N</p></th>
-<th class="head"><p>Rule</p></th>
+<th class="head"><p>Attribute</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Req.</p></th>
+<th class="head"><p>What it is for</p></th>
 </tr>
 </thead>
 <tbody>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">PauseAt</span></code></p></td>
-<td><p>92</p></td>
-<td><p>When the Title Timeline reaches <code class="docutils literal notranslate"><span class="pre">&#64;titleTime</span></code>, <strong>pause the timeline</strong> (freeze video on that frame). It resumes only when script calls <code class="docutils literal notranslate"><span class="pre">Player.playlist.play()</span></code> (or a <code class="docutils literal notranslate"><span class="pre">jump</span></code>). This is how a menu-loop clip holds its last frame.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">titleTime</span></code></p></td>
+<td><p>time expression</p></td>
+<td><p>yes</p></td>
+<td><p>When the timeline reaches it, <strong>pause</strong> the title timeline (video freezes on that frame) until script resumes (<code class="docutils literal notranslate"><span class="pre">Player.playlist.play()</span></code>, or a <code class="docutils literal notranslate"><span class="pre">jump</span></code>). Inside a clip’s valid period the time must fall on a coded video frame’s PTS</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">Event</span></code></p></td>
-<td><p>2696</p></td>
-<td><p>When the timeline reaches <code class="docutils literal notranslate"><span class="pre">&#64;titleTime</span></code>, <strong>dispatch a named event</strong> (<code class="docutils literal notranslate"><span class="pre">&#64;id</span></code>) to the HDi engine. Script catches it with <code class="docutils literal notranslate"><span class="pre">addEventListener(&quot;&lt;id&gt;&quot;,</span> <span class="pre">…)</span></code> (<a class="reference internal" href="05_manifest_hdi.html"><span class="std std-doc">05</span></a> §5.3). No video effect by itself.</p></td>
+<tr class="row-odd"><td><p></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">id</span></code></p></td>
+<td><p>ID</p></td>
+<td><p>no</p></td>
+<td><p>Name for script</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">Event</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">titleTime</span></code></p></td>
+<td><p>time expression</p></td>
+<td><p>yes</p></td>
+<td><p>When the timeline reaches it, the Playlist Manager fires a <strong>Playlist Manager Event</strong> named by <code class="docutils literal notranslate"><span class="pre">id</span></code>; script catches it with <code class="docutils literal notranslate"><span class="pre">addEventListener(&quot;&lt;id&gt;&quot;,</span> <span class="pre">…)</span></code> (<a class="reference internal" href="05_manifest_hdi.html"><span class="std std-doc">05</span></a> §5.3). No effect on video. Script may handle it late</p></td>
+</tr>
+<tr class="row-odd"><td><p></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">id</span></code></p></td>
+<td><p>ID</p></td>
+<td><p>no</p></td>
+<td><p>Event name. Without one, nothing can listen</p></td>
 </tr>
 </tbody>
 </table>
-<p>Canonical pattern (<code class="docutils literal notranslate"><span class="pre">BATMAN_BEGINS</span></code>): a loader clip has <code class="docutils literal notranslate"><span class="pre">PauseAt</span> <span class="pre">id=end-loader</span> <span class="pre">titleTime=00:00:04:59</span></code> and <code class="docutils literal notranslate"><span class="pre">Event</span> <span class="pre">id=enable-mainmenu</span> <span class="pre">titleTime=00:00:05:01</span></code>.
-The timeline plays the loader, pauses on its last frame, and the enable-mainmenu
-event hands control to the menu script. Fire each entry once, when the monotonic
-Title-Timeline clock crosses <code class="docutils literal notranslate"><span class="pre">&#64;titleTime</span></code>; on a backward <code class="docutils literal notranslate"><span class="pre">jump</span></code> a re-crossing may
-re-fire (fail-closed: treat as edge-triggered at crossing).
-<code class="docutils literal notranslate"><span class="pre">[11,</span> <span class="pre">12]</span></code>
-<strong>VERIFIED</strong> (structure) / <strong>INFERRED</strong> (pause + dispatch semantics; Annex Z unpublished).</p>
+<p>Fire each entry once, when the timeline clock crosses <code class="docutils literal notranslate"><span class="pre">titleTime</span></code>; after a
+backward <code class="docutils literal notranslate"><span class="pre">jump</span></code> a re-crossing may fire it again (edge-triggered). This is how a
+menu-loop clip holds its last frame: <code class="docutils literal notranslate"><span class="pre">BATMAN_BEGINS</span></code> has a loader clip with
+<code class="docutils literal notranslate"><span class="pre">PauseAt</span> <span class="pre">id=&quot;end-loader&quot;</span> <span class="pre">titleTime=&quot;00:00:04:59&quot;</span></code> and <code class="docutils literal notranslate"><span class="pre">Event</span> <span class="pre">id=&quot;enable-mainmenu&quot;</span> <span class="pre">titleTime=&quot;00:00:05:01&quot;</span></code>.</p>
+<p>On disc: 435 lists, all strictly increasing; <code class="docutils literal notranslate"><span class="pre">PauseAt</span></code> 92 (<code class="docutils literal notranslate"><span class="pre">id</span></code> on 36), <code class="docutils literal notranslate"><span class="pre">Event</span></code>
+2696. <code class="docutils literal notranslate"><span class="pre">[1,</span> <span class="pre">11,</span> <span class="pre">12]</span></code> <strong>VERIFIED</strong> (structure); pause and dispatch semantics from
+[1].</p>
+</section>
+<section id="uri-of-a-clip-s-map">
+<h2>3.19 URI of a clip’s MAP<a class="headerlink" href="#uri-of-a-clip-s-map" title="Link to this heading"></a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">src=&quot;file:///dvddisc/HVDVD_TS/UNILOGO.MAP&quot;</span></code> (<code class="docutils literal notranslate"><span class="pre">MYSTERY_MEN</span></code> <code class="docutils literal notranslate"><span class="pre">VPLST000</span></code>)
+resolves to the volume root + <code class="docutils literal notranslate"><span class="pre">HVDVD_TS/UNILOGO.MAP</span></code>; the video is the sibling
+<code class="docutils literal notranslate"><span class="pre">HVDVD_TS/UNILOGO.EVO</span></code>, confirmed by the EVOBI filename in the VTI
+(<a class="reference internal" href="06_vti.html"><span class="std std-doc">06</span></a>). Relative URIs resolve against <code class="docutils literal notranslate"><span class="pre">xml:base</span></code> (Title or
+FirstPlayTitle) and then the playlist’s own location.</p>
 </section>
 <section id="which-playlist-to-open">
-<h2>3.10 Which playlist to open<a class="headerlink" href="#which-playlist-to-open" title="Link to this heading"></a></h2>
+<h2>3.20 Which playlist to open<a class="headerlink" href="#which-playlist-to-open" title="Link to this heading"></a></h2>
+<p>Boot file: <strong>the highest <code class="docutils literal notranslate"><span class="pre">$$$</span></code> present</strong> among <code class="docutils literal notranslate"><span class="pre">ADV_OBJ/VPLST$$$.XPL</span></code>
+(Scenarist: “The highest-numbered Playlist is loaded first”). <code class="docutils literal notranslate"><span class="pre">.BAK</span></code> playlists
+are not searched. Audio-only players search <code class="docutils literal notranslate"><span class="pre">APLST$$$.XPL</span></code> instead (0 on disc).</p>
 <table class="docutils align-default">
 <thead>
 <tr class="row-odd"><th class="head"><p>Rule</p></th>
@@ -816,38 +1917,139 @@ re-fire (fail-closed: treat as edge-triggered at crossing).
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>Highest <code class="docutils literal notranslate"><span class="pre">VPLST$$$</span></code> contains <code class="docutils literal notranslate"><span class="pre">PrimaryAudioVideoClip</span></code> (video from XPL alone)</p></td>
+<tr class="row-even"><td><p>Highest <code class="docutils literal notranslate"><span class="pre">VPLST$$$</span></code> has a <code class="docutils literal notranslate"><span class="pre">PrimaryAudioVideoClip</span></code> (video from the XPL alone)</p></td>
 <td><p>116/119</p></td>
 </tr>
-<tr class="row-odd"><td><p>Highest is a <strong>selector</strong> (app only; loads another XPL at runtime)</p></td>
+<tr class="row-odd"><td><p>Highest is a <strong>selector</strong> (application only; loads another playlist at run time)</p></td>
 <td><p>3</p></td>
 </tr>
 </tbody>
 </table>
 <p>Selector discs: <code class="docutils literal notranslate"><span class="pre">MATRIX_REVOLUTIONS</span></code> (<code class="docutils literal notranslate"><span class="pre">VPLST099</span></code>), <code class="docutils literal notranslate"><span class="pre">BLADE_RUNNER</span></code> (<code class="docutils literal notranslate"><span class="pre">VPLST002</span></code>),
-<code class="docutils literal notranslate"><span class="pre">TRAINING_DAY</span></code> (<code class="docutils literal notranslate"><span class="pre">VPLST003</span></code>). Each <code class="docutils literal notranslate"><span class="pre">selector.aca/script.js</span></code> (UTF-16BE) does:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Player</span><span class="o">.</span><span class="n">playlist</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">"file:///dvddisc/ADV_OBJ/VPLST000.XPL"</span><span class="p">);</span>
-</pre></div>
-</div>
-<p>by <code class="docutils literal notranslate"><span class="pre">Player.menuLanguage</span></code>. All three <code class="docutils literal notranslate"><span class="pre">switch</span></code> on <strong>two-letter</strong> tokens
-(<code class="docutils literal notranslate"><span class="pre">en</span></code> / <code class="docutils literal notranslate"><span class="pre">fr</span></code> / <code class="docutils literal notranslate"><span class="pre">ja</span></code> / <code class="docutils literal notranslate"><span class="pre">de</span></code>); <code class="docutils literal notranslate"><span class="pre">en</span></code> is <code class="docutils literal notranslate"><span class="pre">default</span></code>. Full URI, not a
-playlist number. Some other scripts do <code class="docutils literal notranslate"><span class="pre">Player.menuLanguage.slice(0,2)</span></code>
-before matching. Expose a two-letter ISO 639-1 string (or at least treat
-the first two characters as the language).
-<code class="docutils literal notranslate"><span class="pre">[11]</span></code> <strong>VERIFIED</strong> (<code class="docutils literal notranslate"><span class="pre">e12</span></code>)</p>
-<p>A player that implements FIG.50 strictly must run HDi on those three.
-Opening a lower <code class="docutils literal notranslate"><span class="pre">VPLST</span></code> without HDi is a research-only fallback (<code class="docutils literal notranslate"><span class="pre">e14</span></code> A97:
-3/3 have a clip-bearing lower <code class="docutils literal notranslate"><span class="pre">$$$</span></code>). It is <strong>not</strong> an implementation path:
-library work waits on the menu gate in <a class="reference internal" href="05_manifest_hdi.html"><span class="std std-doc">05</span></a> §5.0.</p>
-<p>If <code class="docutils literal notranslate"><span class="pre">FirstPlayTitle</span></code> is present it plays <strong>before Title 1</strong>, then Title 1.
-<code class="docutils literal notranslate"><span class="pre">PlaylistApplication</span></code> is not scheduled on FirstPlayTitle. Hold user
-title-nav until FPT ends (§3.3).</p>
+<code class="docutils literal notranslate"><span class="pre">TRAINING_DAY</span></code> (<code class="docutils literal notranslate"><span class="pre">VPLST003</span></code>). Each <code class="docutils literal notranslate"><span class="pre">selector.aca/script.js</span></code> (UTF-16BE) calls
+<code class="docutils literal notranslate"><span class="pre">Player.playlist.load(&quot;file:///dvddisc/ADV_OBJ/VPLST000.XPL&quot;)</span></code> chosen by
+<code class="docutils literal notranslate"><span class="pre">Player.menuLanguage</span></code>, switching on two-letter tokens (<code class="docutils literal notranslate"><span class="pre">en</span></code>, <code class="docutils literal notranslate"><span class="pre">fr</span></code>, <code class="docutils literal notranslate"><span class="pre">ja</span></code>, <code class="docutils literal notranslate"><span class="pre">de</span></code>;
+<code class="docutils literal notranslate"><span class="pre">en</span></code> default). A player that follows the startup sequence must run HDi on these
+three. Opening a lower <code class="docutils literal notranslate"><span class="pre">VPLST</span></code> without HDi is a research fallback only (<code class="docutils literal notranslate"><span class="pre">e14</span></code>:
+3/3 have one with clips).</p>
+<p><code class="docutils literal notranslate"><span class="pre">FirstPlayTitle</span></code>, if present, plays before Title 1 (§3.9).</p>
+<p><code class="docutils literal notranslate"><span class="pre">[1,</span> <span class="pre">7,</span> <span class="pre">11]</span></code> <strong>VERIFIED</strong> (<code class="docutils literal notranslate"><span class="pre">e12</span></code>)</p>
 </section>
-<section id="elements-in-the-xsd-unused-in-this-corpus">
-<h2>3.11 Elements in the XSD, unused in this corpus<a class="headerlink" href="#elements-in-the-xsd-unused-in-this-corpus" title="Link to this heading"></a></h2>
-<p><code class="docutils literal notranslate"><span class="pre">SecondaryAudioVideoClip</span></code>, <code class="docutils literal notranslate"><span class="pre">SubstituteAudioVideoClip</span></code>, <code class="docutils literal notranslate"><span class="pre">SubstituteAudioClip</span></code>,
-<code class="docutils literal notranslate"><span class="pre">AdvancedSubtitleSegment</span></code>, <code class="docutils literal notranslate"><span class="pre">NetworkSource</span></code>. Still legal; implement if you need
-network / persistent-storage clips.</p>
+<section id="specification-text-versus-schema-and-discs">
+<h2>3.21 Specification text versus schema and discs<a class="headerlink" href="#specification-text-versus-schema-and-discs" title="Link to this heading"></a></h2>
+<p>Where the sources disagree, the schema wins over the specification text, and
+the discs show what players accept.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Point</p></th>
+<th class="head"><p>Specification text [1]</p></th>
+<th class="head"><p>Schema / discs</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">Title&#64;onEnd</span></code></p></td>
+<td><p>an early passage calls it a title <strong>number</strong>, <code class="docutils literal notranslate"><span class="pre">0</span></code> = pause</p></td>
+<td><p>XSD: IDREF to a Title <code class="docutils literal notranslate"><span class="pre">id</span></code>; normative text: absent = stop. Discs: 3192/3192 resolve to an <code class="docutils literal notranslate"><span class="pre">id</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>Titles per playlist</p></td>
+<td><p>“512 or less”</p></td>
+<td><p>XSD: 999</p></td>
+</tr>
+<tr class="row-even"><td><p>Chapters per list</p></td>
+<td><p>“512 or less”</p></td>
+<td><p>XSD: 1999</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ApplicationResource&#64;size</span></code></p></td>
+<td><p>“can be omitted”</p></td>
+<td><p>XSD: required; present on every row</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">PlaylistApplication</span></code> z-order</p></td>
+<td><p>“Describes the Application z-order”</p></td>
+<td><p>no <code class="docutils literal notranslate"><span class="pre">zOrder</span></code> attribute in either XSD</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">noCache</span></code> on resources</p></td>
+<td><p>“if the URI scheme <strong>is</strong> http, the attribute shall be absent”</p></td>
+<td><p>a typo for “is not”: the attribute only has meaning for http/https</p></td>
+</tr>
+<tr class="row-even"><td><p>Version</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">minorVersion</span></code> <code class="docutils literal notranslate"><span class="pre">0</span></code></p></td>
+<td><p>discs declare <code class="docutils literal notranslate"><span class="pre">0</span></code> but use v1.1 attributes (§3.1)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">mediaAttr</span></code></p></td>
+<td><p>must name an existing item</p></td>
+<td><p>2 discs point at missing sub-picture items (§3.12)</p></td>
+</tr>
+<tr class="row-even"><td><p>Manifest <code class="docutils literal notranslate"><span class="pre">Resource&#64;src</span></code></p></td>
+<td><p>“absolute URI … relative URI shall not be used”</p></td>
+<td><p>12 manifests use relative script names (<a class="reference internal" href="05_manifest_hdi.html"><span class="std std-doc">05</span></a> §5.1)</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="on-disc">
+<h2>3.22 On disc<a class="headerlink" href="#on-disc" title="Link to this heading"></a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">e26</span></code> (every playlist): 247 files, all valid against the v1.1 schema; every
+rule above that can be checked from the files holds (title numbering, <code class="docutils literal notranslate"><span class="pre">onEnd</span></code>
+targets, scheduled-control ordering, chapter ordering, stream numbers against the
+VTI, seamless abutting, <code class="docutils literal notranslate"><span class="pre">PlaylistApplication</span></code> languages unique), with only the
+two <code class="docutils literal notranslate"><span class="pre">mediaAttr</span></code> authoring errors listed in §3.12. Element counts:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Element</p></th>
+<th class="head"><p>N</p></th>
+<th class="head"><p>Element</p></th>
+<th class="head"><p>N</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">Playlist</span></code></p></td>
+<td><p>247</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Title</span></code></p></td>
+<td><p>3196</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FirstPlayTitle</span></code></p></td>
+<td><p>119</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">PrimaryAudioVideoClip</span></code></p></td>
+<td><p>4847</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ApplicationSegment</span></code></p></td>
+<td><p>2529</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">ApplicationResource</span></code></p></td>
+<td><p>2506</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">TitleResource</span></code></p></td>
+<td><p>80</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">PlaylistApplication</span></code></p></td>
+<td><p>203</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">PlaylistApplicationResource</span></code></p></td>
+<td><p>455</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">MediaAttributeList</span></code></p></td>
+<td><p>244</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">Video</span></code> / <code class="docutils literal notranslate"><span class="pre">Audio</span></code> / <code class="docutils literal notranslate"><span class="pre">Subtitle</span></code></p></td>
+<td><p>4869 / 6399 / 19992</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">SubVideo</span></code> / <code class="docutils literal notranslate"><span class="pre">SubAudio</span></code></p></td>
+<td><p>84 / 38</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ChapterList</span></code> / <code class="docutils literal notranslate"><span class="pre">Chapter</span></code></p></td>
+<td><p>1014 / 7665</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">TrackNavigationList</span></code></p></td>
+<td><p>2478</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ScheduledControlList</span></code></p></td>
+<td><p>435</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">PauseAt</span></code> / <code class="docutils literal notranslate"><span class="pre">Event</span></code></p></td>
+<td><p>92 / 2696</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">NetworkTimeout</span></code></p></td>
+<td><p>14</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">SecondaryAudioVideoClip</span></code>, <code class="docutils literal notranslate"><span class="pre">SubstituteAudioVideoClip</span></code>, <code class="docutils literal notranslate"><span class="pre">SubstituteAudioClip</span></code>, <code class="docutils literal notranslate"><span class="pre">AdvancedSubtitleSegment</span></code>, <code class="docutils literal notranslate"><span class="pre">NetworkSource</span></code></p></td>
+<td><p>0</p></td>
+</tr>
+</tbody>
+</table>
+<p><code class="docutils literal notranslate"><span class="pre">[1,</span> <span class="pre">5,</span> <span class="pre">7,</span> <span class="pre">11,</span> <span class="pre">12]</span></code></p>
 </section>
 </section>
 

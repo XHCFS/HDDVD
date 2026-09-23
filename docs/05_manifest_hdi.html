@@ -61,18 +61,28 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="03_playlist.html">3. Playlist: VPLST$$$.XPL</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="03_playlist.html#time">3.1 Time</a></li>
-<li class="toctree-l2"><a class="reference internal" href="03_playlist.html#tree">3.2 Tree</a></li>
-<li class="toctree-l2"><a class="reference internal" href="03_playlist.html#title">3.3 Title</a></li>
-<li class="toctree-l2"><a class="reference internal" href="03_playlist.html#primaryaudiovideoclip">3.4 PrimaryAudioVideoClip</a></li>
-<li class="toctree-l2"><a class="reference internal" href="03_playlist.html#applicationsegment">3.5 ApplicationSegment</a></li>
-<li class="toctree-l2"><a class="reference internal" href="03_playlist.html#playlistapplication">3.6 PlaylistApplication</a></li>
-<li class="toctree-l2"><a class="reference internal" href="03_playlist.html#chapter">3.7 Chapter</a></li>
-<li class="toctree-l2"><a class="reference internal" href="03_playlist.html#tracknavigationlist">3.8 TrackNavigationList</a></li>
-<li class="toctree-l2"><a class="reference internal" href="03_playlist.html#uri-of-a-clip-map">3.9 URI of a clip MAP</a></li>
-<li class="toctree-l2"><a class="reference internal" href="03_playlist.html#a-scheduledcontrollist-timeline-pauses-and-events">3.9a ScheduledControlList: timeline pauses and events</a></li>
-<li class="toctree-l2"><a class="reference internal" href="03_playlist.html#which-playlist-to-open">3.10 Which playlist to open</a></li>
-<li class="toctree-l2"><a class="reference internal" href="03_playlist.html#elements-in-the-xsd-unused-in-this-corpus">3.11 Elements in the XSD, unused in this corpus</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_playlist.html#file-versions-schema">3.1 File, versions, schema</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_playlist.html#data-types">3.2 Data types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_playlist.html#document-tree">3.3 Document tree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_playlist.html#playlist">3.4 Playlist</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_playlist.html#configuration">3.5 Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_playlist.html#mediaattributelist">3.6 MediaAttributeList</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_playlist.html#titleset">3.7 TitleSet</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_playlist.html#title">3.8 Title</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_playlist.html#firstplaytitle">3.9 FirstPlayTitle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_playlist.html#presentation-clips">3.10 Presentation clips</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_playlist.html#networksource">3.11 NetworkSource</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_playlist.html#track-number-assignment">3.12 Track number assignment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_playlist.html#applicationsegment-and-advancedsubtitlesegment">3.13 ApplicationSegment and AdvancedSubtitleSegment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_playlist.html#resources">3.14 Resources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_playlist.html#playlistapplication">3.15 PlaylistApplication</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_playlist.html#chapterlist">3.16 ChapterList</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_playlist.html#tracknavigationlist">3.17 TrackNavigationList</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_playlist.html#scheduledcontrollist">3.18 ScheduledControlList</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_playlist.html#uri-of-a-clip-s-map">3.19 URI of a clip’s MAP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_playlist.html#which-playlist-to-open">3.20 Which playlist to open</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_playlist.html#specification-text-versus-schema-and-discs">3.21 Specification text versus schema and discs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_playlist.html#on-disc">3.22 On disc</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="04_aca.html">4. ACA: Advanced Content Archive</a><ul>
@@ -435,9 +445,10 @@ them.</p>
 </section>
 <section id="manifest-xmf">
 <h2>5.1 Manifest: <code class="docutils literal notranslate"><span class="pre">.xmf</span></code><a class="headerlink" href="#manifest-xmf" title="Link to this heading"></a></h2>
-<p>A manifest describes <strong>one HDi application</strong>: where on screen it draws, which
-script and markup to run, and which files must be in the File Cache before it
-starts. The playlist starts an application by pointing at its manifest
+<p>A manifest is the <strong>initialization information of one HDi application</strong>:
+where on screen it draws, which markup page it opens with, which scripts run at
+start-up, and which files it uses. The player launches the application from
+it [1]. The playlist starts an application by pointing at its manifest
 (<code class="docutils literal notranslate"><span class="pre">ApplicationSegment&#64;src</span></code> or <code class="docutils literal notranslate"><span class="pre">PlaylistApplication&#64;src</span></code>, <a class="reference internal" href="03_playlist.html"><span class="std std-doc">03</span></a>).
 Manifests are usually members of an ACA (<a class="reference internal" href="04_aca.html"><span class="std std-doc">04</span></a>).</p>
 <table class="docutils align-default">
@@ -451,7 +462,7 @@ Manifests are usually members of an ACA (<a class="reference internal" href="04_
 <td><p><code class="docutils literal notranslate"><span class="pre">http://www.dvdforum.org/2005/HDDVDVideo/Manifest</span></code></p></td>
 </tr>
 <tr class="row-odd"><td><p>Schema</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">spec/raw/adv_obj/v1.0/Manifest.xsd</span></code> (Spec. 6.2.4.2)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">spec/raw/adv_obj/v1.0/Manifest.xsd</span></code> (Spec. 6.2.4.2); v1.1 is identical</p></td>
 </tr>
 <tr class="row-even"><td><p>Root element</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">Application</span></code></p></td>
@@ -481,7 +492,7 @@ Manifests are usually members of an ACA (<a class="reference internal" href="04_
 <td><p><code class="docutils literal notranslate"><span class="pre">id</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">xs:ID</span></code></p></td>
 <td><p>no</p></td>
-<td><p>Name of the application, unique in the document</p></td>
+<td><p>Name of the application; script can refer to it</p></td>
 </tr>
 <tr class="row-odd"><td><p></p></td>
 <td><p></p></td>
@@ -495,21 +506,21 @@ Manifests are usually members of an ACA (<a class="reference internal" href="04_
 <td><p><code class="docutils literal notranslate"><span class="pre">x</span></code>, <code class="docutils literal notranslate"><span class="pre">y</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">xs:nonNegativeInteger</span></code></p></td>
 <td><p>yes</p></td>
-<td><p>Top-left corner of the application’s area on the graphics plane, in pixels</p></td>
+<td><p>Initial position (top-left) of the application’s region on the canvas, in canvas coordinates (pixels of the graphics plane, sized by the playlist’s <code class="docutils literal notranslate"><span class="pre">Aperture</span></code>, <a class="reference internal" href="03_playlist.html"><span class="std std-doc">03</span></a> §3.5)</p></td>
 </tr>
 <tr class="row-odd"><td><p></p></td>
 <td><p></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">width</span></code>, <code class="docutils literal notranslate"><span class="pre">height</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">xs:nonNegativeInteger</span></code></p></td>
 <td><p>yes</p></td>
-<td><p>Size of that area, in pixels</p></td>
+<td><p>Size of that region, in canvas coordinates</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">Script</span></code></p></td>
 <td><p>0..n</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">src</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">xs:anyURI</span></code></p></td>
 <td><p>yes</p></td>
-<td><p>An ECMAScript (<code class="docutils literal notranslate"><span class="pre">.js</span></code>) file the application runs</p></td>
+<td><p>An ECMAScript (<code class="docutils literal notranslate"><span class="pre">.js</span></code>) file evaluated as global code during the application’s start-up</p></td>
 </tr>
 <tr class="row-odd"><td><p></p></td>
 <td><p></p></td>
@@ -523,7 +534,7 @@ Manifests are usually members of an ACA (<a class="reference internal" href="04_
 <td><p><code class="docutils literal notranslate"><span class="pre">src</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">xs:anyURI</span></code></p></td>
 <td><p>yes</p></td>
-<td><p>The iHD markup (<code class="docutils literal notranslate"><span class="pre">.xmu</span></code>) the application displays (§5.2). Absent for script-only applications</p></td>
+<td><p>The <strong>initial</strong> markup page (<code class="docutils literal notranslate"><span class="pre">.xmu</span></code>, §5.2); later pages are loaded by script. Absent for script-only applications</p></td>
 </tr>
 <tr class="row-odd"><td><p></p></td>
 <td><p></p></td>
@@ -537,7 +548,7 @@ Manifests are usually members of an ACA (<a class="reference internal" href="04_
 <td><p><code class="docutils literal notranslate"><span class="pre">src</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">xs:anyURI</span></code></p></td>
 <td><p>yes</p></td>
-<td><p>A file loaded into the File Cache before the application starts: markup, scripts, images, fonts, or a whole <code class="docutils literal notranslate"><span class="pre">.aca</span></code></p></td>
+<td><p>A file the application uses: markup, scripts, images, fonts, or a whole <code class="docutils literal notranslate"><span class="pre">.aca</span></code>. <strong>Every</strong> file the application uses must be listed, except files in the script-managed (API Managed) area of the File Cache. Must be the absolute URI of one of the playlist’s resources (<code class="docutils literal notranslate"><span class="pre">ApplicationResource</span></code>, <code class="docutils literal notranslate"><span class="pre">TitleResource</span></code> or <code class="docutils literal notranslate"><span class="pre">PlaylistApplicationResource</span></code> <code class="docutils literal notranslate"><span class="pre">src</span></code>, <a class="reference internal" href="03_playlist.html"><span class="std std-doc">03</span></a> §3.14): the playlist decides when files are loaded, the manifest says which of them this application uses</p></td>
 </tr>
 <tr class="row-odd"><td><p></p></td>
 <td><p></p></td>
@@ -562,9 +573,10 @@ namespace, the children are out of order, <code class="docutils literal notransl
 missing, or a required attribute is missing.</p></li>
 <li><p>Accept and ignore attributes that describe the file rather than the
 application: <code class="docutils literal notranslate"><span class="pre">xsi:schemaLocation</span></code> on the root, and a leading byte-order mark.</p></li>
-<li><p>Keep <code class="docutils literal notranslate"><span class="pre">src</span></code> exactly as written. A relative <code class="docutils literal notranslate"><span class="pre">src</span></code> (a bare name such as
-<code class="docutils literal notranslate"><span class="pre">UniLoad.js</span></code>) resolves against the manifest’s own location, which for a
-manifest inside an ACA is that archive (RFC 3986, <code class="docutils literal notranslate"><span class="pre">xml:base</span></code> if present).</p></li>
+<li><p>Keep <code class="docutils literal notranslate"><span class="pre">src</span></code> exactly as written. The specification requires absolute URIs for
+<code class="docutils literal notranslate"><span class="pre">Resource</span></code>; discs also use relative names on <code class="docutils literal notranslate"><span class="pre">Script</span></code> (a bare <code class="docutils literal notranslate"><span class="pre">UniLoad.js</span></code>),
+which resolve against the manifest’s own location, for a manifest inside an
+ACA that archive (RFC 3986, <code class="docutils literal notranslate"><span class="pre">xml:base</span></code> if present). Accept both.</p></li>
 </ul>
 </section>
 <section id="example-1408-dc-popupmenu-xmf">
@@ -598,9 +610,13 @@ relative names, always on a <code class="docutils literal notranslate"><span cla
 always naming a member of that ACA.</p></li>
 <li><p>All 229 <code class="docutils literal notranslate"><span class="pre">Script</span></code> / <code class="docutils literal notranslate"><span class="pre">Markup</span></code> files are loadable through <code class="docutils literal notranslate"><span class="pre">Resource</span></code>: 7 listed
 directly, 210 inside a listed <code class="docutils literal notranslate"><span class="pre">.aca</span></code>, 12 relative inside the manifest’s own ACA.</p></li>
+<li><p>215 of 223 <code class="docutils literal notranslate"><span class="pre">Resource</span></code> URIs are exactly one of the same disc’s playlist
+resource URIs. The 8 others: the selector manifests of <code class="docutils literal notranslate"><span class="pre">BLADE_RUNNER</span></code> and
+<code class="docutils literal notranslate"><span class="pre">TRAINING_DAY</span></code> list <code class="docutils literal notranslate"><span class="pre">…/selector/script.js</span></code>, and <code class="docutils literal notranslate"><span class="pre">SHREK_THE_THIRD_EU</span></code>
+<code class="docutils literal notranslate"><span class="pre">iHD_Manifest.xmf</span></code> lists 6 archives that no saved playlist schedules.</p></li>
 <li><p>Encoding is UTF-8 on all 89; 6 start with a byte-order mark.</p></li>
 </ul>
-<p><code class="docutils literal notranslate"><span class="pre">[5,</span> <span class="pre">11,</span> <span class="pre">12]</span></code> <strong>VERIFIED</strong></p>
+<p><code class="docutils literal notranslate"><span class="pre">[1,</span> <span class="pre">5,</span> <span class="pre">11,</span> <span class="pre">12]</span></code> <strong>VERIFIED</strong></p>
 </section>
 </section>
 <section id="markup-xmu">

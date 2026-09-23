@@ -273,7 +273,7 @@ and MPEG-2/AVC carry sequence headers **in-band** (`00 00 01 0F` for VC-1, confi
 DOWNFALL). No reconstructed extradata. `[2]` **VERIFIED** (framing on disc).
 
 Sub-picture range `0x20..0x3F` gives 32 streams, exactly `SubtitleTrack` max 32
-([03](03_playlist.md) §3.8). Audio decoding number is 3 bits → 8 per codec, matching
+([03](03_playlist.md) §3.17). Audio decoding number is 3 bits → 8 per codec, matching
 `AudioTrack` max 8.
 
 **Grades.** Video VC-1 `0xFD`/`0x55` and DD+ audio `0xC0+` VERIFIED on disc. AC-3 /

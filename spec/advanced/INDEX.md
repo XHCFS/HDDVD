@@ -55,13 +55,13 @@ and an EPUB (`make epub`, `docs/HD-DVD-Advanced-Content.epub`).
 | [12_hdi_scripting_abi.md](12_hdi_scripting_abi.md) | HDi scripting host ABI: 106 typeinfos, 200 constants, full iHD XSD surface |
 | [13_references.md](13_references.md) | Numbered reference list. Every citation, live links. |
 
-Authoritative XML schemas (DVD Forum 16 Jul 2006, v1.0; every retail playlist):
+Authoritative XML schemas (DVD Forum): v1.0 (16 Jul 2006) and v1.1 (5 Nov 2007),
+both bundled. Retail playlists declare version 1.0 but all 247 validate only
+against **v1.1** (`e26`, [03](03_playlist.md) §3.1), so read against v1.1:
 
-- `spec/raw/adv_obj/v1.0/Playlist.xsd`
-- `spec/raw/adv_obj/v1.0/Manifest.xsd`
-- `spec/raw/adv_obj/v1.0/iHD.xsd`
-- `spec/raw/adv_obj/v1.0/iHDstyle.xsd`
-- `spec/raw/adv_obj/v1.0/iHDstate.xsd`
+- `spec/raw/adv_obj/v1.1/Playlist.xsd` (v1.0 for reference)
+- `spec/raw/adv_obj/v1.1/Manifest.xsd` (identical to v1.0)
+- `spec/raw/adv_obj/v1.1/iHD.xsd`, `iHDstyle.xsd`, `iHDstate.xsd` (v1.0 for reference)
 - `spec/raw/adv_obj/iHD_Scripting_API.txt` (106 typeinfos; names only)
 
 ## Status of public sources
@@ -115,7 +115,7 @@ grammar, `jump` pause-at-destination, used cue paths, glyph/`anchor` fail-closed
 raster, src-over plane blend, `changeLayout` 8-tuple, `createTimer` / `ITimer`,
 `animate` keyframes, and `sync` hard/soft are specified
 ([05](05_manifest_hdi.md) §5.3 / §5.9, [08](08_evo.md) §8.6,
-[03](03_playlist.md) §3.5). Change those rules only if a disc contradicts them.
+[03](03_playlist.md) §3.13). Change those rules only if a disc contradicts them.
 Flow: [10](10_playback.md) §10.0 / §10.8.
 
 Still uncloseable: firmware vs FIG.50 (catalog
