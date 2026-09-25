@@ -691,7 +691,7 @@ Timing makes the page change over time and react to input. It lives in
 
 | Clock | Runs | Used for |
 |---|---|---|
-| `title` (default) | locked to the title timeline: pauses and seeks with the video | cues at specific movie times (in-movie overlays) |
+| `title` (default) | locked to the title timeline (media time): pauses and seeks with the video | cues at specific movie times (in-movie overlays) |
 | `page` | from when the page is loaded, independent of the video | menus: effects keep playing while the video is paused |
 | `application` | for the application's whole active life | timers shared across pages |
 

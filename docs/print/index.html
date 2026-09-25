@@ -2818,6 +2818,32 @@ everything is in attributes.</p>
 <p><strong><code class="docutils literal notranslate"><span class="pre">Application</span></code></strong> (root, one per file). The application itself.</p>
 <table class="docutils align-default">
 <thead>
+<tr class="row-odd"><th class="head"><p>Child</p></th>
+<th class="head"><p>How many</p></th>
+<th class="head"><p>What it is</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">Region</span></code></p></td>
+<td><p>exactly 1, first</p></td>
+<td><p>Where the application draws</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">Script</span></code></p></td>
+<td><p>any number</p></td>
+<td><p>Scripts run at start-up</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">Markup</span></code></p></td>
+<td><p>0 or 1</p></td>
+<td><p>The first page shown</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">Resource</span></code></p></td>
+<td><p>1 or more, last</p></td>
+<td><p>Files the application uses</p></td>
+</tr>
+</tbody>
+</table>
+<table class="docutils align-default">
+<thead>
 <tr class="row-odd"><th class="head"><p>Attribute</p></th>
 <th class="head"><p>Type</p></th>
 <th class="head"><p>Req.</p></th>
@@ -2837,9 +2863,10 @@ everything is in attributes.</p>
 </tr>
 </tbody>
 </table>
-<p><strong><code class="docutils literal notranslate"><span class="pre">Region</span></code></strong> (exactly 1, first child). Where the application draws. The canvas
+<p><strong><code class="docutils literal notranslate"><span class="pre">Region</span></code></strong> (exactly 1, first child). Where the application draws when it
+starts: the values are the region’s <strong>initial</strong> position and size. The canvas
 is the graphics plane; its size comes from the playlist’s <code class="docutils literal notranslate"><span class="pre">Aperture</span></code>
-(<a class="reference internal" href="#document-03_playlist"><span class="std std-doc">03</span></a> §3.5).</p>
+(<a class="reference internal" href="#document-03_playlist"><span class="std std-doc">03</span></a> §3.5). No children.</p>
 <table class="docutils align-default">
 <thead>
 <tr class="row-odd"><th class="head"><p>Attribute</p></th>
@@ -2852,12 +2879,12 @@ is the graphics plane; its size comes from the playlist’s <code class="docutil
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">x</span></code></p></td>
 <td><p>non-negative integer</p></td>
 <td><p>yes</p></td>
-<td><p>Left edge of the region on the canvas, in pixels</p></td>
+<td><p>Left edge of the region (its top-left corner) on the canvas, in pixels</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">y</span></code></p></td>
 <td><p>non-negative integer</p></td>
 <td><p>yes</p></td>
-<td><p>Top edge of the region on the canvas, in pixels</p></td>
+<td><p>Top edge of the region (its top-left corner) on the canvas, in pixels</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">width</span></code></p></td>
 <td><p>non-negative integer</p></td>
@@ -2871,7 +2898,7 @@ is the graphics plane; its size comes from the playlist’s <code class="docutil
 </tr>
 </tbody>
 </table>
-<p><strong><code class="docutils literal notranslate"><span class="pre">Script</span></code></strong> (0 or more). A script that runs when the application starts.</p>
+<p><strong><code class="docutils literal notranslate"><span class="pre">Script</span></code></strong> (0 or more). A script that runs when the application starts. No children.</p>
 <table class="docutils align-default">
 <thead>
 <tr class="row-odd"><th class="head"><p>Attribute</p></th>
@@ -2894,7 +2921,7 @@ is the graphics plane; its size comes from the playlist’s <code class="docutil
 </tbody>
 </table>
 <p><strong><code class="docutils literal notranslate"><span class="pre">Markup</span></code></strong> (0 or 1). The first page the application shows. Absent for
-script-only applications.</p>
+script-only applications. No children.</p>
 <table class="docutils align-default">
 <thead>
 <tr class="row-odd"><th class="head"><p>Attribute</p></th>
@@ -2916,7 +2943,7 @@ script-only applications.</p>
 </tr>
 </tbody>
 </table>
-<p><strong><code class="docutils literal notranslate"><span class="pre">Resource</span></code></strong> (1 or more, last). A file the application uses.</p>
+<p><strong><code class="docutils literal notranslate"><span class="pre">Resource</span></code></strong> (1 or more, last). A file the application uses. No children.</p>
 <table class="docutils align-default">
 <thead>
 <tr class="row-odd"><th class="head"><p>Attribute</p></th>
@@ -5249,7 +5276,7 @@ document order, then inline attributes, which win. <strong>INFERRED</strong>.</p
 </thead>
 <tbody>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">title</span></code> (default)</p></td>
-<td><p>locked to the title timeline: pauses and seeks with the video</p></td>
+<td><p>locked to the title timeline (media time): pauses and seeks with the video</p></td>
 <td><p>cues at specific movie times (in-movie overlays)</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">page</span></code></p></td>

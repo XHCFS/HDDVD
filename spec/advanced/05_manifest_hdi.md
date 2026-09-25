@@ -83,23 +83,31 @@ Application     @id?  @xml:base?                 the application
 
 **`Application`** (root, one per file). The application itself.
 
+| Child | How many | What it is |
+|---|---|---|
+| `Region` | exactly 1, first | Where the application draws |
+| `Script` | any number | Scripts run at start-up |
+| `Markup` | 0 or 1 | The first page shown |
+| `Resource` | 1 or more, last | Files the application uses |
+
 | Attribute | Type | Req. | What it is for |
 |---|---|---|---|
 | `id` | ID | no | Name of the application; script can refer to it |
 | `xml:base` | URI | no | Base for resolving relative `src` values |
 
-**`Region`** (exactly 1, first child). Where the application draws. The canvas
+**`Region`** (exactly 1, first child). Where the application draws when it
+starts: the values are the region's **initial** position and size. The canvas
 is the graphics plane; its size comes from the playlist's `Aperture`
-([03](03_playlist.md) §3.5).
+([03](03_playlist.md) §3.5). No children.
 
 | Attribute | Type | Req. | What it is for |
 |---|---|---|---|
-| `x` | non-negative integer | yes | Left edge of the region on the canvas, in pixels |
-| `y` | non-negative integer | yes | Top edge of the region on the canvas, in pixels |
+| `x` | non-negative integer | yes | Left edge of the region (its top-left corner) on the canvas, in pixels |
+| `y` | non-negative integer | yes | Top edge of the region (its top-left corner) on the canvas, in pixels |
 | `width` | non-negative integer | yes | Width of the region, in pixels |
 | `height` | non-negative integer | yes | Height of the region, in pixels |
 
-**`Script`** (0 or more). A script that runs when the application starts.
+**`Script`** (0 or more). A script that runs when the application starts. No children.
 
 | Attribute | Type | Req. | What it is for |
 |---|---|---|---|
@@ -107,14 +115,14 @@ is the graphics plane; its size comes from the playlist's `Aperture`
 | `id` | ID | no | Name of this entry |
 
 **`Markup`** (0 or 1). The first page the application shows. Absent for
-script-only applications.
+script-only applications. No children.
 
 | Attribute | Type | Req. | What it is for |
 |---|---|---|---|
 | `src` | URI | yes | The **initial** markup page (`.xmu`, §5.2). Later pages are loaded by script |
 | `id` | ID | no | Name of this entry |
 
-**`Resource`** (1 or more, last). A file the application uses.
+**`Resource`** (1 or more, last). A file the application uses. No children.
 
 | Attribute | Type | Req. | What it is for |
 |---|---|---|---|
