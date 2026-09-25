@@ -65,23 +65,68 @@ Manifests are usually members of an ACA ([04](04_aca.md)).
 | Root element | `Application` |
 | Encoding | UTF-8, optionally with a byte-order mark |
 
+### Document tree
+
+`?` = optional, `*` = any number, `+` = at least one. Children appear in exactly
+this order (the XSD is a `sequence`). None of them has child elements;
+everything is in attributes.
+
+```
+Application     @id?  @xml:base?                 the application
+├── Region      @x  @y  @width  @height          where it draws
+├── Script*     @src  @id?                       scripts run at start-up
+├── Markup?     @src  @id?                       first page shown
+└── Resource+   @src  @id?                       files it uses
+```
+
 ### Elements
 
-Children appear in exactly this order (the XSD is a `sequence`):
-`Region`, `Script`*, `Markup`?, `Resource`+.
+**`Application`** (root, one per file). The application itself.
 
-| Element | Occurs | Attribute | XSD type | Required | What it is for |
-|---|---|---|---|---|---|
-| `Application` | 1, root | `id` | `xs:ID` | no | Name of the application; script can refer to it |
-| | | `xml:base` | URI | no | Base for resolving relative `src` values |
-| `Region` | 1, first | `x`, `y` | `xs:nonNegativeInteger` | yes | Initial position (top-left) of the application's region on the canvas, in canvas coordinates (pixels of the graphics plane, sized by the playlist's `Aperture`, [03](03_playlist.md) §3.5) |
-| | | `width`, `height` | `xs:nonNegativeInteger` | yes | Size of that region, in canvas coordinates |
-| `Script` | 0..n | `src` | `xs:anyURI` | yes | An ECMAScript (`.js`) file evaluated as global code during the application's start-up |
-| | | `id` | `xs:ID` | no | Name of this entry |
-| `Markup` | 0..1 | `src` | `xs:anyURI` | yes | The **initial** markup page (`.xmu`, §5.2); later pages are loaded by script. Absent for script-only applications |
-| | | `id` | `xs:ID` | no | Name of this entry |
-| `Resource` | 1..n, last | `src` | `xs:anyURI` | yes | A file the application uses: markup, scripts, images, fonts, or a whole `.aca`. **Every** file the application uses must be listed, except files in the script-managed (API Managed) area of the File Cache. Must be the absolute URI of one of the playlist's resources (`ApplicationResource`, `TitleResource` or `PlaylistApplicationResource` `src`, [03](03_playlist.md) §3.14): the playlist decides when files are loaded, the manifest says which of them this application uses |
-| | | `id` | `xs:ID` | no | Name of this entry |
+| Attribute | Type | Req. | What it is for |
+|---|---|---|---|
+| `id` | ID | no | Name of the application; script can refer to it |
+| `xml:base` | URI | no | Base for resolving relative `src` values |
+
+**`Region`** (exactly 1, first child). Where the application draws. The canvas
+is the graphics plane; its size comes from the playlist's `Aperture`
+([03](03_playlist.md) §3.5).
+
+| Attribute | Type | Req. | What it is for |
+|---|---|---|---|
+| `x` | non-negative integer | yes | Left edge of the region on the canvas, in pixels |
+| `y` | non-negative integer | yes | Top edge of the region on the canvas, in pixels |
+| `width` | non-negative integer | yes | Width of the region, in pixels |
+| `height` | non-negative integer | yes | Height of the region, in pixels |
+
+**`Script`** (0 or more). A script that runs when the application starts.
+
+| Attribute | Type | Req. | What it is for |
+|---|---|---|---|
+| `src` | URI | yes | An ECMAScript (`.js`) file, evaluated as global code during start-up |
+| `id` | ID | no | Name of this entry |
+
+**`Markup`** (0 or 1). The first page the application shows. Absent for
+script-only applications.
+
+| Attribute | Type | Req. | What it is for |
+|---|---|---|---|
+| `src` | URI | yes | The **initial** markup page (`.xmu`, §5.2). Later pages are loaded by script |
+| `id` | ID | no | Name of this entry |
+
+**`Resource`** (1 or more, last). A file the application uses.
+
+| Attribute | Type | Req. | What it is for |
+|---|---|---|---|
+| `src` | URI | yes | Markup, script, image, font, or a whole `.aca` archive |
+| `id` | ID | no | Name of this entry |
+
+**Every** file the application uses must be listed, except files in the
+script-managed (API Managed) area of the File Cache. Each `src` must be the
+absolute URI of one of the playlist's resources (`ApplicationResource`,
+`TitleResource` or `PlaylistApplicationResource` `src`,
+[03](03_playlist.md) §3.14): the playlist decides when files are loaded, the
+manifest says which of them this application uses.
 
 `Script` and `Markup` say **what to run**; `Resource` says **what to load**. The
 file a `Script` or `Markup` names is always loadable through the `Resource` list:
