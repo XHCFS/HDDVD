@@ -46,7 +46,7 @@ and an EPUB (`make epub`, `docs/HD-DVD-Advanced-Content.epub`).
 | [03_playlist.md](03_playlist.md) | `VPLST$$$.XPL`: titles, clips, chapters, tracks |
 | [04_aca.md](04_aca.md) | `.ACA` archive |
 | [05_manifest_hdi.md](05_manifest_hdi.md) | Manifest, iHD, script |
-| [14_markup.md](14_markup.md) | iHD markup (`.xmu`, `.xts`, `.xss`): every element, style and state attribute, timing, path expressions |
+| [14_markup.md](14_markup.md) | iHD markup (`.xmu`, `.xts`, `.xss`): document tree, value types, every element, style and state attribute, timing, path expressions |
 | [06_vti.md](06_vti.md) | `HVA00001.VTI`: Advanced VTSI, ATRI, EVOBI |
 | [07_map.md](07_map.md) | `.MAP` time map (seek) |
 | [08_evo.md](08_evo.md) | `.EVO` MPEG-2 PS, NV_PCK |

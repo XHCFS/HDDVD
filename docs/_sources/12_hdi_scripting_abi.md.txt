@@ -207,7 +207,7 @@ iHD.xsd annotates `PathExpressionType` only as "Spec 7.5.2.4" (unpublished book)
 
 Namespaces: `state="http://www.dvdforum.org/2005/ihd#state"`, `style="http://www.dvdforum.org/2005/ihd#style"`.
 
-**Node functions** used on disc besides XPath's own `id()`: `class('c')` (elements whose `class` contains `c`) and `defaultNode()` (the cue's default node, the element its `begin` matched); see [14](14_markup.md) §14.7 for the full list with counts.
+**Node functions** used on disc besides XPath's own `id()`: `class('c')` (elements whose `class` contains `c`) and `defaultNode()` (the cue's default node, the element its `begin` matched); see [14](14_markup.md) §14.8 for the full list with counts.
 
 **`state:` functions** (one per `ihd#state` attribute [5]): `state:actioned()`, `state:enabled()`, `state:focused()`, `state:foreground()`, `state:pointer()`, `state:value()`.
 

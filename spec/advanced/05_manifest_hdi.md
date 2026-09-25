@@ -187,10 +187,13 @@ on 28 discs, 86 of them ACA members (extracted by offset/length).
 
 ## 5.2 Markup: `.xmu`
 
-**The complete markup reference is [14](14_markup.md)**: every element, style
-and state attribute, the timing model and the path expressions, checked against
-every markup document on disc (`e27`). This section keeps the research notes
-behind it.
+**The complete markup reference is [14](14_markup.md)**: the document tree
+(§14.2), the value types and what each parses to (§14.3), every element with its
+attributes (§14.4–14.7), the path expressions (§14.8), and every style and state
+attribute (§14.9–14.10), checked against every markup document on disc (`e27`).
+Read that sheet to implement markup. This section keeps the research notes
+behind it; where a count here differs from sheet 14, the earlier `e15` sample is
+the reason and sheet 14 is current.
 
 Namespace: `http://www.dvdforum.org/2005/ihd`  
 Also: `ihd#style`, `ihd#state`  
@@ -215,10 +218,10 @@ width height position display backgroundImage opacity nav*` then
 anchor zIndex visibility …`. New vs the first 50-ACA cut: `lineHeight`
 (37) once `<p>` archives landed.
 
-Used `ihd#state`: `value` 80, `focused` 33, `enabled` 1. Markup rarely sets
+Used `ihd#state` (`e27`): `value` 113, `focused` 33, `enabled` 1. Markup rarely sets
 `actioned`; Jumpstart Chapters and `1408` fire it from the remote (Enter).
 
-**Clocks.** `timing@clock`: `page` 66, `application` 9, `title` 3, omitted 6.
+**Clocks.** `timing@clock` (`e27`): `page` 68, `application` 9, `title` 3, omitted 8.
 
 The three clock types (Microsoft HDi Jumpstart [14], *Dissecting Chapters*):
 
