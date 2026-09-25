@@ -3,21 +3,23 @@
 *Counts written "N/120", "N/119", "on N discs", "listings", or as named discs are over the reference corpus of 120 archived retail HD DVD images [11]. `eNN` are the reproducible verification experiments [12].*
 
 iHD markup is the page language of HDi applications: the menus, pop-up menus,
-bonus screens and in-movie overlays. A markup document lays out elements on the
-graphics plane (boxes with images and text, buttons, text inputs), gives them
-styles and states, and describes in a timing section how those styles and states
-change over time and in response to focus and remote-control keys. Script
-([05](05_manifest_hdi.md) §5.3) reads and changes the same document through the
-DOM. A manifest names the application's first markup page
+bonus screens and in-movie overlays. A markup page does three things:
+
+- **Content** (`body`): the boxes, images, text, buttons and text fields on the
+  graphics plane, nested inside each other like HTML.
+- **Styling** (`style:` attributes and `styling`): where each box is, how big,
+  which image it shows, what colour its text is.
+- **Timing** (`timing`): what changes over time and in response to the remote,
+  for example "when this button gets focus, show its highlighted image".
+
+Script ([05](05_manifest_hdi.md) §5.3) reads and changes the same page through
+the DOM. A manifest names the application's first markup page
 ([05](05_manifest_hdi.md) §5.1).
 
-This sheet documents every element and attribute of the iHD schemas, grouped as
-the schemas group them: content (§14.4), styling (§14.5), timing (§14.6), then
-the path expressions used by timing (§14.7), every style attribute (§14.8) and
-every state attribute (§14.9). HDi is built from Web standards [15]: the element
-set is XHTML-like, the style attributes take their names and meanings from
-XSL-FO / CSS, and the timing model is SMIL 2.0 [18] over a DOM Level 2 tree
-[17] ([12](12_hdi_scripting_abi.md) §12.4). Where this sheet says "XSL-FO
+HDi is built from Web standards [15]: the elements are XHTML-like, the style
+attributes take their names and meanings from XSL-FO / CSS, and the timing model
+is SMIL 2.0 [18] over a DOM Level 2 tree [17]
+([12](12_hdi_scripting_abi.md) §12.4). Where this sheet says "XSL-FO
 semantics", those standards give the meaning; the iHD book chapters that restate
 them (Spec. 7.5–7.8) are not among the available sources.
 
@@ -25,11 +27,17 @@ Sources: the DVD Forum schemas [5] (v1.0 and v1.1), the HDi Jumpstart posts
 [14], the patent [1] for page switching and clocks, and the corpus, checked by
 `e27` (every markup document) with the earlier `e15` / `e17`.
 
+**How to read this sheet.** Start with the tree (§14.2), which shows every
+element and where it can go. §14.3 defines each value type once; every table
+after it uses those type names. §14.4 lists the attributes many elements share,
+so the element tables (§14.5–14.7) list only what is specific to each element.
+§14.9 is the full list of style attributes.
+
 ## 14.1 Files, namespaces, versions
 
 | File | Root element | What it holds |
 |---|---|---|
-| `.xmu` | `root` | A markup page: head (styles, timing) and body (content) |
+| `.xmu` | `root` | A markup page: `head` (styles, timing) and `body` (content) |
 | `.xts` | `timing` | A timing section on its own, pulled into a page's `head` by `include` |
 | `.xss` | `styling` (inferred) | A styling section on its own, pulled into `head` by `include` |
 | `.xas` | `root` | Advanced Subtitle markup ([11](11_gaps.md) B3); same document model |
@@ -37,13 +45,13 @@ Sources: the DVD Forum schemas [5] (v1.0 and v1.1), the HDi Jumpstart posts
 | Namespace | Prefix used here | Contains |
 |---|---|---|
 | `http://www.dvdforum.org/2005/ihd` | (none) | elements and their plain attributes |
-| `http://www.dvdforum.org/2005/ihd#style` | `style:` | the style attributes (§14.8) |
-| `http://www.dvdforum.org/2005/ihd#state` | `state:` | the state attributes (§14.9) |
+| `http://www.dvdforum.org/2005/ihd#style` | `style:` | the style attributes (§14.9) |
+| `http://www.dvdforum.org/2005/ihd#state` | `state:` | the state attributes (§14.10) |
 | `http://www.w3.org/XML/1998/namespace` | `xml:` | `xml:lang`, `xml:base`, `xml:space` |
 
 Schemas: `spec/raw/adv_obj/v1.1/iHD.xsd` (imports `iHDstyle.xsd` and
-`iHDstate.xsd`); v1.0 for reference. Differences in §14.10. The corpus
-validates against both except for one document (§14.11).
+`iHDstate.xsd`); v1.0 for reference. Differences in §14.11. The corpus
+validates against both except for one document (§14.12).
 
 **Reading rules.**
 
@@ -53,57 +61,109 @@ validates against both except for one document (§14.11).
   them) and ignore them for rendering. `SHREK_THE_THIRD_EU` puts 305 such
   attributes (`onaction`, `onup`, … in `http://sampleext`) on buttons for its own
   script; the schema only allows foreign attributes on `meta`.
-- Apply the defaults below when an attribute is absent.
-- An `id` is an XML ID: unique in the document, used by `nav*`, `style`,
-  `id()` paths and script.
-- `include` is resolved before anything else (§14.4).
+- Apply the defaults in the tables when an attribute is absent.
+- An `id` is unique in the document. `nav*`, `style`, `use`, `id()` paths and
+  script refer to elements by it.
+- `include` is resolved before anything else (§14.5).
 
-## 14.2 Document structure
+## 14.2 Document tree
+
+`?` = optional, `*` = any number, `+` = at least one. `( a | b )*` = any number
+of `a` and `b` in any order. Where a line lists several groups, they come in
+that order.
 
 ```
-root                     xml:lang (required)
-├── head?
-│   ├── meta*
-│   └── (include | styling | timing)*
-│       styling  → style*                              §14.5
-│       timing   → defs*, then (par | seq)*            §14.6
-│                  defs → (g | animate | set | event | link)*
-│                  par / seq → (cue | par | seq)*
-│                  cue → (animate | set | event)* or one link
-└── body?
+root                                  §14.5   the page
+├── head?                             §14.5   everything that is not drawn
+│   ├── meta*                         §14.5
+│   └── ( include | styling | timing )*
+│       ├── include                   §14.5   pulls in a .xss (styling) or .xts (timing)
+│       ├── styling                   §14.6
+│       │   ├── meta*
+│       │   └── style*                §14.6   one named or selected style
+│       └── timing                    §14.7
+│           ├── defs*                 §14.7   reusable effects
+│           │   └── ( g | animate | set | event | link )*
+│           │       g → ( g | animate | set | event )*
+│           └── ( par | seq )*        §14.7   time containers
+│               └── ( cue | par | seq )*
+│                   cue → ( animate | set | event )*   or exactly one link
+│                   event → param*
+└── body?                             §14.5   what is drawn
     ├── meta*
-    └── (div | object | include)*                      §14.4
-        div   → meta*, (button | object | input | div | p)*
-        p     → text and (object | button | input | br | span)*
-        span  → text and (object | button | input | br | span)*
-        button, input → meta*, p?
-        object → meta*, param*, area*, p?
+    └── ( div | object | include )*
 ```
 
-Every content element gets common attributes from its **base type**:
+The content under `body` nests to any depth. What each content element can hold:
 
-| Base | Adds | Elements |
-|---|---|---|
-| NonDisplay | (nothing) | `root`, `head`, `meta`, `include` |
-| Display | `class`, `state:enabled` | `body`, `br`, `object` |
-| Navigable | + `style` (IDREFS), `state:pointer` | `div`, `p`, `span` |
-| Activateable | + `state:focused`, `state:actioned` | (base only) |
-| Stateful | + `state:value` | `area`, `button`, `input` |
+```
+div      meta*, then ( div | button | input | object | p )*
+p        text mixed with ( meta | object | button | input | br | span )*
+span     text mixed with ( meta | object | button | input | br | span )*
+button   meta*, p?                    the p is the button's label
+input    meta*, p?
+object   meta*, param*, area*, p?
+param    text only
+br, area no children
+meta     any elements from other namespaces
+```
 
-All elements also accept `xml:base`, `xml:lang`, `xml:space` and `id`.
+A typical menu page:
+
+```
+root
+├── head
+│   ├── styling → style id="defaultStyles"
+│   └── timing clock="page"
+│       └── par
+│           ├── cue  begin="id('BT_play')[state:focused()=true()]"  → set backgroundFrame=1
+│           └── cue  begin="id('BT_play')[state:actioned()=true()]" → event name="play"
+└── body
+    └── div  (full-screen background image)
+        ├── button id="BT_play"   (x, y, width, height, backgroundImage, navDown="BT_scenes")
+        │   └── p → "Play"
+        └── button id="BT_scenes" (…, navUp="BT_play")
+```
 
 ## 14.3 Data types
 
-| Type | Syntax | Meaning |
-|---|---|---|
-| time | `HH:MM:SS` or `HH:MM:SS:FF` (clock value, hours may exceed two digits), or a number with a unit: `h`, `m`, `s`, `ms`, `f` (`0.5s`, `500ms`, `9f`) | A time or duration on the element's clock (§14.6). `f` counts frames: the title timeline's frame rate on the title clock, the tick rate on page and application clocks (**INFERRED**) |
-| time or path | a time, or a path expression (§14.7) | `begin` / `end` on timing elements: a time, or a condition that becomes true |
-| length | integer + `px`, `em` or `%` (`-12px` allowed where the type allows negatives) | Pixels are graphics-plane pixels (the playlist `Aperture`, normally 1920×1080) |
-| colour | `#rgb`, `#rrggbb`, `rgb(r,g,b)`, `rgba(r,g,b,a)` (0–255 or %), one of 16 names (`aqua black blue fuchsia gray green lime maroon navy olive purple red silver teal white yellow`), `transparent` | |
-| animated value | several values separated by `;` (`1;0.8;0.5`) | Keyframes for `animate` (§14.6); a style attribute that allows it lists "animatable" in §14.8 |
-| `inherit` | the token | Take the parent's value |
-| access key list | space-separated: `U+XXXX` (a Unicode character) or a virtual key `VK_…` | Remote keys that activate the element directly |
-| URI | `anyURI` | `file:///dvddisc/…`, an ACA member `…/x.aca/member`, or a relative URI (against `xml:base` then the document's location) |
+Every attribute in this sheet has one of these types. **Parsed value** says what
+the text becomes once it is read.
+
+| Type | Written as | Parsed value | Notes |
+|---|---|---|---|
+| boolean | `true` \| `false` | true / false | |
+| integer | `-?[0-9]+` | signed integer | |
+| non-negative integer | `[0-9]+` | unsigned integer | |
+| number | decimal, `0.5` | fraction | only `opacity`, 0 to 1 |
+| string | any text | text | |
+| enum | one of the listed words | one of a fixed set | the tables list every allowed word |
+| ID | an XML name (`BT_play`) | text | unique in the document |
+| IDREF | an ID | text | names another element |
+| IDREFS | IDs separated by spaces | list of texts | |
+| names | names separated by spaces (`xs:NMTOKENS`) | list of texts | `class` |
+| URI | `file:///dvddisc/…`, `…/x.aca/member`, or relative | text, kept as written | relative URIs resolve against `xml:base`, then the document's own location |
+| URL list | `url('a.png') url('b.png')` or `none` | list of URIs, or none | `backgroundImage` |
+| time | `HH:MM:SS`, `HH:MM:SS:FF` (hours may have more than two digits), or a decimal with a unit: `h`, `m`, `s`, `ms`, `f` (`0.5s`, `500ms`, `9f`) | either a clock value (hours, minutes, seconds, frames) or an amount with a unit | `f` counts frames of the element's clock (§14.7): the title timeline's frame rate on the title clock, the tick rate on page and application clocks (**INFERRED**). Keep the unit: the frame length is known only once the clock is |
+| path | an XPath 1.0 expression (§14.8) | text, kept as written | evaluated while the page runs, not when it is read |
+| time or path | a time, or a path | tagged: a time or a path | a value that matches the time syntax is a time; anything else is a path |
+| length | integer + `px`, `em` or `%` (`-12px` where negatives are allowed) | number + unit | `px` are graphics-plane pixels (the playlist `Aperture`, normally 1920×1080) |
+| percentage | integer + `%` | number | |
+| colour | `#rgb`, `#rrggbb`, `rgb(r,g,b)`, `rgba(r,g,b,a)` (each 0–255 or a %), one of 16 names, or `transparent` | red, green, blue, alpha | names: `aqua black blue fuchsia gray green lime maroon navy olive purple red silver teal white yellow`. `transparent` = alpha 0 |
+| access keys | space-separated keys: `U+XXXX` (4–6 hex digits, a Unicode character) or a virtual key `VK_…` | list of keys, each a character code or a virtual key | virtual keys listed below |
+| border | text without `;` (CSS-like width, style, colour) | text | the grammar is not in the sources |
+| font | a URI, optionally followed by a family name in quotes: `file:///dvddisc/ADV_OBJ/font.ttf 'Arial'` | URI + optional family name | an OpenType file in the File Cache; players have no built-in fonts |
+
+Two forms apply on top of the style and state types:
+
+| Form | Written as | Parsed value | Where |
+|---|---|---|---|
+| keyframe list | values separated by `;` (`1;0.8;0.5`) | list of values of the attribute's own type; a single value is a list of one | every **animatable** style attribute (§14.9), `state:enabled`, `state:focused`, `state:value`. Used by `animate` (§14.7) |
+| `inherit` | the word `inherit` | "take the parent's value" | every style attribute except `anchor`, `crop`, `flip` and `navIndex` |
+
+So a style attribute on an element is in one of three conditions: **not
+written** (named and selected styles, then the default, apply), **`inherit`**,
+or **a value** (one value or a keyframe list).
 
 Virtual keys (`VirtualKeyType`): `VK_PLAY VK_PAUSE VK_FF VK_FR VK_SF VK_SR
 VK_STEP_PREV VK_STEP_NEXT VK_SKIP_PREV VK_SKIP_NEXT VK_SUBTITLE_SWITCH
@@ -112,141 +172,232 @@ VK_LEFT VK_UP VK_RIGHT VK_DOWN VK_LEFTUP VK_RIGHTUP VK_LEFTDOWN VK_RIGHTDOWN
 VK_TAB VK_A_BUTTON`…`VK_L_BUTTON VK_ENTER VK_ESC VK_0`…`VK_9
 VK_MOUSE_1`…`VK_MOUSE_5 VK_VECTOR_1`…`VK_VECTOR_4`.
 
-## 14.4 Content elements
+## 14.4 Shared attributes
 
-**`root`** (Spec. 7.5.3.1.13). The document element. Children: `head?`, `body?`.
+The schema builds the content elements from a chain of base types, each adding
+attributes to the one before. This table spells the chain out: the **On**
+column says exactly which elements have each attribute, so the element tables
+below do not repeat them.
 
-| Attribute | Type | Req. | What it is for |
-|---|---|---|---|
-| `xml:lang` | language | **yes** | Language of the page's text (`en`, `en-us` on disc) |
-| `xml:base` | URI | no | Base for relative URIs in the page |
-| `xml:space`, `id` | | no | XML standard |
+| Attribute | Type | Default | On | What it is for |
+|---|---|---|---|---|
+| `id` | ID | | every element | Name that paths, `nav*`, `style`, `use` and script refer to |
+| `xml:lang` | language (`en`, `en-us`) | | every element except `link`; **required** on `root` | Language of the element's text |
+| `xml:base` | URI | | every element | Base for relative URIs inside the element |
+| `xml:space` | enum `default` \| `preserve` | | every element except `link` | XML white-space handling |
+| `class` | names | | `body`, `br`, `object`, `div`, `p`, `span`, `button`, `input`, `area` | Group names, matched by `class()` in paths (§14.8) and by script |
+| `state:enabled` | boolean, keyframe list | `true` | same as `class` | `false`: the element cannot be focused or activated (§14.10) |
+| `style` | IDREFS | | `body`, `object`, `div`, `p`, `span`, `button`, `input`, `area` | Named styles to apply (§14.6) |
+| `state:pointer` | boolean | `false` | `div`, `p`, `span`, `button`, `input`, `area` | A pointer is over the element (§14.10) |
+| `state:focused` | boolean, keyframe list | `false` | `button`, `input`, `area` | The element has the focus (§14.10) |
+| `state:actioned` | boolean | `false` | `button`, `input`, `area` | The element is being activated (§14.10) |
+| `state:value` | boolean or string, keyframe list | | `button`, `input`, `area` | The element's value (§14.10) |
 
-**`head`** (7.5.3.1.6). Non-visual part: `meta*`, then any number of `include`,
-`styling`, `timing`.
+Schema names for reference: `root`, `head`, `meta`, `include` are
+*NonDisplay*; `body`, `br`, `object` are *Display* (+ `class`,
+`state:enabled`); `div`, `p`, `span` are *Navigable* (+ `style`,
+`state:pointer`); `button`, `input`, `area` are *Stateful* (+ `state:focused`,
+`state:actioned`, `state:value`). `body` and `object` add `style` themselves.
 
-**`body`** (7.5.3.1.2). The visible page; its box is the application's region
-(the manifest `Region`). Children: `meta*`, then `div`, `object`, `include`.
+**Timing attributes.** `begin`, `dur` and `end` appear on content elements and
+on timing elements, with different types:
 
-| Attribute | Type | Default | What it is for |
-|---|---|---|---|
-| `timeContainer` | `par` \| `seq` | `seq` | How the body's timed children are scheduled (§14.6) |
-| `begin`, `dur`, `end` | time | | When the body is active on its clock |
-| `style` | IDREFS | | Named styles to apply (§14.5) |
-| `state:foreground` | boolean | `false` | Whether this page's application is the foreground application, the one that receives the remote keys (**INFERRED** from the name) |
-| `class`, `state:enabled` | | | From Display base |
-| body style attributes | | | §14.8 |
+| On | `begin`, `end` | `dur` |
+|---|---|---|
+| `body`, `div`, `p`, `span` | time | time |
+| `timing`, `par`, `seq`, `cue` | time or path | time |
 
-**`div`** (7.5.3.1.5). A box: the building block of every menu. Children:
-`meta*`, then `button`, `object`, `input`, `div`, `p`.
+## 14.5 Content elements
 
-| Attribute | Type | Default | What it is for |
-|---|---|---|---|
-| `timeContainer` | `par` \| `seq` | `par` | Scheduling of timed children |
-| `begin`, `dur`, `end` | time | | Active interval |
-| `class`, `style`, `state:enabled`, `state:pointer` | | | From Navigable base |
-| div style attributes | | | §14.8 |
+Each table lists the element's own attributes. Shared attributes are in §14.4;
+the style attributes an element accepts are in §14.9, column **Allowed on**.
 
-**`p`** (7.5.3.1.11) and **`span`** (7.5.3.1.14). A paragraph and an inline run
-of text (mixed content). Children: text, `meta`, `object`, `button`, `input`,
-`br`, `span`. Attributes: `timeContainer` (default `par`), `begin` / `dur` / `end`,
-the Navigable base, and their style attributes. On disc every `p` is inside a
-`div`, and the text styling (`font`, `fontSize`, `color`, `lineHeight`) is on
-that `div` ([05](05_manifest_hdi.md) §5.9).
+### `root`
 
-**`br`** (7.5.3.1.3). A line break inside `p` / `span`. Display base, `br` style
+The document element of a `.xmu` or `.xas` (Spec. 7.5.3.1.13).
+Children: `head?`, `body?`.
+
+| Attribute | Type | Req. | Default | What it is for |
+|---|---|---|---|---|
+| `xml:lang` | language | **yes** | | Language of the page's text (`en`, `en-us` on disc) |
+
+Also: `id`, `xml:base`, `xml:space`.
+
+### `head`
+
+The part of the page that is not drawn (7.5.3.1.6). Children: `meta*`, then any
+number of `include`, `styling`, `timing` in any order. No attributes of its own.
+
+### `body`
+
+The visible page (7.5.3.1.2). Its box is the application's region (the manifest
+`Region`). Children: `meta*`, then any number of `div`, `object`, `include`.
+
+| Attribute | Type | Req. | Default | What it is for |
+|---|---|---|---|---|
+| `timeContainer` | enum `par` \| `seq` | no | `seq` | How the body's timed children are scheduled (§14.7) |
+| `begin`, `dur`, `end` | time | no | | When the body is active on its clock |
+| `state:foreground` | boolean | no | `false` | Whether this page's application is the foreground application, the one that receives the remote keys (**INFERRED** from the name) |
+
+Also: `class`, `state:enabled`, `style`; style attributes.
+
+### `div`
+
+A box, the building block of every menu (7.5.3.1.5). Children: `meta*`, then
+any number of `div`, `button`, `input`, `object`, `p`.
+
+| Attribute | Type | Req. | Default | What it is for |
+|---|---|---|---|---|
+| `timeContainer` | enum `par` \| `seq` | no | `par` | How its timed children are scheduled |
+| `begin`, `dur`, `end` | time | no | | When the box is active |
+
+Also: `class`, `state:enabled`, `style`, `state:pointer`; style attributes.
+
+### `p` and `span`
+
+A paragraph and an inline run of text (7.5.3.1.11, 7.5.3.1.14). Both hold text
+mixed with `meta`, `object`, `button`, `input`, `br` and `span` elements.
+
+| Attribute | Type | Req. | Default | What it is for |
+|---|---|---|---|---|
+| `timeContainer` | enum `par` \| `seq` | no | `par` | How timed children are scheduled |
+| `begin`, `dur`, `end` | time | no | | When the text is active |
+
+Also: `class`, `state:enabled`, `style`, `state:pointer`; style attributes.
+
+On disc every `p` is inside a `div`, and the text styling (`font`, `fontSize`,
+`color`, `lineHeight`) is on that `div` ([05](05_manifest_hdi.md) §5.9).
+
+### `br`
+
+A line break inside `p` or `span` (7.5.3.1.3). No children, no attributes of
+its own. Also: `class`, `state:enabled`; style attributes.
+
+### `button`
+
+Something the user can focus and press (7.5.3.1.4). Children: `meta*`, `p?`
+(its label).
+
+| Attribute | Type | Req. | Default | What it is for |
+|---|---|---|---|---|
+| `accessKey` | access keys | no | | Remote keys that press the button directly, wherever the focus is (`VK_MENU`, `VK_TOP_MENU`, `VK_A_BUTTON` on disc). Pressing one sets `state:actioned` on it |
+
+Also: `class`, `state:enabled`, `style`, `state:pointer`, `state:focused`,
+`state:actioned`, `state:value`; style attributes, including the `nav*` focus
+links (§14.9).
+
+### `input`
+
+A text field (7.5.3.1.8). Children: `meta*`, `p?`.
+
+| Attribute | Type | Req. | Default | What it is for |
+|---|---|---|---|---|
+| `mode` | enum `password` \| `singleline` \| `multiline` \| `display` | no | `singleline` | Kind of field; `display` shows text without editing |
+| `accessKey` | access keys | no | | As `button` |
+
+The field's text is its `state:value`. Also: `class`, `state:enabled`, `style`,
+`state:pointer`, `state:focused`, `state:actioned`, `state:value`; style
 attributes.
 
-**`button`** (7.5.3.1.4). A focusable, activatable element. Children: `meta*`,
-`p?` (its label).
+### `object`
 
-| Attribute | Type | What it is for |
-|---|---|---|
-| `accessKey` | access key list | Remote keys that activate the button directly, wherever focus is (`VK_MENU`, `VK_TOP_MENU`, `VK_A_BUTTON` on disc). Pressing one sets `state:actioned` on it |
-| Stateful base | | `class`, `style`, `state:enabled`, `state:pointer`, `state:focused`, `state:actioned`, `state:value` |
-| button style attributes | | §14.8, including the `nav*` focus graph |
+Embedded media (7.5.3.1.10). Children: `meta*`, `param*`, `area*`, `p?`.
 
-**`input`** (7.5.3.1.8). A text field. Children: `meta*`, `p?`.
+| Attribute | Type | Req. | Default | What it is for |
+|---|---|---|---|---|
+| `type` | enum `image/jpeg` \| `image/png` \| `image/cvi` \| `image/cdw` \| `image/mng` \| `audio/x-wav` \| `application/x-clearrect` \| `application/x-graphic` | **yes** | | What the object is. `application/x-clearrect` clears its box on the graphics plane so video shows through; `audio/x-wav` is an effect sound |
+| `src` | URI | no | | The media file |
+| `content` | IDREF | no | | Element whose content the object presents |
 
-| Attribute | Type | Default | What it is for |
-|---|---|---|---|
-| `mode` | `password` \| `singleline` \| `multiline` \| `display` | `singleline` | Kind of field; `display` shows text without editing |
-| `state:value` | string | | The text |
-| `accessKey` | access key list | | As `button` |
+Also: `class`, `state:enabled`, `style`; style attributes.
 
-**`object`** (7.5.3.1.10). Embedded media. Children: `meta*`, `param*`,
-`area*`, `p?`.
+### `param`
 
-| Attribute | Type | Req. | What it is for |
-|---|---|---|---|
-| `type` | `image/jpeg` \| `image/png` \| `image/cvi` \| `image/cdw` \| `image/mng` \| `audio/x-wav` \| `application/x-clearrect` \| `application/x-graphic` | yes | What the object is. `application/x-clearrect` clears its box on the graphics plane so video shows through; `audio/x-wav` is an effect sound |
-| `src` | URI | no | The media file |
-| `content` | IDREF | no | Element whose content the object presents |
-| `style` | IDREFS | no | Named styles |
-| object style attributes | | | §14.8 |
+A named value for its parent `object` or `event` (7.5.3.1.12). Its text content
+may carry a value too.
 
-**`param`** (7.5.3.1.12). A named value for its parent `object` or `event`:
-`name` (required), `value`; the element may also have text content.
+| Attribute | Type | Req. | Default | What it is for |
+|---|---|---|---|---|
+| `name` | string | **yes** | | Name of the value |
+| `value` | string | no | | The value |
 
-**`area`** (7.5.3.1.1). A clickable region of an `object` (image map):
+### `area`
 
-| Attribute | Type | Default | What it is for |
-|---|---|---|---|
-| `shape` | `circle` \| `poly` \| `rect` \| `default` | `default` | Region shape; `default` = the whole object |
-| `coords` | list of non-negative integers | | Shape coordinates (HTML image-map convention) |
-| `accessKey` | access key list | | As `button` |
-| Stateful base, area style attributes | | | |
+A clickable region of an `object`, as in an HTML image map (7.5.3.1.1).
+No children.
 
-**`meta`** (7.5.3.1.9). Author metadata: any elements and attributes from other
-namespaces; ignored by rendering. On disc always empty (329).
+| Attribute | Type | Req. | Default | What it is for |
+|---|---|---|---|---|
+| `shape` | enum `circle` \| `poly` \| `rect` \| `default` | no | `default` | Shape of the region; `default` is the whole object |
+| `coords` | non-negative integers, space-separated | no | | Shape coordinates, HTML image-map convention |
+| `accessKey` | access keys | no | | As `button` |
 
-**`include`** (7.5.3.1.7). Pulls another document into this one at this point.
+Also: `class`, `state:enabled`, `style`, `state:pointer`, `state:focused`,
+`state:actioned`, `state:value`; style attributes.
 
-| Attribute | Type | Req. | What it is for |
-|---|---|---|---|
-| `href` | URI | yes | The document: `.xmu` fragment in `body`, `.xts` (a `timing`) or `.xss` (a `styling`) in `head` |
-| `condition` | string | no | Condition for including it (unused on disc) |
+### `meta`
 
-On disc: `body` includes `.xmu` 23, `head` includes `.xss` 11 and `.xts` 2.
+Author metadata (7.5.3.1.9): any elements and attributes from other namespaces.
+Ignored by rendering. On disc always empty (329).
 
-## 14.5 Styling
+### `include`
 
-Styles can be written three ways, all with the same `style:` attributes (§14.8):
+Pulls another document in at this point (7.5.3.1.7).
+
+| Attribute | Type | Req. | Default | What it is for |
+|---|---|---|---|---|
+| `href` | URI | **yes** | | The document: a `.xmu` fragment inside `body`; a `.xts` (a `timing`) or `.xss` (a `styling`) inside `head` |
+| `condition` | string | no | | Condition for including it (unused on disc) |
+
+On disc: `body` includes `.xmu` 23 times, `head` includes `.xss` 11 and `.xts` 2.
+
+## 14.6 Styling
+
+Styles can be given three ways, all with the same `style:` attributes (§14.9):
 
 1. **Inline**: `style:` attributes on the element itself.
-2. **Named styles**: a `style` element with an `id` in `head/styling`; an element
-   lists the ids it uses in its `style` attribute (space-separated IDREFS; `style`
-   elements can also reference others the same way).
-3. **Selected styles**: a `style` element with `select` (a path expression,
-   §14.7) applies to every element the path matches.
-
-**`styling`** (7.6.3.1.1): `meta*`, `style*`.
-
-**`style`** (7.6.3.1.2): children `meta*`.
-
-| Attribute | Type | What it is for |
-|---|---|---|
-| `id` | ID | Name other elements use in their `style` attribute |
-| `style` | IDREFS | Other named styles this one builds on |
-| `select` | path | Elements this style applies to |
-| any `style:` attribute | | The style values (all 61 allowed) |
+2. **Named**: a `style` element with an `id` in `head/styling`. An element lists
+   the ids it uses in its `style` attribute; a `style` can build on others the
+   same way.
+3. **Selected**: a `style` element with `select` applies to every element the
+   path matches.
 
 Precedence between the three is not in the available sources. Apply them in the
 CSS order that HDi's model follows [15]: named or selected styles first, in
-document order, then inline attributes, which win. **INFERRED**. On disc: 88
-`style` elements, named styles referenced 387 times (`defaultStyles`,
-`defaultStyles keyStyle`, …); `select` on `style` is unused.
+document order, then inline attributes, which win. **INFERRED**.
 
-## 14.6 Timing
+### `styling`
+
+A block of styles (7.6.3.1.1). Children: `meta*`, `style*`. No attributes of
+its own.
+
+### `style`
+
+One style (7.6.3.1.2). Children: `meta*`.
+
+| Attribute | Type | Req. | Default | What it is for |
+|---|---|---|---|---|
+| `id` | ID | no | | Name other elements use in their `style` attribute |
+| `style` | IDREFS | no | | Other named styles this one builds on |
+| `select` | path | no | | Elements this style applies to |
+| every `style:` attribute | §14.9 | no | | The style values; all 61 are allowed here |
+
+Also: `xml:lang`, `xml:base`, `xml:space`.
+
+On disc: 88 `style` elements; named styles referenced 387 times
+(`defaultStyles`, `defaultStyles keyStyle`, …); `select` on `style` is unused.
+
+## 14.7 Timing
 
 Timing makes the page change over time and react to input. It lives in
-`head/timing` (or an included `.xts`), separately from the content it acts on.
+`head/timing` (or an included `.xts`), apart from the content it acts on: each
+`cue` selects the elements it changes.
 
-**Clocks.** Every timing section runs on one clock (`timing@clock`):
+**Clocks.** Every timing section runs on one clock, chosen by `timing@clock`:
 
 | Clock | Runs | Used for |
 |---|---|---|
-| `title` (default) | locked to the title timeline (media time): pauses and seeks with the video | cues at specific movie times (in-movie overlays) |
+| `title` (default) | locked to the title timeline: pauses and seeks with the video | cues at specific movie times (in-movie overlays) |
 | `page` | from when the page is loaded, independent of the video | menus: effects keep playing while the video is paused |
 | `application` | for the application's whole active life | timers shared across pages |
 
@@ -254,65 +405,98 @@ Page and application clocks tick at `TitleSet@tickBase`, reduced by
 `Title@tickBaseDivisor` ([03](03_playlist.md) §3.7, §3.8). On disc: `page` 68,
 `application` 9, `title` 3, omitted 8. ([05](05_manifest_hdi.md) §5.2.)
 
-**`timing`** (7.7.2.9.10). Children: `defs*`, then `par` / `seq`.
+### `timing`
 
-| Attribute | Type | Default | What it is for |
-|---|---|---|---|
-| `clock` | `title` \| `application` \| `page` | `title` | The clock (above) |
-| `timeContainer` | `par` \| `seq` | `par` | How the top-level containers run |
-| `begin`, `dur`, `end` | time or path | | Active interval of the whole section |
-| `clockDivisor` (v1.0 only) | positive integer | `1` | Removed in v1.1 |
+A timing section (7.7.2.9.10). Children: `defs*`, then any number of `par`, `seq`.
 
-**`par`** and **`seq`** (7.7.2.9.7–8). Time containers, as SMIL: the children of
-`par` run in parallel; the children of `seq` one after another. Children: `cue`,
-`par`, `seq`. Attributes: `begin`, `dur`, `end` (time or path).
+| Attribute | Type | Req. | Default | What it is for |
+|---|---|---|---|---|
+| `clock` | enum `title` \| `application` \| `page` | no | `title` | The clock (above) |
+| `timeContainer` | enum `par` \| `seq` | no | `par` | How the top-level containers run |
+| `begin`, `end` | time or path | no | | Active interval of the whole section |
+| `dur` | time | no | | |
+| `clockDivisor` | positive integer | no | `1` | **v1.0 only**, removed in v1.1 |
 
-**`cue`** (7.7.2.9.2). The unit of action: while its interval is active, it applies
-its effects to the elements it selects.
+### `par` and `seq`
 
-| Attribute | Type | Default | What it is for |
-|---|---|---|---|
-| `select` | path | | The elements the cue acts on. Absent: the element its `begin` path matched (see `defaultNode()`, §14.7) |
-| `begin` | time or path | | When the cue starts: a time, or the moment a condition becomes true (`id('BT_play')[state:focused()=true()]`) |
-| `end` | time or path | | When it stops |
-| `dur` | time | | Its length (instead of `end`) |
-| `use` | IDREFS | | `g` elements from `defs` whose effects to apply, as if they were written inside the cue |
-| `fill` | `remove` \| `hold` | `remove` | After the cue ends: `remove` undoes its effects, `hold` keeps the final values |
+Time containers, as in SMIL (7.7.2.9.7–8): the children of `par` run at the
+same time; the children of `seq` run one after another. Children: any number of
+`cue`, `par`, `seq`.
 
-Children: any number of `animate`, `set`, `event`; **or** a single `link`.
+| Attribute | Type | Req. | Default | What it is for |
+|---|---|---|---|---|
+| `begin`, `end` | time or path | no | | When the container starts and stops |
+| `dur` | time | no | | Its length |
 
-**`defs`** (7.7.2.9.3) holds reusable effects: `g`, `animate`, `set`, `event`,
-`link`. **`g`** (7.7.2.9.5) groups them under an `id` for `cue@use`; children
-`g`, `animate`, `set`, `event`.
+### `cue`
 
-**`set`** (7.7.2.9.9). While active, sets style and state attributes of the
-selected elements to the given values. Allowed: every animatable style attribute
-and `state:enabled`, `state:focused`, `state:value` (v1.1). Example:
-`<set style:backgroundFrame="1"/>` shows the focused image.
+The unit of action (7.7.2.9.2): while it is active, it applies its effects to
+the elements it selects. Children: any number of `animate`, `set`, `event`,
+**or** exactly one `link`.
 
-**`animate`** (7.7.2.9.1). Changes attributes over the cue's duration through a
-list of keyframes (`style:opacity="0;0.5;1"`), spread evenly across the duration.
+| Attribute | Type | Req. | Default | What it is for |
+|---|---|---|---|---|
+| `select` | path | no | | The elements the cue acts on. Absent: the element its `begin` path matched (`defaultNode()`, §14.8) |
+| `begin` | time or path | no | | When it starts: a time, or the moment a condition becomes true (`id('BT_play')[state:focused()=true()]`) |
+| `end` | time or path | no | | When it stops |
+| `dur` | time | no | | Its length, instead of `end` |
+| `use` | IDREFS | no | | `g` elements in `defs` whose effects apply as if written inside the cue |
+| `fill` | enum `remove` \| `hold` | no | `remove` | After the cue ends: `remove` undoes its effects, `hold` keeps the final values |
 
-| Attribute | Type | Default | What it is for |
-|---|---|---|---|
-| `calcMode` | `linear` \| `discrete` | `linear` | Interpolate between keyframes, or jump |
-| `additive` | `replace` \| `sum` | `replace` | Replace the attribute's value, or add to it |
-| animatable style / state attributes | animated value | | The keyframes |
+### `defs` and `g`
 
-**`event`** (7.7.2.9.4). Fires a DOM event named `name` (required) when the cue
-starts, targeted at the cue's selected elements (**INFERRED**); script receives it through
-`addEventListener(name, …)`. Children: `param*`, the event's data.
+`defs` (7.7.2.9.3) holds reusable effects: any number of `g`, `animate`, `set`,
+`event`, `link`. `g` (7.7.2.9.5) groups effects under an `id` so a `cue` can
+`use` them; its children are `g`, `animate`, `set`, `event`. Neither has
+attributes beyond `id` and the `xml:` ones.
 
-**`link`** (7.7.2.9.6). Switches the application to another markup page:
-`href` (required, the `.xmu`), `xml:base`, `id` (v1.1). The current page is
-replaced; the application and its File Cache stay [1]. On disc: 12, all in
-`OLIVER_TWIST_JPN` menus.
+### `set`
 
-**Rules** (SMIL 2.0 [18], [12](12_hdi_scripting_abi.md) §12.4):
+While active, sets style and state attributes of the selected elements
+(7.7.2.9.9). Its attributes **are** the values to set: any animatable style
+attribute (§14.9) and `state:enabled`, `state:focused`, `state:value`. No
+children. Example: `<set style:backgroundFrame="1"/>` shows the focused image.
+
+### `animate`
+
+Changes attributes over the cue's duration through keyframes spread evenly
+across it (7.7.2.9.1): `<animate style:opacity="0;0.5;1"/>`. No children.
+
+| Attribute | Type | Req. | Default | What it is for |
+|---|---|---|---|---|
+| `calcMode` | enum `linear` \| `discrete` | no | `linear` | Interpolate between keyframes, or jump |
+| `additive` | enum `replace` \| `sum` | no | `replace` | Replace the attribute's value, or add to it |
+| any animatable style attribute, `state:enabled`, `state:focused`, `state:value` | keyframe list | no | | The keyframes |
+
+### `event`
+
+Fires a DOM event when the cue starts (7.7.2.9.4), aimed at the cue's selected
+elements (**INFERRED**). Script receives it with `addEventListener(name, …)`.
+Children: `param*`, the event's data.
+
+| Attribute | Type | Req. | Default | What it is for |
+|---|---|---|---|---|
+| `name` | name (`xs:NMTOKEN`) | **yes** | | The event's name |
+
+### `link`
+
+Switches the application to another markup page (7.7.2.9.6). The current page is
+replaced; the application and its File Cache stay [1]. No children. On disc: 12,
+all in `OLIVER_TWIST_JPN` menus.
+
+| Attribute | Type | Req. | Default | What it is for |
+|---|---|---|---|---|
+| `href` | URI | **yes** | | The `.xmu` to switch to |
+| `xml:base` | URI | no | | Base for `href` |
+| `id` | ID | no | | v1.1 only |
+
+### Rules
+
+From SMIL 2.0 [18] and [12](12_hdi_scripting_abi.md) §12.4:
 
 - A cue whose `begin` is a path starts when the path becomes true and ends when
-  its `end` becomes true (or after `dur`); it can start again when `begin` is
-  next true.
+  its `end` becomes true (or after `dur`). It can start again the next time
+  `begin` is true.
 - Evaluate path conditions on every clock tick and on every focus, action or
   state change.
 - A cue's timing never outlives its application: the application's valid period
@@ -322,7 +506,7 @@ On disc: `cue` 1239, `set` 579, `event` 510, `animate` 483, `par` 204, `seq` 33,
 `defs` 54, `g` 8, `link` 12; `fill` only `hold` (176); `calcMode` only `linear`
 (24); `additive` only `sum` (12).
 
-## 14.7 Path expressions
+## 14.8 Path expressions
 
 `begin`, `end` and `select` on timing elements, and `select` on `style`, take a
 path expression (`PathExpressionType`, Spec. 7.5.2.4). It is **XPath 1.0**
@@ -334,13 +518,13 @@ bound, the page's variables, and these functions:
 | `id('x')`, `id($v)` | node-set | The element with that `id` (XPath standard) |
 | `class('c')`, `class($v)` | node-set | Every element whose `class` contains `c` (iHD extension) |
 | `defaultNode()` | node-set | The cue's default node: the element its `begin` matched. On disc it appears only in the `end` of timing elements (192 `cue`, 1 `par`) that have no `select` and whose `begin` names one element, as `defaultNode()[state:focused()=false()]`: "end when that element loses focus". **INFERRED** |
-| `state:focused()`, `state:actioned()`, `state:enabled()`, `state:pointer()`, `state:value()`, `state:foreground()` | boolean or string | The state attribute (§14.9) of the context node |
-| `style:x()`, `style:opacity()`, … (one per style attribute) | string | The current value of that style attribute of the context node; with a node argument (`style:x(id('focusToggle'))`) of that node |
+| `state:focused()`, `state:actioned()`, `state:enabled()`, `state:pointer()`, `state:value()`, `state:foreground()` | boolean or string | The state attribute (§14.10) of the context node |
+| `style:x()`, `style:opacity()`, … (one per style attribute) | string | The current value of that style attribute of the context node; with a node argument (`style:x(id('focusToggle'))`), of that node |
 | `true()`, `false()`, `not()`, `boolean()` | boolean | XPath standard |
 
-Plus: location paths (`//button`, `//body`), predicates `[…]`, attribute tests
-(`@state:focused='true'`, `@id=$focus`), unions `|`, comparisons `=` `!=`, `and`,
-number and string literals, and `$name` variables that script sets with
+Also: location paths (`//button`, `//body`), predicates `[…]`, attribute tests
+(`@state:focused='true'`, `@id=$focus`), unions `|`, comparisons `=` `!=`,
+`and`, number and string literals, and `$name` variables that script sets with
 `document.setXPathVariable(name, value)` ([05](05_manifest_hdi.md) §5.3).
 
 A path in `begin` / `end` is true when it yields a non-empty node-set or boolean
@@ -361,112 +545,137 @@ begin="//button[state:actioned()=true()]"
 begin="(boolean($sw01) and boolean($set01))"
 ```
 
-## 14.8 Style attributes
+## 14.9 Style attributes
 
-All in the `ihd#style` namespace (Spec. 7.6.3.3.2.*). **Animatable** attributes
-may take a `;` keyframe list and may be used in `set` / `animate`. **Allowed on**
-is from the element's style group in the v1.1 schema; every attribute is also
-allowed on `style`. **Used** counts the attribute on any element in the corpus.
+All in the `ihd#style` namespace (Spec. 7.6.3.3.2.*), grouped by what they do.
+
+- **Type** uses the names from §14.3. Every attribute also accepts `inherit`
+  except `anchor`, `crop`, `flip` and `navIndex`.
+- **Anim.** = animatable: the value may be a keyframe list, and the attribute
+  can be used in `set` and `animate`.
+- **Allowed on** is the element's style group in the v1.1 schema. Every
+  attribute is also allowed on `style` (§14.6).
+- **On disc** counts the attribute on any element in the corpus.
+
 Meanings marked "XSL-FO semantics" follow that standard; the rest are verified
 on disc or follow directly from the name and values
-([05](05_manifest_hdi.md) §5.9 for the used rendering rules).
+([05](05_manifest_hdi.md) §5.9 for the used rendering rules). Directions: in the
+default writing mode `lr-tb`, *start* = left, *end* = right, *before* = top,
+*after* = bottom.
 
-| Attribute | Values | Default | Animatable | Allowed on | Used | What it is for |
+### Position and size
+
+| Attribute | Type | Default | Anim. | Allowed on | On disc | What it is for |
 |---|---|---|---|---|---|---|
-| `anchor` | `startBefore` \| `centerBefore` \| `endBefore` \| `startCenter` \| `center` \| `endCenter` \| `startAfter` \| `centerAfter` \| `endAfter` | `startBefore` | yes | button, div, object | 31 | Which point of the element's box is placed at (`x`, `y`): `start`/`center`/`end` across × `Before`/`Center`/`After` down (in `lr-tb`, start = left, before = top); `center` is the middle |
-| `backgroundColor` | colour | `transparent` | yes | area, body, br, button, div, input, object, p, span | 4 | Colour filling the box behind its content |
-| `backgroundFrame` | integer | `0` | yes | area, body, button, div, input, object | 114 | Which image of the `backgroundImage` list is shown, counting from 0. Menus use 0 normal, 1 focused, 2 actioned |
-| `backgroundImage` | list of `url('…')` \| `none` | `none` | yes | area, body, button, div, input, object | 1357 | The box's image(s): a space-separated list of `url('…')`; one is shown at a time, chosen by `backgroundFrame`. Long lists are animation strips |
-| `backgroundPositionHorizontal` | length \| % \| `left` \| `center` \| `right` | `0%` | yes | area, body, button, div, input, object | 6 | Horizontal position of the background image in the box |
-| `backgroundPositionVertical` | length \| % \| `top` \| `center` \| `bottom` | `0%` | yes | area, body, button, div, input, object | 3 | Vertical position of the background image in the box |
-| `backgroundRepeat` | `repeat` \| `no-repeat` | `no-repeat` |  | area, body, button, div, input, object | 0 | Whether the background image is tiled |
-| `blockProgressionDimension` | length \| % \| `auto` | `auto` | yes | area, body, button, div, input, object, p | 0 | Size along the block direction (the height in `lr-tb`); XSL-FO name for `height` |
-| `border` | border string | `None` | yes | area, body, button, div, input, object, p | 0 | Border on all four sides, as one string (CSS-like width, style, colour) |
-| `borderAfter` | border string | `None` | yes | area, body, button, div, input, object, p | 0 | Border on the after side (bottom in `lr-tb`) |
-| `borderBefore` | border string | `None` | yes | area, body, button, div, input, object, p | 0 | Border on the before side (top in `lr-tb`) |
-| `borderEnd` | border string | `None` | yes | area, body, button, div, input, object, p | 0 | Border on the end side (right in `lr-tb`) |
-| `borderStart` | border string | `None` | yes | area, body, button, div, input, object, p | 0 | Border on the start side (left in `lr-tb`) |
-| `breakAfter` | `auto` \| `line` | `auto` |  | br, button, input, object, span | 0 | `line` forces a line break after this inline element |
-| `breakBefore` | `auto` \| `line` | `auto` |  | br, button, input, object, span | 0 | `line` forces a line break before this inline element |
-| `color` |  | `white` | yes | area, body, div, input, p, span | 50 | Text colour |
-| `contentWidth` | length \| % \| `auto` \| `scale-to-fit` | `auto` | yes | area, body, button, div, input, object | 116 | Width of the image drawn inside the box (as `contentHeight`) |
-| `contentHeight` | length \| % \| `auto` \| `scale-to-fit` | `auto` | yes | area, body, button, div, input, object | 115 | Height of the image drawn inside the box: `auto` = its own size, `scale-to-fit` = fit the box |
-| `crop` | four integers \| `auto` | `auto` | yes | area, body, button, div, input, object | 0 | Part of the source image to use, four integers; `auto` = all of it. Order of the four numbers not in the sources |
-| `direction` | `ltr` \| `rtl` | `ltr` |  | body, div, input, p, span | 0 | Text direction, left-to-right or right-to-left |
-| `display` | `auto` \| `none` | `auto` | yes | area, body, br, button, div, input, object, p, span | 1641 | `none` removes the element and its children from rendering (it stays in the navigation graph); `auto` shows it |
-| `displayAlign` | `auto` \| `before` \| `center` \| `after` | `auto` | yes | area, body, button, div, input, object, p | 0 | Alignment of the content along the block direction (top / middle / bottom in `lr-tb`) |
-| `flip` | `none` \| `inlineProgression` \| `blockProgression` \| `both` | `none` | yes | area, body, button, div, input, object | 0 | Mirror the content across the inline axis, the block axis, or both |
-| `font` | font URI | `None` | yes | body, div, input, p, span | 47 | The font: URI of an OpenType file in the File Cache (players have no built-in fonts), optionally followed by a quoted family name |
-| `fontSize` | 1 or 2 lengths \| `xx-small` \| `x-small` \| `small` \| `medium` \| `large` \| `x-large` \| `xx-large` \| `smaller` \| `larger` | `medium` | yes | body, div, input, p, span | 55 | Text size; two lengths give horizontal and vertical size separately |
-| `fontStyle` | `normal` \| `italic` \| `oblique` \| `backslant` \| `reverse-oblique` | `normal` | yes | body, div, input, p, span | 0 | Upright, italic or slanted text |
-| `height` | length \| % \| `auto` | `auto` | yes | area, body, button, div, input, object, p | 1665 | Box height |
-| `inlineProgressionDimension` | length \| % \| `auto` | `auto` | yes | area, body, button, div, input, object, p | 0 | Size along the inline direction (the width in `lr-tb`); XSL-FO name for `width` |
-| `linefeedTreatment` | `ignore` \| `preserve` \| `treat-as-space` \| `treat-as-zero-width-space` | `treat-as-space` |  | body, div, input, p, span | 0 | What a line feed in the text does (XSL-FO semantics) |
-| `lineHeight` | length \| % \| `auto` | `auto` | yes | body, div, input, p | 37 | Height of each line of text |
-| `navDown` | element id \| `none` | `none` | yes | area, button, input | 405 | `id` of the element that gets focus when the user presses down; `none` = focus stays |
-| `navIndex` | two integers \| `auto` \| `none` | `auto` | yes | area, button, input | 2 | Sequential navigation order; `none` removes the element from remote navigation, `auto` = document order |
-| `navLeft` | element id \| `none` | `none` | yes | area, button, input | 405 | As `navDown`, for left |
-| `navLeftDown` | element id \| `none` | `none` | yes | area, button, input | 5 | As `navDown`, for the diagonal key |
-| `navLeftUp` | element id \| `none` | `none` | yes | area, button, input | 5 | As `navDown`, for the diagonal key |
-| `navRight` | element id \| `none` | `none` | yes | area, button, input | 405 | As `navDown`, for right |
-| `navRightDown` | element id \| `none` | `none` | yes | area, button, input | 5 | As `navDown`, for the diagonal key |
-| `navRightUp` | element id \| `none` | `none` | yes | area, button, input | 5 | As `navDown`, for the diagonal key |
-| `navUp` | element id \| `none` | `none` | yes | area, button, input | 405 | As `navDown`, for up |
+| `position` | enum `static` \| `relative` \| `absolute` | `static` | | button, div, object | 1462 | `absolute`: the box is placed at `x`, `y` in its parent. `static` and `relative` follow flow layout |
+| `x` | length or `auto` | `0px` | yes | button, div, object | 1763 | Horizontal position of the anchor point, relative to the parent |
+| `y` | length or `auto` | `0px` | yes | button, div, object | 1913 | Vertical position of the anchor point, relative to the parent |
+| `anchor` | enum `startBefore` \| `centerBefore` \| `endBefore` \| `startCenter` \| `center` \| `endCenter` \| `startAfter` \| `centerAfter` \| `endAfter` | `startBefore` | yes | button, div, object | 31 | Which point of the box is placed at (`x`, `y`): start / center / end across, Before / Center / After down; `center` is the middle |
+| `width` | length or `auto` | `auto` | yes | area, body, button, div, input, object, p | 1668 | Box width |
+| `height` | length or `auto` | `auto` | yes | area, body, button, div, input, object, p | 1665 | Box height |
+| `inlineProgressionDimension` | length or `auto` | `auto` | yes | area, body, button, div, input, object, p | 0 | XSL-FO name for the size along a line (the width in `lr-tb`) |
+| `blockProgressionDimension` | length or `auto` | `auto` | yes | area, body, button, div, input, object, p | 0 | XSL-FO name for the size across lines (the height in `lr-tb`) |
+| `zIndex` | integer or `auto` | `auto` | yes | button, div, object | 19 | Stacking order among siblings; higher is drawn on top |
+
+### Showing and hiding
+
+| Attribute | Type | Default | Anim. | Allowed on | On disc | What it is for |
+|---|---|---|---|---|---|---|
+| `display` | enum `auto` \| `none` | `auto` | yes | area, body, br, button, div, input, object, p, span | 1641 | `none` removes the element and its children from rendering (it stays in the navigation graph); `auto` shows it |
+| `visibility` | enum `visible` \| `hidden` | `visible` | yes | area, body, br, button, div, input, object, p, span | 11 | `hidden` hides the element but keeps its space and navigation |
 | `opacity` | number 0–1 | `1.0` | yes | area, body, br, button, div, input, object, p, span | 1526 | Alpha multiplied into the element and its children: 0 invisible, 1 opaque |
-| `padding` | 1–4 lengths | `0px` | yes | area, body, button, div, input, object, p | 0 | Space between border and content on all sides (1–4 values, CSS order) |
-| `paddingAfter` | length \| % | `0px` | yes | area, body, button, div, input, object, p | 0 | Padding on the after side |
-| `paddingBefore` | length \| % | `0px` | yes | area, body, button, div, input, object, p | 0 | Padding on the before side |
-| `paddingEnd` | length \| % | `0px` | yes | area, body, button, div, input, object, p | 0 | Padding on the end side |
-| `paddingStart` | length \| % | `0px` | yes | area, body, button, div, input, object, p | 0 | Padding on the start side |
-| `position` | `static` \| `relative` \| `absolute` | `static` |  | button, div, object | 1462 | `absolute`: the box is placed at `x`, `y` in its parent. `static` / `relative` follow flow layout |
-| `scaling` | `uniform` \| `non-uniform` | `non-uniform` |  | area, body, button, div, input, object | 1 | `uniform` keeps the image aspect ratio when fitting; `non-uniform` stretches |
-| `suppressAtLineBreak` | `auto` \| `suppress` \| `retain` | `auto` |  | input, span | 0 | Whether this inline content is dropped at a line break (XSL-FO semantics) |
-| `textAlign` | `start` \| `center` \| `end` | `start` | yes | body, div, input, p | 0 | Alignment of lines: start, centre or end |
-| `textAltitude` | length \| % \| `auto` | `auto` | yes | input, p, span | 0 | Height of the text area above the baseline |
-| `textDepth` | length \| % \| `auto` | `auto` | yes | input, p, span | 0 | Depth of the text area below the baseline |
-| `textIndent` | length \| % | `0px` | yes | body, div, input, p | 0 | Indent of the first line |
-| `visibility` | `visible` \| `hidden` | `visible` | yes | area, body, br, button, div, input, object, p, span | 11 | `hidden` hides the element but keeps its space and navigation |
-| `whiteSpaceCollapse` | `true` \| `false` | `true` |  | body, div, input, p | 0 | Whether runs of spaces collapse to one (XSL-FO semantics) |
-| `whiteSpaceTreatment` | `ignore` \| `preserve` \| `ignore-before` \| `ignore-after` \| `ignore-around` | `ignore-around` |  | body, div, input, p | 0 | Which spaces around line breaks are removed (XSL-FO semantics) |
-| `width` | length \| % \| `auto` | `auto` | yes | area, body, button, div, input, object, p | 1668 | Box width |
-| `wrapOption` | `wrap` \| `no-wrap` | `wrap` | yes | body, div, input, p, span | 0 | Whether long lines wrap |
-| `writingMode` | `lr-tb` \| `rl-tb` \| `tb-rl` | `lr-tb` |  | body, div, input | 0 | Line and page direction: `lr-tb` left-to-right, top-to-bottom; `rl-tb`; `tb-rl` vertical (Japanese) |
-| `x` | length \| % \| `auto` | `0px` | yes | button, div, object | 1763 | Horizontal position of the anchor point, relative to the parent |
-| `y` | length \| % \| `auto` | `0px` | yes | button, div, object | 1913 | Vertical position of the anchor point, relative to the parent |
-| `zIndex` | integer \| `auto` | `auto` | yes | button, div, object | 19 | Stacking order among siblings; higher is drawn on top |
 
-On disc: `position` is always `absolute` (1462/1462); `display` `inherit` 1054,
-`auto` 473, `none` 114; `opacity` `inherit` 1043 and keyframe lists on
-`animate`; `contentWidth` / `contentHeight` `scale-to-fit` 41 / 40.
-`writingMode`, `padding*`, `border*`, `direction`, `displayAlign`, `whiteSpace*`,
-`textAlign` and the text-metric attributes are never used; implement them from
-the schema and XSL-FO when a disc needs them.
+### Background and image
 
-`[5, 11, 12]` **VERIFIED** (names, values, defaults, placement); meanings of the
-unused attributes **INFERRED** (XSL-FO / CSS).
+| Attribute | Type | Default | Anim. | Allowed on | On disc | What it is for |
+|---|---|---|---|---|---|---|
+| `backgroundColor` | colour | `transparent` | yes | area, body, br, button, div, input, object, p, span | 4 | Colour filling the box behind its content |
+| `backgroundImage` | URL list | `none` | yes | area, body, button, div, input, object | 1357 | The box's images; one is shown at a time, chosen by `backgroundFrame`. Long lists are animation strips |
+| `backgroundFrame` | integer | `0` | yes | area, body, button, div, input, object | 114 | Which image of `backgroundImage` is shown, counting from 0. Menus use 0 normal, 1 focused, 2 pressed |
+| `backgroundPositionHorizontal` | length, or enum `left` \| `center` \| `right` | `0%` | yes | area, body, button, div, input, object | 6 | Horizontal position of the background image in the box |
+| `backgroundPositionVertical` | length, or enum `top` \| `center` \| `bottom` | `0%` | yes | area, body, button, div, input, object | 3 | Vertical position of the background image in the box |
+| `backgroundRepeat` | enum `repeat` \| `no-repeat` | `no-repeat` | | area, body, button, div, input, object | 0 | Whether the background image is tiled |
+| `contentWidth` | length, `auto` or `scale-to-fit` | `auto` | yes | area, body, button, div, input, object | 116 | Width of the image drawn inside the box, as `contentHeight` |
+| `contentHeight` | length, `auto` or `scale-to-fit` | `auto` | yes | area, body, button, div, input, object | 115 | Height of the image drawn inside the box: `auto` = its own size, `scale-to-fit` = fit the box |
+| `scaling` | enum `uniform` \| `non-uniform` | `non-uniform` | | area, body, button, div, input, object | 1 | `uniform` keeps the image's aspect ratio when fitting; `non-uniform` stretches |
+| `crop` | four non-negative integers, or `auto` | `auto` | yes | area, body, button, div, input, object | 0 | Part of the source image to use; `auto` = all of it. Order of the four numbers not in the sources |
+| `flip` | enum `none` \| `inlineProgression` \| `blockProgression` \| `both` | `none` | yes | area, body, button, div, input, object | 0 | Mirror the content across the inline axis, the block axis, or both |
 
-## 14.9 State attributes
+### Border and padding
+
+| Attribute | Type | Default | Anim. | Allowed on | On disc | What it is for |
+|---|---|---|---|---|---|---|
+| `border` | border | `None` | yes | area, body, button, div, input, object, p | 0 | Border on all four sides |
+| `borderStart`, `borderEnd`, `borderBefore`, `borderAfter` | border | `None` | yes | area, body, button, div, input, object, p | 0 | Border on one side |
+| `padding` | 1–4 non-negative lengths, space-separated | `0px` | yes | area, body, button, div, input, object, p | 0 | Space between border and content on all sides (CSS order) |
+| `paddingStart`, `paddingEnd`, `paddingBefore`, `paddingAfter` | non-negative length | `0px` | yes | area, body, button, div, input, object, p | 0 | Padding on one side |
+
+### Text
+
+| Attribute | Type | Default | Anim. | Allowed on | On disc | What it is for |
+|---|---|---|---|---|---|---|
+| `font` | font | `None` | yes | body, div, input, p, span | 47 | The font file, optionally with a family name |
+| `fontSize` | 1 or 2 non-negative lengths, or enum `xx-small` \| `x-small` \| `small` \| `medium` \| `large` \| `x-large` \| `xx-large` \| `smaller` \| `larger` | `medium` | yes | body, div, input, p, span | 55 | Text size; two lengths give horizontal and vertical size separately |
+| `fontStyle` | enum `normal` \| `italic` \| `oblique` \| `backslant` \| `reverse-oblique` | `normal` | yes | body, div, input, p, span | 0 | Upright, italic or slanted text |
+| `color` | colour | `white` | yes | area, body, div, input, p, span | 50 | Text colour |
+| `lineHeight` | length or `auto` | `auto` | yes | body, div, input, p | 37 | Height of each line of text |
+| `textAlign` | enum `start` \| `center` \| `end` | `start` | yes | body, div, input, p | 0 | Alignment of lines |
+| `textIndent` | length | `0px` | yes | body, div, input, p | 0 | Indent of the first line |
+| `displayAlign` | enum `auto` \| `before` \| `center` \| `after` | `auto` | yes | area, body, button, div, input, object, p | 0 | Alignment of the content across lines (top / middle / bottom in `lr-tb`) |
+| `textAltitude` | length or `auto` | `auto` | yes | input, p, span | 0 | Height of the text area above the baseline |
+| `textDepth` | length or `auto` | `auto` | yes | input, p, span | 0 | Depth of the text area below the baseline |
+| `wrapOption` | enum `wrap` \| `no-wrap` | `wrap` | yes | body, div, input, p, span | 0 | Whether long lines wrap |
+| `direction` | enum `ltr` \| `rtl` | `ltr` | | body, div, input, p, span | 0 | Text direction |
+| `writingMode` | enum `lr-tb` \| `rl-tb` \| `tb-rl` | `lr-tb` | | body, div, input | 0 | Line and page direction: left-to-right top-to-bottom, right-to-left, or vertical (Japanese) |
+| `linefeedTreatment` | enum `ignore` \| `preserve` \| `treat-as-space` \| `treat-as-zero-width-space` | `treat-as-space` | | body, div, input, p, span | 0 | What a line feed in the text does (XSL-FO semantics) |
+| `whiteSpaceCollapse` | enum `true` \| `false` | `true` | | body, div, input, p | 0 | Whether runs of spaces collapse to one (XSL-FO semantics) |
+| `whiteSpaceTreatment` | enum `ignore` \| `preserve` \| `ignore-before` \| `ignore-after` \| `ignore-around` | `ignore-around` | | body, div, input, p | 0 | Which spaces around line breaks are removed (XSL-FO semantics) |
+| `suppressAtLineBreak` | enum `auto` \| `suppress` \| `retain` | `auto` | | input, span | 0 | Whether this inline content is dropped at a line break (XSL-FO semantics) |
+| `breakBefore`, `breakAfter` | enum `auto` \| `line` | `auto` | | br, button, input, object, span | 0 | `line` forces a line break before / after this inline element |
+
+### Focus navigation
+
+These build the graph the focus moves along when the user presses the arrow
+keys on the remote.
+
+| Attribute | Type | Default | Anim. | Allowed on | On disc | What it is for |
+|---|---|---|---|---|---|---|
+| `navUp`, `navDown`, `navLeft`, `navRight` | IDREF or `none` | `none` | yes | area, button, input | 405 each | `id` of the element that gets the focus when the user presses that arrow; `none` = the focus stays |
+| `navLeftUp`, `navLeftDown`, `navRightUp`, `navRightDown` | IDREF or `none` | `none` | yes | area, button, input | 5 each | As above, for the diagonal keys |
+| `navIndex` | two non-negative integers, `auto` or `none` | `auto` | yes | area, button, input | 2 | Order for sequential navigation. `none` removes the element from remote navigation; `auto` = document order |
+
+On disc: `position` is always `absolute` (1462/1462); `display` is `inherit`
+1054 times, `auto` 473, `none` 114; `opacity` is `inherit` 1043 times, and
+keyframe lists appear on `animate`; `contentWidth` / `contentHeight`
+`scale-to-fit` 41 / 40. `writingMode`, `padding*`, `border*`, `direction`,
+`displayAlign`, `whiteSpace*`, `textAlign` and the text-metric attributes are
+never used; implement them from the schema and XSL-FO when a disc needs them.
+
+`[5, 11, 12]` **VERIFIED** (names, types, values, defaults, placement);
+meanings of the unused attributes **INFERRED** (XSL-FO / CSS).
+
+## 14.10 State attributes
 
 In the `ihd#state` namespace (Spec. 7.6.3.4.2.*). They describe what the user is
-doing to an element. The player maintains them; markup can set initial values;
-`set` / `animate` and script can change the animatable ones; path expressions
-read them with `state:…()`.
+doing to an element. The player keeps them up to date; markup can set initial
+values; `set`, `animate` and script can change the animatable ones; paths read
+them with `state:…()`.
 
-| Attribute | Values | Default | Animatable | On | What it is for |
+| Attribute | Type | Default | Anim. | On | What it is for |
 |---|---|---|---|---|---|
-| `enabled` | boolean | `true` | yes | Display elements and up | `false`: the element cannot be focused or activated |
-| `focused` | boolean | `false` | yes | `area`, `button`, `input` | The element has the focus. One element on a page is focused; moving focus sets the old one `false` and the new one `true`. May be set `true` in markup to choose the initial focus; otherwise the first focusable element in document order |
-| `actioned` | boolean | `false` | no (v1.1) | `area`, `button`, `input` | The element is being activated: Enter on the focused element, one of its `accessKey` keys, or a pointer click. True while the activation lasts |
-| `pointer` | boolean | `false` | no | `div`, `p`, `span` and up | A pointer (cursor) is over the element |
-| `value` | boolean or string | | yes | `area`, `button`, `input` | The element's value: the text of an `input` |
-| `foreground` | boolean | `false` | no | `body` | See `body` (§14.4) |
+| `enabled` | boolean | `true` | yes | `body`, `br`, `object`, `div`, `p`, `span`, `button`, `input`, `area` | `false`: the element cannot be focused or activated |
+| `focused` | boolean | `false` | yes | `button`, `input`, `area` | The element has the focus. One element on a page has it; moving the focus sets the old one `false` and the new one `true`. Set `true` in markup to choose the initial focus; otherwise it is the first focusable element in document order |
+| `actioned` | boolean | `false` | no (v1.1) | `button`, `input`, `area` | The element is being pressed: Enter on the focused element, one of its `accessKey` keys, or a pointer click. True while the press lasts |
+| `pointer` | boolean | `false` | no | `div`, `p`, `span`, `button`, `input`, `area` | A pointer (cursor) is over the element |
+| `value` | boolean or string | | yes | `button`, `input`, `area` | The element's value: the text of an `input` |
+| `foreground` | boolean | `false` | no | `body` | See `body` (§14.5) |
 
 On disc: `state:value` 113 (all on `input`), `state:focused` 33 (initial focus),
 `state:enabled` 1.
 
-## 14.10 v1.0 and v1.1
+## 14.11 v1.0 and v1.1
 
-Retail discs validate against both schema versions (§14.11); read against v1.1
+Retail discs validate against both schema versions (§14.12); read against v1.1
 and accept the v1.0-only forms below.
 
 | Change in v1.1 | v1.0 had |
@@ -482,7 +691,7 @@ and accept the v1.0-only forms below.
 | `opacity` values restricted to 0–1 | values from −1 to 1 allowed by the pattern |
 | Per-element style sets: `area` gains the size attributes and `flip`, loses `breakBefore` / `breakAfter`; `body` gains the size attributes and `flip`; `p` gains the size attributes; `input` gains `flip`; `suppressAtLineBreak` moves from all inline elements to `span` and `input`; `body` and `div` lose `textAltitude` / `textDepth` | the v1.0 sets |
 
-## 14.11 On disc
+## 14.12 On disc
 
 `e27`: 88 markup documents on the saved discs: 84 `.xmu`, 2 `.xts`, 2 `.xas`
 (both empty stubs), extracted from ACAs and loose files. 87 validate against
