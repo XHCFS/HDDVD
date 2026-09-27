@@ -154,7 +154,8 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#document-14_markup#state-attributes">14.10 State attributes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#document-14_markup#v1-0-and-v1-1">14.11 v1.0 and v1.1</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#document-14_markup#on-disc">14.12 On disc</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#document-14_markup#reading-a-page-into-memory">14.12 Reading a page into memory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#document-14_markup#on-disc">14.13 On disc</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="#document-06_vti">6. HVA00001.VTI: Advanced VTSI</a><ul>
@@ -3589,7 +3590,8 @@ them (Spec. 7.5–7.8) are not among the available sources.</p>
 element and where it can go. §14.3 defines each value type once; every table
 after it uses those type names. §14.4 lists the attributes many elements share,
 and every element section (§14.5–14.7) has a table of what it contains and a
-table of all its attributes. §14.9 is the full list of style attributes.</p>
+table of all its attributes. §14.9 is the full list of style attributes, and
+§14.12 lists what a reader has to keep while reading a page.</p>
 <section id="files-namespaces-versions">
 <h4>14.1 Files, namespaces, versions<a class="headerlink" href="#files-namespaces-versions" title="Link to this heading"></a></h4>
 <table class="docutils align-default">
@@ -3646,7 +3648,7 @@ table of all its attributes. §14.9 is the full list of style attributes.</p>
 </table>
 <p>Schemas: <code class="docutils literal notranslate"><span class="pre">spec/raw/adv_obj/v1.1/iHD.xsd</span></code> (imports <code class="docutils literal notranslate"><span class="pre">iHDstyle.xsd</span></code> and
 <code class="docutils literal notranslate"><span class="pre">iHDstate.xsd</span></code>); v1.0 for reference. Differences in §14.11. The corpus
-validates against both except for one document (§14.12).</p>
+validates against both except for one document (§14.13).</p>
 <p><strong>Reading rules.</strong></p>
 <ul class="simple">
 <li><p>UTF-8 XML. Match by namespace and local name, never by prefix.</p></li>
@@ -3780,92 +3782,107 @@ the text becomes once it is read.</p>
 <td><p>unsigned integer</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p>number</p></td>
+<tr class="row-odd"><td><p>positive integer</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">[1-9][0-9]*</span></code></p></td>
+<td><p>unsigned integer, at least 1</p></td>
+<td><p>only <code class="docutils literal notranslate"><span class="pre">timing&#64;clockDivisor</span></code> (v1.0)</p></td>
+</tr>
+<tr class="row-even"><td><p>number</p></td>
 <td><p>decimal, <code class="docutils literal notranslate"><span class="pre">0.5</span></code></p></td>
 <td><p>fraction</p></td>
 <td><p>only <code class="docutils literal notranslate"><span class="pre">opacity</span></code>, 0 to 1</p></td>
 </tr>
-<tr class="row-even"><td><p>string</p></td>
+<tr class="row-odd"><td><p>string</p></td>
 <td><p>any text</p></td>
 <td><p>text</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p>enum</p></td>
+<tr class="row-even"><td><p>enum</p></td>
 <td><p>one of the listed words</p></td>
 <td><p>one of a fixed set</p></td>
 <td><p>the tables list every allowed word</p></td>
 </tr>
-<tr class="row-even"><td><p>ID</p></td>
+<tr class="row-odd"><td><p>ID</p></td>
 <td><p>an XML name (<code class="docutils literal notranslate"><span class="pre">BT_play</span></code>)</p></td>
 <td><p>text</p></td>
 <td><p>unique in the document</p></td>
 </tr>
-<tr class="row-odd"><td><p>IDREF</p></td>
+<tr class="row-even"><td><p>IDREF</p></td>
 <td><p>an ID</p></td>
 <td><p>text</p></td>
 <td><p>names another element</p></td>
 </tr>
-<tr class="row-even"><td><p>IDREFS</p></td>
+<tr class="row-odd"><td><p>IDREFS</p></td>
 <td><p>IDs separated by spaces</p></td>
 <td><p>list of texts</p></td>
 <td><p></p></td>
+</tr>
+<tr class="row-even"><td><p>name</p></td>
+<td><p>one XML name token (<code class="docutils literal notranslate"><span class="pre">xs:NMTOKEN</span></code>)</p></td>
+<td><p>text</p></td>
+<td><p>only <code class="docutils literal notranslate"><span class="pre">event&#64;name</span></code></p></td>
 </tr>
 <tr class="row-odd"><td><p>names</p></td>
 <td><p>names separated by spaces (<code class="docutils literal notranslate"><span class="pre">xs:NMTOKENS</span></code>)</p></td>
 <td><p>list of texts</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">class</span></code></p></td>
 </tr>
-<tr class="row-even"><td><p>URI</p></td>
+<tr class="row-even"><td><p>language</p></td>
+<td><p>a language tag (<code class="docutils literal notranslate"><span class="pre">en</span></code>, <code class="docutils literal notranslate"><span class="pre">en-us</span></code>)</p></td>
+<td><p>text</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">xml:lang</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>URI</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">file:///dvddisc/…</span></code>, <code class="docutils literal notranslate"><span class="pre">…/x.aca/member</span></code>, or relative</p></td>
 <td><p>text, kept as written</p></td>
 <td><p>relative URIs resolve against <code class="docutils literal notranslate"><span class="pre">xml:base</span></code>, then the document’s own location</p></td>
 </tr>
-<tr class="row-odd"><td><p>URL list</p></td>
+<tr class="row-even"><td><p>URL list</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">url('a.png')</span> <span class="pre">url('b.png')</span></code> or <code class="docutils literal notranslate"><span class="pre">none</span></code></p></td>
 <td><p>list of URIs, or none</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">backgroundImage</span></code></p></td>
 </tr>
-<tr class="row-even"><td><p>time</p></td>
+<tr class="row-odd"><td><p>time</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">HH:MM:SS</span></code>, <code class="docutils literal notranslate"><span class="pre">HH:MM:SS:FF</span></code> (hours may have more than two digits), or a decimal with a unit: <code class="docutils literal notranslate"><span class="pre">h</span></code>, <code class="docutils literal notranslate"><span class="pre">m</span></code>, <code class="docutils literal notranslate"><span class="pre">s</span></code>, <code class="docutils literal notranslate"><span class="pre">ms</span></code>, <code class="docutils literal notranslate"><span class="pre">f</span></code> (<code class="docutils literal notranslate"><span class="pre">0.5s</span></code>, <code class="docutils literal notranslate"><span class="pre">500ms</span></code>, <code class="docutils literal notranslate"><span class="pre">9f</span></code>)</p></td>
 <td><p>either a clock value (hours, minutes, seconds, frames) or an amount with a unit</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">f</span></code> counts frames of the element’s clock (§14.7): the title timeline’s frame rate on the title clock, the tick rate on page and application clocks (<strong>INFERRED</strong>). Keep the unit: the frame length is known only once the clock is</p></td>
 </tr>
-<tr class="row-odd"><td><p>path</p></td>
+<tr class="row-even"><td><p>path</p></td>
 <td><p>an XPath 1.0 expression (§14.8)</p></td>
 <td><p>text, kept as written</p></td>
 <td><p>evaluated while the page runs, not when it is read</p></td>
 </tr>
-<tr class="row-even"><td><p>time or path</p></td>
+<tr class="row-odd"><td><p>time or path</p></td>
 <td><p>a time, or a path</p></td>
 <td><p>tagged: a time or a path</p></td>
 <td><p>a value that matches the time syntax is a time; anything else is a path</p></td>
 </tr>
-<tr class="row-odd"><td><p>length</p></td>
+<tr class="row-even"><td><p>length</p></td>
 <td><p>integer + <code class="docutils literal notranslate"><span class="pre">px</span></code>, <code class="docutils literal notranslate"><span class="pre">em</span></code> or <code class="docutils literal notranslate"><span class="pre">%</span></code> (<code class="docutils literal notranslate"><span class="pre">-12px</span></code> where negatives are allowed)</p></td>
 <td><p>number + unit</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">px</span></code> are graphics-plane pixels (the playlist <code class="docutils literal notranslate"><span class="pre">Aperture</span></code>, normally 1920×1080)</p></td>
 </tr>
-<tr class="row-even"><td><p>percentage</p></td>
+<tr class="row-odd"><td><p>percentage</p></td>
 <td><p>integer + <code class="docutils literal notranslate"><span class="pre">%</span></code></p></td>
 <td><p>number</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p>colour</p></td>
+<tr class="row-even"><td><p>colour</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">#rgb</span></code>, <code class="docutils literal notranslate"><span class="pre">#rrggbb</span></code>, <code class="docutils literal notranslate"><span class="pre">rgb(r,g,b)</span></code>, <code class="docutils literal notranslate"><span class="pre">rgba(r,g,b,a)</span></code> (each 0–255 or a %), one of 16 names, or <code class="docutils literal notranslate"><span class="pre">transparent</span></code></p></td>
 <td><p>red, green, blue, alpha</p></td>
 <td><p>names: <code class="docutils literal notranslate"><span class="pre">aqua</span> <span class="pre">black</span> <span class="pre">blue</span> <span class="pre">fuchsia</span> <span class="pre">gray</span> <span class="pre">green</span> <span class="pre">lime</span> <span class="pre">maroon</span> <span class="pre">navy</span> <span class="pre">olive</span> <span class="pre">purple</span> <span class="pre">red</span> <span class="pre">silver</span> <span class="pre">teal</span> <span class="pre">white</span> <span class="pre">yellow</span></code>. <code class="docutils literal notranslate"><span class="pre">transparent</span></code> = alpha 0</p></td>
 </tr>
-<tr class="row-even"><td><p>access keys</p></td>
+<tr class="row-odd"><td><p>access keys</p></td>
 <td><p>space-separated keys: <code class="docutils literal notranslate"><span class="pre">U+XXXX</span></code> (4–6 hex digits, a Unicode character) or a virtual key <code class="docutils literal notranslate"><span class="pre">VK_…</span></code></p></td>
 <td><p>list of keys, each a character code or a virtual key</p></td>
 <td><p>virtual keys listed below</p></td>
 </tr>
-<tr class="row-odd"><td><p>border</p></td>
+<tr class="row-even"><td><p>border</p></td>
 <td><p>text without <code class="docutils literal notranslate"><span class="pre">;</span></code> (CSS-like width, style, colour)</p></td>
 <td><p>text</p></td>
 <td><p>the grammar is not in the sources</p></td>
 </tr>
-<tr class="row-even"><td><p>font</p></td>
+<tr class="row-odd"><td><p>font</p></td>
 <td><p>a URI, optionally followed by a family name in quotes: <code class="docutils literal notranslate"><span class="pre">file:///dvddisc/ADV_OBJ/font.ttf</span> <span class="pre">'Arial'</span></code></p></td>
 <td><p>URI + optional family name</p></td>
 <td><p>an OpenType file in the File Cache; players have no built-in fonts</p></td>
@@ -3903,8 +3920,8 @@ or <strong>a value</strong> (one value or a keyframe list).</p>
 <h4>14.4 Shared attributes<a class="headerlink" href="#shared-attributes" title="Link to this heading"></a></h4>
 <p>The schema builds the content elements from a chain of base types, each adding
 attributes to the one before. This table spells the chain out: the <strong>On</strong>
-column says exactly which elements have each attribute, so the element tables
-below do not repeat them.</p>
+column says exactly which elements have each attribute. The element tables in
+§14.5–14.7 repeat these rows, so each element’s table is complete on its own.</p>
 <table class="docutils align-default">
 <thead>
 <tr class="row-odd"><th class="head"><p>Attribute</p></th>
@@ -3979,7 +3996,7 @@ below do not repeat them.</p>
 <td><p>boolean or string, keyframe list</p></td>
 <td><p></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">button</span></code>, <code class="docutils literal notranslate"><span class="pre">input</span></code>, <code class="docutils literal notranslate"><span class="pre">area</span></code></p></td>
-<td><p>The element’s value (§14.10)</p></td>
+<td><p>The element’s value (§14.10). The schema cannot tell <code class="docutils literal notranslate"><span class="pre">true</span></code> the boolean from <code class="docutils literal notranslate"><span class="pre">true</span></code> the text, so keep it as written</p></td>
 </tr>
 </tbody>
 </table>
@@ -6446,7 +6463,7 @@ them with <code class="docutils literal notranslate"><span class="pre">state:…
 </section>
 <section id="v1-0-and-v1-1">
 <h4>14.11 v1.0 and v1.1<a class="headerlink" href="#v1-0-and-v1-1" title="Link to this heading"></a></h4>
-<p>Retail discs validate against both schema versions (§14.12); read against v1.1
+<p>Retail discs validate against both schema versions (§14.13); read against v1.1
 and accept the v1.0-only forms below.</p>
 <table class="docutils align-default">
 <thead>
@@ -6488,8 +6505,53 @@ and accept the v1.0-only forms below.</p>
 </tbody>
 </table>
 </section>
+<section id="reading-a-page-into-memory">
+<h4>14.12 Reading a page into memory<a class="headerlink" href="#reading-a-page-into-memory" title="Link to this heading"></a></h4>
+<p>What a reader must keep so that layout, timing and script later get the right
+answer. These follow from the rules above; they are collected here because each
+one is easy to lose while parsing.</p>
+<ul>
+<li><p><strong>Three kinds of document.</strong> A <code class="docutils literal notranslate"><span class="pre">.xmu</span></code> or <code class="docutils literal notranslate"><span class="pre">.xas</span></code> has <code class="docutils literal notranslate"><span class="pre">root</span></code> at the top, a <code class="docutils literal notranslate"><span class="pre">.xts</span></code>
+has <code class="docutils literal notranslate"><span class="pre">timing</span></code>, a <code class="docutils literal notranslate"><span class="pre">.xss</span></code> has <code class="docutils literal notranslate"><span class="pre">styling</span></code>. <code class="docutils literal notranslate"><span class="pre">include</span></code> pulls the last two into a
+page’s <code class="docutils literal notranslate"><span class="pre">head</span></code> and <code class="docutils literal notranslate"><span class="pre">.xmu</span></code> fragments into <code class="docutils literal notranslate"><span class="pre">body</span></code>, so a reader needs to accept all
+three roots.</p></li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">include</span></code> needs a loader.</strong> Its <code class="docutils literal notranslate"><span class="pre">href</span></code> can name a loose file or an archive
+member (<code class="docutils literal notranslate"><span class="pre">…/menus.aca/timing.xts</span></code>). The reader does not open files itself; it
+asks whoever loaded the page for the included document.</p></li>
+<li><p><strong>Keep children in document order.</strong> Order carries meaning:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">seq</span></code> runs its children one after another, in order (§14.7).</p></li>
+<li><p>Named and selected styles apply in document order (§14.6).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">navIndex=&quot;auto&quot;</span></code> means document order, and without an initial
+<code class="docutils literal notranslate"><span class="pre">state:focused</span></code>, the first focusable element in document order gets the
+focus (§14.9, §14.10).</p></li>
+</ul>
+<p>A <code class="docutils literal notranslate"><span class="pre">div</span></code>’s children are one ordered list of mixed kinds, not one list per kind.</p>
+</li>
+<li><p><strong>Keep text where it is.</strong> In <code class="docutils literal notranslate"><span class="pre">p</span></code> and <code class="docutils literal notranslate"><span class="pre">span</span></code>, text and child elements
+alternate (<code class="docutils literal notranslate"><span class="pre">Press</span> <span class="pre">&lt;span&gt;here&lt;/span&gt;</span> <span class="pre">to</span> <span class="pre">play</span></code>). Each run of text is a child in
+its own right, in order between the elements. Keep text as written: how spaces
+and line feeds are treated is a style (<code class="docutils literal notranslate"><span class="pre">whiteSpaceCollapse</span></code>,
+<code class="docutils literal notranslate"><span class="pre">linefeedTreatment</span></code>, §14.9), decided at layout.</p></li>
+<li><p><strong>Do not fill in style defaults.</strong> A style attribute that is not written must
+stay “not written”: named and selected styles apply to it first, and only
+then the default (§14.3, §14.6). Filling the default in while reading would
+make it win over the named styles. Plain attributes (<code class="docutils literal notranslate"><span class="pre">timeContainer</span></code>, <code class="docutils literal notranslate"><span class="pre">mode</span></code>,
+<code class="docutils literal notranslate"><span class="pre">shape</span></code>, <code class="docutils literal notranslate"><span class="pre">fill</span></code>, …) have no such rule; their defaults can be applied when read.</p></li>
+<li><p><strong>Keep <code class="docutils literal notranslate"><span class="pre">inherit</span></code> and keyframe lists</strong> as they are (§14.3). <code class="docutils literal notranslate"><span class="pre">inherit</span></code> is
+resolved against the parent at layout; keyframe lists are used by <code class="docutils literal notranslate"><span class="pre">animate</span></code>
+and by animatable values.</p></li>
+<li><p><strong>Keep references as text.</strong> <code class="docutils literal notranslate"><span class="pre">style</span></code>, <code class="docutils literal notranslate"><span class="pre">use</span></code>, <code class="docutils literal notranslate"><span class="pre">nav*</span></code>, <code class="docutils literal notranslate"><span class="pre">content</span></code> and <code class="docutils literal notranslate"><span class="pre">id()</span></code> in
+paths name elements by <code class="docutils literal notranslate"><span class="pre">id</span></code>. Resolve them after the whole page (with its
+includes) is read, because they can point forward.</p></li>
+<li><p><strong>Keep paths as text.</strong> They are evaluated while the page runs (§14.8).</p></li>
+<li><p><strong>Keep attributes from other namespaces</strong> with their namespace, name and
+value (§14.1): script can read them.</p></li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">meta</span></code> is ignored by rendering.</strong> A reader may keep or drop its contents.</p></li>
+</ul>
+</section>
 <section id="on-disc">
-<h4>14.12 On disc<a class="headerlink" href="#on-disc" title="Link to this heading"></a></h4>
+<h4>14.13 On disc<a class="headerlink" href="#on-disc" title="Link to this heading"></a></h4>
 <p><code class="docutils literal notranslate"><span class="pre">e27</span></code>: 88 markup documents on the saved discs: 84 <code class="docutils literal notranslate"><span class="pre">.xmu</span></code>, 2 <code class="docutils literal notranslate"><span class="pre">.xts</span></code>, 2 <code class="docutils literal notranslate"><span class="pre">.xas</span></code>
 (both empty stubs), extracted from ACAs and loose files. 87 validate against
 both v1.1 and v1.0. The one that does not, <code class="docutils literal notranslate"><span class="pre">SHREK_THE_THIRD_EU</span></code>

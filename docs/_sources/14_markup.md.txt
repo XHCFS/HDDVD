@@ -31,7 +31,8 @@ Sources: the DVD Forum schemas [5] (v1.0 and v1.1), the HDi Jumpstart posts
 element and where it can go. §14.3 defines each value type once; every table
 after it uses those type names. §14.4 lists the attributes many elements share,
 and every element section (§14.5–14.7) has a table of what it contains and a
-table of all its attributes. §14.9 is the full list of style attributes.
+table of all its attributes. §14.9 is the full list of style attributes, and
+§14.12 lists what a reader has to keep while reading a page.
 
 ## 14.1 Files, namespaces, versions
 
@@ -51,7 +52,7 @@ table of all its attributes. §14.9 is the full list of style attributes.
 
 Schemas: `spec/raw/adv_obj/v1.1/iHD.xsd` (imports `iHDstyle.xsd` and
 `iHDstate.xsd`); v1.0 for reference. Differences in §14.11. The corpus
-validates against both except for one document (§14.12).
+validates against both except for one document (§14.13).
 
 **Reading rules.**
 
@@ -177,13 +178,16 @@ the text becomes once it is read.
 | boolean | `true` \| `false` | true / false | |
 | integer | `-?[0-9]+` | signed integer | |
 | non-negative integer | `[0-9]+` | unsigned integer | |
+| positive integer | `[1-9][0-9]*` | unsigned integer, at least 1 | only `timing@clockDivisor` (v1.0) |
 | number | decimal, `0.5` | fraction | only `opacity`, 0 to 1 |
 | string | any text | text | |
 | enum | one of the listed words | one of a fixed set | the tables list every allowed word |
 | ID | an XML name (`BT_play`) | text | unique in the document |
 | IDREF | an ID | text | names another element |
 | IDREFS | IDs separated by spaces | list of texts | |
+| name | one XML name token (`xs:NMTOKEN`) | text | only `event@name` |
 | names | names separated by spaces (`xs:NMTOKENS`) | list of texts | `class` |
+| language | a language tag (`en`, `en-us`) | text | `xml:lang` |
 | URI | `file:///dvddisc/…`, `…/x.aca/member`, or relative | text, kept as written | relative URIs resolve against `xml:base`, then the document's own location |
 | URL list | `url('a.png') url('b.png')` or `none` | list of URIs, or none | `backgroundImage` |
 | time | `HH:MM:SS`, `HH:MM:SS:FF` (hours may have more than two digits), or a decimal with a unit: `h`, `m`, `s`, `ms`, `f` (`0.5s`, `500ms`, `9f`) | either a clock value (hours, minutes, seconds, frames) or an amount with a unit | `f` counts frames of the element's clock (§14.7): the title timeline's frame rate on the title clock, the tick rate on page and application clocks (**INFERRED**). Keep the unit: the frame length is known only once the clock is |
@@ -218,8 +222,8 @@ VK_MOUSE_1`…`VK_MOUSE_5 VK_VECTOR_1`…`VK_VECTOR_4`.
 
 The schema builds the content elements from a chain of base types, each adding
 attributes to the one before. This table spells the chain out: the **On**
-column says exactly which elements have each attribute, so the element tables
-below do not repeat them.
+column says exactly which elements have each attribute. The element tables in
+§14.5–14.7 repeat these rows, so each element's table is complete on its own.
 
 | Attribute | Type | Default | On | What it is for |
 |---|---|---|---|---|
@@ -233,7 +237,7 @@ below do not repeat them.
 | `state:pointer` | boolean | `false` | `div`, `p`, `span`, `button`, `input`, `area` | A pointer is over the element (§14.10) |
 | `state:focused` | boolean, keyframe list | `false` | `button`, `input`, `area` | The element has the focus (§14.10) |
 | `state:actioned` | boolean | `false` | `button`, `input`, `area` | The element is being activated (§14.10) |
-| `state:value` | boolean or string, keyframe list | | `button`, `input`, `area` | The element's value (§14.10) |
+| `state:value` | boolean or string, keyframe list | | `button`, `input`, `area` | The element's value (§14.10). The schema cannot tell `true` the boolean from `true` the text, so keep it as written |
 
 Schema names for reference: `root`, `head`, `meta`, `include` are
 *NonDisplay*; `body`, `br`, `object` are *Display* (+ `class`,
@@ -1061,7 +1065,7 @@ On disc: `state:value` 113 (all on `input`), `state:focused` 33 (initial focus),
 
 ## 14.11 v1.0 and v1.1
 
-Retail discs validate against both schema versions (§14.12); read against v1.1
+Retail discs validate against both schema versions (§14.13); read against v1.1
 and accept the v1.0-only forms below.
 
 | Change in v1.1 | v1.0 had |
@@ -1077,7 +1081,49 @@ and accept the v1.0-only forms below.
 | `opacity` values restricted to 0–1 | values from −1 to 1 allowed by the pattern |
 | Per-element style sets: `area` gains the size attributes and `flip`, loses `breakBefore` / `breakAfter`; `body` gains the size attributes and `flip`; `p` gains the size attributes; `input` gains `flip`; `suppressAtLineBreak` moves from all inline elements to `span` and `input`; `body` and `div` lose `textAltitude` / `textDepth` | the v1.0 sets |
 
-## 14.12 On disc
+## 14.12 Reading a page into memory
+
+What a reader must keep so that layout, timing and script later get the right
+answer. These follow from the rules above; they are collected here because each
+one is easy to lose while parsing.
+
+- **Three kinds of document.** A `.xmu` or `.xas` has `root` at the top, a `.xts`
+  has `timing`, a `.xss` has `styling`. `include` pulls the last two into a
+  page's `head` and `.xmu` fragments into `body`, so a reader needs to accept all
+  three roots.
+- **`include` needs a loader.** Its `href` can name a loose file or an archive
+  member (`…/menus.aca/timing.xts`). The reader does not open files itself; it
+  asks whoever loaded the page for the included document.
+- **Keep children in document order.** Order carries meaning:
+  - `seq` runs its children one after another, in order (§14.7).
+  - Named and selected styles apply in document order (§14.6).
+  - `navIndex="auto"` means document order, and without an initial
+    `state:focused`, the first focusable element in document order gets the
+    focus (§14.9, §14.10).
+
+  A `div`'s children are one ordered list of mixed kinds, not one list per kind.
+- **Keep text where it is.** In `p` and `span`, text and child elements
+  alternate (`Press <span>here</span> to play`). Each run of text is a child in
+  its own right, in order between the elements. Keep text as written: how spaces
+  and line feeds are treated is a style (`whiteSpaceCollapse`,
+  `linefeedTreatment`, §14.9), decided at layout.
+- **Do not fill in style defaults.** A style attribute that is not written must
+  stay "not written": named and selected styles apply to it first, and only
+  then the default (§14.3, §14.6). Filling the default in while reading would
+  make it win over the named styles. Plain attributes (`timeContainer`, `mode`,
+  `shape`, `fill`, …) have no such rule; their defaults can be applied when read.
+- **Keep `inherit` and keyframe lists** as they are (§14.3). `inherit` is
+  resolved against the parent at layout; keyframe lists are used by `animate`
+  and by animatable values.
+- **Keep references as text.** `style`, `use`, `nav*`, `content` and `id()` in
+  paths name elements by `id`. Resolve them after the whole page (with its
+  includes) is read, because they can point forward.
+- **Keep paths as text.** They are evaluated while the page runs (§14.8).
+- **Keep attributes from other namespaces** with their namespace, name and
+  value (§14.1): script can read them.
+- **`meta` is ignored by rendering.** A reader may keep or drop its contents.
+
+## 14.13 On disc
 
 `e27`: 88 markup documents on the saved discs: 84 `.xmu`, 2 `.xts`, 2 `.xas`
 (both empty stubs), extracted from ACAs and loose files. 87 validate against
