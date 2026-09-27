@@ -751,14 +751,14 @@ the text becomes once it is read.</p>
 <td><p>a value that matches the time syntax is a time; anything else is a path</p></td>
 </tr>
 <tr class="row-even"><td><p>length</p></td>
-<td><p>integer + <code class="docutils literal notranslate"><span class="pre">px</span></code>, <code class="docutils literal notranslate"><span class="pre">em</span></code> or <code class="docutils literal notranslate"><span class="pre">%</span></code> (<code class="docutils literal notranslate"><span class="pre">-12px</span></code> where negatives are allowed)</p></td>
-<td><p>number + unit</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">px</span></code> are graphics-plane pixels (the playlist <code class="docutils literal notranslate"><span class="pre">Aperture</span></code>, normally 1920×1080)</p></td>
+<td><p>a whole number followed by its unit, no space: <code class="docutils literal notranslate"><span class="pre">100px</span></code>, <code class="docutils literal notranslate"><span class="pre">2em</span></code>, <code class="docutils literal notranslate"><span class="pre">50%</span></code>, <code class="docutils literal notranslate"><span class="pre">-12px</span></code></p></td>
+<td><p>one signed whole number + one unit (<code class="docutils literal notranslate"><span class="pre">px</span></code>, <code class="docutils literal notranslate"><span class="pre">em</span></code> or <code class="docutils literal notranslate"><span class="pre">%</span></code>)</p></td>
+<td><p>Never a fraction (<code class="docutils literal notranslate"><span class="pre">12.5px</span></code> is invalid). Negative values are allowed everywhere except <code class="docutils literal notranslate"><span class="pre">padding*</span></code> and <code class="docutils literal notranslate"><span class="pre">fontSize</span></code>. <code class="docutils literal notranslate"><span class="pre">px</span></code> are graphics-plane pixels (the playlist <code class="docutils literal notranslate"><span class="pre">Aperture</span></code>, normally 1920×1080). Words such as <code class="docutils literal notranslate"><span class="pre">auto</span></code> are not lengths; the attribute’s own type lists them</p></td>
 </tr>
 <tr class="row-odd"><td><p>percentage</p></td>
-<td><p>integer + <code class="docutils literal notranslate"><span class="pre">%</span></code></p></td>
-<td><p>number</p></td>
-<td><p></p></td>
+<td><p>a whole number followed by <code class="docutils literal notranslate"><span class="pre">%</span></code>: <code class="docutils literal notranslate"><span class="pre">50%</span></code></p></td>
+<td><p>one whole number</p></td>
+<td><p>A length whose unit is <code class="docutils literal notranslate"><span class="pre">%</span></code></p></td>
 </tr>
 <tr class="row-even"><td><p>colour</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">#rgb</span></code>, <code class="docutils literal notranslate"><span class="pre">#rrggbb</span></code>, <code class="docutils literal notranslate"><span class="pre">rgb(r,g,b)</span></code>, <code class="docutils literal notranslate"><span class="pre">rgba(r,g,b,a)</span></code> (each 0–255 or a %), one of 16 names, or <code class="docutils literal notranslate"><span class="pre">transparent</span></code></p></td>

@@ -193,8 +193,8 @@ the text becomes once it is read.
 | time | `HH:MM:SS`, `HH:MM:SS:FF` (hours may have more than two digits), or a decimal with a unit: `h`, `m`, `s`, `ms`, `f` (`0.5s`, `500ms`, `9f`) | either a clock value (hours, minutes, seconds, frames) or an amount with a unit | `f` counts frames of the element's clock (§14.7): the title timeline's frame rate on the title clock, the tick rate on page and application clocks (**INFERRED**). Keep the unit: the frame length is known only once the clock is |
 | path | an XPath 1.0 expression (§14.8) | text, kept as written | evaluated while the page runs, not when it is read |
 | time or path | a time, or a path | tagged: a time or a path | a value that matches the time syntax is a time; anything else is a path |
-| length | integer + `px`, `em` or `%` (`-12px` where negatives are allowed) | number + unit | `px` are graphics-plane pixels (the playlist `Aperture`, normally 1920×1080) |
-| percentage | integer + `%` | number | |
+| length | a whole number followed by its unit, no space: `100px`, `2em`, `50%`, `-12px` | one signed whole number + one unit (`px`, `em` or `%`) | Never a fraction (`12.5px` is invalid). Negative values are allowed everywhere except `padding*` and `fontSize`. `px` are graphics-plane pixels (the playlist `Aperture`, normally 1920×1080). Words such as `auto` are not lengths; the attribute's own type lists them |
+| percentage | a whole number followed by `%`: `50%` | one whole number | A length whose unit is `%` |
 | colour | `#rgb`, `#rrggbb`, `rgb(r,g,b)`, `rgba(r,g,b,a)` (each 0–255 or a %), one of 16 names, or `transparent` | red, green, blue, alpha | names: `aqua black blue fuchsia gray green lime maroon navy olive purple red silver teal white yellow`. `transparent` = alpha 0 |
 | access keys | space-separated keys: `U+XXXX` (4–6 hex digits, a Unicode character) or a virtual key `VK_…` | list of keys, each a character code or a virtual key | virtual keys listed below |
 | border | text without `;` (CSS-like width, style, colour) | text | the grammar is not in the sources |
