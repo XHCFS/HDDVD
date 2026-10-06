@@ -769,7 +769,7 @@ the elements it selects.
 | `begin` | time or path | no |  | When it starts: a time, or the moment a condition becomes true (`id('BT_play')[state:focused()=true()]`) |
 | `end` | time or path | no |  | When it stops |
 | `dur` | time | no |  | Its length, instead of `end` |
-| `use` | IDREFS | no |  | `g` elements in `defs` whose effects apply as if written inside the cue |
+| `use` | IDREFS | no |  | Effects in `defs` that apply as if written inside the cue: a `g`, or a single `set`, `animate` or `event`. On disc 256 name a `set`, 141 a `g`, 13 an `animate` |
 | `fill` | enum `remove` \| `hold` | no | `remove` | After the cue ends: `remove` undoes its effects, `hold` keeps the final values |
 | `id`, `xml:lang`, `xml:base`, `xml:space` | §14.4 | no |  | Common to every element |
 
