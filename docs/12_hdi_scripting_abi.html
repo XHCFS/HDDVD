@@ -327,7 +327,7 @@
 </li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">12. HDi scripting host ABI (type library)</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#object-model-106-typeinfos">12.1 Object model (106 typeinfos)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#constant-catalog-200-constants">12.2 Constant catalog (200 constants)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#constant-catalog">12.2 Constant catalog</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#complete-ihd-markup-surface-xsd">12.3 Complete iHD markup surface (XSD)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#hdi-runtime-semantics-published-standards">12.4 HDi runtime semantics (published standards)</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#event-dispatch-order-dom-level-2-events-verbatim">Event dispatch order (DOM Level 2 Events, verbatim)</a></li>
@@ -336,9 +336,11 @@
 <li class="toctree-l3"><a class="reference internal" href="#smil-2-0-timing-resolution-cue-par-seq-set-animate">SMIL 2.0 timing resolution (<code class="docutils literal notranslate"><span class="pre">cue</span></code> / <code class="docutils literal notranslate"><span class="pre">par</span></code> / <code class="docutils literal notranslate"><span class="pre">seq</span></code> / <code class="docutils literal notranslate"><span class="pre">set</span></code> / <code class="docutils literal notranslate"><span class="pre">animate</span></code>)</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#player-object-model-from-the-type-library">12.5 Player object model (from the type library)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#cue-predicate-grammar-pathexpressiontype">12.6 Cue-predicate grammar (<code class="docutils literal notranslate"><span class="pre">PathExpressionType</span></code>)</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#remaining-items-after-12-5-12-6-5-2">Remaining items after §12.5 / §12.6 / §5.2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#player-object-model">12.5 Player object model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cue-predicate-grammar-pathexpressiontype">12.6 Cue-predicate grammar (<code class="docutils literal notranslate"><span class="pre">PathExpressionType</span></code>)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#xpath-variables-system-parameters">12.7 XPath variables (system parameters)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#virtual-keys-and-the-default-input-handler">12.8 Virtual keys and the default input handler</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#remaining-items">Remaining items</a></li>
 </ul>
 </li>
 </ul>
@@ -460,7 +462,11 @@
 <p><em>Counts written “N/120”, “N/119”, “on N discs”, “listings”, or as named discs are over the reference corpus of 120 archived retail HD DVD images [11]. <code class="docutils literal notranslate"><span class="pre">eNN</span></code> are the reproducible verification experiments [12].</em></p>
 <p>The complete ECMAScript host surface the player exposes to disc scripts, extracted from the <strong>type library binary</strong> <code class="docutils literal notranslate"><span class="pre">spec/raw/adv_obj/typelib/iHDScripting.tlb</span></code> (MSFT OLE type library, <code class="docutils literal notranslate"><span class="pre">iHDScriptingTypeLib</span></code>, carried in <code class="docutils literal notranslate"><span class="pre">SCENACA.msi</span></code> inside <code class="docutils literal notranslate"><span class="pre">Scenarist_AC_4.5.iso</span></code>). This is the authoritative object model behind the used-subset call signatures in <a class="reference internal" href="05_manifest_hdi.html"><span class="std std-doc">05</span></a> §5.3.</p>
 <p><code class="docutils literal notranslate"><span class="pre">[6]</span></code></p>
-<p><strong>VERIFIED</strong> at name + constant level (<code class="docutils literal notranslate"><span class="pre">experiments/e20_typelib.py</span></code>). Full parameter/return IDL is recoverable by loading the saved <code class="docutils literal notranslate"><span class="pre">.tlb</span></code> in a Windows type-library viewer (<code class="docutils literal notranslate"><span class="pre">oleview.exe</span></code> / <code class="docutils literal notranslate"><span class="pre">tlbimp</span></code> / <code class="docutils literal notranslate"><span class="pre">comtypes</span></code>); the binary is in the repo. That last step is the remaining part of gap B2 (<a class="reference internal" href="11_gaps.html"><span class="std std-doc">11</span></a>).</p>
+<p><strong>VERIFIED</strong> at name + constant level (<code class="docutils literal notranslate"><span class="pre">experiments/e20_typelib.py</span></code>). The book’s
+Annex Z [23] defines the same API for version 1.01: every object, member, parameter
+and return type, the constant values (§12.2) and the processing steps of each call.
+Read Annex Z for behaviour; the type library adds only the members of later
+versions (§12.2, last paragraph).</p>
 <section id="object-model-106-typeinfos">
 <h2>12.1 Object model (106 typeinfos)<a class="headerlink" href="#object-model-106-typeinfos" title="Link to this heading"></a></h2>
 <p>103 <code class="docutils literal notranslate"><span class="pre">dispinterface</span></code>, 2 <code class="docutils literal notranslate"><span class="pre">interface</span></code>, 1 <code class="docutils literal notranslate"><span class="pre">coclass</span></code>. The host objects a script reaches (<code class="docutils literal notranslate"><span class="pre">Player</span></code>, <code class="docutils literal notranslate"><span class="pre">Player.playlist</span></code>, <code class="docutils literal notranslate"><span class="pre">application</span></code>, <code class="docutils literal notranslate"><span class="pre">PersistentStorageManager</span></code>, <code class="docutils literal notranslate"><span class="pre">document</span></code>, …) are instances of these. Interface list:</p>
@@ -492,36 +498,225 @@
 <code class="docutils literal notranslate"><span class="pre">IDOM2EntityReference</span></code> <code class="docutils literal notranslate"><span class="pre">IDOM2ProcessingInstruction</span></code> <code class="docutils literal notranslate"><span class="pre">IAnimatableDocument</span></code> <code class="docutils literal notranslate"><span class="pre">IAnimatableProperty</span></code><br />
 <code class="docutils literal notranslate"><span class="pre">IAnimatableElement</span></code> <code class="docutils literal notranslate"><span class="pre">WinScriptInterpreter</span></code></p>
 </section>
-<section id="constant-catalog-200-constants">
-<h2>12.2 Constant catalog (200 constants)<a class="headerlink" href="#constant-catalog-200-constants" title="Link to this heading"></a></h2>
-<p>Grouped by the interface that declares them. These are the literal values disc ECMAScript passes and compares. Names verified present in the <code class="docutils literal notranslate"><span class="pre">.tlb</span></code>; values (small sequential integers, DVD/AACS convention) need the IDL viewer step.</p>
-<p><strong>IApplication:</strong> <code class="docutils literal notranslate"><span class="pre">TIMER_APPLICATION</span></code>, <code class="docutils literal notranslate"><span class="pre">TIMER_TITLE</span></code></p>
-<p><strong>IAdvApplication:</strong> <code class="docutils literal notranslate"><span class="pre">APPLICATION_PLAYLIST</span></code>, <code class="docutils literal notranslate"><span class="pre">APPLICATION_TITLE</span></code>, <code class="docutils literal notranslate"><span class="pre">STATE_ACTIVE</span></code>, <code class="docutils literal notranslate"><span class="pre">STATE_INACTIVE</span></code>, <code class="docutils literal notranslate"><span class="pre">STATE_INVALID</span></code></p>
-<p><strong>IFileIO:</strong> <code class="docutils literal notranslate"><span class="pre">FILE_IOMODE_READ</span></code>, <code class="docutils literal notranslate"><span class="pre">FILE_IOMODE_WRITE</span></code>, <code class="docutils literal notranslate"><span class="pre">FILE_IOMODE_READWRITE</span></code>, <code class="docutils literal notranslate"><span class="pre">SUCCEEDED</span></code>, <code class="docutils literal notranslate"><span class="pre">FAILED</span></code>, <code class="docutils literal notranslate"><span class="pre">FILE_NOT_FOUND</span></code>, <code class="docutils literal notranslate"><span class="pre">NOT_PERMITTED</span></code>, <code class="docutils literal notranslate"><span class="pre">DIRECTORY_NOT_FOUND</span></code>, <code class="docutils literal notranslate"><span class="pre">ARGUMENT</span></code>, <code class="docutils literal notranslate"><span class="pre">NOT_ENOUGH_SPACE</span></code></p>
-<p><strong>IDiagnostics:</strong> <code class="docutils literal notranslate"><span class="pre">TRACE_LEVEL_ERROR</span></code>, <code class="docutils literal notranslate"><span class="pre">TRACE_LEVEL_WARNING</span></code>, <code class="docutils literal notranslate"><span class="pre">TRACE_LEVEL_INFO</span></code></p>
-<p><strong>ITraceListenerCollection:</strong> <code class="docutils literal notranslate"><span class="pre">LISTENER_TYPE_FILE</span></code>, <code class="docutils literal notranslate"><span class="pre">LISTENER_TYPE_NETWORK</span></code>, <code class="docutils literal notranslate"><span class="pre">LISTENER_TYPE_DEBUGGER</span></code></p>
-<p><strong>IController:</strong> <code class="docutils literal notranslate"><span class="pre">OTHER</span></code>, <code class="docutils literal notranslate"><span class="pre">REMOTE_CONTROLLER</span></code>, <code class="docutils literal notranslate"><span class="pre">KEYBORAD</span></code>, <code class="docutils literal notranslate"><span class="pre">MOUSE</span></code>, <code class="docutils literal notranslate"><span class="pre">FRONT_PANEL</span></code>, <code class="docutils literal notranslate"><span class="pre">GAME_PAD</span></code></p>
-<p><strong>IHTTPClient:</strong> <code class="docutils literal notranslate"><span class="pre">STATE_UNINITIALIZED</span></code>, <code class="docutils literal notranslate"><span class="pre">STATE_LOADING</span></code>, <code class="docutils literal notranslate"><span class="pre">STATE_REQUESTPROGRESS</span></code>, <code class="docutils literal notranslate"><span class="pre">STATE_REQUESTSENT</span></code>, <code class="docutils literal notranslate"><span class="pre">STATE_HEADERRECEIVED</span></code>, <code class="docutils literal notranslate"><span class="pre">STATE_RESPONSEPROGRESS</span></code>, <code class="docutils literal notranslate"><span class="pre">STATE_COMPLETED</span></code>, <code class="docutils literal notranslate"><span class="pre">STATE_ERROR</span></code>, <code class="docutils literal notranslate"><span class="pre">STATE_ABORT</span></code>, <code class="docutils literal notranslate"><span class="pre">AUTHENTICATION_NONE</span></code>, <code class="docutils literal notranslate"><span class="pre">AUTHENTICATION_BASIC</span></code>, <code class="docutils literal notranslate"><span class="pre">AUTHENTICATION_DIGEST</span></code></p>
-<p><strong>INetwork:</strong> <code class="docutils literal notranslate"><span class="pre">HTTP_GET</span></code>, <code class="docutils literal notranslate"><span class="pre">HTTP_HEAD</span></code>, <code class="docutils literal notranslate"><span class="pre">HTTP_POST</span></code>, <code class="docutils literal notranslate"><span class="pre">HTTP_PUT</span></code>, <code class="docutils literal notranslate"><span class="pre">HTTP_TRACE</span></code>, <code class="docutils literal notranslate"><span class="pre">HTTP_OPTIONS</span></code>, <code class="docutils literal notranslate"><span class="pre">HTTP_DELETE</span></code></p>
-<p><strong>IPersistentStorageMgr:</strong> <code class="docutils literal notranslate"><span class="pre">STORAGE_ALL</span></code>, <code class="docutils literal notranslate"><span class="pre">STORAGE_REQUIRED</span></code>, <code class="docutils literal notranslate"><span class="pre">STORAGE_ADDITIONAL</span></code>, <code class="docutils literal notranslate"><span class="pre">STORAGE_NETWORK</span></code>, <code class="docutils literal notranslate"><span class="pre">STATE_SLOT</span></code>, <code class="docutils literal notranslate"><span class="pre">STATE_MEDIA_SLOT</span></code>, <code class="docutils literal notranslate"><span class="pre">STATE_NON_SLOT</span></code>, <code class="docutils literal notranslate"><span class="pre">SUCCEEDED</span></code>, <code class="docutils literal notranslate"><span class="pre">FILE_NOT_FOUND</span></code>, <code class="docutils literal notranslate"><span class="pre">ARGUMENT</span></code>, <code class="docutils literal notranslate"><span class="pre">NOT_ENOUGH_SPACE</span></code></p>
-<p><strong>IPlayer:</strong> <code class="docutils literal notranslate"><span class="pre">DISPLAY_ASPECT_RATIO_4_3</span></code>, <code class="docutils literal notranslate"><span class="pre">DISPLAY_ASPECT_RATIO_16_9</span></code>, <code class="docutils literal notranslate"><span class="pre">DISPLAY_ASPECT_RATIO_NOT_SPECIFIED</span></code>, <code class="docutils literal notranslate"><span class="pre">DISPLAY_NONE</span></code>, <code class="docutils literal notranslate"><span class="pre">DISPLAY_NORMAL_WIDE</span></code>, <code class="docutils literal notranslate"><span class="pre">DISPLAY_PANSCAN</span></code>, <code class="docutils literal notranslate"><span class="pre">DISPLAY_LETTERBOX</span></code>, <code class="docutils literal notranslate"><span class="pre">DISPLAY_HD</span></code>, <code class="docutils literal notranslate"><span class="pre">REGION_1</span></code>, <code class="docutils literal notranslate"><span class="pre">REGION_2</span></code>, <code class="docutils literal notranslate"><span class="pre">REGION_3</span></code>, <code class="docutils literal notranslate"><span class="pre">REGION_4</span></code>, <code class="docutils literal notranslate"><span class="pre">REGION_5</span></code>, <code class="docutils literal notranslate"><span class="pre">REGION_6</span></code>, <code class="docutils literal notranslate"><span class="pre">REGION_7</span></code>, <code class="docutils literal notranslate"><span class="pre">REGION_8</span></code>, <code class="docutils literal notranslate"><span class="pre">PARENTAL_NONE</span></code>, <code class="docutils literal notranslate"><span class="pre">PARENTAL_1</span></code>, <code class="docutils literal notranslate"><span class="pre">PARENTAL_2</span></code>, <code class="docutils literal notranslate"><span class="pre">PARENTAL_3</span></code>, <code class="docutils literal notranslate"><span class="pre">PARENTAL_4</span></code>, <code class="docutils literal notranslate"><span class="pre">PARENTAL_5</span></code>, <code class="docutils literal notranslate"><span class="pre">PARENTAL_6</span></code>, <code class="docutils literal notranslate"><span class="pre">PARENTAL_7</span></code>, <code class="docutils literal notranslate"><span class="pre">PARENTAL_8</span></code>, <code class="docutils literal notranslate"><span class="pre">ACCESSIBILITY_CLOSED_CAPTION</span></code>, <code class="docutils literal notranslate"><span class="pre">ACCESSIBILITY_SIMPLIFIED_CAPTION</span></code>, <code class="docutils literal notranslate"><span class="pre">ACCESSIBILITY_LARGE_FONT</span></code>, <code class="docutils literal notranslate"><span class="pre">ACCESSIBILITY_CONTRAST_DISPLAY</span></code>, <code class="docutils literal notranslate"><span class="pre">ACCESSIBILITY_DESCRIPTIVE_AUDIO</span></code>, <code class="docutils literal notranslate"><span class="pre">ACCESSIBILITY_EXTENDED_INTERACTION_TIMES</span></code>, <code class="docutils literal notranslate"><span class="pre">SUCCEEDED</span></code>, <code class="docutils literal notranslate"><span class="pre">FINISHED</span></code>, <code class="docutils literal notranslate"><span class="pre">FAILED</span></code>, <code class="docutils literal notranslate"><span class="pre">FILE_NOT_FOUND</span></code>, <code class="docutils literal notranslate"><span class="pre">NOT_ENOUGH_SPACE</span></code>, <code class="docutils literal notranslate"><span class="pre">WRONG_FORMAT</span></code>, <code class="docutils literal notranslate"><span class="pre">ARGUMENT</span></code>, <code class="docutils literal notranslate"><span class="pre">NETWORK_PROBLEM</span></code>, <code class="docutils literal notranslate"><span class="pre">INVALID_CALL</span></code></p>
-<p><strong>IAACS:</strong> <code class="docutils literal notranslate"><span class="pre">INVALIDKEY</span></code></p>
-<p><strong>IAudioCapabilities:</strong> <code class="docutils literal notranslate"><span class="pre">CHANNEL_2</span></code>, <code class="docutils literal notranslate"><span class="pre">CHANNEL_5_1</span></code>, <code class="docutils literal notranslate"><span class="pre">CHANNEL_7_1</span></code></p>
-<p><strong>IDecodeCapabilities:</strong> <code class="docutils literal notranslate"><span class="pre">NOT_SUPPORT</span></code>, <code class="docutils literal notranslate"><span class="pre">CHANNEL_2</span></code>, <code class="docutils literal notranslate"><span class="pre">CHANNEL_5_1</span></code>, <code class="docutils literal notranslate"><span class="pre">CHANNEL_7_1</span></code></p>
-<p><strong>IDigitalInterfaceCapabilities:</strong> <code class="docutils literal notranslate"><span class="pre">CODEC_DD</span></code>, <code class="docutils literal notranslate"><span class="pre">CODEC_DTS</span></code></p>
-<p><strong>IFontCapabilities:</strong> <code class="docutils literal notranslate"><span class="pre">CLASS_1</span></code>, <code class="docutils literal notranslate"><span class="pre">CLASS_2</span></code></p>
-<p><strong>IPlaylist:</strong> <code class="docutils literal notranslate"><span class="pre">PLAYSTATE_PLAY</span></code>, <code class="docutils literal notranslate"><span class="pre">PLAYSTATE_PAUSE</span></code>, <code class="docutils literal notranslate"><span class="pre">PLAYSTATE_FAST_FWD</span></code>, <code class="docutils literal notranslate"><span class="pre">PLAYSTATE_FAST_REV</span></code>, <code class="docutils literal notranslate"><span class="pre">PLAYSTATE_SLOW_FWD</span></code>, <code class="docutils literal notranslate"><span class="pre">PLAYSTATE_SLOW_REV</span></code></p>
-<p><strong>IStandardContentPlayer:</strong> <code class="docutils literal notranslate"><span class="pre">DOMAIN_TITLE</span></code>, <code class="docutils literal notranslate"><span class="pre">DOMAIN_MENU</span></code></p>
-<p><strong>ISecondaryVideoPlayer:</strong> <code class="docutils literal notranslate"><span class="pre">PLAYSTATE_INIT</span></code>, <code class="docutils literal notranslate"><span class="pre">PLAYSTATE_PLAY</span></code>, <code class="docutils literal notranslate"><span class="pre">PLAYSTATE_PAUSE</span></code>, <code class="docutils literal notranslate"><span class="pre">PLAYSTATE_STOP</span></code>, <code class="docutils literal notranslate"><span class="pre">PLAYSTATE_SYNC</span></code>, <code class="docutils literal notranslate"><span class="pre">PLAYSTATE_STREAMING_PRELOAD</span></code>, <code class="docutils literal notranslate"><span class="pre">PLAYSTATE_STREAMING_PLAY</span></code>, <code class="docutils literal notranslate"><span class="pre">PLAYSTATE_STREAMING_PAUSE</span></code></p>
-<p><strong>IXMLParser:</strong> <code class="docutils literal notranslate"><span class="pre">UTF8</span></code>, <code class="docutils literal notranslate"><span class="pre">UTF16_BE</span></code>, <code class="docutils literal notranslate"><span class="pre">UTF16_LE</span></code>, <code class="docutils literal notranslate"><span class="pre">UTF16</span></code>, <code class="docutils literal notranslate"><span class="pre">READY</span></code>, <code class="docutils literal notranslate"><span class="pre">PARSING</span></code>, <code class="docutils literal notranslate"><span class="pre">WRITING</span></code>, <code class="docutils literal notranslate"><span class="pre">PARSE_ERR</span></code>, <code class="docutils literal notranslate"><span class="pre">FILE_NOT_FOUND</span></code>, <code class="docutils literal notranslate"><span class="pre">FILE_OVERWRITE_ERR</span></code>, <code class="docutils literal notranslate"><span class="pre">FILECACHE_ERR</span></code>, <code class="docutils literal notranslate"><span class="pre">SERIALIZE_ERR</span></code>, <code class="docutils literal notranslate"><span class="pre">FILE_WRITE_ERR</span></code></p>
-<p><strong>IDOM2Event:</strong> <code class="docutils literal notranslate"><span class="pre">CAPTURING_PHASE</span></code>, <code class="docutils literal notranslate"><span class="pre">AT_TARGET</span></code>, <code class="docutils literal notranslate"><span class="pre">BUBBLING_PHASE</span></code></p>
-<p><strong>IHDEventProperties:</strong> <code class="docutils literal notranslate"><span class="pre">BEGIN</span></code>, <code class="docutils literal notranslate"><span class="pre">END</span></code>, <code class="docutils literal notranslate"><span class="pre">CHANGE</span></code>, <code class="docutils literal notranslate"><span class="pre">DISCONNECTED</span></code>, <code class="docutils literal notranslate"><span class="pre">NOT_FOUND</span></code>, <code class="docutils literal notranslate"><span class="pre">EMPTY</span></code>, <code class="docutils literal notranslate"><span class="pre">RESTART</span></code>, <code class="docutils literal notranslate"><span class="pre">CONNECTION</span></code>, <code class="docutils literal notranslate"><span class="pre">DOWN</span></code>, <code class="docutils literal notranslate"><span class="pre">CURSOR_MOVE</span></code>, <code class="docutils literal notranslate"><span class="pre">VECTOR</span></code></p>
-<p><strong>IDOM2ExceptionFunction:</strong> <code class="docutils literal notranslate"><span class="pre">INDEX_SIZE_ERR</span></code>, <code class="docutils literal notranslate"><span class="pre">DOMSTRING_SIZE_ERR</span></code>, <code class="docutils literal notranslate"><span class="pre">HIERARCHY_REQUEST_ERR</span></code>, <code class="docutils literal notranslate"><span class="pre">WRONG_DOCUMENT_ERR</span></code>, <code class="docutils literal notranslate"><span class="pre">INVALID_CHARACTER_ERR</span></code>, <code class="docutils literal notranslate"><span class="pre">NO_DATA_ALLOWED_ERR</span></code>, <code class="docutils literal notranslate"><span class="pre">NO_MODIFICATION_ALLOWED_ERR</span></code>, <code class="docutils literal notranslate"><span class="pre">NOT_FOUND_ERR</span></code>, <code class="docutils literal notranslate"><span class="pre">NOT_SUPPORTED_ERR</span></code>, <code class="docutils literal notranslate"><span class="pre">INUSE_ATTRIBUTE_ERR</span></code>, <code class="docutils literal notranslate"><span class="pre">INVALID_STATE_ERR</span></code>, <code class="docutils literal notranslate"><span class="pre">SYNTAX_ERR</span></code>, <code class="docutils literal notranslate"><span class="pre">INVALID_MODIFICATION_ERR</span></code>, <code class="docutils literal notranslate"><span class="pre">NAMESPACE_ERR</span></code>, <code class="docutils literal notranslate"><span class="pre">INVALID_ACCESS_ERR</span></code></p>
-<p><strong>IEventExceptionFunction:</strong> <code class="docutils literal notranslate"><span class="pre">UNSPECIFIED_EVENT_TYPE_ERR</span></code></p>
-<p><strong>INodeConstructor:</strong> <code class="docutils literal notranslate"><span class="pre">ELEMENT_NODE</span></code>, <code class="docutils literal notranslate"><span class="pre">ATTRIBUTE_NODE</span></code>, <code class="docutils literal notranslate"><span class="pre">TEXT_NODE</span></code>, <code class="docutils literal notranslate"><span class="pre">CDATA_SECTION_NODE</span></code>, <code class="docutils literal notranslate"><span class="pre">ENTITY_REFERENCE_NODE</span></code>, <code class="docutils literal notranslate"><span class="pre">ENTITY_NODE</span></code>, <code class="docutils literal notranslate"><span class="pre">PROCESSING_INSTRUCTION_NODE</span></code>, <code class="docutils literal notranslate"><span class="pre">COMMENT_NODE</span></code>, <code class="docutils literal notranslate"><span class="pre">DOCUMENT_NODE</span></code>, <code class="docutils literal notranslate"><span class="pre">DOCUMENT_TYPE_NODE</span></code>, <code class="docutils literal notranslate"><span class="pre">DOCUMENT_FRAGMENT_NODE</span></code>, <code class="docutils literal notranslate"><span class="pre">NOTATION_NODE</span></code></p>
-<p><strong>IEventConstructor:</strong> <code class="docutils literal notranslate"><span class="pre">CAPTURING_PHASE</span></code>, <code class="docutils literal notranslate"><span class="pre">AT_TARGET</span></code>, <code class="docutils literal notranslate"><span class="pre">BUBBLING_PHASE</span></code></p>
-<p><strong>IMutationEventConstructor:</strong> <code class="docutils literal notranslate"><span class="pre">MODIFICATION</span></code>, <code class="docutils literal notranslate"><span class="pre">ADDITION</span></code>, <code class="docutils literal notranslate"><span class="pre">REMOVAL</span></code></p>
-<p><strong>IDOM2Node:</strong> <code class="docutils literal notranslate"><span class="pre">ELEMENT_NODE</span></code>, <code class="docutils literal notranslate"><span class="pre">ATTRIBUTE_NODE</span></code>, <code class="docutils literal notranslate"><span class="pre">TEXT_NODE</span></code>, <code class="docutils literal notranslate"><span class="pre">CDATA_SECTION_NODE</span></code>, <code class="docutils literal notranslate"><span class="pre">ENTITY_REFERENCE_NODE</span></code>, <code class="docutils literal notranslate"><span class="pre">ENTITY_NODE</span></code>, <code class="docutils literal notranslate"><span class="pre">PROCESSING_INSTRUCTION_NODE</span></code>, <code class="docutils literal notranslate"><span class="pre">COMMENT_NODE</span></code>, <code class="docutils literal notranslate"><span class="pre">DOCUMENT_NODE</span></code>, <code class="docutils literal notranslate"><span class="pre">DOCUMENT_TYPE_NODE</span></code>, <code class="docutils literal notranslate"><span class="pre">DOCUMENT_FRAGMENT_NODE</span></code>, <code class="docutils literal notranslate"><span class="pre">NOTATION_NODE</span></code></p>
+<section id="constant-catalog">
+<h2>12.2 Constant catalog<a class="headerlink" href="#constant-catalog" title="Link to this heading"></a></h2>
+<p>The values are the book’s [23 Annex Z]; the names also appear in the type library
+[6]. Grouped by the object that declares them. An integer constant is
+<code class="docutils literal notranslate"><span class="pre">unsigned</span> <span class="pre">int</span></code>; a few are strings. Names the type library has but 1.01 does not
+define are listed at the end.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Object</p></th>
+<th class="head"><p>Constants</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">Application</span></code> (Timer type)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">TIMER_APPLICATION</span></code> 1 (application clock), <code class="docutils literal notranslate"><span class="pre">TIMER_TITLE</span></code> 2 (title clock)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">AdvancedApplication</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">APPLICATION_PLAYLIST</span></code> 1, <code class="docutils literal notranslate"><span class="pre">APPLICATION_TITLE</span></code> 2; state <code class="docutils literal notranslate"><span class="pre">STATE_ACTIVE</span></code> 1, <code class="docutils literal notranslate"><span class="pre">STATE_INACTIVE</span></code> 2, <code class="docutils literal notranslate"><span class="pre">STATE_INVALID</span></code> 3</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FileIO</span></code></p></td>
+<td><p>mode <code class="docutils literal notranslate"><span class="pre">FILE_IOMODE_READ</span></code> 1, <code class="docutils literal notranslate"><span class="pre">FILE_IOMODE_WRITE</span></code> 2, <code class="docutils literal notranslate"><span class="pre">FILE_IOMODE_READWRITE</span></code> 3; result <code class="docutils literal notranslate"><span class="pre">SUCCEEDED</span></code> 1, <code class="docutils literal notranslate"><span class="pre">ARGUMENT</span></code> 2, <code class="docutils literal notranslate"><span class="pre">FILE_NOT_FOUND</span></code> 3, <code class="docutils literal notranslate"><span class="pre">NOT_ENOUGH_SPACE</span></code> 4, <code class="docutils literal notranslate"><span class="pre">IO</span></code> 5, <code class="docutils literal notranslate"><span class="pre">NOT_PERMITTED</span></code> 6, <code class="docutils literal notranslate"><span class="pre">FAILED</span></code> 7, <code class="docutils literal notranslate"><span class="pre">DIRECTORY_NOT_FOUND</span></code> 8</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">Diagnostics</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">TRACE_LEVEL_ERROR</span></code> 1, <code class="docutils literal notranslate"><span class="pre">TRACE_LEVEL_WARNING</span></code> 2, <code class="docutils literal notranslate"><span class="pre">TRACE_LEVEL_INFO</span></code> 3</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">TraceListenerCollection</span></code></p></td>
+<td><p>strings: <code class="docutils literal notranslate"><span class="pre">LISTENER_TYPE_FILE</span></code> <code class="docutils literal notranslate"><span class="pre">&quot;file&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">LISTENER_TYPE_NETWORK</span></code> <code class="docutils literal notranslate"><span class="pre">&quot;network&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">LISTENER_TYPE_DEBUGGER</span></code> <code class="docutils literal notranslate"><span class="pre">&quot;debugger&quot;</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">Controller</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">OTHER</span></code> 0, <code class="docutils literal notranslate"><span class="pre">REMOTE_CONTROLLER</span></code> 1, <code class="docutils literal notranslate"><span class="pre">KEYBOARD</span></code> 2, <code class="docutils literal notranslate"><span class="pre">MOUSE</span></code> 3, <code class="docutils literal notranslate"><span class="pre">FRONT_PANEL</span></code> 4, <code class="docutils literal notranslate"><span class="pre">GAME_PAD</span></code> 5 (the type library spells <code class="docutils literal notranslate"><span class="pre">KEYBORAD</span></code>)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ControllerEvent</span></code></p></td>
+<td><p>strings: <code class="docutils literal notranslate"><span class="pre">CONNECT</span></code> <code class="docutils literal notranslate"><span class="pre">&quot;controller_connect&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">DISCONNECT</span></code> <code class="docutils literal notranslate"><span class="pre">&quot;controller_disconnect&quot;</span></code> (Z.5.1; Z.6.2 writes <code class="docutils literal notranslate"><span class="pre">CONNECTED</span></code> <code class="docutils literal notranslate"><span class="pre">&quot;controller_connected&quot;</span></code> / <code class="docutils literal notranslate"><span class="pre">DISCONNECTED</span></code> <code class="docutils literal notranslate"><span class="pre">&quot;controller_disconnected&quot;</span></code>, the book is inconsistent)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ControllerKeyEvent</span></code></p></td>
+<td><p>strings: <code class="docutils literal notranslate"><span class="pre">DOWN</span></code> <code class="docutils literal notranslate"><span class="pre">&quot;controller_key_down&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">UP</span></code> <code class="docutils literal notranslate"><span class="pre">&quot;controller_key_up&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">CURSOR_MOVE</span></code> <code class="docutils literal notranslate"><span class="pre">&quot;cursor_move&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">VECTOR</span></code> <code class="docutils literal notranslate"><span class="pre">&quot;controller_key_vector&quot;</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">HTTPClient</span></code></p></td>
+<td><p>state <code class="docutils literal notranslate"><span class="pre">STATE_UNINITIALIZED</span></code> 1, <code class="docutils literal notranslate"><span class="pre">STATE_LOADING</span></code> 2, <code class="docutils literal notranslate"><span class="pre">STATE_REQUESTPROGRESS</span></code> 3, <code class="docutils literal notranslate"><span class="pre">STATE_REQUESTSENT</span></code> 4, <code class="docutils literal notranslate"><span class="pre">STATE_HEADERRECEIVED</span></code> 5, <code class="docutils literal notranslate"><span class="pre">STATE_RESPONSEPROGRESS</span></code> 6, <code class="docutils literal notranslate"><span class="pre">STATE_COMPLETED</span></code> 7, <code class="docutils literal notranslate"><span class="pre">STATE_ERROR</span></code> 8, <code class="docutils literal notranslate"><span class="pre">STATE_ABORT</span></code> 9; <code class="docutils literal notranslate"><span class="pre">AUTHENTICATION_NONE</span></code> 1, <code class="docutils literal notranslate"><span class="pre">AUTHENTICATION_BASIC</span></code> 2, <code class="docutils literal notranslate"><span class="pre">AUTHENTICATION_DIGEST</span></code> 3</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">Network</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">HTTP_GET</span></code> 1, <code class="docutils literal notranslate"><span class="pre">HTTP_HEAD</span></code> 2, <code class="docutils literal notranslate"><span class="pre">HTTP_POST</span></code> 3, <code class="docutils literal notranslate"><span class="pre">HTTP_PUT</span></code> 4, <code class="docutils literal notranslate"><span class="pre">HTTP_TRACE</span></code> 5, <code class="docutils literal notranslate"><span class="pre">HTTP_OPTIONS</span></code> 6, <code class="docutils literal notranslate"><span class="pre">HTTP_DELETE</span></code> 7</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">PersistentStorageManager</span></code></p></td>
+<td><p>device <code class="docutils literal notranslate"><span class="pre">STORAGE_ALL</span></code> 0, <code class="docutils literal notranslate"><span class="pre">STORAGE_REQUIRED</span></code> 1, <code class="docutils literal notranslate"><span class="pre">STORAGE_ADDITIONAL</span></code> 2, <code class="docutils literal notranslate"><span class="pre">STORAGE_NETWORK</span></code> 3; slot <code class="docutils literal notranslate"><span class="pre">STATE_SLOT</span></code> 1, <code class="docutils literal notranslate"><span class="pre">STATE_MEDIA_SLOT</span></code> 2, <code class="docutils literal notranslate"><span class="pre">STATE_NON_SLOT</span></code> 3; result <code class="docutils literal notranslate"><span class="pre">SUCCEEDED</span></code> 1, <code class="docutils literal notranslate"><span class="pre">ARGUMENT</span></code> 2, <code class="docutils literal notranslate"><span class="pre">FILE_NOT_FOUND</span></code> 3, <code class="docutils literal notranslate"><span class="pre">NOT_ENOUGH_SPACE</span></code> 4</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">PersistentStorageEvent</span></code></p></td>
+<td><p>string: <code class="docutils literal notranslate"><span class="pre">CHANGE</span></code> <code class="docutils literal notranslate"><span class="pre">&quot;storage_change&quot;</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">Player</span></code></p></td>
+<td><p>aspect <code class="docutils literal notranslate"><span class="pre">DISPLAY_ASPECT_RATIO_4_3</span></code> 1, <code class="docutils literal notranslate"><span class="pre">DISPLAY_ASPECT_RATIO_16_9</span></code> 2, <code class="docutils literal notranslate"><span class="pre">DISPLAY_ASPECT_RATIO_NOT_SPECIFIED</span></code> 3; display <code class="docutils literal notranslate"><span class="pre">DISPLAY_NONE</span></code> 1, <code class="docutils literal notranslate"><span class="pre">DISPLAY_NORMAL_WIDE</span></code> 2, <code class="docutils literal notranslate"><span class="pre">DISPLAY_PANSCAN</span></code> 3, <code class="docutils literal notranslate"><span class="pre">DISPLAY_LETTERBOX</span></code> 4, <code class="docutils literal notranslate"><span class="pre">DISPLAY_HD</span></code> 5; <code class="docutils literal notranslate"><span class="pre">PARENTAL_NONE</span></code> 0, <code class="docutils literal notranslate"><span class="pre">PARENTAL_1</span></code>…<code class="docutils literal notranslate"><span class="pre">PARENTAL_8</span></code> 1…8 (US: 1 G, 3 PG, 4 PG-13, 6 R, 7 NC-17); accessibility bits <code class="docutils literal notranslate"><span class="pre">ACCESSIBILITY_CLOSED_CAPTION</span></code> 1, <code class="docutils literal notranslate"><span class="pre">…_SIMPLIFIED_CAPTION</span></code> 2, <code class="docutils literal notranslate"><span class="pre">…_LARGE_FONT</span></code> 4, <code class="docutils literal notranslate"><span class="pre">…_CONTRAST_DISPLAY</span></code> 8, <code class="docutils literal notranslate"><span class="pre">…_DESCRIPTIVE_AUDIO</span></code> 16, <code class="docutils literal notranslate"><span class="pre">…_EXTENDED_INTERACTION_TIMES</span></code> 32; async result <code class="docutils literal notranslate"><span class="pre">SUCCEEDED</span></code> 1, <code class="docutils literal notranslate"><span class="pre">ARGUMENT</span></code> 2, <code class="docutils literal notranslate"><span class="pre">FILE_NOT_FOUND</span></code> 3, <code class="docutils literal notranslate"><span class="pre">NOT_ENOUGH_SPACE</span></code> 4, <code class="docutils literal notranslate"><span class="pre">WRONG_FORMAT</span></code> 5, <code class="docutils literal notranslate"><span class="pre">NETWORK_PROBLEM</span></code> 6, <code class="docutils literal notranslate"><span class="pre">FAILED</span></code> 7, <code class="docutils literal notranslate"><span class="pre">FINISHED</span></code> 8, <code class="docutils literal notranslate"><span class="pre">INVALID_CALL</span></code> 9</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">AudioCapabilities</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">CHANNEL_2</span></code> 1, <code class="docutils literal notranslate"><span class="pre">CHANNEL_5_1</span></code> 2, <code class="docutils literal notranslate"><span class="pre">CHANNEL_7_1</span></code> 3</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">DecodeCapabilities</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">NOT_SUPPORT</span></code> 0, <code class="docutils literal notranslate"><span class="pre">CHANNEL_2</span></code> 1, <code class="docutils literal notranslate"><span class="pre">CHANNEL_5_1</span></code> 2, <code class="docutils literal notranslate"><span class="pre">CHANNEL_7_1</span></code> 3</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">DigitalInterfaceCapabilities</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">CODEC_DD</span></code> 1, <code class="docutils literal notranslate"><span class="pre">CODEC_DTS</span></code> 2</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">VideoCapabilities</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">SD</span></code> 1, <code class="docutils literal notranslate"><span class="pre">HD</span></code> 2</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FontCapabilities</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">CLASS_1</span></code> 1, <code class="docutils literal notranslate"><span class="pre">CLASS_2</span></code> 2 (optional OpenType tables supported)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">Playlist</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">PLAYSTATE_PLAY</span></code> 1, <code class="docutils literal notranslate"><span class="pre">PLAYSTATE_PAUSE</span></code> 2, <code class="docutils literal notranslate"><span class="pre">PLAYSTATE_FAST_FWD</span></code> 3, <code class="docutils literal notranslate"><span class="pre">PLAYSTATE_FAST_REV</span></code> 4, <code class="docutils literal notranslate"><span class="pre">PLAYSTATE_SLOW_FWD</span></code> 5, <code class="docutils literal notranslate"><span class="pre">PLAYSTATE_SLOW_REV</span></code> 6</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">StandardContentPlayer</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">DOMAIN_TITLE</span></code> 1, <code class="docutils literal notranslate"><span class="pre">DOMAIN_MENU</span></code> 2</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">SecondaryVideoPlayer</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">PLAYSTATE_PLAY</span></code> 1, <code class="docutils literal notranslate"><span class="pre">PLAYSTATE_PAUSE</span></code> 2, <code class="docutils literal notranslate"><span class="pre">PLAYSTATE_STOP</span></code> 3, <code class="docutils literal notranslate"><span class="pre">PLAYSTATE_SYNC</span></code> 4, <code class="docutils literal notranslate"><span class="pre">PLAYSTATE_INIT</span></code> 5, <code class="docutils literal notranslate"><span class="pre">PLAYSTATE_STREAMING_PRELOAD</span></code> 6, <code class="docutils literal notranslate"><span class="pre">PLAYSTATE_STREAMING_PLAY</span></code> 7, <code class="docutils literal notranslate"><span class="pre">PLAYSTATE_STREAMING_PAUSE</span></code> 8</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">XMLParser</span></code></p></td>
+<td><p>encoding <code class="docutils literal notranslate"><span class="pre">UTF8</span></code> 1, <code class="docutils literal notranslate"><span class="pre">UTF16_BE</span></code> 2, <code class="docutils literal notranslate"><span class="pre">UTF16_LE</span></code> 3, <code class="docutils literal notranslate"><span class="pre">UTF16</span></code> 2; status <code class="docutils literal notranslate"><span class="pre">READY</span></code> 1, <code class="docutils literal notranslate"><span class="pre">PARSING</span></code> 2, <code class="docutils literal notranslate"><span class="pre">WRITING</span></code> 4; errors <code class="docutils literal notranslate"><span class="pre">FILE_NOT_FOUND</span></code> 3, <code class="docutils literal notranslate"><span class="pre">OK</span></code> 5, <code class="docutils literal notranslate"><span class="pre">PARSE_ERR</span></code> 6, <code class="docutils literal notranslate"><span class="pre">FILE_OVERWRITE_ERR</span></code> 7, <code class="docutils literal notranslate"><span class="pre">FILECACHE_ERR</span></code> 8, <code class="docutils literal notranslate"><span class="pre">SERIALIZE_ERR</span></code> 9, <code class="docutils literal notranslate"><span class="pre">FILE_WRITE_ERR</span></code> 10</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">Event</span></code> (DOM 2)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">CAPTURING_PHASE</span></code> 1, <code class="docutils literal notranslate"><span class="pre">AT_TARGET</span></code> 2, <code class="docutils literal notranslate"><span class="pre">BUBBLING_PHASE</span></code> 3</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">MutationEvent</span></code> (DOM 2)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">MODIFICATION</span></code> 1, <code class="docutils literal notranslate"><span class="pre">ADDITION</span></code> 2, <code class="docutils literal notranslate"><span class="pre">REMOVAL</span></code> 3</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">Node</span></code> (DOM 2)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">ELEMENT_NODE</span></code> 1 … <code class="docutils literal notranslate"><span class="pre">NOTATION_NODE</span></code> 12 (W3C order)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">DOMException</span></code> (DOM 2)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">INDEX_SIZE_ERR</span></code> 1 … <code class="docutils literal notranslate"><span class="pre">INVALID_ACCESS_ERR</span></code> 15 (W3C order); <code class="docutils literal notranslate"><span class="pre">EventException.UNSPECIFIED_EVENT_TYPE_ERR</span></code> 0</p></td>
+</tr>
+</tbody>
+</table>
+<p><strong>System event types</strong> are string constants on each event object; they are what
+<code class="docutils literal notranslate"><span class="pre">addEventListener</span></code> takes [23 Annex Z.6.2]. Every system event bubbles, is
+cancelable, cannot be made with <code class="docutils literal notranslate"><span class="pre">createEvent</span></code>, and has a read-only <code class="docutils literal notranslate"><span class="pre">time</span></code> (the
+title-timeline time it happened at).</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Event object</p></th>
+<th class="head"><p>Constant = type</p></th>
+<th class="head"><p>Fired when</p></th>
+<th class="head"><p>In trick play</p></th>
+<th class="head"><p>Extra properties</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">TitleEvent</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">BEGIN</span></code> = <code class="docutils literal notranslate"><span class="pre">&quot;title_begin&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">END</span></code> = <code class="docutils literal notranslate"><span class="pre">&quot;title_end&quot;</span></code></p></td>
+<td><p>a title starts (start-up, <code class="docutils literal notranslate"><span class="pre">onEnd</span></code>, API) / just before it ends</p></td>
+<td><p>fired</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">id</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ScheduledEvent</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">EVENT</span></code> = <code class="docutils literal notranslate"><span class="pre">&quot;scheduled_event&quot;</span></code></p></td>
+<td><p>the timeline reaches a playlist <code class="docutils literal notranslate"><span class="pre">Event</span></code></p></td>
+<td><p>not fired</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">id</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ChapterEvent</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">CHANGE</span></code> = <code class="docutils literal notranslate"><span class="pre">&quot;chapter&quot;</span></code></p></td>
+<td><p>the chapter changes (not at the title’s end)</p></td>
+<td><p>fired</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">oldValue</span></code>, <code class="docutils literal notranslate"><span class="pre">newValue</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ClipEvent</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">BEGIN</span></code> = <code class="docutils literal notranslate"><span class="pre">&quot;clip_begin&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">END</span></code> = <code class="docutils literal notranslate"><span class="pre">&quot;clip_end&quot;</span></code></p></td>
+<td><p>a clip starts / just before it ends (unselected clips too, playlist order)</p></td>
+<td><p>not fired</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">id</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">VideoTrackEvent</span></code>, <code class="docutils literal notranslate"><span class="pre">AudioTrackEvent</span></code>, <code class="docutils literal notranslate"><span class="pre">SubtitleTrackEvent</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">CHANGE</span></code> = <code class="docutils literal notranslate"><span class="pre">&quot;video_track&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;audio_track&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;subtitle_track&quot;</span></code></p></td>
+<td><p>the track changes by clip change or API</p></td>
+<td><p>not fired</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">oldValue</span></code>, <code class="docutils literal notranslate"><span class="pre">newValue</span></code> (NaN when absent)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ApplicationEvent</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">END</span></code> = <code class="docutils literal notranslate"><span class="pre">&quot;application_end&quot;</span></code></p></td>
+<td><p>just before the timeline leaves the application’s valid period</p></td>
+<td><p>fired</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">id</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">PlayStateEvent</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">CHANGE</span></code> = <code class="docutils literal notranslate"><span class="pre">&quot;play_state&quot;</span></code></p></td>
+<td><p>play state changes (API, user, <code class="docutils literal notranslate"><span class="pre">PauseAt</span></code>, title change)</p></td>
+<td><p>fired</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">oldValue</span></code>, <code class="docutils literal notranslate"><span class="pre">newValue</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">PlaySpeedEvent</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">CHANGE</span></code> = <code class="docutils literal notranslate"><span class="pre">&quot;play_speed&quot;</span></code></p></td>
+<td><p>trick-play speed changes</p></td>
+<td><p>fired</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">oldValue</span></code>, <code class="docutils literal notranslate"><span class="pre">newValue</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ControllerEvent</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">CONNECTED</span></code> = <code class="docutils literal notranslate"><span class="pre">&quot;controller_connected&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">DISCONNECTED</span></code> = <code class="docutils literal notranslate"><span class="pre">&quot;controller_disconnected&quot;</span></code> (§Z.5.1 writes <code class="docutils literal notranslate"><span class="pre">controller_connect</span></code> / <code class="docutils literal notranslate"><span class="pre">controller_disconnect</span></code>)</p></td>
+<td><p>a controller is connected / removed</p></td>
+<td><p>fired</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">PersistentStorageEvent</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">CHANGE</span></code> = <code class="docutils literal notranslate"><span class="pre">&quot;storage_change&quot;</span></code></p></td>
+<td><p>an additional device is connected / removed</p></td>
+<td><p>fired</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">NetworkTimeoutEvent</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">TIMEOUT</span></code> = <code class="docutils literal notranslate"><span class="pre">&quot;network_timeout&quot;</span></code></p></td>
+<td><p>a hard-synchronised download passes <code class="docutils literal notranslate"><span class="pre">NetworkTimeout</span></code></p></td>
+<td><p>fired</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">uri</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ResourceNotFoundEvent</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">NOT_FOUND</span></code> = <code class="docutils literal notranslate"><span class="pre">&quot;resource_not_found&quot;</span></code></p></td>
+<td><p>a resource or secondary video set is missing or fails to download</p></td>
+<td><p></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">uri</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">StreamingBufferEvent</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">EMPTY</span></code> = <code class="docutils literal notranslate"><span class="pre">&quot;buffer_empty&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">RESTART</span></code> = <code class="docutils literal notranslate"><span class="pre">&quot;buffer_restart&quot;</span></code></p></td>
+<td><p>streaming buffer underflow / playback resumes</p></td>
+<td><p></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">uri</span></code>, <code class="docutils literal notranslate"><span class="pre">time</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">NetworkConnectionEvent</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">CONNECTION</span></code> = <code class="docutils literal notranslate"><span class="pre">&quot;network_connection&quot;</span></code></p></td>
+<td><p>the data-link state changes</p></td>
+<td><p></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">connect</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">StopRequestEvent</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">STOP</span></code> = <code class="docutils literal notranslate"><span class="pre">&quot;stop_request&quot;</span></code></p></td>
+<td><p>the user or system asks to stop (STOP, EJECT)</p></td>
+<td><p>fired</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+<p>Events caused by the timeline fire at the start of a tick, in this table’s order;
+API-caused events fire in call order. A title start fires, in order:
+<code class="docutils literal notranslate"><span class="pre">title_begin</span></code> (after Playlist applications load), <code class="docutils literal notranslate"><span class="pre">chapter</span></code> (1), <code class="docutils literal notranslate"><span class="pre">clip_begin</span></code>,
+then the track events; a title end: <code class="docutils literal notranslate"><span class="pre">clip_end</span></code>, <code class="docutils literal notranslate"><span class="pre">application_end</span></code>, <code class="docutils literal notranslate"><span class="pre">title_end</span></code>,
+<code class="docutils literal notranslate"><span class="pre">stop_request</span></code> [23 §8.3.1]. On disc (<a class="reference internal" href="05_manifest_hdi.html"><span class="std std-doc">05</span></a> §5.3) scripts
+listen to <code class="docutils literal notranslate"><span class="pre">controller_key_down</span></code>, <code class="docutils literal notranslate"><span class="pre">chapter</span></code>, <code class="docutils literal notranslate"><span class="pre">scheduled_event</span></code>, <code class="docutils literal notranslate"><span class="pre">title_begin</span></code>,
+<code class="docutils literal notranslate"><span class="pre">title_end</span></code>, <code class="docutils literal notranslate"><span class="pre">play_state</span></code>, <code class="docutils literal notranslate"><span class="pre">audio_track</span></code>, <code class="docutils literal notranslate"><span class="pre">controller_key_up</span></code>,
+<code class="docutils literal notranslate"><span class="pre">subtitle_track</span></code>, <code class="docutils literal notranslate"><span class="pre">stop_request</span></code>.</p>
+<p><strong>Exceptions</strong> [23 Annex Z.1.3]: <code class="docutils literal notranslate"><span class="pre">HDDVD_E_ARGUMENT</span></code>, <code class="docutils literal notranslate"><span class="pre">HDDVD_E_ARGUMENTOUTOFRANGE</span></code>,
+<code class="docutils literal notranslate"><span class="pre">HDDVD_E_ARGUMENTNULL</span></code>, <code class="docutils literal notranslate"><span class="pre">HDDVD_E_FORMAT</span></code>, <code class="docutils literal notranslate"><span class="pre">HDDVD_E_OVERFLOW</span></code>, <code class="docutils literal notranslate"><span class="pre">HDDVD_E_IO</span></code>,
+<code class="docutils literal notranslate"><span class="pre">HDDVD_E_PATHTOOLONG</span></code>, <code class="docutils literal notranslate"><span class="pre">HDDVD_E_FILENOTFOUND</span></code>, <code class="docutils literal notranslate"><span class="pre">HDDVD_E_NOTSUPPORTED</span></code>,
+<code class="docutils literal notranslate"><span class="pre">HDDVD_E_INVALIDOPERATION</span></code>, <code class="docutils literal notranslate"><span class="pre">HDDVD_E_UNSPECIFIEDEVENTTYPE</span></code>, <code class="docutils literal notranslate"><span class="pre">HDDVD_E_INVALIDCALL</span></code>
+(also every restricted API in Restricted Mode), <code class="docutils literal notranslate"><span class="pre">HDDVD_E_NOTENOUGHSPACE</span></code>,
+<code class="docutils literal notranslate"><span class="pre">HDDVD_E_TIMEOUT</span></code>, <code class="docutils literal notranslate"><span class="pre">HDDVD_E_PROTOCOLVIOLATION</span></code>, <code class="docutils literal notranslate"><span class="pre">HDDVD_E_WEB</span></code>.</p>
+<p><strong>In the type library but not in 1.01</strong>: <code class="docutils literal notranslate"><span class="pre">IAACS.INVALIDKEY</span></code>, <code class="docutils literal notranslate"><span class="pre">IPlayer.REGION_1</span></code>…
+<code class="docutils literal notranslate"><span class="pre">REGION_8</span></code> (no <code class="docutils literal notranslate"><span class="pre">regionCode</span></code> member in 1.01), and the members <code class="docutils literal notranslate"><span class="pre">aacs</span></code>,
+<code class="docutils literal notranslate"><span class="pre">captureWithMAC</span></code>, <code class="docutils literal notranslate"><span class="pre">changeImageSizeWithMAC</span></code>. They come from a later version of the
+book; no disc in the corpus calls them. The type library’s <code class="docutils literal notranslate"><span class="pre">IHDEventProperties</span></code>
+names (<code class="docutils literal notranslate"><span class="pre">BEGIN</span></code>, <code class="docutils literal notranslate"><span class="pre">END</span></code>, <code class="docutils literal notranslate"><span class="pre">CHANGE</span></code>, …) are the event-type constants above.</p>
+<p><code class="docutils literal notranslate"><span class="pre">[23</span> <span class="pre">Annex</span> <span class="pre">Z]</span></code> <strong>SPEC</strong>; <code class="docutils literal notranslate"><span class="pre">[6]</span></code> names <strong>VERIFIED</strong> (<code class="docutils literal notranslate"><span class="pre">e20</span></code>).</p>
 </section>
 <section id="complete-ihd-markup-surface-xsd">
 <h2>12.3 Complete iHD markup surface (XSD)<a class="headerlink" href="#complete-ihd-markup-surface-xsd" title="Link to this heading"></a></h2>
@@ -536,14 +731,15 @@
 <section id="hdi-runtime-semantics-published-standards">
 <h2>12.4 HDi runtime semantics (published standards)<a class="headerlink" href="#hdi-runtime-semantics-published-standards" title="Link to this heading"></a></h2>
 <p>The HDi <em>behavioural</em> contract (event dispatch, timing resolution, DOM/exception
-model) is not unpublished proprietary behaviour. HDi is, in Microsoft/Disco’s
+model) is in the book [23 §7, §8, Annex Z], which builds on these published
+standards and restricts them. HDi is, in Microsoft/Disco’s
 description, <em>“a combination of Web-based standards: an HTML-based element grammar,
 a CSS/XSL-based attribute grammar, and a SMIL-based element/attribute grammar for
 timing, animation, eventing and synchronization, parsed into a DOM that ECMAScript
 controls.”</em> The recovered type library proves iHD implements exactly those W3C/ECMA
 models. Their <strong>published</strong> semantics are therefore the runtime contract. That
-covers the runtime half of gap B1 from open standards. Only HDi-specific glue (the
-disc clock model, §5.2/§5.9) rests on the unpublished book.
+covers the runtime half of gap B1 from open standards; the HDi-specific glue (the
+clocks, the scheduler, focus, gestures) is in the book [23 §7.2, §8.3–8.5].
 <code class="docutils literal notranslate"><span class="pre">[15]</span></code>
 <code class="docutils literal notranslate"><span class="pre">[6]</span></code></p>
 <table class="docutils align-default">
@@ -619,7 +815,7 @@ phase constants fix the values:</p>
 phases (<code class="docutils literal notranslate"><span class="pre">initEvent</span></code> sets type/bubbles/cancelable). This is exactly W3C DOM2 Events.
 Implement that algorithm. HDi input arrives as controller-key events
 (<code class="docutils literal notranslate"><span class="pre">initControllerKeyEvent</span></code>, <code class="docutils literal notranslate"><span class="pre">IHDEventProperties</span></code>) delivered through the same flow;
-<code class="docutils literal notranslate"><span class="pre">accessKey</span></code>/Enter synthesise <code class="docutils literal notranslate"><span class="pre">state:actioned</span></code> on the focused target (§5.9).</p>
+<code class="docutils literal notranslate"><span class="pre">accessKey</span></code>/Enter synthesise <code class="docutils literal notranslate"><span class="pre">state:actioned</span></code> on the focused target (<a class="reference internal" href="05_manifest_hdi.html"><span class="std std-doc">05</span></a> §5.9).</p>
 </section>
 <section id="dom-level-2-node-types-standard-integer-values-typelib-order-matches-w3c">
 <h3>DOM Level 2 node types (standard integer values, typelib order matches W3C)<a class="headerlink" href="#dom-level-2-node-types-standard-integer-values-typelib-order-matches-w3c" title="Link to this heading"></a></h3>
@@ -640,18 +836,20 @@ Core fixes them; typelib lists the names in this canonical order).</p>
 </section>
 <section id="smil-2-0-timing-resolution-cue-par-seq-set-animate">
 <h3>SMIL 2.0 timing resolution (<code class="docutils literal notranslate"><span class="pre">cue</span></code> / <code class="docutils literal notranslate"><span class="pre">par</span></code> / <code class="docutils literal notranslate"><span class="pre">seq</span></code> / <code class="docutils literal notranslate"><span class="pre">set</span></code> / <code class="docutils literal notranslate"><span class="pre">animate</span></code>)<a class="headerlink" href="#smil-2-0-timing-resolution-cue-par-seq-set-animate" title="Link to this heading"></a></h3>
-<p>Resolve <code class="docutils literal notranslate"><span class="pre">begin</span></code>/<code class="docutils literal notranslate"><span class="pre">end</span></code>/<code class="docutils literal notranslate"><span class="pre">dur</span></code> and interpolate exactly as SMIL 2.0 [18]:
-<code class="docutils literal notranslate"><span class="pre">calcMode</span></code> (<code class="docutils literal notranslate"><span class="pre">linear</span></code> default | <code class="docutils literal notranslate"><span class="pre">discrete</span></code> | <code class="docutils literal notranslate"><span class="pre">paced</span></code>), <code class="docutils literal notranslate"><span class="pre">additive</span></code> (<code class="docutils literal notranslate"><span class="pre">replace</span></code>
-default | <code class="docutils literal notranslate"><span class="pre">sum</span></code>), <code class="docutils literal notranslate"><span class="pre">fill</span></code> (<code class="docutils literal notranslate"><span class="pre">remove</span></code> default | <code class="docutils literal notranslate"><span class="pre">hold</span></code>), and container type
-(<code class="docutils literal notranslate"><span class="pre">par</span></code> = children share a timebase, <code class="docutils literal notranslate"><span class="pre">seq</span></code> = children run in order). §5.9 gives the
-corpus-used cue-path predicates over this model; the <em>timing algebra itself</em> is
-SMIL 2.0. A conforming keyframe list a future disc uses that the corpus does not is
-still resolved by the SMIL rules, not by a guess.</p>
+<p>Resolve <code class="docutils literal notranslate"><span class="pre">begin</span></code>/<code class="docutils literal notranslate"><span class="pre">end</span></code>/<code class="docutils literal notranslate"><span class="pre">dur</span></code> and interpolate as the book’s SMIL 2.0 subset
+[23 §7.7], [18]: <code class="docutils literal notranslate"><span class="pre">calcMode</span></code> (<code class="docutils literal notranslate"><span class="pre">linear</span></code> default | <code class="docutils literal notranslate"><span class="pre">discrete</span></code>; <strong>no</strong> <code class="docutils literal notranslate"><span class="pre">paced</span></code>),
+<code class="docutils literal notranslate"><span class="pre">additive</span></code> (<code class="docutils literal notranslate"><span class="pre">replace</span></code> default | <code class="docutils literal notranslate"><span class="pre">sum</span></code>), <code class="docutils literal notranslate"><span class="pre">fill</span></code> (<code class="docutils literal notranslate"><span class="pre">remove</span></code> default | <code class="docutils literal notranslate"><span class="pre">hold</span></code>, page and
+application clocks only), and container type (<code class="docutils literal notranslate"><span class="pre">par</span></code> = children share a timebase,
+<code class="docutils literal notranslate"><span class="pre">seq</span></code> = children run in order). No <code class="docutils literal notranslate"><span class="pre">from</span></code>/<code class="docutils literal notranslate"><span class="pre">by</span></code>/<code class="docutils literal notranslate"><span class="pre">to</span></code>, <code class="docutils literal notranslate"><span class="pre">accumulate</span></code>,
+<code class="docutils literal notranslate"><span class="pre">animateMotion</span></code> or <code class="docutils literal notranslate"><span class="pre">animateColor</span></code>. The simple-duration and active-interval rules
+are in <a class="reference internal" href="14_markup.html"><span class="std std-doc">14</span></a> §14.7.</p>
 </section>
 </section>
-<section id="player-object-model-from-the-type-library">
-<h2>12.5 Player object model (from the type library)<a class="headerlink" href="#player-object-model-from-the-type-library" title="Link to this heading"></a></h2>
-<p>Member <strong>names</strong> of the script host graph and its control surface are the type library [6]. Semantics of the members discs call are [14] plus disc call-sites (<a class="reference internal" href="05_manifest_hdi.html"><span class="std std-doc">05</span></a> §5.3). The whole surface is enumerable, not just corpus-used calls.</p>
+<section id="player-object-model">
+<h2>12.5 Player object model<a class="headerlink" href="#player-object-model" title="Link to this heading"></a></h2>
+<p>Member names from the type library [6]; the book’s Annex Z [23] defines the 1.01
+members and their behaviour (the table marks typelib-only members). Disc
+call-sites are in <a class="reference internal" href="05_manifest_hdi.html"><span class="std std-doc">05</span></a> §5.3.</p>
 <table class="docutils align-default">
 <thead>
 <tr class="row-odd"><th class="head"><p>Object (interface)</p></th>
@@ -662,7 +860,7 @@ still resolved by the SMIL rules, not by a guess.</p>
 <tbody>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">Player</span> <span class="pre">(IPlayer)</span></code></p></td>
 <td><p>top-level singleton</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">majorVersion</span></code>, <code class="docutils literal notranslate"><span class="pre">minorVersion</span></code>, <code class="docutils literal notranslate"><span class="pre">performanceLevel</span></code>, <code class="docutils literal notranslate"><span class="pre">countryCode</span></code>, <code class="docutils literal notranslate"><span class="pre">displayAspectRatio</span></code>, <code class="docutils literal notranslate"><span class="pre">currentDisplayMode</span></code>, <code class="docutils literal notranslate"><span class="pre">regionCode</span></code>, <code class="docutils literal notranslate"><span class="pre">accessibility</span></code>, <code class="docutils literal notranslate"><span class="pre">parentalLevel</span></code>, <code class="docutils literal notranslate"><span class="pre">track</span></code>, <code class="docutils literal notranslate"><span class="pre">bookmark</span></code>, <code class="docutils literal notranslate"><span class="pre">capabilities</span></code>, <code class="docutils literal notranslate"><span class="pre">playlist</span></code>, <code class="docutils literal notranslate"><span class="pre">video</span></code>, <code class="docutils literal notranslate"><span class="pre">audio</span></code>, <code class="docutils literal notranslate"><span class="pre">subtitle</span></code>, <code class="docutils literal notranslate"><span class="pre">secondaryVideoPlayer</span></code>, <code class="docutils literal notranslate"><span class="pre">standardContentPlayer</span></code>, <code class="docutils literal notranslate"><span class="pre">generalParameters</span></code>, <code class="docutils literal notranslate"><span class="pre">aacs</span></code>, <code class="docutils literal notranslate"><span class="pre">menuLanguage</span></code>, <code class="docutils literal notranslate"><span class="pre">applicationGroup</span></code>, <code class="docutils literal notranslate"><span class="pre">createVideoScale</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">majorVersion</span></code>, <code class="docutils literal notranslate"><span class="pre">minorVersion</span></code>, <code class="docutils literal notranslate"><span class="pre">performanceLevel</span></code>, <code class="docutils literal notranslate"><span class="pre">countryCode</span></code>, <code class="docutils literal notranslate"><span class="pre">displayAspectRatio</span></code>, <code class="docutils literal notranslate"><span class="pre">currentDisplayMode</span></code>, <code class="docutils literal notranslate"><span class="pre">accessibility</span></code>, <code class="docutils literal notranslate"><span class="pre">parentalLevel</span></code>, <code class="docutils literal notranslate"><span class="pre">menuLanguage</span></code>, <code class="docutils literal notranslate"><span class="pre">applicationGroup</span></code>, <code class="docutils literal notranslate"><span class="pre">track</span></code>, <code class="docutils literal notranslate"><span class="pre">bookmark</span></code>, <code class="docutils literal notranslate"><span class="pre">capabilities</span></code>, <code class="docutils literal notranslate"><span class="pre">playlist</span></code>, <code class="docutils literal notranslate"><span class="pre">video</span></code>, <code class="docutils literal notranslate"><span class="pre">audio</span></code>, <code class="docutils literal notranslate"><span class="pre">subtitle</span></code>, <code class="docutils literal notranslate"><span class="pre">secondaryVideoPlayer</span></code>, <code class="docutils literal notranslate"><span class="pre">standardContentPlayer</span></code>, <code class="docutils literal notranslate"><span class="pre">generalParameters</span></code>, <code class="docutils literal notranslate"><span class="pre">createVideoScale(numerator,</span> <span class="pre">denominator)</span></code>; typelib only: <code class="docutils literal notranslate"><span class="pre">regionCode</span></code>, <code class="docutils literal notranslate"><span class="pre">aacs</span></code></p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">Player.playlist</span> <span class="pre">(IPlaylist)</span></code></p></td>
 <td><p>playback control</p></td>
@@ -670,56 +868,249 @@ still resolved by the SMIL rules, not by a guess.</p>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">...currentTitle</span> <span class="pre">(ITitle)</span></code></p></td>
 <td><p>current title</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">elapsedTime</span></code>, <code class="docutils literal notranslate"><span class="pre">chapters</span></code>, <code class="docutils literal notranslate"><span class="pre">videoTracks</span></code>, <code class="docutils literal notranslate"><span class="pre">audioTracks</span></code>, <code class="docutils literal notranslate"><span class="pre">subtitleTracks</span></code>, <code class="docutils literal notranslate"><span class="pre">attributes</span></code>, <code class="docutils literal notranslate"><span class="pre">jump</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">elapsedTime</span></code>, <code class="docutils literal notranslate"><span class="pre">chapters</span></code>, <code class="docutils literal notranslate"><span class="pre">videoTracks</span></code>, <code class="docutils literal notranslate"><span class="pre">audioTracks</span></code>, <code class="docutils literal notranslate"><span class="pre">subtitleTracks</span></code>, <code class="docutils literal notranslate"><span class="pre">attributes</span></code> (every <code class="docutils literal notranslate"><span class="pre">Title</span></code> attribute as a string), <code class="docutils literal notranslate"><span class="pre">jump(time,</span> <span class="pre">bookmark)</span></code></p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">...chapters[n]</span> <span class="pre">(IChapter)</span></code></p></td>
 <td><p>chapter</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">number</span></code>, <code class="docutils literal notranslate"><span class="pre">elapsedTime</span></code>, <code class="docutils literal notranslate"><span class="pre">attributes</span></code>, <code class="docutils literal notranslate"><span class="pre">jump</span></code>, <code class="docutils literal notranslate"><span class="pre">top</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">number</span></code>, <code class="docutils literal notranslate"><span class="pre">elapsedTime</span></code>, <code class="docutils literal notranslate"><span class="pre">attributes</span></code>, <code class="docutils literal notranslate"><span class="pre">jump(time,</span> <span class="pre">bookmark)</span></code>, <code class="docutils literal notranslate"><span class="pre">top()</span></code></p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">Player.video.main</span> <span class="pre">(IMainVideo)</span></code></p></td>
 <td><p>main video plane</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">capturing</span></code>, <code class="docutils literal notranslate"><span class="pre">changing</span></code>, <code class="docutils literal notranslate"><span class="pre">outerFrameColorY</span></code>, <code class="docutils literal notranslate"><span class="pre">outerFrameColorCr</span></code>, <code class="docutils literal notranslate"><span class="pre">outerFrameColorCb</span></code>, <code class="docutils literal notranslate"><span class="pre">x</span></code>, <code class="docutils literal notranslate"><span class="pre">y</span></code>, <code class="docutils literal notranslate"><span class="pre">scale</span></code>, <code class="docutils literal notranslate"><span class="pre">cropX</span></code>, <code class="docutils literal notranslate"><span class="pre">cropY</span></code>, <code class="docutils literal notranslate"><span class="pre">cropHeight</span></code>, <code class="docutils literal notranslate"><span class="pre">cropWidth</span></code>, <code class="docutils literal notranslate"><span class="pre">capture</span></code>, <code class="docutils literal notranslate"><span class="pre">captureWithMAC</span></code>, <code class="docutils literal notranslate"><span class="pre">changeImageSize</span></code>, <code class="docutils literal notranslate"><span class="pre">changeImageSizeWithMAC</span></code>, <code class="docutils literal notranslate"><span class="pre">setOuterFrameColor</span></code>, <code class="docutils literal notranslate"><span class="pre">changeLayout</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">capturing</span></code>, <code class="docutils literal notranslate"><span class="pre">changing</span></code>, <code class="docutils literal notranslate"><span class="pre">outerFrameColorY</span></code>, <code class="docutils literal notranslate"><span class="pre">outerFrameColorCr</span></code>, <code class="docutils literal notranslate"><span class="pre">outerFrameColorCb</span></code>, <code class="docutils literal notranslate"><span class="pre">x</span></code>, <code class="docutils literal notranslate"><span class="pre">y</span></code>, <code class="docutils literal notranslate"><span class="pre">scale</span></code>, <code class="docutils literal notranslate"><span class="pre">cropX</span></code>, <code class="docutils literal notranslate"><span class="pre">cropY</span></code>, <code class="docutils literal notranslate"><span class="pre">cropHeight</span></code>, <code class="docutils literal notranslate"><span class="pre">cropWidth</span></code>, <code class="docutils literal notranslate"><span class="pre">capture</span></code>, <code class="docutils literal notranslate"><span class="pre">changeImageSize</span></code>, <code class="docutils literal notranslate"><span class="pre">setOuterFrameColor</span></code>, <code class="docutils literal notranslate"><span class="pre">changeLayout(x,</span> <span class="pre">y,</span> <span class="pre">scale,</span> <span class="pre">cropX,</span> <span class="pre">cropY,</span> <span class="pre">cropWidth,</span> <span class="pre">cropHeight,</span> <span class="pre">duration)</span></code>; typelib only: <code class="docutils literal notranslate"><span class="pre">captureWithMAC</span></code>, <code class="docutils literal notranslate"><span class="pre">changeImageSizeWithMAC</span></code></p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">application</span> <span class="pre">(IApplication)</span></code></p></td>
-<td><p>app host</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">FileIO</span></code>, <code class="docutils literal notranslate"><span class="pre">Diagnostics</span></code>, <code class="docutils literal notranslate"><span class="pre">ControllerManager</span></code>, <code class="docutils literal notranslate"><span class="pre">Drawing</span></code>, <code class="docutils literal notranslate"><span class="pre">Network</span></code>, <code class="docutils literal notranslate"><span class="pre">attributes</span></code>, <code class="docutils literal notranslate"><span class="pre">zOrder</span></code>, <code class="docutils literal notranslate"><span class="pre">location</span></code>, <code class="docutils literal notranslate"><span class="pre">advancedApplications</span></code>, <code class="docutils literal notranslate"><span class="pre">thisAdvancedApplication</span></code>, <code class="docutils literal notranslate"><span class="pre">document</span></code>, <code class="docutils literal notranslate"><span class="pre">application</span></code>, <code class="docutils literal notranslate"><span class="pre">coordX</span></code>, <code class="docutils literal notranslate"><span class="pre">coordY</span></code>, <code class="docutils literal notranslate"><span class="pre">moveToTop</span></code>, <code class="docutils literal notranslate"><span class="pre">moveToBottom</span></code>, <code class="docutils literal notranslate"><span class="pre">link</span></code>, <code class="docutils literal notranslate"><span class="pre">setMarkupLoadedHandler</span></code>, <code class="docutils literal notranslate"><span class="pre">createStringArray</span></code>, <code class="docutils literal notranslate"><span class="pre">createTimer</span></code>, <code class="docutils literal notranslate"><span class="pre">createEvent</span></code>, <code class="docutils literal notranslate"><span class="pre">computeImplicitNav</span></code></p></td>
+<td><p>app host; its members are also global properties</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">FileIO</span></code>, <code class="docutils literal notranslate"><span class="pre">Diagnostics</span></code>, <code class="docutils literal notranslate"><span class="pre">ControllerManager</span></code>, <code class="docutils literal notranslate"><span class="pre">Drawing</span></code>, <code class="docutils literal notranslate"><span class="pre">Network</span></code>, <code class="docutils literal notranslate"><span class="pre">attributes</span></code>, <code class="docutils literal notranslate"><span class="pre">zOrder</span></code>, <code class="docutils literal notranslate"><span class="pre">location</span></code>, <code class="docutils literal notranslate"><span class="pre">advancedApplications</span></code>, <code class="docutils literal notranslate"><span class="pre">thisAdvancedApplication</span></code>, <code class="docutils literal notranslate"><span class="pre">document</span></code>, <code class="docutils literal notranslate"><span class="pre">application</span></code>, <code class="docutils literal notranslate"><span class="pre">coordX</span></code>, <code class="docutils literal notranslate"><span class="pre">coordY</span></code> (region position on the canvas), <code class="docutils literal notranslate"><span class="pre">moveToTop</span></code>, <code class="docutils literal notranslate"><span class="pre">moveToBottom</span></code>, <code class="docutils literal notranslate"><span class="pre">link(uri)</span></code>, <code class="docutils literal notranslate"><span class="pre">setMarkupLoadedHandler(callback)</span></code>, <code class="docutils literal notranslate"><span class="pre">createStringArray(size)</span></code>, <code class="docutils literal notranslate"><span class="pre">createTimer(ticks,</span> <span class="pre">type,</span> <span class="pre">callback)</span></code>, <code class="docutils literal notranslate"><span class="pre">computeImplicitNav()</span></code>, plus <code class="docutils literal notranslate"><span class="pre">EventTarget</span></code> and <code class="docutils literal notranslate"><span class="pre">DocumentEvent</span></code> (<code class="docutils literal notranslate"><span class="pre">addEventListener</span></code>, <code class="docutils literal notranslate"><span class="pre">createEvent</span></code>)</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">PersistentStorageManager</span> <span class="pre">(IPersistentStorageMgr)</span></code></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">AdvancedApplication</span></code></p></td>
+<td><p>another application of the title</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">id</span></code>, <code class="docutils literal notranslate"><span class="pre">state</span></code>, <code class="docutils literal notranslate"><span class="pre">zOrder</span></code>, <code class="docutils literal notranslate"><span class="pre">type</span></code>, <code class="docutils literal notranslate"><span class="pre">activate()</span></code>, <code class="docutils literal notranslate"><span class="pre">inactivate()</span></code>, <code class="docutils literal notranslate"><span class="pre">moveBefore(app)</span></code>, <code class="docutils literal notranslate"><span class="pre">moveAfter(app)</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">PersistentStorageManager</span> <span class="pre">(IPersistentStorageMgr)</span></code></p></td>
 <td><p>P-storage</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">contentId</span></code>, <code class="docutils literal notranslate"><span class="pre">getPersistentStorageDevices</span></code>, <code class="docutils literal notranslate"><span class="pre">callManagementMenu</span></code>, <code class="docutils literal notranslate"><span class="pre">saveBasePath</span></code></p></td>
 </tr>
 </tbody>
 </table>
-<p><strong>Playback control (<code class="docutils literal notranslate"><span class="pre">IPlaylist</span></code>):</strong> <code class="docutils literal notranslate"><span class="pre">load</span></code> (replace playlist, FIG.51 soft reset [1]), <code class="docutils literal notranslate"><span class="pre">play</span></code>/<code class="docutils literal notranslate"><span class="pre">pause</span></code>/<code class="docutils literal notranslate"><span class="pre">stop</span></code>, <code class="docutils literal notranslate"><span class="pre">fastForward</span></code>/<code class="docutils literal notranslate"><span class="pre">fastReverse</span></code>/<code class="docutils literal notranslate"><span class="pre">slowForward</span></code>/<code class="docutils literal notranslate"><span class="pre">slowReverse</span></code> (+ <code class="docutils literal notranslate"><span class="pre">*Speed</span></code>), <code class="docutils literal notranslate"><span class="pre">stepForward</span></code>/<code class="docutils literal notranslate"><span class="pre">stepBackward</span></code>, <code class="docutils literal notranslate"><span class="pre">playState</span></code> (<code class="docutils literal notranslate"><span class="pre">PLAYSTATE_*</span></code>, §12.2); <code class="docutils literal notranslate"><span class="pre">currentTitle</span></code>/<code class="docutils literal notranslate"><span class="pre">currentChapter</span></code> are live position; <code class="docutils literal notranslate"><span class="pre">titles[...]</span></code>/<code class="docutils literal notranslate"><span class="pre">.chapters[n]</span></code> index by id/number [14]. Trick-play verbs are the published surface even where no corpus disc scripts them.</p>
+<p><strong>Playback control (<code class="docutils literal notranslate"><span class="pre">IPlaylist</span></code>):</strong> <code class="docutils literal notranslate"><span class="pre">load(uri)</span></code> (replace the playlist: Soft Reset, <a class="reference internal" href="10_playback.html"><span class="std std-doc">10</span></a> §10.2), <code class="docutils literal notranslate"><span class="pre">play</span></code>/<code class="docutils literal notranslate"><span class="pre">pause</span></code>/<code class="docutils literal notranslate"><span class="pre">stop</span></code>, <code class="docutils literal notranslate"><span class="pre">fastForward(i)</span></code>/<code class="docutils literal notranslate"><span class="pre">fastReverse(i)</span></code>/<code class="docutils literal notranslate"><span class="pre">slowForward(i)</span></code>/<code class="docutils literal notranslate"><span class="pre">slowReverse(i)</span></code> (an index into <code class="docutils literal notranslate"><span class="pre">fastForwardSpeed</span></code> etc.), <code class="docutils literal notranslate"><span class="pre">stepForward()</span></code>/<code class="docutils literal notranslate"><span class="pre">stepBackward()</span></code> (Annex V’s default handler writes <code class="docutils literal notranslate"><span class="pre">stepReverse</span></code>), <code class="docutils literal notranslate"><span class="pre">playState</span></code> (<code class="docutils literal notranslate"><span class="pre">PLAYSTATE_*</span></code>, §12.2); <code class="docutils literal notranslate"><span class="pre">currentTitle</span></code>/<code class="docutils literal notranslate"><span class="pre">currentChapter</span></code> are live position; <code class="docutils literal notranslate"><span class="pre">titles[...]</span></code>/<code class="docutils literal notranslate"><span class="pre">.chapters[n]</span></code> index by id/number [23 Annex Z.10.12].</p>
+<p><strong>Application states</strong> [23 §8.4]: an application is <em>Valid</em> while the title time is
+in <code class="docutils literal notranslate"><span class="pre">[titleTimeBegin,</span> <span class="pre">titleTimeEnd)</span></code>, <em>Selected</em> when its language and group match
+the player, <em>Ready</em> when <code class="docutils literal notranslate"><span class="pre">autorun</span></code> is true on entering the valid period or
+<code class="docutils literal notranslate"><span class="pre">activate()</span></code> was called during it (<code class="docutils literal notranslate"><span class="pre">inactivate()</span></code> clears it), and <em>Loaded</em> once its
+manifest’s resources are in the File Cache and its first script and page are
+parsed. It is active (runs script, takes events, draws) only when all four hold.
+All script runs on one application thread through a queue of work items ordered
+by begin time, then insertion; items past their end time are dropped; long
+scripts are never aborted [23 §8.5].</p>
+<p><strong>Restricted Mode</strong> [23 Annex X]: without a trusted signature, network,
+persistent-storage and diagnostics APIs throw <code class="docutils literal notranslate"><span class="pre">HDDVD_E_INVALIDCALL</span></code>, URI
+arguments are limited to <code class="docutils literal notranslate"><span class="pre">file:///dvddisc/</span></code> and <code class="docutils literal notranslate"><span class="pre">file:///filecache/</span></code>, and the XML
+DOM is read-only; constants stay readable.</p>
 </section>
 <section id="cue-predicate-grammar-pathexpressiontype">
 <h2>12.6 Cue-predicate grammar (<code class="docutils literal notranslate"><span class="pre">PathExpressionType</span></code>)<a class="headerlink" href="#cue-predicate-grammar-pathexpressiontype" title="Link to this heading"></a></h2>
-<p>iHD.xsd annotates <code class="docutils literal notranslate"><span class="pre">PathExpressionType</span></code> only as “Spec 7.5.2.4” (unpublished book), but the grammar is closeable: <strong>XPath 1.0</strong> boolean/node-set over the markup DOM, extended with two function namespaces whose functions are exactly the <code class="docutils literal notranslate"><span class="pre">ihd#state</span></code> / <code class="docutils literal notranslate"><span class="pre">ihd#style</span></code> attribute local-names [5], plus <code class="docutils literal notranslate"><span class="pre">$name</span></code> vars (<code class="docutils literal notranslate"><span class="pre">document.setXPathVariable</span></code>, §5.3) and time/duration literals.</p>
+<p>iHD.xsd annotates <code class="docutils literal notranslate"><span class="pre">PathExpressionType</span></code> as “Spec 7.5.2.4”; that section of the book
+[23] defines it: an <strong>XPath 1.0</strong> subset over the markup DOM with <code class="docutils literal notranslate"><span class="pre">body</span></code> as the
+context node, extended with two function namespaces whose functions are the
+<code class="docutils literal notranslate"><span class="pre">ihd#state</span></code> / <code class="docutils literal notranslate"><span class="pre">ihd#style</span></code> property names, <code class="docutils literal notranslate"><span class="pre">GPRM()</span></code>, <code class="docutils literal notranslate"><span class="pre">SPRM()</span></code>, <code class="docutils literal notranslate"><span class="pre">class()</span></code>,
+<code class="docutils literal notranslate"><span class="pre">defaultNode()</span></code>, the system-parameter variables (§12.7) and <code class="docutils literal notranslate"><span class="pre">$name</span></code> variables set
+by <code class="docutils literal notranslate"><span class="pre">document.setXPathVariable</span></code> (<a class="reference internal" href="05_manifest_hdi.html"><span class="std std-doc">05</span></a> §5.3). Full rules in
+<a class="reference internal" href="14_markup.html"><span class="std std-doc">14</span></a> §14.8.</p>
 <p>Namespaces: <code class="docutils literal notranslate"><span class="pre">state=&quot;http://www.dvdforum.org/2005/ihd#state&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">style=&quot;http://www.dvdforum.org/2005/ihd#style&quot;</span></code>.</p>
 <p><strong>Node functions</strong> used on disc besides XPath’s own <code class="docutils literal notranslate"><span class="pre">id()</span></code>: <code class="docutils literal notranslate"><span class="pre">class('c')</span></code> (elements whose <code class="docutils literal notranslate"><span class="pre">class</span></code> contains <code class="docutils literal notranslate"><span class="pre">c</span></code>) and <code class="docutils literal notranslate"><span class="pre">defaultNode()</span></code> (the cue’s default node, the element its <code class="docutils literal notranslate"><span class="pre">begin</span></code> matched); see <a class="reference internal" href="14_markup.html"><span class="std std-doc">14</span></a> §14.8 for the full list with counts.</p>
 <p><strong><code class="docutils literal notranslate"><span class="pre">state:</span></code> functions</strong> (one per <code class="docutils literal notranslate"><span class="pre">ihd#state</span></code> attribute [5]): <code class="docutils literal notranslate"><span class="pre">state:actioned()</span></code>, <code class="docutils literal notranslate"><span class="pre">state:enabled()</span></code>, <code class="docutils literal notranslate"><span class="pre">state:focused()</span></code>, <code class="docutils literal notranslate"><span class="pre">state:foreground()</span></code>, <code class="docutils literal notranslate"><span class="pre">state:pointer()</span></code>, <code class="docutils literal notranslate"><span class="pre">state:value()</span></code>.</p>
 <p><strong><code class="docutils literal notranslate"><span class="pre">style:</span></code> functions</strong> (one per <code class="docutils literal notranslate"><span class="pre">ihd#style</span></code> attribute [5]; used <code class="docutils literal notranslate"><span class="pre">style:opacity()</span></code>): <code class="docutils literal notranslate"><span class="pre">style:</span></code> + any §12.3 style attribute.</p>
-<p>With <code class="docutils literal notranslate"><span class="pre">id('X')</span></code>, comparisons (<code class="docutils literal notranslate"><span class="pre">=0</span></code>/<code class="docutils literal notranslate"><span class="pre">=1</span></code>/<code class="docutils literal notranslate"><span class="pre">=true()</span></code>), <code class="docutils literal notranslate"><span class="pre">$var</span></code>, and time literals (<code class="docutils literal notranslate"><span class="pre">HH:MM:SS:FF</span></code>, <code class="docutils literal notranslate"><span class="pre">NNms</span></code>) this covers every observed predicate (§5.9) and any conforming one a future disc forms. The function set is enumerated, not sampled. Unknown/ill-typed path evaluates to boolean false (the cue does not fire). <strong>INFERRED</strong> (XPath 1.0 + enumerated extension functions).</p>
-<section id="remaining-items-after-12-5-12-6-5-2">
-<h3>Remaining items after §12.5 / §12.6 / §5.2<a class="headerlink" href="#remaining-items-after-12-5-12-6-5-2" title="Link to this heading"></a></h3>
-<p>The three items once attributed to the unpublished book are specified from public
-sources:</p>
-<ul class="simple">
-<li><p><strong>The three clocks</strong> (page / title / application) and their media-clock and
-<code class="docutils literal notranslate"><span class="pre">sync</span></code> relation, from Microsoft HDi Jumpstart [14] and the patent [1]
-(<a class="reference internal" href="05_manifest_hdi.html"><span class="std std-doc">05</span></a> §5.2).</p></li>
-<li><p><strong>The cue-path predicate grammar</strong>, as XPath 1.0 plus the enumerated
-<code class="docutils literal notranslate"><span class="pre">state:</span></code> / <code class="docutils literal notranslate"><span class="pre">style:</span></code> extension functions and <code class="docutils literal notranslate"><span class="pre">$vars</span></code> (§12.6), from the XSDs [5].</p></li>
-<li><p><strong>Player object semantics.</strong> The full object graph and control surface is the
-type library [6] (§12.5); used-method behaviour is [14] plus disc call-sites.</p></li>
-</ul>
-<p>What remains is <strong>numeric/edge quirks</strong> no public artifact fixes:
-exact node-set→boolean coercion in a cue predicate, the precise still-frame vs
-tick instant at <code class="docutils literal notranslate"><span class="pre">titleTimeEnd</span></code> (A102), and any per-method corner behaviour beyond
-what a disc exercises. All are fail-closed in the sheets. None blocks a
-conforming title. The DVD Forum iHD/Annex Z book would make them exhaustive. That book is the
-remaining unpublished source. What it would add is a short list of numeric and
-edge cases, not the whole runtime.</p>
+<p>With <code class="docutils literal notranslate"><span class="pre">id('X')</span></code>, comparisons (<code class="docutils literal notranslate"><span class="pre">=0</span></code>/<code class="docutils literal notranslate"><span class="pre">=1</span></code>/<code class="docutils literal notranslate"><span class="pre">=true()</span></code>) and <code class="docutils literal notranslate"><span class="pre">$var</span></code> this covers every
+observed predicate (<a class="reference internal" href="05_manifest_hdi.html"><span class="std std-doc">05</span></a> §5.9). A path that cannot be evaluated is false (the cue does
+not fire). <code class="docutils literal notranslate"><span class="pre">[23</span> <span class="pre">§7.5.2.4]</span></code> <strong>SPEC</strong>; the failure rule <strong>INFERRED</strong>.</p>
+</section>
+<section id="xpath-variables-system-parameters">
+<h2>12.7 XPath variables (system parameters)<a class="headerlink" href="#xpath-variables-system-parameters" title="Link to this heading"></a></h2>
+<p>Markup paths can read every system parameter as a variable [23 §7.5.2.4.1,
+Annex W.2]. Player and capability variables hold their value when the page loaded;
+the others are read when the path is evaluated. In Restricted Mode
+<code class="docutils literal notranslate"><span class="pre">networkThroughput</span></code> and <code class="docutils literal notranslate"><span class="pre">streamBufferSize</span></code> read 0 and <code class="docutils literal notranslate"><span class="pre">networkConnection</span></code> false.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Group</p></th>
+<th class="head"><p>Variables</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Player</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">majorVersion</span></code>, <code class="docutils literal notranslate"><span class="pre">minorVersion</span></code>, <code class="docutils literal notranslate"><span class="pre">currentDisplayMode</span></code> (1–5, §12.2 display type), <code class="docutils literal notranslate"><span class="pre">dataCacheSize</span></code>, <code class="docutils literal notranslate"><span class="pre">performanceLevel</span></code>, <code class="docutils literal notranslate"><span class="pre">closedCaption</span></code>, <code class="docutils literal notranslate"><span class="pre">simplifiedCaption</span></code>, <code class="docutils literal notranslate"><span class="pre">largeFont</span></code>, <code class="docutils literal notranslate"><span class="pre">contrastDisplay</span></code>, <code class="docutils literal notranslate"><span class="pre">descriptiveAudio</span></code>, <code class="docutils literal notranslate"><span class="pre">extendedInteractionTimes</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>Capability</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">mainAudioCapabilityLPCM</span></code> (1–2), <code class="docutils literal notranslate"><span class="pre">mainAudioCapabilityDDP</span></code>, <code class="docutils literal notranslate"><span class="pre">mainAudioCapabilityMPEG</span></code>, <code class="docutils literal notranslate"><span class="pre">mainAudioCapabilityDTSHD</span></code>, <code class="docutils literal notranslate"><span class="pre">mainAudioCapabilityMLP</span></code> (1–3), <code class="docutils literal notranslate"><span class="pre">subAudioCapabilityDDP</span></code>, <code class="docutils literal notranslate"><span class="pre">subAudioCapabilityDTSHD</span></code> (1), <code class="docutils literal notranslate"><span class="pre">subAudioCapabilityAACV2</span></code>, <code class="docutils literal notranslate"><span class="pre">subAudioCapabilityMP3</span></code>, <code class="docutils literal notranslate"><span class="pre">subAudioCapabilityWMAPro</span></code> (0–1), <code class="docutils literal notranslate"><span class="pre">enableHDMIOutput</span></code>, <code class="docutils literal notranslate"><span class="pre">audioCapabilityAnalogOutput</span></code>, <code class="docutils literal notranslate"><span class="pre">audioCapabilityHDMI</span></code> (1–3 or NaN), <code class="docutils literal notranslate"><span class="pre">audioCapabilitySPDIF</span></code> (1–2 or NaN), <code class="docutils literal notranslate"><span class="pre">spdifCapabilityEncoded</span></code>, <code class="docutils literal notranslate"><span class="pre">spdifCapabilityDirectOutputOfDD</span></code>, <code class="docutils literal notranslate"><span class="pre">spdifCapabilityDirectOutputOfDTS</span></code>, <code class="docutils literal notranslate"><span class="pre">subVideoResolution</span></code> (1–2), <code class="docutils literal notranslate"><span class="pre">networkConnection</span></code>, <code class="docutils literal notranslate"><span class="pre">networkThroughput</span></code> (kbit/s), <code class="docutils literal notranslate"><span class="pre">supportedOpenTypeFontTables</span></code>, <code class="docutils literal notranslate"><span class="pre">supportOfSlowForward</span></code>, <code class="docutils literal notranslate"><span class="pre">supportOfSlowReverse</span></code>, <code class="docutils literal notranslate"><span class="pre">supportOfStepForward</span></code>, <code class="docutils literal notranslate"><span class="pre">supportOfStepReverse</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>Presentation</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">playlistLocation</span></code>, <code class="docutils literal notranslate"><span class="pre">titleId</span></code>, <code class="docutils literal notranslate"><span class="pre">titleNumber</span></code>, <code class="docutils literal notranslate"><span class="pre">timeOnTitleTime</span></code>, <code class="docutils literal notranslate"><span class="pre">playState</span></code> (1–6), <code class="docutils literal notranslate"><span class="pre">playSpeed</span></code>, <code class="docutils literal notranslate"><span class="pre">playStateOfSecondaryVideoPlayer</span></code>, <code class="docutils literal notranslate"><span class="pre">elapsedTimeOfSecondaryVideoPlayer</span></code>, <code class="docutils literal notranslate"><span class="pre">currentVideoTrackNumber</span></code>, <code class="docutils literal notranslate"><span class="pre">currentAudioTrackNumber</span></code>, <code class="docutils literal notranslate"><span class="pre">currentSubtitleTrackNumber</span></code>, <code class="docutils literal notranslate"><span class="pre">selectedVideoTrackNumber</span></code>, <code class="docutils literal notranslate"><span class="pre">selectedAudioTrackNumber</span></code>, <code class="docutils literal notranslate"><span class="pre">selectedSubtitleTrackNumber</span></code>, <code class="docutils literal notranslate"><span class="pre">selectedAudioLanguageCode</span></code>, <code class="docutils literal notranslate"><span class="pre">selectedAudioLanguageCodeExtension</span></code>, <code class="docutils literal notranslate"><span class="pre">selectedSubtitleLanguageCode</span></code>, <code class="docutils literal notranslate"><span class="pre">selectedSubtitleLanguageCodeExtension</span></code>, <code class="docutils literal notranslate"><span class="pre">selectedApplicationGroup</span></code>, <code class="docutils literal notranslate"><span class="pre">effectAudioPlaying</span></code>, <code class="docutils literal notranslate"><span class="pre">streamBufferSize</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>Audio (0–255)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">mainAudioVolumeTo{Left,Right,Center,LeftS,RightS,LeftB,RightB,Lfe}</span></code>; <code class="docutils literal notranslate"><span class="pre">subAudioLeftChannelGainTo…</span></code>, <code class="docutils literal notranslate"><span class="pre">subAudioRightChannelGainTo…</span></code>, <code class="docutils literal notranslate"><span class="pre">effectAudioLeftChannelGainTo…</span></code>, <code class="docutils literal notranslate"><span class="pre">effectAudioRightChannelGainTo…</span></code> with the same eight outputs</p></td>
+</tr>
+<tr class="row-even"><td><p>Layout</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">mainVideoOuterFrameColorY</span></code> (16–235), <code class="docutils literal notranslate"><span class="pre">mainVideoOuterFrameColorCr</span></code>, <code class="docutils literal notranslate"><span class="pre">mainVideoOuterFrameColorCb</span></code> (16–240), <code class="docutils literal notranslate"><span class="pre">mainVideoChanging</span></code>, <code class="docutils literal notranslate"><span class="pre">mainVideoCapturing</span></code>, <code class="docutils literal notranslate"><span class="pre">mainVideoX</span></code>, <code class="docutils literal notranslate"><span class="pre">mainVideoY</span></code>, <code class="docutils literal notranslate"><span class="pre">mainVideoScaleNumerator</span></code>, <code class="docutils literal notranslate"><span class="pre">mainVideoScaleDenominator</span></code> (1–16), <code class="docutils literal notranslate"><span class="pre">mainVideoCropX</span></code>, <code class="docutils literal notranslate"><span class="pre">mainVideoCropY</span></code>, <code class="docutils literal notranslate"><span class="pre">mainVideoCropWidth</span></code>, <code class="docutils literal notranslate"><span class="pre">mainVideoCropHeight</span></code>, <code class="docutils literal notranslate"><span class="pre">subVideoX</span></code>, <code class="docutils literal notranslate"><span class="pre">subVideoY</span></code>, <code class="docutils literal notranslate"><span class="pre">subVideoScaleNumerator</span></code>, <code class="docutils literal notranslate"><span class="pre">subVideoScaleDenominator</span></code>, <code class="docutils literal notranslate"><span class="pre">subVideoCropX</span></code>, <code class="docutils literal notranslate"><span class="pre">subVideoCropY</span></code>, <code class="docutils literal notranslate"><span class="pre">subVideoCropWidth</span></code>, <code class="docutils literal notranslate"><span class="pre">subVideoCropHeight</span></code>, <code class="docutils literal notranslate"><span class="pre">subVideoChanging</span></code>, <code class="docutils literal notranslate"><span class="pre">subVideoAlpha</span></code> (0–255), <code class="docutils literal notranslate"><span class="pre">subtitleVisibility</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>Cursor</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">cursorX</span></code>, <code class="docutils literal notranslate"><span class="pre">cursorY</span></code>, <code class="docutils literal notranslate"><span class="pre">cursorImage</span></code>, <code class="docutils literal notranslate"><span class="pre">cursorHotSpotX</span></code>, <code class="docutils literal notranslate"><span class="pre">cursorHotSpotY</span></code>, <code class="docutils literal notranslate"><span class="pre">cursorRegionX</span></code>, <code class="docutils literal notranslate"><span class="pre">cursorRegionY</span></code>, <code class="docutils literal notranslate"><span class="pre">cursorRegionWidth</span></code>, <code class="docutils literal notranslate"><span class="pre">cursorRegionHeight</span></code>, <code class="docutils literal notranslate"><span class="pre">cursorEnable</span></code>, <code class="docutils literal notranslate"><span class="pre">cursorVisible</span></code></p></td>
+</tr>
+</tbody>
+</table>
+<p>Initial values and what Soft Reset and a title change reset are in [23 Annex W]:
+for example the current track numbers reset on Soft Reset but survive a title
+change, the selected ones survive both, the selected languages start from SPRM
+16–19, and the video layout resets at every title while the outer-frame colour
+does not. Menu language, country and parental level are SPRM 0, 12 and 13.</p>
+</section>
+<section id="virtual-keys-and-the-default-input-handler">
+<h2>12.8 Virtual keys and the default input handler<a class="headerlink" href="#virtual-keys-and-the-default-input-handler" title="Link to this heading"></a></h2>
+<p>Key events reach script first; what script does not consume goes to markup
+(<code class="docutils literal notranslate"><span class="pre">accessKey</span></code>, arrows, Enter, ESC); what markup does not consume runs the default
+handler [23 §4.3.17, Annex V]. M = the player must have the key.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Key</p></th>
+<th class="head"><p>Value</p></th>
+<th class="head"><p>M</p></th>
+<th class="head"><p>Default action</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">VK_PLAY</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0xFA</span></code></p></td>
+<td><p>M</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Player.playlist.play()</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">VK_PAUSE</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0xB3</span></code></p></td>
+<td><p>M</p></td>
+<td><p>toggle play / pause</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">VK_FF</span></code>, <code class="docutils literal notranslate"><span class="pre">VK_FR</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0xC1</span></code>, <code class="docutils literal notranslate"><span class="pre">0xC2</span></code></p></td>
+<td><p>M</p></td>
+<td><p>next fast forward / reverse speed</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">VK_SF</span></code>, <code class="docutils literal notranslate"><span class="pre">VK_SR</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0xC3</span></code>, <code class="docutils literal notranslate"><span class="pre">0xC4</span></code></p></td>
+<td><p></p></td>
+<td><p>next slow speed, if supported</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">VK_STEP_NEXT</span></code>, <code class="docutils literal notranslate"><span class="pre">VK_STEP_PREV</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0xC5</span></code>, <code class="docutils literal notranslate"><span class="pre">0xC6</span></code></p></td>
+<td><p></p></td>
+<td><p>step, if supported</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">VK_SKIP_NEXT</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0xC7</span></code></p></td>
+<td><p>M</p></td>
+<td><p>next chapter; at the last chapter the <code class="docutils literal notranslate"><span class="pre">onEnd</span></code> title, else stop</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">VK_SKIP_PREV</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0xC8</span></code></p></td>
+<td><p>M</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">currentChapter.top()</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">VK_SUBTITLE_SWITCH</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0xC9</span></code></p></td>
+<td><p>M</p></td>
+<td><p>toggle <code class="docutils literal notranslate"><span class="pre">Player.subtitle.visible</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">VK_SUBTITLE</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0xCA</span></code></p></td>
+<td><p>M</p></td>
+<td><p>next selectable subtitle track (skipping closed captions if <code class="docutils literal notranslate"><span class="pre">VK_CC</span></code> exists)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">VK_CC</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0xCB</span></code></p></td>
+<td><p></p></td>
+<td><p>next closed-caption track (extension <code class="docutils literal notranslate"><span class="pre">05</span></code>–<code class="docutils literal notranslate"><span class="pre">07</span></code>)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">VK_ANGLE</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0xCC</span></code></p></td>
+<td><p>M</p></td>
+<td><p>next selectable video track</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">VK_AUDIO</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0xCD</span></code></p></td>
+<td><p>M</p></td>
+<td><p>next selectable audio track</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">VK_MENU</span></code>, <code class="docutils literal notranslate"><span class="pre">VK_TOP_MENU</span></code>, <code class="docutils literal notranslate"><span class="pre">VK_BACK</span></code>, <code class="docutils literal notranslate"><span class="pre">VK_RESUME</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0xCE</span></code>, <code class="docutils literal notranslate"><span class="pre">0xCF</span></code>, <code class="docutils literal notranslate"><span class="pre">0xD0</span></code>, <code class="docutils literal notranslate"><span class="pre">0xD1</span></code></p></td>
+<td><p>M</p></td>
+<td><p>none (for applications)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">VK_LEFT</span></code>, <code class="docutils literal notranslate"><span class="pre">VK_UP</span></code>, <code class="docutils literal notranslate"><span class="pre">VK_RIGHT</span></code>, <code class="docutils literal notranslate"><span class="pre">VK_DOWN</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0x25</span></code>–<code class="docutils literal notranslate"><span class="pre">0x28</span></code></p></td>
+<td><p>M</p></td>
+<td><p>markup navigation</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">VK_LEFTUP</span></code>, <code class="docutils literal notranslate"><span class="pre">VK_RIGHTUP</span></code>, <code class="docutils literal notranslate"><span class="pre">VK_LEFTDOWN</span></code>, <code class="docutils literal notranslate"><span class="pre">VK_RIGHTDOWN</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0x29</span></code>–<code class="docutils literal notranslate"><span class="pre">0x2C</span></code></p></td>
+<td><p>M</p></td>
+<td><p>markup navigation</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">VK_TAB</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0x09</span></code></p></td>
+<td><p></p></td>
+<td><p>markup</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">VK_A_BUTTON</span></code>…<code class="docutils literal notranslate"><span class="pre">VK_D_BUTTON</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0x70</span></code>–<code class="docutils literal notranslate"><span class="pre">0x73</span></code></p></td>
+<td><p>M</p></td>
+<td><p>none</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">VK_E_BUTTON</span></code>…<code class="docutils literal notranslate"><span class="pre">VK_L_BUTTON</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0x74</span></code>–<code class="docutils literal notranslate"><span class="pre">0x7B</span></code></p></td>
+<td><p></p></td>
+<td><p>none</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">VK_ENTER</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0x0D</span></code></p></td>
+<td><p>M</p></td>
+<td><p>markup Activate</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">VK_ESC</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0x1B</span></code></p></td>
+<td><p></p></td>
+<td><p>markup Cancel</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">VK_0</span></code>…<code class="docutils literal notranslate"><span class="pre">VK_9</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0x30</span></code>–<code class="docutils literal notranslate"><span class="pre">0x39</span></code></p></td>
+<td><p>M</p></td>
+<td><p>none</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">VK_MOUSE_1</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0x01</span></code></p></td>
+<td><p>M</p></td>
+<td><p>markup Activate (on key up)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">VK_MOUSE_2</span></code>…<code class="docutils literal notranslate"><span class="pre">VK_MOUSE_5</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0x02</span></code>, <code class="docutils literal notranslate"><span class="pre">0x04</span></code>, <code class="docutils literal notranslate"><span class="pre">0x05</span></code>, <code class="docutils literal notranslate"><span class="pre">0x06</span></code></p></td>
+<td><p></p></td>
+<td><p>none</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">VK_VECTOR_1</span></code>…<code class="docutils literal notranslate"><span class="pre">VK_VECTOR_4</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0x97</span></code>–<code class="docutils literal notranslate"><span class="pre">0x9A</span></code></p></td>
+<td><p></p></td>
+<td><p>analog input</p></td>
+</tr>
+</tbody>
+</table>
+<p>The track keys walk <code class="docutils literal notranslate"><span class="pre">Player.playlist.currentTitle.{video,audio,subtitle}Tracks</span></code>
+from the current track, wrapping, and pick the next <code class="docutils literal notranslate"><span class="pre">selectable</span></code> one; a title
+without a <code class="docutils literal notranslate"><span class="pre">TrackNavigationList</span></code> does not change track.</p>
+<p><code class="docutils literal notranslate"><span class="pre">[23</span> <span class="pre">Annex</span> <span class="pre">V,</span> <span class="pre">Annex</span> <span class="pre">W]</span></code> <strong>SPEC</strong></p>
+<section id="remaining-items">
+<h3>Remaining items<a class="headerlink" href="#remaining-items" title="Link to this heading"></a></h3>
+<p>Earlier versions of this sheet reconstructed the clocks, the cue grammar and the
+object semantics from Jumpstart, the patents and the XSDs, and listed the DVD
+Forum book as the missing source. The book [23] now confirms or replaces each
+reconstruction (§12.2–12.8, <a class="reference internal" href="05_manifest_hdi.html"><span class="std std-doc">05</span></a>, <a class="reference internal" href="14_markup.html"><span class="std std-doc">14</span></a>). What
+the book does not fix is behaviour no disc exercises at pixel or tick precision,
+and members added after version 1.01.</p>
 </section>
 </section>
 </section>
