@@ -3,7 +3,9 @@
 A specification of the **HD DVD-Video Advanced Content** disc format (Category 2 /
 HDi, used by nearly all retail HD DVDs): filesystem, on-disc structures,
 navigation model, interactive engine, stream layout, and copy-protection layout.
-The unpublished DVD Forum books are not required to read these sheets.
+The sheets are checked against the DVD Forum book, version 1.01 (June 2006), now
+public as a scan [23]. The discs were authored to the later schema v1.1, so where
+the book and the discs differ the sheets give both.
 
 There is no program-chain (PGC), cell, or navigation-command VM here. Advanced
 Content replaces all of that with an XML playlist and an interactive application
@@ -12,11 +14,13 @@ out of scope.
 
 ## About this specification
 
-Most of the format was never published. This document was reconstructed from three
-kinds of source and states each fact with its evidence:
+The format book was confidential until its version 1.01 scan was released [23].
+This document was first reconstructed without it, then checked line by line against
+it. Each fact is stated with its evidence:
 
-- **Primary specifications.** Toshiba patents, the AACS HD DVD Pre-recorded Book,
-  the DVD Forum v1.0 XML schemas, and the HDi scripting type library. Cited `[n]`.
+- **Primary specifications.** The DVD Forum book v1.01 [23], Toshiba patents, the
+  AACS HD DVD Pre-recorded Book, the DVD Forum v1.0 and v1.1 XML schemas, and the
+  HDi scripting type library. Cited `[n]`.
 - **A reference corpus.** 120 retail HD DVD disc images preserved on the Internet
   Archive, read structurally to confirm what discs actually contain. Figures written
   as **"N/120"** (or "N/119" for the Advanced-Content subset) are this survey. For
@@ -29,9 +33,11 @@ kinds of source and states each fact with its evidence:
 **How to read a claim.** Normative rules are stated in imperative English. Each
 carries a citation `[n]` to [13_references.md](13_references.md) (every reference is a
 live URL or a bundled artifact) and an evidence grade: **VERIFIED** (confirmed on
-disc or by two agreeing sources), **INFERRED** (a fail-closed rule reasoned from a
-source), **OPEN** (a runtime guess would still be required), **UNCLOSEABLE** (needs
-material not publicly available), or **OUT** (out of scope). OPEN/UNCLOSEABLE items
+disc or by two agreeing sources), **SPEC** (stated by the book [23] or another
+primary specification, and not something the discs can show), **INFERRED** (a
+fail-closed rule reasoned from a source), **OPEN** (a runtime guess would still be
+required), **UNCLOSEABLE** (needs material not publicly available), or **OUT**
+(out of scope). OPEN/UNCLOSEABLE items
 are collected in [11_gaps.md](11_gaps.md). None is on the critical path to playback.
 
 **Reading / printing.** The HTML site is one sheet per page. The whole specification
@@ -53,7 +59,7 @@ and an EPUB (`make epub`, `docs/HD-DVD-Advanced-Content.epub`).
 | [09_aacs.md](09_aacs.md) | `ANY!` / `AAC!` overlay (format only; not a decryptor) |
 | [10_playback.md](10_playback.md) | Insert to designed menus to title to pack. §10.0 flow and §10.8 Q&A |
 | [11_gaps.md](11_gaps.md) | Gap register |
-| [12_hdi_scripting_abi.md](12_hdi_scripting_abi.md) | HDi scripting host ABI: 106 typeinfos, 200 constants, full iHD XSD surface |
+| [12_hdi_scripting_abi.md](12_hdi_scripting_abi.md) | HDi scripting host ABI: objects, constant values, system events, XPath variables, virtual keys (Annex Z, V, W), full iHD XSD surface |
 | [13_references.md](13_references.md) | Numbered reference list. Every citation, live links. |
 
 Authoritative XML schemas (DVD Forum): v1.0 (16 Jul 2006) and v1.1 (5 Nov 2007),
@@ -74,10 +80,11 @@ Windows, and **cannot open menus from an ISO or folder**. They required a physic
 disc in a licensed drive.
 `[20]`
 
-Sheets 01–10 specify Category 2 linear playback and on-disc HDi menus. A complete
-HDi runtime additionally needs the unpublished iHD/Annex Z behavioural book (B1)
-and the full type-library IDL (B2, recoverable from the Scenarist MSI). Player
-firmware is not a usable source for those. The Toshiba update images are fully
+Sheets 01–10 specify Category 2 linear playback and on-disc HDi menus. The
+behaviour of a complete HDi runtime (markup chapter 7, script chapter 8, the API in
+Annex Z) is now public in the v1.01 book [23]; the sheets summarise what a reader
+needs and point to the book's sections. The type-library IDL (B2) is still the
+source for members added after 1.01. Player firmware is not a usable source. The Toshiba update images are fully
 encrypted (entropy 7.997), verified in `11_gaps.md` §11.F. Remaining gaps are in
 [11_gaps.md](11_gaps.md).
 
@@ -92,8 +99,8 @@ encrypted (entropy 7.997), verified in `11_gaps.md` §11.F. Remaining gaps are i
 | Disc URI | `file:///dvddisc/` + absolute path from volume root. Example: `file:///dvddisc/HVDVD_TS/FEATURE_1.MAP`. |
 | Path through ACA | `file:///dvddisc/ADV_OBJ/<archive>.aca/<member>` |
 | Version word | `VERN` `0x0010` = specification 1.0 (high byte major, low nibble-style as on DVD). |
-| Drift | When a patent identifier disagrees with the disc, **the disc wins**. Recorded in-place. |
-| Citations | Inline `[n]` → numbered source in [13_references.md](13_references.md) (every entry a live/accessible link). Grades **VERIFIED/INFERRED/OPEN/UNCLOSEABLE/OUT** are evidence strength, not citations. |
+| Drift | When a patent identifier disagrees with the disc, **the disc wins**. When the book v1.01 disagrees with the disc, the disc shows what players accepted and the book what 1.01 required; both are recorded in place. |
+| Citations | Inline `[n]` → numbered source in [13_references.md](13_references.md) (every entry a live/accessible link); `[23 §x.y]` is a section of the DVD Forum book v1.01. Grades **VERIFIED/SPEC/INFERRED/OPEN/UNCLOSEABLE/OUT** are evidence strength, not citations. |
 | Patent figures | What the drawings specify vs this corpus: `spec/clean/16_PATENT_FIGURES.md`. |
 
 ## Scope
@@ -104,9 +111,8 @@ Category 2 discs are HDi titles (203/247 playlists ship a `PlaylistApplication`,
 Category 2.
 
 Sheets 01–10 specify linear playback and on-disc menus for the retail corpus.
-Remaining work for a complete HDi runtime is B1 (DOM2/SMIL/ECMA-327 in
-[12](12_hdi_scripting_abi.md) §12.4) and B2 parameter IDL (type-library binary
-bundled). See [11_gaps.md](11_gaps.md).
+The HDi runtime contract is the v1.01 book [23 §7, §8, Annex Z], summarised in
+[12](12_hdi_scripting_abi.md) and [14](14_markup.md). See [11_gaps.md](11_gaps.md).
 
 On-disc menus are File Cache + ACA + Manifest + iHD markup (layout / style /
 state / timing) + ECMAScript typelib + graphics plane over scaled main video +
@@ -121,8 +127,10 @@ Flow: [10](10_playback.md) §10.0 / §10.8.
 
 Still uncloseable: firmware vs FIG.50 (catalog
 http://hd-dvd.org/firmware.html is intermittent; no reverse-engineering), CHT
-bodies, VTUF `URS_NUM>0`, ATRI palettes, EVOBI+282 units, Category 3 / `HVSO` /
-`APLST` (0/120). See [10](10_playback.md) §10.7.
+bodies, VTUF `URS_NUM>0`. The book closes the ATRI palettes ([06](06_vti.md)),
+EVOBI+282 (`FIRST_SCR`), and the Category 3 / `HVS0@@@@.MAP` / `APLST` rules
+[23 §3.3.2, §4.3.22]; the corpus has 0/120 of the last three. See
+[10](10_playback.md) §10.7.
 
 Open questions that are not C structs: `spec/clean/15_ADVERSARIAL_QUESTIONS.md`.
 

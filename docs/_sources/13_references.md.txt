@@ -1,10 +1,11 @@
 # 13. References
 
-Numbered sources for the citations throughout sheets 01–12. Every entry is a live,
+Numbered sources for the citations throughout sheets 01–14. Every entry is a live,
 accessible source: a public URL, or a primary artifact bundled with this
 specification at the path given. Inline `[n]` marks the source. The grades **VERIFIED / INFERRED /
 OPEN / UNCLOSEABLE / OUT** are evidence-strength, not citations
-(`spec/clean/EVIDENCE_STANDARD.md`).
+(`spec/clean/EVIDENCE_STANDARD.md`); **SPEC** marks a fact stated by a primary
+specification such as [23] that the corpus cannot show.
 
 ## Patents
 
@@ -14,8 +15,17 @@ OPEN / UNCLOSEABLE / OUT** are evidence-strength, not citations
 
 ## Standards & specifications
 
+- **[23]** DVD Forum, *DVD Specifications for High Definition Video*, Version 1.01 (June 2006), scanned book released at <https://github.com/amp64/hddvd-docs/releases/tag/v1.01>. Part 3 Vol 1 ch. 1–4 (disc structure, system model, startup), Vol 2 ch. 5 (Standard Content: pack, GCI/PCI/DSI, sub-picture), Vol 3 ch. 6–10 (Advanced Content data: playlist, manifest, VTSI, TMAP, EVOB, ADV_PCK, archive, DISCID; markup; script; network; persistent storage), Vol 4 Annexes A–Z (B language codes, K seamless, Q sub-audio codecs, V default input handler, W system parameters, X restricted mode, Z script API). Cited as `[23 §x.y]` or `[23 Annex X]`. The discs in [11] follow the later schema v1.1 [5]; where 1.01 and the discs differ, the sheets give both. Files and SHA-256 (as released):
+  `HD.DVD.Vol.1.Chapters.1-4.pdf` `aa580341e20df6cc95b9cbab1a68d01ccf0ccec63c3496c064b2b6f32d1a795c`,
+  `HD.DVD.Vol.2.Chapter.5.pdf` `51c92a88e6d72a905b98caf460c317ea5153d71c3756b4146d49ca9ebe440d00`,
+  `HD.DVD.Vol.2.Chapter.5.210-211.pdf` `130d5e4f753be73879daa54a34371883a635f132ef339279eae2509225c1705d`,
+  `HD.DVD.Vol.3.Chapters.6-10.pdf` `19119099b261b8021c795ad6d63c52b16494501852fb11b2fc1eef0ba6c65ce7`,
+  `HD.DVD.Vol.4.Annex.All.pdf` `d9511f82eef2d99a05ef5e6150feb45f583a96a98c4d46cb08ff9cce776cbe79`,
+  `HD.DVD.Vol.4.Annex.-.Prolog.pdf` `8288d54f00946ab54cdd50e5eae31a493fc930ec39e2baff24e25ff14f86e8b1`,
+  `HD.DVD.Annex.Z.pdf` `6f91d9876b6da68dbedd0d55b437a66cb5ebe3eabd07dc0640dc0ac672e4dc62`
+  (the release also splits every annex A–Y into its own PDF).
 - **[4]** AACS LA, *Advanced Access Content System (AACS): HD DVD and DVD Pre-recorded Book*, Final Revision 0.953 (154 pages). Tables cited: 3-8 Title Key File, 3-9 Binding Information (BIFO), 3-10 Title Usage File, 3-11 BURS, 3-12 Usage Rule Set, 3-17 Content Certificate, 3-18 / 3-19 Content Hash Tables #1 / #2, 4-1 to 4-6 CPI (KMI, CHMI, URMI, CCI_SS, CCI), 4-7 Encrypted Pack, 6-2 Directory Key File; §4.3 (one Title Key per EVOB), §6.3 (persistent-storage provider directory), p. 21 (trailing residue allowed only after MKB, SKBF and CRL). Withdrawn from the AACS LA site; archived copy captured 2013-01-28: <https://web.archive.org/web/20130128114208/http://www.aacsla.com/specifications/AACS_Spec_HD_DVD_and_DVD_Prerecorded_Final_0.953.pdf> (SHA-256 `bd772c0b2d233412d0a644ab89d3489acf82f3b2907ce13b7f94830bfb38d5f5`). Specifications index: <https://aacsla.com/aacs-specifications/>
-- **[5]** DVD Forum, *HD DVD-Video Advanced Content* XML Schemas v1.0 (16 Jul 2006): `Playlist.xsd`, `Manifest.xsd`, `iHD.xsd`, `iHDstyle.xsd`, `iHDstate.xsd`. Bundled: `spec/raw/adv_obj/v1.0/`. Origin (Scenarist install): <https://archive.org/details/scenarist-hd-dvd-45>
+- **[5]** DVD Forum, *HD DVD-Video Advanced Content* XML Schemas v1.0 (16 Jul 2006) and v1.1 (5 Nov 2007): `Playlist.xsd`, `Manifest.xsd`, `iHD.xsd`, `iHDstyle.xsd`, `iHDstate.xsd`. Bundled: `spec/raw/adv_obj/v1.0/`, `spec/raw/adv_obj/v1.1/`. The book [23 Annex U] makes its XML Syntax Representation normative and the schemas informative. Origin (Scenarist install): <https://archive.org/details/scenarist-hd-dvd-45>
 - **[17]** W3C, *Document Object Model (DOM) Level 2 Core* <https://www.w3.org/TR/DOM-Level-2-Core/> and *DOM Level 2 Events* <https://www.w3.org/TR/DOM-Level-2-Events/>.
 - **[18]** W3C, *Synchronized Multimedia Integration Language (SMIL 2.0)*. <https://www.w3.org/TR/2005/REC-SMIL2-20050107/>
 - **[19]** Ecma International, *ECMA-327, Compact Profile of ECMAScript*. <https://ecma-international.org/publications-and-standards/standards/ecma-327/>
