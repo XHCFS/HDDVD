@@ -3,9 +3,10 @@
 *Counts written "N/120", "N/119", "on N discs", "listings", or as named discs are over the reference corpus of 120 archived retail HD DVD images [11]. `eNN` are the reproducible verification experiments [12].*
 
 
-Patent: US20070091495A1 FIG.7 (category) and FIG.50 (Advanced startup).
-Filenames on disc are `VPLST$$$.XPL`, `ADV_OBJ`, `DISCID.DAT`, not the patent’s
-`VPLIST.XML` / `HDDVD_TS`.
+Book: [23 §4.1.1] (category), [23 §4.3.22] (startup, update, Standard Content
+transition, shutdown), [23 Annex X] (Restricted Mode). Patent: US20070091495A1
+FIG.7 and FIG.50 agree. Filenames on disc are `VPLST$$$.XPL`, `ADV_OBJ`,
+`DISCID.DAT`, as in the book, not the patent's `VPLIST.XML` / `HDDVD_TS`.
 
 §5.0 is **met** ([05](05_manifest_hdi.md)). This sheet is insert, then designed
 menus, then title timeline. It does not authorize shipping a demuxer without HDi.
@@ -21,23 +22,24 @@ logic keyed to the §10.8 evidence Q&A; these diagrams are the readable overview
 ```{mermaid}
 flowchart TD
   I["Insert / open image"] --> U["Mount UDF 2.50, 2048-byte LB<br/>AVDP sector 256, metadata partition"]
-  U --> CAT{"ADV_OBJ/ has VPLST*.XPL?"}
+  U --> CAT{"ADV_OBJ/DISCID.DAT exists?"}
   CAT -->|no| C1{"HVDVD_TS/HV000I01.IFO?"}
   C1 -->|yes| REF["Category 1 Standard Content<br/>out of scope: refuse"]
   C1 -->|no| FAIL["fail disc"]
   CAT -->|yes| AACS["Probe ANY!/ then AAC!/<br/>(absent = clear disc, legal)"]
-  AACS --> DID["Read ADV_OBJ/DISCID.DAT<br/>128 B, magic HDDVD-V_CONF"]
-  DID --> SF{"SEARCH_FLG == 0?"}
-  SF -->|yes| PS["Search file:///required/{contentId}/VPLST$$$.XPL<br/>on required storage (empty = success-as-absent)"]
+  AACS --> RM["Restricted Mode unless the content<br/>verifies as signed (then FullTrust)"]
+  RM --> DID["Read ADV_OBJ/DISCID.DAT<br/>128 B, magic HDDVD-V_CONF"]
+  DID --> SF{"SEARCH_FLG == 0<br/>and not Restricted?"}
+  SF -->|yes| PS["Search /HD_DVD/ProviderID/ContentID/VPLST$$$.XPL<br/>on every connected storage device (empty = success-as-absent)"]
   SF -->|no| DISC1
-  PS --> DISC1["List ADV_OBJ/VPLST$$$.XPL (ignore .BAK)<br/>choose highest $$$"]
-  DISC1 -->|none| FAIL
-  DISC1 --> PARSE["Parse Playlist.xsd v1.0<br/>Configuration: Aperture, StreamingBuffer<br/>wipe File Cache"]
+  PS --> DISC1["List ADV_OBJ/VPLST$$$.XPL (ignore .BAK)<br/>choose highest $$$ over all found"]
+  DISC1 -->|"none (then APLST, then fail)"| FAIL
+  DISC1 --> PARSE["Parse playlist<br/>Change System Configuration: Aperture, StreamingBuffer<br/>empty File Cache and Streaming Buffer"]
   PARSE --> HASCLIP{"Playlist has<br/>PrimaryAudioVideoClip?"}
-  HASCLIP -->|"no (3/119 selectors)"| SEL["Run HDi; script calls<br/>Player.playlist.load(full VPLST URI)<br/>FIG.51 soft reset: wipe cache, rebuild map<br/>do NOT re-read DISCID / re-search"]
+  HASCLIP -->|"no (3/119 selectors)"| SEL["Run HDi; script calls<br/>Player.playlist.load(full VPLST URI)<br/>Soft Reset: Change System Configuration, rebuild map<br/>do NOT re-read DISCID / re-search"]
   SEL --> PARSE
   HASCLIP -->|yes| FPT{"FirstPlayTitle present?"}
-  FPT -->|yes| PLAYFPT["Play FPT start->end, normal speed<br/>video track 1 + audio track 1<br/>no PlaylistApplication; ignore user title-nav"]
+  FPT -->|yes| PLAYFPT["Play FPT start->end, normal speed<br/>video track 1 + audio track 1, no subtitles<br/>no applications or events; only STOP / EJECT"]
   FPT -->|no| T1
   PLAYFPT --> T1["Enter Title 1 -> title runtime"]
 ```
@@ -52,17 +54,17 @@ flowchart TD
 
   subgraph subGV["Video / audio pipeline"]
     V1["clip src = .MAP -> sibling .EVO"] --> V2["Demux 2048-byte MPEG-2 PS packs"]
-    V2 --> V3["Route streams by @streamNumber (8.7)<br/>video 0xE0/0xE2/0xFD+ext0x55<br/>audio 0xBD sub CODEC_BASE|(n-1)<br/>subtitle 0xBD sub 0x20|(n-1)"]
-    V3 --> V4["NV_PCK first pack: PCI/DSI/GCI<br/>ADV_PCK 0x80 -> File Cache, not decoder"]
+    V2 --> V3["Route streams by @streamNumber (8.7)<br/>video 0xE0/0xE2/0xFD+ext0x55<br/>audio 0xBD sub CODEC_BASE|(n-1)<br/>subtitle 0xBD sub 0x20|SPST_ATR number"]
+    V3 --> V4["NV_PCK first pack: GCI/DSI (PCI ignored)<br/>ADV_PCK 0x80 -> File Cache, not decoder"]
     V4 --> V5["Decode (codec lib) + sub-picture RLC (8.8)"]
     V5 --> V6["Scale main video into Aperture<br/>changeLayout(x,y,scale|null,crop*,time)"]
   end
 
   subgraph subHDI["HDi engine"]
-    H1["File Cache: open every resource src<br/>reject if listing > @size; flush at 64 MB"] --> H2["ACA extract (04): 14+(flags&0xFF)+32"]
+    H1["File Cache: open every resource src<br/>reject if listing > @size; discard by priority;<br/>overflow -> Stop"] --> H2["ACA extract (04): record 14+namelen+32"]
     H2 --> H3["Manifest: Region / Script / Markup / Resource"]
     H3 --> H4["iHD markup: absolute boxes, PNG frames,<br/>nav* graph, p-in-div text, focus"]
-    H4 --> H5["Compact-ES script (UTF-16BE)<br/>load / jump(time,pause) / timers / events"]
+    H4 --> H5["Compact-ES script (UTF-16BE)<br/>load / jump(time,bookmark) / timers / events"]
   end
 
   V6 --> COMP["Composite graphics plane src-over scaled YCbCr<br/>PNG alpha x opacity; x-clearrect punches alpha 0<br/>zOrder stacks apps; cursor on top"]
@@ -70,10 +72,10 @@ flowchart TD
 
   COMP --> LOOP["Runtime loop each tick"]
   LOOP --> CUE["Clocks (page/app/title) + cue begin/end<br/>mapping window wins; unknown path = no fire"]
-  LOOP --> SCL["ScheduledControlList (3.9a)<br/>PauseAt@titleTime freezes timeline<br/>Event@titleTime -> addEventListener"]
+  LOOP --> SCL["ScheduledControlList (03 §3.18)<br/>PauseAt@titleTime freezes timeline<br/>Event@titleTime -> scheduled_event"]
   LOOP --> RC["Remote: nav* move focus; Enter/accessKey<br/>-> state:actioned -> event -> script"]
   RC --> ACT{"Script action?"}
-  ACT -->|"jump(time,false)"| SEEK["Seek (see seek diagram); play unless paused"]
+  ACT -->|"jump(time,false)"| SEEK["Seek (see seek diagram); same title keeps play state,<br/>another title plays"]
   ACT -->|"playlist.load(URI)"| RELOAD["Soft reset to new VPLST"]
   ACT -->|none| LOOP
   SEEK --> LOOP
@@ -117,36 +119,41 @@ menu” on a title. Boxes are numbered for §10.8.
 [A1] treat medium as 2048-byte UDF 2.50 (AVDP sector 256, metadata partition)
         |
         v
-[A2] ADV_OBJ/ contains VPLST*.XPL (that directory, not subdirs)?
+[A2] ADV_OBJ/DISCID.DAT exists (Category 2 or 3)?
         | no --> [A2b] HVDVD_TS/HV000I01.IFO ? --yes--> Category 1, refuse
         | yes                              \--no--> fail disc
         v
 [A3] probe ANY!/ then AAC!/ (missing AACS dir is legal)
         |
         v
+[A3b] Restricted Mode, or FullTrust if the content is verified as signed
+        |
+        v
 [A4] read ADV_OBJ/DISCID.DAT (128 B, HDDVD-V_CONF)
         |
         v
-[A5] SEARCH_FLG == 0 ?
-        | yes --> [A5b] search file:///required/{contentId}/VPLST$$$.XPL
-        |         (empty P-storage is success-as-absent, not a fail)
+[A5] SEARCH_FLG == 0 and not Restricted Mode?
+        | yes --> [A5b] search /HD_DVD/<ProviderID>/<ContentID>/VPLST$$$.XPL
+        |         on every connected device (script view:
+        |         file:///required/{contentId}/; empty is success-as-absent)
         +<--------+
         v
 [A6] list ADV_OBJ/VPLST$$$.XPL only (ignore .BAK); open highest $$$
-        | none --> fail disc
+        | none --> same search for APLST###.XPL; none --> fail disc
         v
-[A7] parse Playlist.xsd v1.0 (Forum namespace)
+[A7] parse the playlist (Forum namespace; read against the v1.1 schema)
         |
         v
-[A8] apply Configuration (Aperture, StreamingBuffer); wipe File Cache
+[A8] Change System Configuration: Aperture, StreamingBuffer;
+     empty File Cache and Streaming Buffer
         |
         v
 [A9] this XPL has PrimaryAudioVideoClip?
         | no --> [A9b] HDi IPlaylist.load(full file:/// URI)
-        |        FIG.51: wipe cache, rebuild mapping; do not re-read DISCID
-        |        do not re-run highest-$$$ search; loop to [A7] on the new XPL
+        |        Soft Reset: back to [A8] on the new XPL (cache emptied, mapping
+        |        rebuilt); do not re-read DISCID or re-run the highest-$$$ search
         v yes
-[A10] FirstPlayTitle if present (no PlaylistApplication; tracks 1+1; then Title 1)
+[A10] FirstPlayTitle if present (no applications; tracks 1+1; only STOP/EJECT; then Title 1)
         |
         v
 [A11] Title 1: enter §10.0 menu graph + §10.3 video
@@ -167,20 +174,21 @@ menu” on a title. Boxes are numbered for §10.8.
 [B4] for each resource src:
         always open the URI (ACA or loose file)
         reject if listing size > @size
-        if multiplexed = N: concat ADV_PCK slot N from the playing EVO
+        if multiplexed = N: concat ADV_PCK identifier N from the playing EVO
             (packs may be absent; still keep the URI copy)
-        flush File Cache if reserved @size sum would exceed 64 MB
+        discard unused resources by priority when space is needed;
+        an overflow while loading playlist resources goes to Stop
         |
         v
 [B5] Manifest.xsd: Region / Resource / Script / Markup
         |
-        +-- [B6] ACA extract (04): 14+(flags&0xFF)+32; slice offset/length
+        +-- [B6] ACA extract (04): record 14+namelen+32; slice offset/length
         +-- [B7] iHD used path (05 §5.9): absolute boxes, PNG frames, nav*, p-in-div, src-over
-        +-- [B8] UTF-16BE compact ES (05 §5.3): load / jump(time, pause) / elapsedTime / …
+        +-- [B8] UTF-16BE compact ES (05 §5.3): load / jump(time, bookmark) / elapsedTime / …
         |
         v
 [B9]  MAP → sibling EVO → NV_PCK then AV packs
-      codec = MediaAttributeList, not VTI V_ATR
+      codec = VTI EVOB_VM_ATR (MediaAttributeList is wrong on 125 clips)
       route ADV_PCK 0x80 into [B4]
         |
         v
@@ -192,7 +200,8 @@ menu” on a title. Boxes are numbered for §10.8.
 [B11] clocks + cue begin/end (mapping window wins over cues)
       remote: nav* / focused / actioned
       script may jump(time, false), load another XPL, setXPathVariable
-      (pause=false: seek without forcing pause; unknown cue path does not fire)
+      (bookmark=false: no bookmark; a jump keeps the play state within a title;
+       a cue path that cannot be evaluated does not fire)
         |
         v
 [B12] exclusive titleTimeEnd unmaps the segment
@@ -202,51 +211,85 @@ menu” on a title. Boxes are numbered for §10.8.
 Network TLS / `.CER` / `IHTTPClient` never appear on this graph (out of gate).
 AACS decrypt is [C1] on a licensed drive only; Archive.org packs are clear.
 
-## 10.1 Insert → category
+## 10.1 Insert → category [23 §4.1.1]
 
 ```
 mount UDF 2.50 volume
-if ADV_OBJ has VPLST*.XPL (directory itself, not subdirs):
+if ADV_OBJ/DISCID.DAT exists:
     Category 2 (or 3) → 10.2
-else if HVDVD_TS/HV000I01.IFO exists:
+else if HVDVD_TS/HV000I01.IFO has VMG_ID "HVDVD-VMG100"
+        and VMG_CAT says no Advanced VTS:
     Category 1 → Standard Content (out of scope)
 else:
-    failure
+    player-dependent (here: failure)
 ```
+
+Every Advanced disc in the corpus has both `DISCID.DAT` and a `VPLST`, so the
+older test (`ADV_OBJ/` holds a `VPLST*.XPL`) gives the same answer here.
 
 ## 10.2 Advanced startup (FIG.50)
 
+The book's sequence [23 §4.3.22.2, Annex X.4.2]:
+
+0. Start in Restricted Mode; switch to FullTrust only if the content verifies as
+   signed by a DVD Forum-approved signer. The mode holds for the whole disc.
 1. Read `ADV_OBJ/DISCID.DAT` → `PROVIDER_ID`, `CONTENT_ID`, `SEARCH_FLG`.
-2. Display mode: video → VPLST search; audio-only → APLST (unused here).
+2. Display Mode system parameter: a display is connected → VPLST search;
+   otherwise → APLST search (unused here).
 3. VPLST search:
-   - if `SEARCH_FLG == 0`: also search persistent storage for `VPLST000.XPL`…`999`
+   - if `SEARCH_FLG == 0` (and not Restricted Mode): search every connected
+     persistent storage device for `/HD_DVD/<ProviderID>/<ContentID>/VPLST$$$.XPL`
    - if `SEARCH_FLG == 1`: skip persistent storage
    - search `ADV_OBJ/` (not subdirectories)
-   - **open the highest `$$$`**
-4. Apply `Playlist/Configuration` (StreamingBuffer, Aperture). Wipe File Cache.
-5. Build Title Timeline from `Title` / `FirstPlayTitle` / `Chapter` / clip mappings.
-6. Load into File Cache: Manifest, markup, script, fonts, images, TMAPs needed
-   before start. Init Primary Video Player with `HVA00001.VTI` + clip TMAP(s).
-7. Start Title Timeline.
-8. None found → failure.
+   - **open the highest `$$$`** among everything found. A playlist from
+     persistent storage must be signed like the disc, or the player halts.
+   - none: run the same steps for `APLST###.XPL`; none either → failure (what
+     follows is up to the player).
+4. Change System Configuration: resize the Streaming Buffer to
+   `Configuration/StreamingBuffer` (in Restricted Mode it must be 0), set the
+   Aperture and outer-frame colour, and empty the File Cache and Streaming
+   Buffer.
+5. Build the Title Timeline mapping and chapters of the first title.
+6. Load into the File Cache everything the first title needs before it starts
+   (Manifest, markup, script, fonts, images, secondary TMAPs / S-EVOBs). Init the
+   Primary Video Player with `HVA00001.VTI` + clip TMAP(s), and the Secondary
+   Video Player with its TMAP.
+7. Start the Title Timeline.
 
 116/119 discs: the highest playlist already contains `PrimaryAudioVideoClip`.
 3/119: highest is a selector app (`MATRIX_REVOLUTIONS` 099, `BLADE_RUNNER` 002,
 `TRAINING_DAY` 003); spec boot requires HDi
 `Player.playlist.load("file:///dvddisc/ADV_OBJ/VPLST$$$.XPL")`.
 Each has a lower-numbered XPL with `PrimaryAudioVideoClip` (`e14` A97).
-FIG.51 (`pages/page-051.png`): after that load, **soft reset to S63** (re-init
-object mapping + title timeline). It does **not** re-run S61 (highest-number
-search) or S62 (config). Sheet [05](05_manifest_hdi.md) §5.7: the **body** of
-FIG.51 wipes File Cache then loads the new XPL (drawing vs body: body wins).
+After that load the player soft-resets [23 §4.3.22.3]: it runs **Change System
+Configuration** on the new playlist (Streaming Buffer, Aperture, empty File Cache
+and Streaming Buffer), restores the new playlist and its Assignment Information
+files into the File Cache, then rebuilds the title mapping. It does **not** re-read
+DISCID or re-run the highest-number search. The patent's FIG.51 drawing (S63, no
+S62) disagrees with its own body text, which wipes the File Cache; the book
+settles it.
 
 `FirstPlayTitle` is the first clip **inside** the chosen playlist, not the boot file.
-If present, play it to the end of its timeline (normal speed, tracks 1+1), then
-**Title 1**. PlaylistApplication starts on Title 1, not on FirstPlayTitle.
+If present, play it to the end of its timeline (normal speed, tracks 1+1,
+subtitles off, only STOP and EJECT accepted), then **Title 1**.
+PlaylistApplication starts on Title 1, not on FirstPlayTitle ([03](03_playlist.md)
+§3.9).
 
 `SEARCH_FLG=0` with no persistent-storage VPLST: search comes up empty, then
 the disc `ADV_OBJ` list is used (highest `$$$` among files that exist).
-URI: `file:///required/{contentId}/VPLST$$$.XPL` ([05](05_manifest_hdi.md) §5.8).
+Script URI: `file:///required/{contentId}/VPLST$$$.XPL`; device path
+`/HD_DVD/<ProviderID>/<ContentID>/` ([05](05_manifest_hdi.md) §5.8).
+
+**Category 3** [23 §4.3.22.4]: play starts in Advanced Content.
+`StandardContentPlayer.play()` suspends the title timeline (Suspend state) and
+plays a Standard VTS with its navigation commands, with remote keys going to it
+directly. The `CallAdvancedContentPlayer` navigation command (or stop / eject,
+which also fires `stop_request`) returns to the script just after the `play()`
+call, in the Playback or Pause state. 0/120.
+
+**Shutdown** [23 §4.3.22.5]: STOP or EJECT stops the timeline and the video, then
+fires `stop_request`; an application may save resume data to persistent storage;
+the player may time out after at least 2 s.
 
 ## 10.3 Play a title
 
@@ -261,17 +304,29 @@ load File Cache resources for PlaylistApplication (not on FPT) and
 for each PrimaryAudioVideoClip in timeline order:
     open src MAP                          # file:///dvddisc/HVDVD_TS/FOO.MAP
     open sibling EVO                      # FOO.EVO (confirm via EVOBI)
-    codec = MediaAttributeList[Video@mediaAttr]
+    codec = VTI EVOB_VM_ATR bits 31-29 (06 §6.2)
     demux 2048-byte packs from EVO
     select streams by @streamNumber -> PES stream_id/sub_stream_id (08 §8.7):
-        video 0xE0/0xE2/0xFD+0x55 ; audio 0xBD sub CODEC_BASE|(n-1) ; subtitle 0xBD 0x20|(n-1)
+        video 0xE0/0xE2/0xFD+0x55 ; audio 0xBD sub CODEC_BASE|(n-1) ;
+        subtitle 0xBD 0x20|SPST_ATR[n-1] number
     route ADV_PCK 0x80 to File Cache
 composite graphics plane over scaled main video
-seamless="true" → decoder connection flag only
+seamless="true" → join without a break when the book's conditions hold (03 §3.10)
 onEnd → jump to that Title id
 ```
 
-Track selection: `Audio@track` / `Subtitle@track` + `TrackNavigationList` langcodes.
+Track selection: the book's algorithm over the selected track numbers and
+languages ([03](03_playlist.md) §3.17).
+
+**Errors during a title** [23 §4.3.19.5.3, §9.6]: a missing resource or secondary
+video set fires `resource_not_found`; a network wait past `NetworkTimeout` fires
+`network_timeout`. While the event is handled the timeline holds unless the
+resource is soft-synchronised. If no application cancels the event, the player
+goes to the Stop state. If one cancels it, playback continues without that
+resource (or at the title it jumped to). With no application running there is no
+event, only Stop. A player may also stop for File Cache overflow, script memory
+or pixel-buffer exhaustion, an invalid playlist / manifest / markup / script, a
+missing disc file named by a URI, or an uncaught script exception.
 
 ## 10.4 Seek
 
@@ -325,15 +380,15 @@ A licensed player shall not skip MKB / cert / CHT boot.
 | UDF 2.50, roots, Category 2 | Official HD DVD medium MMC probe |
 | DISCID, highest-VPLST boot, 3 selectors, FIG.50 P-storage URI grammar | On-device P-storage directory dump (0 specimens) |
 | XPL titles/clips/chapters/tracks; `FirstPlayTitle` restrictions | Firmware vs FIG.50 (no RE) |
-| Used iHD + `jump(time, pause)` + used cue paths + `changeLayout` 8-tuple ([05](05_manifest_hdi.md) §5.3 / §5.9) | Unused XSD attrs (`writingMode`, padding, MNG, `pointer`) |
+| iHD markup, styles and timing from the book ([14](14_markup.md)); `jump(time, bookmark)` + used cue paths + `changeLayout` 8-tuple ([05](05_manifest_hdi.md) §5.3 / §5.9) | Screenshot-exact rendering of attributes no disc uses |
 | MAP `EVOBU_ENT` → EVO offset; matches DSI | AACS sequence-key (`SKF` 0/120) |
-| ILVU_ENT at `ILVUI_SA`; `SZ` = EVOBU count; `ADR` = pack index; u16@372 (`e13`) | `ILVU_ENT_Ns` in SRP (always 0); official name of u16@372 |
-| VTI MAT, ATRI `V_ATR`/`AST_Ns`/`SP_Ns`, EVOBI pack count + serial | ATRI palettes; EVOBI+282 units |
-| NV_PCK GCI+PCI+DSI GI; PCI may be omitted; CPI at pack `0x3C` | Pack stuffing moving a hard-coded byte 20 / Dtk@84 |
-| ADV_PCK `0x80` concat; locate `HDDVDACA` after the name field (`e16`) | Screenshot-calibrated OpenType hinting (em scale is specified) |
-| ACA 32-byte header + `14+(flags&0xFF)+32` (`e17` 97/885) | ACA AACS-sidecar 283-byte internals; `.CER` bodies |
+| ILVU_ENT at `ILVUI_SA`; `SZ` = EVOBU count; `ADR` = pack index; `ILVU_ENT_Ns` u32 @370 (`e13`, [23]) | |
+| VTI MAT, ATR (`VM_ATR`, `AMST`, `ASST`, `SPST`, palettes), EVOBI fields ([06](06_vti.md), [23]) | |
+| NV_PCK GCI + reserved area + DSI; PCI ignored; CPI at pack `0x3C` | Pack stuffing moving a hard-coded byte 20 / Dtk@84 |
+| ADV_PCK `0x80` concat; data at 259 / 4 from the book's header (`e16`) | Screenshot-calibrated OpenType hinting (em scale is specified) |
+| ACA 32-byte header + `14+namelen+32` (`e17` 97/885) | ACA AACS-sidecar 283-byte internals; `.CER` bodies |
 | AACS dirs, VTKF Table 3-8, VTUF 144 B / `URS_NUM=0` (217/217 listed) | Volume ID from ISO; CHT bodies; VTUF `URS_NUM>0` |
-| Category 3 / `HVSO` / `APLST` | **0/120**; uncloseable as a format |
+| Category 3 / `HVS0@@@@.MAP` / `APLST` / Restricted Mode ([23 §3.3.2, §4.3.22, Annex X]) | **0/120** on disc; signature verification needs DVD Forum signing keys |
 
 **Firmware vs FIG.50 is uncloseable (no RE).** Catalog:
 [http://hd-dvd.org/firmware.html](http://hd-dvd.org/firmware.html)
@@ -387,13 +442,13 @@ not hard-code 288 in the walker. AVDP at sector 256 is what
 ### A2 Category
 
 **Q.** How do you know Category 2 vs 1 vs 3? Is there an MMC “HD DVD?” probe?
-**A.** `ADV_OBJ/` contains `VPLST*.XPL` in that directory → Category 2 (or 3)
-→ this spec. Else `HVDVD_TS/HV000I01.IFO` magic `HVDVD-VMG100` → Category 1,
-refuse. Both playlist and Standard VMG (Category 3) is **0/120**; if a disc
-ever has both, still start Advanced. The official drive medium probe is MMC `GET CONFIGURATION` returning current profile
+**A.** `ADV_OBJ/DISCID.DAT` exists → Category 2 (or 3) → this spec
+[23 §4.1.1]. Else `HVDVD_TS/HV000I01.IFO` magic `HVDVD-VMG100` → Category 1,
+refuse. On the corpus the `VPLST` test gives the same split. Category 3 is
+**0/120**; it always starts in Advanced Content. The official drive medium probe is MMC `GET CONFIGURATION` returning current profile
 `0x0050` (HD DVD-ROM); `0x0051`/`0x0052` are HD DVD-R/RAM [21]. It is drive-level and
 cannot be answered from an ISO. The directory test above is the ISO-level equivalent.
-`[1]` `[11, 12]` **VERIFIED**
+`[23]` **SPEC**; `[1]` `[11, 12]` **VERIFIED**
 (directory test). MMC probe **UNCLOSEABLE** from an ISO.
 
 ### A3 AACS directory
@@ -416,22 +471,22 @@ Disc ID @12 is **not** AACS Volume ID (`0xFF×16` on 109). `PROVIDER_ID` /
 ### A5 / A5b Persistent-storage search
 
 **Q.** What directory bytes do you search when `PROVIDER_ID` is binary?
-**A.** Scripts never put `PROVIDER_ID` in a URI. Search
-`file:///required/{contentId}/VPLST$$$.XPL` then disc `ADV_OBJ`. `contentId`
-is DISCID `CONTENT_ID` as lowercase UUID `8-4-4-4-12` (**INFERRED**
-punctuation). All-`FF` content IDs (usually `SEARCH_FLG=1`) skip P-storage.
-Empty P-storage still boots the disc playlist (106 discs). `file:///fixed/`
-and `file:///removable/` are 0/122 saved JS. Provider-folder nesting is the
-host UI, not the path.
-`[11, 12]` **VERIFIED** (script).
-`[14]` `[1]` **INFERRED** (0 on-device dumps).
+**A.** Scripts never put `PROVIDER_ID` in a URI. The player searches
+`/HD_DVD/<ProviderID>/<ContentID>/VPLST$$$.XPL` on every connected device (the
+script sees it as `file:///required/{contentId}/`), then disc `ADV_OBJ`. The IDs
+are written as upper-case GUID strings [23 §10.2]; on an AACS disc the provider
+folder is the keyed `PROVIDER_DIR` ([09](09_aacs.md) §9.4). All-`FF` content IDs
+(14 discs, 9 of them with `SEARCH_FLG=1`) skip P-storage. Empty P-storage still boots the disc
+playlist (106 discs). `file:///fixed/` and `file:///removable/` are 0/122 saved
+JS and not in the book.
+`[23]` **SPEC**; `[11, 12]` **VERIFIED** (script); 0 on-device dumps.
 
 ### A6 Highest VPLST
 
 **Q.** Boot `VPLST000`? Search `.BAK`? Audio `APLST`?
 **A.** Highest `$$$` among `ADV_OBJ/VPLST$$$.XPL` only. `.BAK` is never the
-boot file (`e07`). `APLST` is 0 files. Ignore unless you are an audio-only
-player.
+boot file (`e07`). `APLST` is 0 files; the book uses it when no display is
+connected and when no `VPLST` exists.
 `[1]` `[11, 12]` **VERIFIED**.
 
 ### A7 Parse playlist
@@ -445,47 +500,45 @@ player.
 ### A8 Configuration / wipe
 
 **Q.** Keep File Cache across boot? Aperture other than 1920×1080?
-**A.** Wipe File Cache at FIG.50 Change System Configuration. Aperture is
-`1920x1080` on 247/247 (XSD also allows `1280x720`). `StreamingBuffer@size`
-is pack units; `"0"` on 246/247. Ignore for disc-only. `MainVideoDefaultColor`
-is 6 hex YCbCr for the aperture outside scaled video.
-`[11, 12]` **VERIFIED**. Wipe **INFERRED** (FIG.50; no player dump).
+**A.** Empty the File Cache and the Streaming Buffer at Change System
+Configuration [23 §4.3.22.2]. Aperture is `1920x1080` on 247/247 (also allowed:
+`1280x720`). `StreamingBuffer@size` is in kB of 1024 bytes (`1024` = 1 MB);
+`"0"` on 246/247. `MainVideoDefaultColor` is 6 hex YCrCb for the aperture
+outside scaled video.
+`[23]` **SPEC**; `[11, 12]` **VERIFIED** (values).
 
 ### A9 / A9b Selector
 
 **Q.** Highest XPL has no `PrimaryAudioVideoClip`. Open a lower `$$$`?
 **A.** No for this product. Run HDi so script can
-`Player.playlist.load("file:///dvddisc/ADV_OBJ/VPLST$$$.XPL")`. FIG.51 soft
-reset rebuilds mapping; it does **not** re-run DISCID or highest-$$$ search.
-Wipe File Cache then load the new XPL’s resources (FIG.51 **body**, A37).
-Opening a lower `$$$` (all 3 selectors have one with clips, `e14` A97) is
-research only.
-`[11]` **VERIFIED** (URI).
-`[1]` **INFERRED** (wipe).
+`Player.playlist.load("file:///dvddisc/ADV_OBJ/VPLST$$$.XPL")`. The Soft Reset
+re-runs Change System Configuration on the new playlist (emptying the File Cache)
+and rebuilds the mapping; it does **not** re-read DISCID or re-run the highest-$$$
+search [23 §4.3.22.3]. Opening a lower `$$$` (all 3 selectors have one with clips,
+`e14` A97) is research only.
+`[23]` **SPEC**; `[11]` **VERIFIED** (URI).
 
 ### A10 FirstPlayTitle
 
 **Q.** Schedule PlaylistApplication on the FBI/logo? May the user skip it?
-**A.** PlaylistApplication starts on Title 1, not FPT (`e12` / patent). FPT
-plays start→end, normal speed, video track 1 + audio track 1. Ignore user
-title-nav (Next / Prev / FF / FR / time-search / `jump`) until FPT ends,
-then Title 1. Next is **not** “skip to Title 1.” Missing File Cache resource
-during FPT: keep playing FPT video, skip that resource (same as 64 MB
-overflow). Do not abort the playlist. `THE_SEARCHERS` FPT
-`titleDuration` 23:00 vs last clip end 23:55; clamp to `titleDuration`.
-`[1]` `[11, 12]` **VERIFIED**
-(scheduling, clamp). Skip key **INFERRED** (fail-closed; not demonstrated).
-Cache-miss **INFERRED**.
+**A.** PlaylistApplication starts on Title 1, not FPT (`e12` / patent / book).
+FPT plays start→end, normal speed, video track 1 + audio track 1, subtitles
+off. Every user operation except STOP and EJECT is refused until it ends; then
+Title 1. No application runs and no event fires during it. An error during the
+FPT may stop playback [23 §4.3.19.6.1]. `THE_SEARCHERS` FPT `titleDuration`
+23:00 vs last clip end 23:55; clamp to `titleDuration`.
+`[23]` **SPEC**; `[1]` `[11, 12]` **VERIFIED** (scheduling, clamp).
 
 ### A11 Title 1
 
 **Q.** `titleNumber` gaps? Default tracks with no `TrackNavigationList`?
 **A.** After FPT, Title 1 (`titleNumber` required, max 999). 718 titles have
-no `TrackNavigationList`. Use the first mapped `Audio` child; if none, track 1
-(fail-closed). `PlaylistApplication@language` is ISO 639-1 two-letter
+no `TrackNavigationList`. The book's algorithm then takes the lowest available
+track ([03](03_playlist.md) §3.17), which is the first mapped `Audio` child on
+every such title. `PlaylistApplication@language` is ISO 639-1 two-letter
 despite the XSD type name. Duplicate `Audio@track` is 0 in corpus; treat a
 future duplicate as authoring error.
-`[11, 12]` **VERIFIED** / **INFERRED** (default track).
+`[23]` **SPEC**; `[11, 12]` **VERIFIED**.
 
 ### B1–B3 Mapping
 
@@ -497,24 +550,27 @@ do not keep an app alive outside that window (A40, mapping wins).
 Soft lets the timeline run; the app may miss its window (14.Q52). Page /
 application clocks are independent of the media clock: a mapped page-clock
 menu keeps ticking when video is paused. Still unmap at exclusive end.
-`autorun` default true. `zOrder` is the graphics stack.
-`[11, 12]` **VERIFIED** (window, counts).
-`[1]` **VERIFIED** / **INFERRED** (pause).
+`autorun` default true. `zOrder` is the graphics stack. Leaving the window with
+an `application_end` listener pauses the title until the listener stops
+cancelling it [23 §8.4.7].
+`[23 §4.3.19.9, §7.2.3]` **SPEC**; `[11, 12]` **VERIFIED** (window, counts).
 
 ### B4 File Cache
 
 **Q.** `@size` vs file? Overflow? `multiplexed="2"` but no ADV_PCK in the EVO?
 **A.** Declared `size` may be larger than the file, must not be smaller
 (Jumpstart; Xbox `0xC667000A`). Corpus: 532 equal, 2428 larger, **1** smaller
-(`PANS_LABYRINTH` `multi_angle.aca`: reject). Cap 64 MB of reserved `@size`.
-If a new resource would exceed it: flush highest `@priority` first; if it
-still does not fit, skip the resource (DLL strings). Always load `src`.
-Positive `multiplexed` is a slot id; OLIVER `LoopMenu.EVO` / `JpnTokuhou.EVO`
+(`PANS_LABYRINTH` `multi_angle.aca`: reject). The author keeps loading + ready +
+used resources within 64 MB minus the Streaming Buffer; space is counted in
+512-byte blocks. When space is needed, discard unused resources, highest
+`@priority` first and application resources before title resources; an overflow
+while loading playlist resources goes to the Stop state [23 §4.3.20]. Always load
+`src`. Numeric `multiplexed` is the ADV_PCK `advanced_identifier`; OLIVER
+`LoopMenu.EVO` / `JpnTokuhou.EVO`
 have **0** `0x80` packs and still ship the ACA file. `STALINGRAD` `logo.EVO`
 concat equals the file (`e16`). `PlaylistApplicationResource@multiplexed="0"`
 (12) is integer 0, not token `false`. Still load `src` (those are ACA URIs).
-`[14]` `[11, 12]` **VERIFIED**.
-Overflow policy **INFERRED**.
+`[23]` **SPEC**; `[14]` `[11, 12]` **VERIFIED**.
 
 ### B5 Manifest
 
@@ -526,9 +582,10 @@ are 1920×1080 on 247/247. Script + Resource as in Manifest.xsd.
 ### B6 ACA
 
 **Q.** Fixed 58-byte directory? Reject `0xff` CRC?
-**A.** Record = `14+(flags&0xFF)+32`. namelen 0 / `>64` / `/` = 0 on 885
-members (`e17`). Magic `HDDVDACA`, VERN `0x0010`, encoding 1, file type 0.
-CRC of raw bytes matches only when flags high byte is not `0xff`; extract
+**A.** Record = `14+namelen+32` (byte 13 is the name length, byte 12 the MIME
+type code). namelen 0 / `>64` / `/` = 0 on 885 members (`e17`). Magic
+`HDDVDACA`, VERN `0x0010`, file type 0, encoding type 1.
+CRC of raw bytes matches only when the MIME code is not `0xff`; extract
 `0xff` members by offset/length anyway. the 283-byte `AACS` sidecar is a per-member
 content-protection descriptor (structure in [04](04_aca.md) §4.2); linear extract does not need it.
 `[11, 12]` **VERIFIED**. Sidecar internals **OPEN**.
@@ -541,55 +598,61 @@ off-screen?
 `absolute` (1462). `<p>` (1390) is a child of a styled `div` (`font` /
 `fontSize` / `lineHeight` / `color`); `p` itself has no style attrs.
 Scale the OpenType em so `unitsPerEm` → `fontSize` px; line box =
-`lineHeight`. `anchor` is the named border-box point on `(x,y)`; even
-`center*` floors toward start/before. `backgroundImage` is a `url()` list;
-`backgroundFrame` 0/1/2 = normal / focused / actioned. `nav*` is an id
-graph. Initial `state:focused="true"` may sit outside the aperture (`1408`
-`BT_dummy` at `y="1100px"`). Clip paint, keep it in the graph. `navIndex`
-used twice, both `none` on a `mode="display"` debug `input`. `accessKey` is
-`VK_*` (OLIVER / Resident Evil) → `actioned`. `input@mode`: `multiline` 106,
-`display` 7; paint `state:value`.
-`[11, 12]` **VERIFIED** (used path). Glyph/`anchor`
-**INFERRED** (fail-closed em scale / FO names).
+`lineHeight`. `anchor` follows the book's formulas (outer edge for start/end,
+content centre for center; [05](05_manifest_hdi.md) §5.9); odd halves floor
+toward start/before. `backgroundImage` is a `url()` list; `backgroundFrame`
+0/1/2 = normal / focused / actioned. `nav*` is an `[app#]id` graph; elements
+without it use the automatic `navIndex` numbering. Initial
+`state:focused="true"` may sit outside the aperture (`1408` `BT_dummy` at
+`y="1100px"`). Clip paint, keep it in the graph. `navIndex` used twice, both
+`none` on a `mode="display"` debug `input`. `accessKey` is `VK_*` (OLIVER /
+Resident Evil) → `actioned`. `input@mode`: `multiline` 106, `display` 7; paint
+`state:value`.
+`[23 §7]` **SPEC**; `[11, 12]` **VERIFIED** (used path).
 
 ### B8 Script
 
 **Q.** UTF-8 JS? What does `jump`’s boolean mean? `elapsedTime` units?
 **A.** Every saved `.js` is UTF-16BE BOM `FE FF` (`e15` N=122), compact
-ES (ECMA-327). `ITitle.jump(time, pause)`: `time` is `HH:MM:SS:FF`;
-`pause` is **always `false`** in saved sources (258/258). Fail-closed:
-`true` → seek then `PLAYSTATE_PAUSE`; `false` → seek and do not force
-pause. A jump that selects another Title starts that title playing (`1408`
-extras/trailers: `jump(..., false)` with no `play()`). If the current title
-was already paused, it stays paused unless script calls
-`Player.playlist.play()` (`1408` chapter buttons after `menubarHide()`).
+ES (ECMA-327). `ITitle.jump(time, bookmark)`: `time` is `HH:MM:SS:FF`;
+`bookmark` is **always `false`** in saved sources (258/258); `true` would save
+a bookmark first. A jump within the title keeps the play state; a jump to another
+Title starts it playing (`1408` extras/trailers: `jump(..., false)` with no
+`play()`). A paused title stays paused unless script calls
+`Player.playlist.play()` (`1408` chapter buttons after `menubarHide()`)
+[23 Annex Z.10.13].
 Do not invent a third overload. `currentTitle.elapsedTime` is an
 `HH:MM:SS:FF` string. `menuLanguage` is two-letter.
 `document.setXPathVariable` binds `$name` for cues.
-`createTimer(time, type, cb)`: `type` is `1` (title clock, 150) or
-`TIMER_APPLICATION` (1); `ITimer.autoReset` is `false` (one-shot) on 142 but
-`true` on 7 (`resumeStoreTimer`, 15 s periodic). Honor as written.
+`createTimer(ticks, type, cb)`: `type` is `1` (150) or `TIMER_APPLICATION`
+(1), the **application** clock; `TIMER_TITLE` = 2 [23 Annex Z.1.1].
+`ITimer.autoReset` is `false` (one-shot) on 142 but `true` on 7
+(`resumeStoreTimer`, 15 s periodic). Honor as written.
 Selectors `switch (Player.menuLanguage)` on `en`/`fr`/`ja`/`de`.
 `[11, 12, 14]`
 **VERIFIED** (types, encoding, 258 `false`, 8-arg layout, timer, 2-letter).
-Pause-at-destination **INFERRED**.
+`[23]` **SPEC** (bookmark, timer type). The earlier pause-at-destination reading
+is refuted.
 
 ### B9 Packs / ADV_PCK
 
 **Q.** Codec from VTI `V_ATR`? ADV_PCK filename on every pack?
-**A.** Codec from `MediaAttributeList` via `@mediaAttr`. `V_ATR` bits 31–30
-are never AVC/VC-1 on 1131 ATRIs (`e13`). Which PES carries a selected track:
+**A.** Codec from the VTI: `EVOB_VM_ATR` bits 31–29 ([06](06_vti.md)); it matches
+the streams, while `MediaAttributeList` is wrong on 125 clip videos
+([03](03_playlist.md) §3.6). The old reading of bits 31–30 was the wrong layout.
+Which PES carries a selected track:
 `@streamNumber` → `stream_id`/`sub_stream_id` per [08](08_evo.md) §8.7 (98219
 TABLE 45/46): video `0xE0`/`0xE2`/`0xFD`+ext`0x55`, audio `0xBD` sub
-`CODEC_BASE|(n-1)` (DD+ `0xC0`), subtitle `0xBD` sub `0x20|(n-1)`. Sibling of `FOO.MAP` is `FOO.EVO`
-(2421/2421). ADV_PCK: `0xBF` / `0x80`; first packet slot+filename+ADDTHD+
-`HDDVDACA`; middle/last skip 4 bytes; concat per slot (`e16`, 2383 packs).
-TABLE 91 “32-byte name on every packet” is wrong for middle/last. NV_PCK:
-parse `sub_stream_id` `0x00` PCI / `0x01` DSI / `0x04` GCI; PCI may be
-omitted. Parse the pack header (stuffing 0–7); do not hard-code byte 20.
-`[11, 12]` **VERIFIED**. ADDTHD length is not a
-constant. Locate `HDDVDACA` after the 32-byte name field (STALINGRAD is
-225 zeros; do not hard-code 259).
+`CODEC_BASE|(n-1)` (DD+ `0xC0`), subtitle `0xBD` sub `0x20|` the `SPST_ATR`
+number. Sibling of `FOO.MAP` is `FOO.EVO` (2421/2421). ADV_PCK: `0xBF` / `0x80`;
+a 12-bit `advanced_identifier`; a 255-byte name only on a first pack (status `01b`)
+or a whole-archive pack (`11b`), then the
+stuffing count; data at 259 (first) or 4 (others) plus stuffing; concat per
+identifier (`e16`, 2383 packs). TABLE 91 "32-byte name on every packet" is wrong.
+NV_PCK: `0x04` GCI, the 983-byte reserved area (PCI ignored), `0x01` DSI; PCI
+may be absent or zeroed. Parse the pack header (stuffing 0–7); do not hard-code
+byte 20.
+`[23 §6.3.5]` **SPEC**; `[11, 12]` **VERIFIED**.
 
 ### B10 Composite
 
@@ -598,32 +661,34 @@ constant. Locate `HDDVDACA` after the 32-byte name field (STALINGRAD is
 **always** `(x, y, scale, cropX, cropY, cropW, cropH, time)` (101/101).
 `scale` is `Player.createVideoScale(1,1)` (71/71, IVideoScale numerator /
 denominator) or `null`. Used windows: SD `(96,166,…,720,480)` ×67 and full
-`(0,0,null,…,1920,1080)` ×30. `time` is `"00:00:00:00"` on every call (apply
-now). Graphics plane is **src-over** that scaled YCbCr: PNG per-pixel alpha ×
+`(0,0,null,…,1920,1080)` ×30. The last argument is the duration of the change
+(`"00:00:00:00"` on every call: apply now; required when paused); `null` scale =
+fit the Aperture height and centre, ignoring the other arguments; `x`, `y` even
+[23 Annex Z.10.19]. Planes top to bottom: cursor, graphics, sub-picture, sub
+video, main video, each **src-over** the ones below: PNG per-pixel alpha ×
 `opacity` (0–1, default 1.0). `object@type="application/x-clearrect"`
-punches alpha 0 in that box (MATRIX/BONNIE cards). `zOrder` among apps;
-cursor above graphics. Unmapped ticks: fill `MainVideoDefaultColor`.
-`[5, 11, 12]` **VERIFIED** (API, aperture).
-`[2, 3]` **INFERRED**
-(fail-closed overlay; not screenshot-measured).
+punches a hole in that box (MATRIX/BONNIE cards). `zOrder` among apps.
+Unmapped ticks: fill `MainVideoDefaultColor`.
+`[23]` **SPEC**; `[5, 11, 12]` **VERIFIED** (API, aperture).
 
 ### B11 Cues / remote
 
 **Q.** Which clock? Full XPath? What does Enter do?
 **A.** Saved `timing@clock`: `page` 66, `application` 9, `title` 3, omitted 6
 (`e17`). Used cue paths: `state:focused`, `state:actioned`, duration,
-timecode, `$vars`, `style:opacity()=1`. Implement that subset. An unknown
-`PathExpressionType` is false. The cue does **not** fire. This is not a general
-XPath 1.0 engine. Enter sets `state:actioned`; Jumpstart + `1408` run a
-short `seq` then `event`. Arrows follow `nav*`. `accessKey` `VK_*` →
-`actioned`. A `Title`'s `ScheduledControlList` ([03](03_playlist.md) §3.18)
-fires `Event@id` to script and freezes the timeline at `PauseAt@titleTime`
-(menu-loop hold) when the Title-Timeline clock crosses that time.
+timecode, `$vars`, `style:opacity()=1`. The book's path grammar is an XPath 1.0
+subset ([14](14_markup.md) §14.8); a path that cannot be evaluated is false and
+the cue does **not** fire. Enter sets `state:actioned` for one tick; Jumpstart +
+`1408` run a short `seq` then `event`. Arrows follow `nav*`, else `navIndex`.
+`accessKey` `VK_*` → `actioned`. A `Title`'s `ScheduledControlList`
+([03](03_playlist.md) §3.18) fires `scheduled_event` with `Event@id` at normal
+speed and freezes the timeline at `PauseAt@titleTime` (menu-loop hold) in forward
+play.
 `include@href` loads `.xmu` / `.xts` / `.xss`. `.xul` is Mozilla
 XUL; ignore it. `set` snaps a style; `animate` spreads a `;` keyframe list
 across `cue@dur` (`linear` default).
-`[5, 11, 12]` **VERIFIED** (used).
-Unknown path **INFERRED** (fail-closed).
+`[23]` **SPEC**; `[5, 11, 12]` **VERIFIED** (used).
+Evaluation-failure rule **INFERRED** (fail-closed).
 
 ### B12 End of title
 

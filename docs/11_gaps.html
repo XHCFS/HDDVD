@@ -278,7 +278,7 @@
 <li class="toctree-l3"><a class="reference internal" href="10_playback.html#designed-menus-title-timeline">Designed menus (title timeline)</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="10_playback.html#insert-category">10.1 Insert → category</a></li>
+<li class="toctree-l2"><a class="reference internal" href="10_playback.html#insert-category-23-4-1-1">10.1 Insert → category [23 §4.1.1]</a></li>
 <li class="toctree-l2"><a class="reference internal" href="10_playback.html#advanced-startup-fig-50">10.2 Advanced startup (FIG.50)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="10_playback.html#play-a-title">10.3 Play a title</a></li>
 <li class="toctree-l2"><a class="reference internal" href="10_playback.html#seek">10.4 Seek</a></li>
@@ -315,9 +315,9 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">11. What a C author still cannot build (gap register)</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#a-fully-specified-a-c-author-can-build-these-now">A. Fully specified (a C author CAN build these now)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#b-blocking-missing-for-a-general-engine-not-for-the-corpus-menus">B. BLOCKING (missing for a <em>general</em> engine; not for the corpus menus)</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#b1-full-hdi-runtime-semantics-event-timing-execution-model">B1. Full HDi runtime semantics (event/timing execution model)</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#b2-hdi-type-library-signatures-abi">B2. HDi type-library signatures (ABI)</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#b3-advanced-subtitle">B3. Advanced Subtitle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#b1-full-hdi-runtime-semantics-event-timing-execution-model-closed-23">B1. Full HDi runtime semantics (event/timing execution model): CLOSED [23]</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#b2-hdi-type-library-signatures-abi-closed-for-1-01-23-annex-z">B2. HDi type-library signatures (ABI): CLOSED for 1.01 [23 Annex Z]</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#b3-advanced-subtitle-closed-23-7-9">B3. Advanced Subtitle: CLOSED [23 §7.9]</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#c-degraded-plays-but-not-pixel-behaviour-exact">C. DEGRADED (plays, but not pixel/behaviour exact)</a></li>
@@ -476,6 +476,9 @@ that can. <code class="docutils literal notranslate"><span class="pre">[20]</spa
 (plays, but a real title looks or behaves wrong), <strong>EXTERNAL</strong> (needs a component
 outside libhddvd: a codec, a key, a drive), <strong>RESEARCH</strong> (closeable with more
 corpus/patent work), <strong>UNCLOSEABLE</strong> (needs firmware reverse-engineering or NDA books).</p>
+<p>The DVD Forum book v1.01 is now public [23]. It closes B1 and B3 below and most of
+§C; what it settles is marked <strong>CLOSED [23]</strong>. The discs were authored to the
+later schema v1.1, so a few disc behaviours newer than 1.01 remain RESEARCH.</p>
 <hr class="docutils" />
 <section id="a-fully-specified-a-c-author-can-build-these-now">
 <h2>A. Fully specified (a C author CAN build these now)<a class="headerlink" href="#a-fully-specified-a-c-author-can-build-these-now" title="Link to this heading"></a></h2>
@@ -490,9 +493,16 @@ title.</p>
 <hr class="docutils" />
 <section id="b-blocking-missing-for-a-general-engine-not-for-the-corpus-menus">
 <h2>B. BLOCKING (missing for a <em>general</em> engine; not for the corpus menus)<a class="headerlink" href="#b-blocking-missing-for-a-general-engine-not-for-the-corpus-menus" title="Link to this heading"></a></h2>
-<section id="b1-full-hdi-runtime-semantics-event-timing-execution-model">
-<h3>B1. Full HDi runtime semantics (event/timing execution model)<a class="headerlink" href="#b1-full-hdi-runtime-semantics-event-timing-execution-model" title="Link to this heading"></a></h3>
-<p>Sheets 05/10 specify the <strong>used subset</strong> the retail corpus exercises: the ~18
+<section id="b1-full-hdi-runtime-semantics-event-timing-execution-model-closed-23">
+<h3>B1. Full HDi runtime semantics (event/timing execution model): CLOSED [23]<a class="headerlink" href="#b1-full-hdi-runtime-semantics-event-timing-execution-model-closed-23" title="Link to this heading"></a></h3>
+<p>The book’s chapter 7 (markup: page lifecycle, tick processing, focus and implicit
+navigation, gestures, the timing algebra, the style property tables), chapter 8
+(script restrictions, system events and their order, event delivery across
+applications, application lifetime states, the work-item scheduler) and Annex Z
+(every API object, member and constant value) are the complete contract. Sheets
+<a class="reference internal" href="05_manifest_hdi.html"><span class="std std-doc">05</span></a>, <a class="reference internal" href="12_hdi_scripting_abi.html"><span class="std std-doc">12</span></a> and <a class="reference internal" href="14_markup.html"><span class="std std-doc">14</span></a>
+summarise them. The text below is the history of the gap.
+Sheets 05/10 specify the <strong>used subset</strong> the retail corpus exercises: the ~18
 script calls with signatures, the used markup attributes, the used cue-path
 allowlist, the page/title/application clock rule. A <em>general</em> HDi engine (one
 that runs an arbitrary conforming disc, not just these 120) needs the complete
@@ -515,9 +525,13 @@ quirks (cue coercion, A102 tick instant), fail-closed in the sheets,
 <strong>DEGRADED-safe</strong>, not blocking.
 <code class="docutils literal notranslate"><span class="pre">[5,</span> <span class="pre">6,</span> <span class="pre">14]</span></code></p>
 </section>
-<section id="b2-hdi-type-library-signatures-abi">
-<h3>B2. HDi type-library signatures (ABI)<a class="headerlink" href="#b2-hdi-type-library-signatures-abi" title="Link to this heading"></a></h3>
-<p><code class="docutils literal notranslate"><span class="pre">iHD_Scripting_API.txt</span></code> is <strong>106 typeinfos / 954 names only</strong>, with no argument types
+<section id="b2-hdi-type-library-signatures-abi-closed-for-1-01-23-annex-z">
+<h3>B2. HDi type-library signatures (ABI): CLOSED for 1.01 [23 Annex Z]<a class="headerlink" href="#b2-hdi-type-library-signatures-abi-closed-for-1-01-23-annex-z" title="Link to this heading"></a></h3>
+<p>Annex Z gives every member’s parameter and return types and every constant’s
+value for the 1.01 API (<a class="reference internal" href="12_hdi_scripting_abi.html"><span class="std std-doc">12</span></a>). The type library is
+still the only source for members added after 1.01 (for example <code class="docutils literal notranslate"><span class="pre">aacs</span></code>,
+<code class="docutils literal notranslate"><span class="pre">regionCode</span></code>, <code class="docutils literal notranslate"><span class="pre">captureWithMAC</span></code>); those stay RESEARCH.
+<code class="docutils literal notranslate"><span class="pre">iHD_Scripting_API.txt</span></code> is <strong>106 typeinfos / 954 names only</strong>, with no argument types
 or return types. Sheets 03/05/10 give <em>inferred</em> signatures for the members discs
 actually call (from call-sites). For any member a future disc calls that the
 corpus does not, the C author has a name but no signature.
@@ -532,13 +546,13 @@ not inferred). Parameter/return <strong>types</strong> still need a Windows type
 on the saved binary. That is a mechanical step; the artifact is in the repo.
 <strong>RESEARCH</strong> (artifact in hand).</p>
 </section>
-<section id="b3-advanced-subtitle">
-<h3>B3. Advanced Subtitle<a class="headerlink" href="#b3-advanced-subtitle" title="Link to this heading"></a></h3>
-<p><code class="docutils literal notranslate"><span class="pre">AdvancedSubtitleSegment</span></code> is 0/120 in this corpus and <code class="docutils literal notranslate"><span class="pre">AdvancedSubtitle</span></code> markup
-(a separate <code class="docutils literal notranslate"><span class="pre">ihd</span></code>-family timed-text) is not transcribed. Discs that caption via
-Advanced Subtitle rather than sub-picture (§8.8) would show no subtitles.
-<strong>Best source:</strong> iHD.xsd family + the Advanced Subtitle schema (not among the available sources).
-<strong>RESEARCH</strong> (no corpus specimen; low priority, 0 discs here use it).</p>
+<section id="b3-advanced-subtitle-closed-23-7-9">
+<h3>B3. Advanced Subtitle: CLOSED [23 §7.9]<a class="headerlink" href="#b3-advanced-subtitle-closed-23-7-9" title="Link to this heading"></a></h3>
+<p>An Advanced Subtitle is ordinary iHD markup (<code class="docutils literal notranslate"><span class="pre">.xas</span></code>) drawn on the sub-picture
+plane, without <code class="docutils literal notranslate"><span class="pre">area</span></code>/<code class="docutils literal notranslate"><span class="pre">button</span></code>/<code class="docutils literal notranslate"><span class="pre">input</span></code>/<code class="docutils literal notranslate"><span class="pre">object</span></code>, focus, inline styles, script or
+<code class="docutils literal notranslate"><span class="pre">event</span></code>, and usually with inline timing (<a class="reference internal" href="14_markup.html"><span class="std std-doc">14</span></a> §14.13a). Its
+playlist side is <code class="docutils literal notranslate"><span class="pre">AdvancedSubtitleSegment</span></code> (<a class="reference internal" href="03_playlist.html"><span class="std std-doc">03</span></a> §3.13). 0/120
+discs use it, so it has no corpus test.</p>
 </section>
 </section>
 <hr class="docutils" />
@@ -560,15 +574,19 @@ Advanced Subtitle rather than sub-picture (§8.8) would show no subtitles.
 <td><p>src-over is correct; exact YCbCr matrix / rounding not measured</p></td>
 <td><p>05 §5.9</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">jump(time,</span> <span class="pre">true)</span></code> pause-at-destination</p></td>
-<td><p>never seen (<code class="docutils literal notranslate"><span class="pre">false</span></code> 258/258); fail-closed rule may differ from firmware</p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">jump(time,</span> <span class="pre">true)</span></code> (was: pause-at-destination)</p></td>
+<td><p>CLOSED [23 Annex Z.10.13]: the boolean is <code class="docutils literal notranslate"><span class="pre">bookmark</span></code>, not pause</p></td>
 <td><p>05 §5.3</p></td>
 </tr>
 <tr class="row-odd"><td><p>File Cache 64 MB overflow order</p></td>
-<td><p>conforming titles never overflow; flush order is Scenarist-derived</p></td>
+<td><p>CLOSED [23 §4.3.20]: priority order, application resources before title resources, Stop on overflow</p></td>
 <td><p>05 §5.7</p></td>
 </tr>
-<tr class="row-even"><td><p>ILVU angle interleave beyond Pan’s 4 maps</p></td>
+<tr class="row-even"><td><p>Playlist <code class="docutils literal notranslate"><span class="pre">Event</span></code> delivered under its own id as event type</p></td>
+<td><p>1.01 delivers <code class="docutils literal notranslate"><span class="pre">scheduled_event</span></code> only; <code class="docutils literal notranslate"><span class="pre">1408_DC</span></code> listens on the id</p></td>
+<td><p>03 §3.18</p></td>
+</tr>
+<tr class="row-odd"><td><p>ILVU angle interleave beyond Pan’s 4 maps</p></td>
 <td><p>linear play unaffected; multi-angle walk INFERRED</p></td>
 <td><p>07</p></td>
 </tr>
@@ -644,9 +662,9 @@ in hand).</p>
 <p>Build order for a C author: <strong>(1)</strong> UDF→playlist→MAP→EVO demux→video/audio via
 §8.7 = linear playback of every corpus disc; <strong>(2)</strong> ACA→Manifest→used iHD→script
 subset→File Cache→graphics plane = PNG-button menus (the §5.0 gate). Both are
-closed. <strong>What blocks a <em>general</em> engine</strong> is B1 (full HDi behaviour) and B2
-(full typelib IDL). Neither blocks the corpus. Both are fail-closed or
-RESEARCH-closeable. No open-source player has ever crossed even the linear bar.</p>
+closed. B1 and B3 are now closed by the book, and B2 for the 1.01 API. What
+remains is the post-1.01 API surface and the exact rendering of features no disc
+uses. No open-source player has ever crossed even the linear bar.</p>
 </section>
 </section>
 

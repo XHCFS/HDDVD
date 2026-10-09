@@ -278,7 +278,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#designed-menus-title-timeline">Designed menus (title timeline)</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#insert-category">10.1 Insert → category</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#insert-category-23-4-1-1">10.1 Insert → category [23 §4.1.1]</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#advanced-startup-fig-50">10.2 Advanced startup (FIG.50)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#play-a-title">10.3 Play a title</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#seek">10.4 Seek</a></li>
@@ -315,9 +315,9 @@
 <li class="toctree-l1"><a class="reference internal" href="11_gaps.html">11. What a C author still cannot build (gap register)</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="11_gaps.html#a-fully-specified-a-c-author-can-build-these-now">A. Fully specified (a C author CAN build these now)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="11_gaps.html#b-blocking-missing-for-a-general-engine-not-for-the-corpus-menus">B. BLOCKING (missing for a <em>general</em> engine; not for the corpus menus)</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="11_gaps.html#b1-full-hdi-runtime-semantics-event-timing-execution-model">B1. Full HDi runtime semantics (event/timing execution model)</a></li>
-<li class="toctree-l3"><a class="reference internal" href="11_gaps.html#b2-hdi-type-library-signatures-abi">B2. HDi type-library signatures (ABI)</a></li>
-<li class="toctree-l3"><a class="reference internal" href="11_gaps.html#b3-advanced-subtitle">B3. Advanced Subtitle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="11_gaps.html#b1-full-hdi-runtime-semantics-event-timing-execution-model-closed-23">B1. Full HDi runtime semantics (event/timing execution model): CLOSED [23]</a></li>
+<li class="toctree-l3"><a class="reference internal" href="11_gaps.html#b2-hdi-type-library-signatures-abi-closed-for-1-01-23-annex-z">B2. HDi type-library signatures (ABI): CLOSED for 1.01 [23 Annex Z]</a></li>
+<li class="toctree-l3"><a class="reference internal" href="11_gaps.html#b3-advanced-subtitle-closed-23-7-9">B3. Advanced Subtitle: CLOSED [23 §7.9]</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="11_gaps.html#c-degraded-plays-but-not-pixel-behaviour-exact">C. DEGRADED (plays, but not pixel/behaviour exact)</a></li>
@@ -462,9 +462,10 @@
   <section id="playback-sequence">
 <h1>10. Playback sequence<a class="headerlink" href="#playback-sequence" title="Link to this heading"></a></h1>
 <p><em>Counts written “N/120”, “N/119”, “on N discs”, “listings”, or as named discs are over the reference corpus of 120 archived retail HD DVD images [11]. <code class="docutils literal notranslate"><span class="pre">eNN</span></code> are the reproducible verification experiments [12].</em></p>
-<p>Patent: US20070091495A1 FIG.7 (category) and FIG.50 (Advanced startup).
-Filenames on disc are <code class="docutils literal notranslate"><span class="pre">VPLST$$$.XPL</span></code>, <code class="docutils literal notranslate"><span class="pre">ADV_OBJ</span></code>, <code class="docutils literal notranslate"><span class="pre">DISCID.DAT</span></code>, not the patent’s
-<code class="docutils literal notranslate"><span class="pre">VPLIST.XML</span></code> / <code class="docutils literal notranslate"><span class="pre">HDDVD_TS</span></code>.</p>
+<p>Book: [23 §4.1.1] (category), [23 §4.3.22] (startup, update, Standard Content
+transition, shutdown), [23 Annex X] (Restricted Mode). Patent: US20070091495A1
+FIG.7 and FIG.50 agree. Filenames on disc are <code class="docutils literal notranslate"><span class="pre">VPLST$$$.XPL</span></code>, <code class="docutils literal notranslate"><span class="pre">ADV_OBJ</span></code>,
+<code class="docutils literal notranslate"><span class="pre">DISCID.DAT</span></code>, as in the book, not the patent’s <code class="docutils literal notranslate"><span class="pre">VPLIST.XML</span></code> / <code class="docutils literal notranslate"><span class="pre">HDDVD_TS</span></code>.</p>
 <p>§5.0 is <strong>met</strong> (<a class="reference internal" href="05_manifest_hdi.html"><span class="std std-doc">05</span></a>). This sheet is insert, then designed
 menus, then title timeline. It does not authorize shipping a demuxer without HDi.
 Every box in §10.0 has a gap question and an evidence answer in §10.8.</p>
@@ -474,48 +475,49 @@ Every box in §10.0 has a gap question and an evidence answer in §10.8.</p>
 logic keyed to the §10.8 evidence Q&amp;A; these diagrams are the readable overview.</p>
 <section id="boot-insert-to-first-title">
 <h3>Boot: insert to first title<a class="headerlink" href="#boot-insert-to-first-title" title="Link to this heading"></a></h3>
-<img src="_images/mermaid-8582f110a763f5c730a3a96d2541fd0f64dbdbbb.png" alt="flowchart TD
+<img src="_images/mermaid-c8c238d58a1848ba8ca150ad70db2d337abb3e6c.png" alt="flowchart TD
   I[&quot;Insert / open image&quot;] --&gt; U[&quot;Mount UDF 2.50, 2048-byte LB&lt;br/&gt;AVDP sector 256, metadata partition&quot;]
-  U --&gt; CAT{&quot;ADV_OBJ/ has VPLST*.XPL?&quot;}
+  U --&gt; CAT{&quot;ADV_OBJ/DISCID.DAT exists?&quot;}
   CAT --&gt;|no| C1{&quot;HVDVD_TS/HV000I01.IFO?&quot;}
   C1 --&gt;|yes| REF[&quot;Category 1 Standard Content&lt;br/&gt;out of scope: refuse&quot;]
   C1 --&gt;|no| FAIL[&quot;fail disc&quot;]
   CAT --&gt;|yes| AACS[&quot;Probe ANY!/ then AAC!/&lt;br/&gt;(absent = clear disc, legal)&quot;]
-  AACS --&gt; DID[&quot;Read ADV_OBJ/DISCID.DAT&lt;br/&gt;128 B, magic HDDVD-V_CONF&quot;]
-  DID --&gt; SF{&quot;SEARCH_FLG == 0?&quot;}
-  SF --&gt;|yes| PS[&quot;Search file:///required/{contentId}/VPLST$$$.XPL&lt;br/&gt;on required storage (empty = success-as-absent)&quot;]
+  AACS --&gt; RM[&quot;Restricted Mode unless the content&lt;br/&gt;verifies as signed (then FullTrust)&quot;]
+  RM --&gt; DID[&quot;Read ADV_OBJ/DISCID.DAT&lt;br/&gt;128 B, magic HDDVD-V_CONF&quot;]
+  DID --&gt; SF{&quot;SEARCH_FLG == 0&lt;br/&gt;and not Restricted?&quot;}
+  SF --&gt;|yes| PS[&quot;Search /HD_DVD/ProviderID/ContentID/VPLST$$$.XPL&lt;br/&gt;on every connected storage device (empty = success-as-absent)&quot;]
   SF --&gt;|no| DISC1
-  PS --&gt; DISC1[&quot;List ADV_OBJ/VPLST$$$.XPL (ignore .BAK)&lt;br/&gt;choose highest $$$&quot;]
-  DISC1 --&gt;|none| FAIL
-  DISC1 --&gt; PARSE[&quot;Parse Playlist.xsd v1.0&lt;br/&gt;Configuration: Aperture, StreamingBuffer&lt;br/&gt;wipe File Cache&quot;]
+  PS --&gt; DISC1[&quot;List ADV_OBJ/VPLST$$$.XPL (ignore .BAK)&lt;br/&gt;choose highest $$$ over all found&quot;]
+  DISC1 --&gt;|&quot;none (then APLST, then fail)&quot;| FAIL
+  DISC1 --&gt; PARSE[&quot;Parse playlist&lt;br/&gt;Change System Configuration: Aperture, StreamingBuffer&lt;br/&gt;empty File Cache and Streaming Buffer&quot;]
   PARSE --&gt; HASCLIP{&quot;Playlist has&lt;br/&gt;PrimaryAudioVideoClip?&quot;}
-  HASCLIP --&gt;|&quot;no (3/119 selectors)&quot;| SEL[&quot;Run HDi; script calls&lt;br/&gt;Player.playlist.load(full VPLST URI)&lt;br/&gt;FIG.51 soft reset: wipe cache, rebuild map&lt;br/&gt;do NOT re-read DISCID / re-search&quot;]
+  HASCLIP --&gt;|&quot;no (3/119 selectors)&quot;| SEL[&quot;Run HDi; script calls&lt;br/&gt;Player.playlist.load(full VPLST URI)&lt;br/&gt;Soft Reset: Change System Configuration, rebuild map&lt;br/&gt;do NOT re-read DISCID / re-search&quot;]
   SEL --&gt; PARSE
   HASCLIP --&gt;|yes| FPT{&quot;FirstPlayTitle present?&quot;}
-  FPT --&gt;|yes| PLAYFPT[&quot;Play FPT start-&gt;end, normal speed&lt;br/&gt;video track 1 + audio track 1&lt;br/&gt;no PlaylistApplication; ignore user title-nav&quot;]
+  FPT --&gt;|yes| PLAYFPT[&quot;Play FPT start-&gt;end, normal speed&lt;br/&gt;video track 1 + audio track 1, no subtitles&lt;br/&gt;no applications or events; only STOP / EJECT&quot;]
   FPT --&gt;|no| T1
   PLAYFPT --&gt; T1[&quot;Enter Title 1 -&gt; title runtime&quot;]" class="mermaid"/>
 </section>
 <section id="title-runtime-video-pipeline-hdi-engine-in-parallel">
 <h3>Title runtime: video pipeline + HDi engine in parallel<a class="headerlink" href="#title-runtime-video-pipeline-hdi-engine-in-parallel" title="Link to this heading"></a></h3>
-<img src="_images/mermaid-de2cb5e4ae2b2de3d9ff9dec644cf21dd85555f9.png" alt="flowchart TD
+<img src="_images/mermaid-e680f592e32fffc0e521a094dd327ad5eac6e2d0.png" alt="flowchart TD
   T[&quot;Title N current&quot;] --&gt; MAPAPPS[&quot;Map objects on Title Timeline&lt;br/&gt;PlaylistApplication (whole playlist, not FPT)&lt;br/&gt;ApplicationSegment where begin &amp;le; T &amp;lt; end&quot;]
   MAPAPPS --&gt; subGV
   MAPAPPS --&gt; subHDI
 
   subgraph subGV[&quot;Video / audio pipeline&quot;]
     V1[&quot;clip src = .MAP -&gt; sibling .EVO&quot;] --&gt; V2[&quot;Demux 2048-byte MPEG-2 PS packs&quot;]
-    V2 --&gt; V3[&quot;Route streams by &#64;streamNumber (8.7)&lt;br/&gt;video 0xE0/0xE2/0xFD+ext0x55&lt;br/&gt;audio 0xBD sub CODEC_BASE|(n-1)&lt;br/&gt;subtitle 0xBD sub 0x20|(n-1)&quot;]
-    V3 --&gt; V4[&quot;NV_PCK first pack: PCI/DSI/GCI&lt;br/&gt;ADV_PCK 0x80 -&gt; File Cache, not decoder&quot;]
+    V2 --&gt; V3[&quot;Route streams by &#64;streamNumber (8.7)&lt;br/&gt;video 0xE0/0xE2/0xFD+ext0x55&lt;br/&gt;audio 0xBD sub CODEC_BASE|(n-1)&lt;br/&gt;subtitle 0xBD sub 0x20|SPST_ATR number&quot;]
+    V3 --&gt; V4[&quot;NV_PCK first pack: GCI/DSI (PCI ignored)&lt;br/&gt;ADV_PCK 0x80 -&gt; File Cache, not decoder&quot;]
     V4 --&gt; V5[&quot;Decode (codec lib) + sub-picture RLC (8.8)&quot;]
     V5 --&gt; V6[&quot;Scale main video into Aperture&lt;br/&gt;changeLayout(x,y,scale|null,crop*,time)&quot;]
   end
 
   subgraph subHDI[&quot;HDi engine&quot;]
-    H1[&quot;File Cache: open every resource src&lt;br/&gt;reject if listing &gt; &#64;size; flush at 64 MB&quot;] --&gt; H2[&quot;ACA extract (04): 14+(flags&amp;0xFF)+32&quot;]
+    H1[&quot;File Cache: open every resource src&lt;br/&gt;reject if listing &gt; &#64;size; discard by priority;&lt;br/&gt;overflow -&gt; Stop&quot;] --&gt; H2[&quot;ACA extract (04): record 14+namelen+32&quot;]
     H2 --&gt; H3[&quot;Manifest: Region / Script / Markup / Resource&quot;]
     H3 --&gt; H4[&quot;iHD markup: absolute boxes, PNG frames,&lt;br/&gt;nav* graph, p-in-div text, focus&quot;]
-    H4 --&gt; H5[&quot;Compact-ES script (UTF-16BE)&lt;br/&gt;load / jump(time,pause) / timers / events&quot;]
+    H4 --&gt; H5[&quot;Compact-ES script (UTF-16BE)&lt;br/&gt;load / jump(time,bookmark) / timers / events&quot;]
   end
 
   V6 --&gt; COMP[&quot;Composite graphics plane src-over scaled YCbCr&lt;br/&gt;PNG alpha x opacity; x-clearrect punches alpha 0&lt;br/&gt;zOrder stacks apps; cursor on top&quot;]
@@ -523,10 +525,10 @@ logic keyed to the §10.8 evidence Q&amp;A; these diagrams are the readable over
 
   COMP --&gt; LOOP[&quot;Runtime loop each tick&quot;]
   LOOP --&gt; CUE[&quot;Clocks (page/app/title) + cue begin/end&lt;br/&gt;mapping window wins; unknown path = no fire&quot;]
-  LOOP --&gt; SCL[&quot;ScheduledControlList (3.9a)&lt;br/&gt;PauseAt&#64;titleTime freezes timeline&lt;br/&gt;Event&#64;titleTime -&gt; addEventListener&quot;]
+  LOOP --&gt; SCL[&quot;ScheduledControlList (03 §3.18)&lt;br/&gt;PauseAt&#64;titleTime freezes timeline&lt;br/&gt;Event&#64;titleTime -&gt; scheduled_event&quot;]
   LOOP --&gt; RC[&quot;Remote: nav* move focus; Enter/accessKey&lt;br/&gt;-&gt; state:actioned -&gt; event -&gt; script&quot;]
   RC --&gt; ACT{&quot;Script action?&quot;}
-  ACT --&gt;|&quot;jump(time,false)&quot;| SEEK[&quot;Seek (see seek diagram); play unless paused&quot;]
+  ACT --&gt;|&quot;jump(time,false)&quot;| SEEK[&quot;Seek (see seek diagram); same title keeps play state,&lt;br/&gt;another title plays&quot;]
   ACT --&gt;|&quot;playlist.load(URI)&quot;| RELOAD[&quot;Soft reset to new VPLST&quot;]
   ACT --&gt;|none| LOOP
   SEEK --&gt; LOOP
@@ -564,36 +566,41 @@ menu” on a title. Boxes are numbered for §10.8.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>[A1] treat medium as 2048-byte UDF 2.50 (AVDP sector 256, metadata partition)
         |
         v
-[A2] ADV_OBJ/ contains VPLST*.XPL (that directory, not subdirs)?
+[A2] ADV_OBJ/DISCID.DAT exists (Category 2 or 3)?
         | no --&gt; [A2b] HVDVD_TS/HV000I01.IFO ? --yes--&gt; Category 1, refuse
         | yes                              \--no--&gt; fail disc
         v
 [A3] probe ANY!/ then AAC!/ (missing AACS dir is legal)
         |
         v
+[A3b] Restricted Mode, or FullTrust if the content is verified as signed
+        |
+        v
 [A4] read ADV_OBJ/DISCID.DAT (128 B, HDDVD-V_CONF)
         |
         v
-[A5] SEARCH_FLG == 0 ?
-        | yes --&gt; [A5b] search file:///required/{contentId}/VPLST$$$.XPL
-        |         (empty P-storage is success-as-absent, not a fail)
+[A5] SEARCH_FLG == 0 and not Restricted Mode?
+        | yes --&gt; [A5b] search /HD_DVD/&lt;ProviderID&gt;/&lt;ContentID&gt;/VPLST$$$.XPL
+        |         on every connected device (script view:
+        |         file:///required/{contentId}/; empty is success-as-absent)
         +&lt;--------+
         v
 [A6] list ADV_OBJ/VPLST$$$.XPL only (ignore .BAK); open highest $$$
-        | none --&gt; fail disc
+        | none --&gt; same search for APLST###.XPL; none --&gt; fail disc
         v
-[A7] parse Playlist.xsd v1.0 (Forum namespace)
+[A7] parse the playlist (Forum namespace; read against the v1.1 schema)
         |
         v
-[A8] apply Configuration (Aperture, StreamingBuffer); wipe File Cache
+[A8] Change System Configuration: Aperture, StreamingBuffer;
+     empty File Cache and Streaming Buffer
         |
         v
 [A9] this XPL has PrimaryAudioVideoClip?
         | no --&gt; [A9b] HDi IPlaylist.load(full file:/// URI)
-        |        FIG.51: wipe cache, rebuild mapping; do not re-read DISCID
-        |        do not re-run highest-$$$ search; loop to [A7] on the new XPL
+        |        Soft Reset: back to [A8] on the new XPL (cache emptied, mapping
+        |        rebuilt); do not re-read DISCID or re-run the highest-$$$ search
         v yes
-[A10] FirstPlayTitle if present (no PlaylistApplication; tracks 1+1; then Title 1)
+[A10] FirstPlayTitle if present (no applications; tracks 1+1; only STOP/EJECT; then Title 1)
         |
         v
 [A11] Title 1: enter §10.0 menu graph + §10.3 video
@@ -613,20 +620,21 @@ menu” on a title. Boxes are numbered for §10.8.</p>
 [B4] for each resource src:
         always open the URI (ACA or loose file)
         reject if listing size &gt; @size
-        if multiplexed = N: concat ADV_PCK slot N from the playing EVO
+        if multiplexed = N: concat ADV_PCK identifier N from the playing EVO
             (packs may be absent; still keep the URI copy)
-        flush File Cache if reserved @size sum would exceed 64 MB
+        discard unused resources by priority when space is needed;
+        an overflow while loading playlist resources goes to Stop
         |
         v
 [B5] Manifest.xsd: Region / Resource / Script / Markup
         |
-        +-- [B6] ACA extract (04): 14+(flags&amp;0xFF)+32; slice offset/length
+        +-- [B6] ACA extract (04): record 14+namelen+32; slice offset/length
         +-- [B7] iHD used path (05 §5.9): absolute boxes, PNG frames, nav*, p-in-div, src-over
-        +-- [B8] UTF-16BE compact ES (05 §5.3): load / jump(time, pause) / elapsedTime / …
+        +-- [B8] UTF-16BE compact ES (05 §5.3): load / jump(time, bookmark) / elapsedTime / …
         |
         v
 [B9]  MAP → sibling EVO → NV_PCK then AV packs
-      codec = MediaAttributeList, not VTI V_ATR
+      codec = VTI EVOB_VM_ATR (MediaAttributeList is wrong on 125 clips)
       route ADV_PCK 0x80 into [B4]
         |
         v
@@ -638,7 +646,8 @@ menu” on a title. Boxes are numbered for §10.8.</p>
 [B11] clocks + cue begin/end (mapping window wins over cues)
       remote: nav* / focused / actioned
       script may jump(time, false), load another XPL, setXPathVariable
-      (pause=false: seek without forcing pause; unknown cue path does not fire)
+      (bookmark=false: no bookmark; a jump keeps the play state within a title;
+       a cue path that cannot be evaluated does not fire)
         |
         v
 [B12] exclusive titleTimeEnd unmaps the segment
@@ -649,53 +658,83 @@ menu” on a title. Boxes are numbered for §10.8.</p>
 AACS decrypt is [C1] on a licensed drive only; Archive.org packs are clear.</p>
 </section>
 </section>
-<section id="insert-category">
-<h2>10.1 Insert → category<a class="headerlink" href="#insert-category" title="Link to this heading"></a></h2>
+<section id="insert-category-23-4-1-1">
+<h2>10.1 Insert → category [23 §4.1.1]<a class="headerlink" href="#insert-category-23-4-1-1" title="Link to this heading"></a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>mount UDF 2.50 volume
-if ADV_OBJ has VPLST*.XPL (directory itself, not subdirs):
+if ADV_OBJ/DISCID.DAT exists:
     Category 2 (or 3) → 10.2
-else if HVDVD_TS/HV000I01.IFO exists:
+else if HVDVD_TS/HV000I01.IFO has VMG_ID "HVDVD-VMG100"
+        and VMG_CAT says no Advanced VTS:
     Category 1 → Standard Content (out of scope)
 else:
-    failure
+    player-dependent (here: failure)
 </pre></div>
 </div>
+<p>Every Advanced disc in the corpus has both <code class="docutils literal notranslate"><span class="pre">DISCID.DAT</span></code> and a <code class="docutils literal notranslate"><span class="pre">VPLST</span></code>, so the
+older test (<code class="docutils literal notranslate"><span class="pre">ADV_OBJ/</span></code> holds a <code class="docutils literal notranslate"><span class="pre">VPLST*.XPL</span></code>) gives the same answer here.</p>
 </section>
 <section id="advanced-startup-fig-50">
 <h2>10.2 Advanced startup (FIG.50)<a class="headerlink" href="#advanced-startup-fig-50" title="Link to this heading"></a></h2>
-<ol class="arabic simple">
+<p>The book’s sequence [23 §4.3.22.2, Annex X.4.2]:</p>
+<ol class="arabic simple" start="0">
+<li><p>Start in Restricted Mode; switch to FullTrust only if the content verifies as
+signed by a DVD Forum-approved signer. The mode holds for the whole disc.</p></li>
 <li><p>Read <code class="docutils literal notranslate"><span class="pre">ADV_OBJ/DISCID.DAT</span></code> → <code class="docutils literal notranslate"><span class="pre">PROVIDER_ID</span></code>, <code class="docutils literal notranslate"><span class="pre">CONTENT_ID</span></code>, <code class="docutils literal notranslate"><span class="pre">SEARCH_FLG</span></code>.</p></li>
-<li><p>Display mode: video → VPLST search; audio-only → APLST (unused here).</p></li>
+<li><p>Display Mode system parameter: a display is connected → VPLST search;
+otherwise → APLST search (unused here).</p></li>
 <li><p>VPLST search:</p>
 <ul class="simple">
-<li><p>if <code class="docutils literal notranslate"><span class="pre">SEARCH_FLG</span> <span class="pre">==</span> <span class="pre">0</span></code>: also search persistent storage for <code class="docutils literal notranslate"><span class="pre">VPLST000.XPL</span></code>…<code class="docutils literal notranslate"><span class="pre">999</span></code></p></li>
+<li><p>if <code class="docutils literal notranslate"><span class="pre">SEARCH_FLG</span> <span class="pre">==</span> <span class="pre">0</span></code> (and not Restricted Mode): search every connected
+persistent storage device for <code class="docutils literal notranslate"><span class="pre">/HD_DVD/&lt;ProviderID&gt;/&lt;ContentID&gt;/VPLST$$$.XPL</span></code></p></li>
 <li><p>if <code class="docutils literal notranslate"><span class="pre">SEARCH_FLG</span> <span class="pre">==</span> <span class="pre">1</span></code>: skip persistent storage</p></li>
 <li><p>search <code class="docutils literal notranslate"><span class="pre">ADV_OBJ/</span></code> (not subdirectories)</p></li>
-<li><p><strong>open the highest <code class="docutils literal notranslate"><span class="pre">$$$</span></code></strong></p></li>
+<li><p><strong>open the highest <code class="docutils literal notranslate"><span class="pre">$$$</span></code></strong> among everything found. A playlist from
+persistent storage must be signed like the disc, or the player halts.</p></li>
+<li><p>none: run the same steps for <code class="docutils literal notranslate"><span class="pre">APLST###.XPL</span></code>; none either → failure (what
+follows is up to the player).</p></li>
 </ul>
 </li>
-<li><p>Apply <code class="docutils literal notranslate"><span class="pre">Playlist/Configuration</span></code> (StreamingBuffer, Aperture). Wipe File Cache.</p></li>
-<li><p>Build Title Timeline from <code class="docutils literal notranslate"><span class="pre">Title</span></code> / <code class="docutils literal notranslate"><span class="pre">FirstPlayTitle</span></code> / <code class="docutils literal notranslate"><span class="pre">Chapter</span></code> / clip mappings.</p></li>
-<li><p>Load into File Cache: Manifest, markup, script, fonts, images, TMAPs needed
-before start. Init Primary Video Player with <code class="docutils literal notranslate"><span class="pre">HVA00001.VTI</span></code> + clip TMAP(s).</p></li>
-<li><p>Start Title Timeline.</p></li>
-<li><p>None found → failure.</p></li>
+<li><p>Change System Configuration: resize the Streaming Buffer to
+<code class="docutils literal notranslate"><span class="pre">Configuration/StreamingBuffer</span></code> (in Restricted Mode it must be 0), set the
+Aperture and outer-frame colour, and empty the File Cache and Streaming
+Buffer.</p></li>
+<li><p>Build the Title Timeline mapping and chapters of the first title.</p></li>
+<li><p>Load into the File Cache everything the first title needs before it starts
+(Manifest, markup, script, fonts, images, secondary TMAPs / S-EVOBs). Init the
+Primary Video Player with <code class="docutils literal notranslate"><span class="pre">HVA00001.VTI</span></code> + clip TMAP(s), and the Secondary
+Video Player with its TMAP.</p></li>
+<li><p>Start the Title Timeline.</p></li>
 </ol>
 <p>116/119 discs: the highest playlist already contains <code class="docutils literal notranslate"><span class="pre">PrimaryAudioVideoClip</span></code>.
 3/119: highest is a selector app (<code class="docutils literal notranslate"><span class="pre">MATRIX_REVOLUTIONS</span></code> 099, <code class="docutils literal notranslate"><span class="pre">BLADE_RUNNER</span></code> 002,
 <code class="docutils literal notranslate"><span class="pre">TRAINING_DAY</span></code> 003); spec boot requires HDi
 <code class="docutils literal notranslate"><span class="pre">Player.playlist.load(&quot;file:///dvddisc/ADV_OBJ/VPLST$$$.XPL&quot;)</span></code>.
 Each has a lower-numbered XPL with <code class="docutils literal notranslate"><span class="pre">PrimaryAudioVideoClip</span></code> (<code class="docutils literal notranslate"><span class="pre">e14</span></code> A97).
-FIG.51 (<code class="docutils literal notranslate"><span class="pre">pages/page-051.png</span></code>): after that load, <strong>soft reset to S63</strong> (re-init
-object mapping + title timeline). It does <strong>not</strong> re-run S61 (highest-number
-search) or S62 (config). Sheet <a class="reference internal" href="05_manifest_hdi.html"><span class="std std-doc">05</span></a> §5.7: the <strong>body</strong> of
-FIG.51 wipes File Cache then loads the new XPL (drawing vs body: body wins).</p>
+After that load the player soft-resets [23 §4.3.22.3]: it runs <strong>Change System
+Configuration</strong> on the new playlist (Streaming Buffer, Aperture, empty File Cache
+and Streaming Buffer), restores the new playlist and its Assignment Information
+files into the File Cache, then rebuilds the title mapping. It does <strong>not</strong> re-read
+DISCID or re-run the highest-number search. The patent’s FIG.51 drawing (S63, no
+S62) disagrees with its own body text, which wipes the File Cache; the book
+settles it.</p>
 <p><code class="docutils literal notranslate"><span class="pre">FirstPlayTitle</span></code> is the first clip <strong>inside</strong> the chosen playlist, not the boot file.
-If present, play it to the end of its timeline (normal speed, tracks 1+1), then
-<strong>Title 1</strong>. PlaylistApplication starts on Title 1, not on FirstPlayTitle.</p>
+If present, play it to the end of its timeline (normal speed, tracks 1+1,
+subtitles off, only STOP and EJECT accepted), then <strong>Title 1</strong>.
+PlaylistApplication starts on Title 1, not on FirstPlayTitle (<a class="reference internal" href="03_playlist.html"><span class="std std-doc">03</span></a>
+§3.9).</p>
 <p><code class="docutils literal notranslate"><span class="pre">SEARCH_FLG=0</span></code> with no persistent-storage VPLST: search comes up empty, then
 the disc <code class="docutils literal notranslate"><span class="pre">ADV_OBJ</span></code> list is used (highest <code class="docutils literal notranslate"><span class="pre">$$$</span></code> among files that exist).
-URI: <code class="docutils literal notranslate"><span class="pre">file:///required/{contentId}/VPLST$$$.XPL</span></code> (<a class="reference internal" href="05_manifest_hdi.html"><span class="std std-doc">05</span></a> §5.8).</p>
+Script URI: <code class="docutils literal notranslate"><span class="pre">file:///required/{contentId}/VPLST$$$.XPL</span></code>; device path
+<code class="docutils literal notranslate"><span class="pre">/HD_DVD/&lt;ProviderID&gt;/&lt;ContentID&gt;/</span></code> (<a class="reference internal" href="05_manifest_hdi.html"><span class="std std-doc">05</span></a> §5.8).</p>
+<p><strong>Category 3</strong> [23 §4.3.22.4]: play starts in Advanced Content.
+<code class="docutils literal notranslate"><span class="pre">StandardContentPlayer.play()</span></code> suspends the title timeline (Suspend state) and
+plays a Standard VTS with its navigation commands, with remote keys going to it
+directly. The <code class="docutils literal notranslate"><span class="pre">CallAdvancedContentPlayer</span></code> navigation command (or stop / eject,
+which also fires <code class="docutils literal notranslate"><span class="pre">stop_request</span></code>) returns to the script just after the <code class="docutils literal notranslate"><span class="pre">play()</span></code>
+call, in the Playback or Pause state. 0/120.</p>
+<p><strong>Shutdown</strong> [23 §4.3.22.5]: STOP or EJECT stops the timeline and the video, then
+fires <code class="docutils literal notranslate"><span class="pre">stop_request</span></code>; an application may save resume data to persistent storage;
+the player may time out after at least 2 s.</p>
 </section>
 <section id="play-a-title">
 <h2>10.3 Play a title<a class="headerlink" href="#play-a-title" title="Link to this heading"></a></h2>
@@ -708,17 +747,28 @@ load File Cache resources for PlaylistApplication (not on FPT) and
 for each PrimaryAudioVideoClip in timeline order:
     open src MAP                          # file:///dvddisc/HVDVD_TS/FOO.MAP
     open sibling EVO                      # FOO.EVO (confirm via EVOBI)
-    codec = MediaAttributeList[Video@mediaAttr]
+    codec = VTI EVOB_VM_ATR bits 31-29 (06 §6.2)
     demux 2048-byte packs from EVO
     select streams by @streamNumber -&gt; PES stream_id/sub_stream_id (08 §8.7):
-        video 0xE0/0xE2/0xFD+0x55 ; audio 0xBD sub CODEC_BASE|(n-1) ; subtitle 0xBD 0x20|(n-1)
+        video 0xE0/0xE2/0xFD+0x55 ; audio 0xBD sub CODEC_BASE|(n-1) ;
+        subtitle 0xBD 0x20|SPST_ATR[n-1] number
     route ADV_PCK 0x80 to File Cache
 composite graphics plane over scaled main video
-seamless="true" → decoder connection flag only
+seamless="true" → join without a break when the book's conditions hold (03 §3.10)
 onEnd → jump to that Title id
 </pre></div>
 </div>
-<p>Track selection: <code class="docutils literal notranslate"><span class="pre">Audio&#64;track</span></code> / <code class="docutils literal notranslate"><span class="pre">Subtitle&#64;track</span></code> + <code class="docutils literal notranslate"><span class="pre">TrackNavigationList</span></code> langcodes.</p>
+<p>Track selection: the book’s algorithm over the selected track numbers and
+languages (<a class="reference internal" href="03_playlist.html"><span class="std std-doc">03</span></a> §3.17).</p>
+<p><strong>Errors during a title</strong> [23 §4.3.19.5.3, §9.6]: a missing resource or secondary
+video set fires <code class="docutils literal notranslate"><span class="pre">resource_not_found</span></code>; a network wait past <code class="docutils literal notranslate"><span class="pre">NetworkTimeout</span></code> fires
+<code class="docutils literal notranslate"><span class="pre">network_timeout</span></code>. While the event is handled the timeline holds unless the
+resource is soft-synchronised. If no application cancels the event, the player
+goes to the Stop state. If one cancels it, playback continues without that
+resource (or at the title it jumped to). With no application running there is no
+event, only Stop. A player may also stop for File Cache overflow, script memory
+or pixel-buffer exhaustion, an invalid playlist / manifest / markup / script, a
+missing disc file named by a URI, or an uncaught script exception.</p>
 </section>
 <section id="seek">
 <h2>10.4 Seek<a class="headerlink" href="#seek" title="Link to this heading"></a></h2>
@@ -781,32 +831,32 @@ A licensed player shall not skip MKB / cert / CHT boot.</p>
 <tr class="row-even"><td><p>XPL titles/clips/chapters/tracks; <code class="docutils literal notranslate"><span class="pre">FirstPlayTitle</span></code> restrictions</p></td>
 <td><p>Firmware vs FIG.50 (no RE)</p></td>
 </tr>
-<tr class="row-odd"><td><p>Used iHD + <code class="docutils literal notranslate"><span class="pre">jump(time,</span> <span class="pre">pause)</span></code> + used cue paths + <code class="docutils literal notranslate"><span class="pre">changeLayout</span></code> 8-tuple (<a class="reference internal" href="05_manifest_hdi.html"><span class="std std-doc">05</span></a> §5.3 / §5.9)</p></td>
-<td><p>Unused XSD attrs (<code class="docutils literal notranslate"><span class="pre">writingMode</span></code>, padding, MNG, <code class="docutils literal notranslate"><span class="pre">pointer</span></code>)</p></td>
+<tr class="row-odd"><td><p>iHD markup, styles and timing from the book (<a class="reference internal" href="14_markup.html"><span class="std std-doc">14</span></a>); <code class="docutils literal notranslate"><span class="pre">jump(time,</span> <span class="pre">bookmark)</span></code> + used cue paths + <code class="docutils literal notranslate"><span class="pre">changeLayout</span></code> 8-tuple (<a class="reference internal" href="05_manifest_hdi.html"><span class="std std-doc">05</span></a> §5.3 / §5.9)</p></td>
+<td><p>Screenshot-exact rendering of attributes no disc uses</p></td>
 </tr>
 <tr class="row-even"><td><p>MAP <code class="docutils literal notranslate"><span class="pre">EVOBU_ENT</span></code> → EVO offset; matches DSI</p></td>
 <td><p>AACS sequence-key (<code class="docutils literal notranslate"><span class="pre">SKF</span></code> 0/120)</p></td>
 </tr>
-<tr class="row-odd"><td><p>ILVU_ENT at <code class="docutils literal notranslate"><span class="pre">ILVUI_SA</span></code>; <code class="docutils literal notranslate"><span class="pre">SZ</span></code> = EVOBU count; <code class="docutils literal notranslate"><span class="pre">ADR</span></code> = pack index; u16&#64;372 (<code class="docutils literal notranslate"><span class="pre">e13</span></code>)</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">ILVU_ENT_Ns</span></code> in SRP (always 0); official name of u16&#64;372</p></td>
+<tr class="row-odd"><td><p>ILVU_ENT at <code class="docutils literal notranslate"><span class="pre">ILVUI_SA</span></code>; <code class="docutils literal notranslate"><span class="pre">SZ</span></code> = EVOBU count; <code class="docutils literal notranslate"><span class="pre">ADR</span></code> = pack index; <code class="docutils literal notranslate"><span class="pre">ILVU_ENT_Ns</span></code> u32 &#64;370 (<code class="docutils literal notranslate"><span class="pre">e13</span></code>, [23])</p></td>
+<td><p></p></td>
 </tr>
-<tr class="row-even"><td><p>VTI MAT, ATRI <code class="docutils literal notranslate"><span class="pre">V_ATR</span></code>/<code class="docutils literal notranslate"><span class="pre">AST_Ns</span></code>/<code class="docutils literal notranslate"><span class="pre">SP_Ns</span></code>, EVOBI pack count + serial</p></td>
-<td><p>ATRI palettes; EVOBI+282 units</p></td>
+<tr class="row-even"><td><p>VTI MAT, ATR (<code class="docutils literal notranslate"><span class="pre">VM_ATR</span></code>, <code class="docutils literal notranslate"><span class="pre">AMST</span></code>, <code class="docutils literal notranslate"><span class="pre">ASST</span></code>, <code class="docutils literal notranslate"><span class="pre">SPST</span></code>, palettes), EVOBI fields (<a class="reference internal" href="06_vti.html"><span class="std std-doc">06</span></a>, [23])</p></td>
+<td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p>NV_PCK GCI+PCI+DSI GI; PCI may be omitted; CPI at pack <code class="docutils literal notranslate"><span class="pre">0x3C</span></code></p></td>
+<tr class="row-odd"><td><p>NV_PCK GCI + reserved area + DSI; PCI ignored; CPI at pack <code class="docutils literal notranslate"><span class="pre">0x3C</span></code></p></td>
 <td><p>Pack stuffing moving a hard-coded byte 20 / Dtk&#64;84</p></td>
 </tr>
-<tr class="row-even"><td><p>ADV_PCK <code class="docutils literal notranslate"><span class="pre">0x80</span></code> concat; locate <code class="docutils literal notranslate"><span class="pre">HDDVDACA</span></code> after the name field (<code class="docutils literal notranslate"><span class="pre">e16</span></code>)</p></td>
+<tr class="row-even"><td><p>ADV_PCK <code class="docutils literal notranslate"><span class="pre">0x80</span></code> concat; data at 259 / 4 from the book’s header (<code class="docutils literal notranslate"><span class="pre">e16</span></code>)</p></td>
 <td><p>Screenshot-calibrated OpenType hinting (em scale is specified)</p></td>
 </tr>
-<tr class="row-odd"><td><p>ACA 32-byte header + <code class="docutils literal notranslate"><span class="pre">14+(flags&amp;0xFF)+32</span></code> (<code class="docutils literal notranslate"><span class="pre">e17</span></code> 97/885)</p></td>
+<tr class="row-odd"><td><p>ACA 32-byte header + <code class="docutils literal notranslate"><span class="pre">14+namelen+32</span></code> (<code class="docutils literal notranslate"><span class="pre">e17</span></code> 97/885)</p></td>
 <td><p>ACA AACS-sidecar 283-byte internals; <code class="docutils literal notranslate"><span class="pre">.CER</span></code> bodies</p></td>
 </tr>
 <tr class="row-even"><td><p>AACS dirs, VTKF Table 3-8, VTUF 144 B / <code class="docutils literal notranslate"><span class="pre">URS_NUM=0</span></code> (217/217 listed)</p></td>
 <td><p>Volume ID from ISO; CHT bodies; VTUF <code class="docutils literal notranslate"><span class="pre">URS_NUM&gt;0</span></code></p></td>
 </tr>
-<tr class="row-odd"><td><p>Category 3 / <code class="docutils literal notranslate"><span class="pre">HVSO</span></code> / <code class="docutils literal notranslate"><span class="pre">APLST</span></code></p></td>
-<td><p><strong>0/120</strong>; uncloseable as a format</p></td>
+<tr class="row-odd"><td><p>Category 3 / <code class="docutils literal notranslate"><span class="pre">HVS0&#64;&#64;&#64;&#64;.MAP</span></code> / <code class="docutils literal notranslate"><span class="pre">APLST</span></code> / Restricted Mode ([23 §3.3.2, §4.3.22, Annex X])</p></td>
+<td><p><strong>0/120</strong> on disc; signature verification needs DVD Forum signing keys</p></td>
 </tr>
 </tbody>
 </table>
@@ -857,13 +907,13 @@ not hard-code 288 in the walker. AVDP at sector 256 is what
 <section id="a2-category">
 <h3>A2 Category<a class="headerlink" href="#a2-category" title="Link to this heading"></a></h3>
 <p><strong>Q.</strong> How do you know Category 2 vs 1 vs 3? Is there an MMC “HD DVD?” probe?
-<strong>A.</strong> <code class="docutils literal notranslate"><span class="pre">ADV_OBJ/</span></code> contains <code class="docutils literal notranslate"><span class="pre">VPLST*.XPL</span></code> in that directory → Category 2 (or 3)
-→ this spec. Else <code class="docutils literal notranslate"><span class="pre">HVDVD_TS/HV000I01.IFO</span></code> magic <code class="docutils literal notranslate"><span class="pre">HVDVD-VMG100</span></code> → Category 1,
-refuse. Both playlist and Standard VMG (Category 3) is <strong>0/120</strong>; if a disc
-ever has both, still start Advanced. The official drive medium probe is MMC <code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">CONFIGURATION</span></code> returning current profile
+<strong>A.</strong> <code class="docutils literal notranslate"><span class="pre">ADV_OBJ/DISCID.DAT</span></code> exists → Category 2 (or 3) → this spec
+[23 §4.1.1]. Else <code class="docutils literal notranslate"><span class="pre">HVDVD_TS/HV000I01.IFO</span></code> magic <code class="docutils literal notranslate"><span class="pre">HVDVD-VMG100</span></code> → Category 1,
+refuse. On the corpus the <code class="docutils literal notranslate"><span class="pre">VPLST</span></code> test gives the same split. Category 3 is
+<strong>0/120</strong>; it always starts in Advanced Content. The official drive medium probe is MMC <code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">CONFIGURATION</span></code> returning current profile
 <code class="docutils literal notranslate"><span class="pre">0x0050</span></code> (HD DVD-ROM); <code class="docutils literal notranslate"><span class="pre">0x0051</span></code>/<code class="docutils literal notranslate"><span class="pre">0x0052</span></code> are HD DVD-R/RAM [21]. It is drive-level and
 cannot be answered from an ISO. The directory test above is the ISO-level equivalent.
-<code class="docutils literal notranslate"><span class="pre">[1]</span></code> <code class="docutils literal notranslate"><span class="pre">[11,</span> <span class="pre">12]</span></code> <strong>VERIFIED</strong>
+<code class="docutils literal notranslate"><span class="pre">[23]</span></code> <strong>SPEC</strong>; <code class="docutils literal notranslate"><span class="pre">[1]</span></code> <code class="docutils literal notranslate"><span class="pre">[11,</span> <span class="pre">12]</span></code> <strong>VERIFIED</strong>
 (directory test). MMC probe <strong>UNCLOSEABLE</strong> from an ISO.</p>
 </section>
 <section id="a3-aacs-directory">
@@ -886,22 +936,22 @@ Disc ID &#64;12 is <strong>not</strong> AACS Volume ID (<code class="docutils li
 <section id="a5-a5b-persistent-storage-search">
 <h3>A5 / A5b Persistent-storage search<a class="headerlink" href="#a5-a5b-persistent-storage-search" title="Link to this heading"></a></h3>
 <p><strong>Q.</strong> What directory bytes do you search when <code class="docutils literal notranslate"><span class="pre">PROVIDER_ID</span></code> is binary?
-<strong>A.</strong> Scripts never put <code class="docutils literal notranslate"><span class="pre">PROVIDER_ID</span></code> in a URI. Search
-<code class="docutils literal notranslate"><span class="pre">file:///required/{contentId}/VPLST$$$.XPL</span></code> then disc <code class="docutils literal notranslate"><span class="pre">ADV_OBJ</span></code>. <code class="docutils literal notranslate"><span class="pre">contentId</span></code>
-is DISCID <code class="docutils literal notranslate"><span class="pre">CONTENT_ID</span></code> as lowercase UUID <code class="docutils literal notranslate"><span class="pre">8-4-4-4-12</span></code> (<strong>INFERRED</strong>
-punctuation). All-<code class="docutils literal notranslate"><span class="pre">FF</span></code> content IDs (usually <code class="docutils literal notranslate"><span class="pre">SEARCH_FLG=1</span></code>) skip P-storage.
-Empty P-storage still boots the disc playlist (106 discs). <code class="docutils literal notranslate"><span class="pre">file:///fixed/</span></code>
-and <code class="docutils literal notranslate"><span class="pre">file:///removable/</span></code> are 0/122 saved JS. Provider-folder nesting is the
-host UI, not the path.
-<code class="docutils literal notranslate"><span class="pre">[11,</span> <span class="pre">12]</span></code> <strong>VERIFIED</strong> (script).
-<code class="docutils literal notranslate"><span class="pre">[14]</span></code> <code class="docutils literal notranslate"><span class="pre">[1]</span></code> <strong>INFERRED</strong> (0 on-device dumps).</p>
+<strong>A.</strong> Scripts never put <code class="docutils literal notranslate"><span class="pre">PROVIDER_ID</span></code> in a URI. The player searches
+<code class="docutils literal notranslate"><span class="pre">/HD_DVD/&lt;ProviderID&gt;/&lt;ContentID&gt;/VPLST$$$.XPL</span></code> on every connected device (the
+script sees it as <code class="docutils literal notranslate"><span class="pre">file:///required/{contentId}/</span></code>), then disc <code class="docutils literal notranslate"><span class="pre">ADV_OBJ</span></code>. The IDs
+are written as upper-case GUID strings [23 §10.2]; on an AACS disc the provider
+folder is the keyed <code class="docutils literal notranslate"><span class="pre">PROVIDER_DIR</span></code> (<a class="reference internal" href="09_aacs.html"><span class="std std-doc">09</span></a> §9.4). All-<code class="docutils literal notranslate"><span class="pre">FF</span></code> content IDs
+(14 discs, 9 of them with <code class="docutils literal notranslate"><span class="pre">SEARCH_FLG=1</span></code>) skip P-storage. Empty P-storage still boots the disc
+playlist (106 discs). <code class="docutils literal notranslate"><span class="pre">file:///fixed/</span></code> and <code class="docutils literal notranslate"><span class="pre">file:///removable/</span></code> are 0/122 saved
+JS and not in the book.
+<code class="docutils literal notranslate"><span class="pre">[23]</span></code> <strong>SPEC</strong>; <code class="docutils literal notranslate"><span class="pre">[11,</span> <span class="pre">12]</span></code> <strong>VERIFIED</strong> (script); 0 on-device dumps.</p>
 </section>
 <section id="a6-highest-vplst">
 <h3>A6 Highest VPLST<a class="headerlink" href="#a6-highest-vplst" title="Link to this heading"></a></h3>
 <p><strong>Q.</strong> Boot <code class="docutils literal notranslate"><span class="pre">VPLST000</span></code>? Search <code class="docutils literal notranslate"><span class="pre">.BAK</span></code>? Audio <code class="docutils literal notranslate"><span class="pre">APLST</span></code>?
 <strong>A.</strong> Highest <code class="docutils literal notranslate"><span class="pre">$$$</span></code> among <code class="docutils literal notranslate"><span class="pre">ADV_OBJ/VPLST$$$.XPL</span></code> only. <code class="docutils literal notranslate"><span class="pre">.BAK</span></code> is never the
-boot file (<code class="docutils literal notranslate"><span class="pre">e07</span></code>). <code class="docutils literal notranslate"><span class="pre">APLST</span></code> is 0 files. Ignore unless you are an audio-only
-player.
+boot file (<code class="docutils literal notranslate"><span class="pre">e07</span></code>). <code class="docutils literal notranslate"><span class="pre">APLST</span></code> is 0 files; the book uses it when no display is
+connected and when no <code class="docutils literal notranslate"><span class="pre">VPLST</span></code> exists.
 <code class="docutils literal notranslate"><span class="pre">[1]</span></code> <code class="docutils literal notranslate"><span class="pre">[11,</span> <span class="pre">12]</span></code> <strong>VERIFIED</strong>.</p>
 </section>
 <section id="a7-parse-playlist">
@@ -915,47 +965,45 @@ player.
 <section id="a8-configuration-wipe">
 <h3>A8 Configuration / wipe<a class="headerlink" href="#a8-configuration-wipe" title="Link to this heading"></a></h3>
 <p><strong>Q.</strong> Keep File Cache across boot? Aperture other than 1920×1080?
-<strong>A.</strong> Wipe File Cache at FIG.50 Change System Configuration. Aperture is
-<code class="docutils literal notranslate"><span class="pre">1920x1080</span></code> on 247/247 (XSD also allows <code class="docutils literal notranslate"><span class="pre">1280x720</span></code>). <code class="docutils literal notranslate"><span class="pre">StreamingBuffer&#64;size</span></code>
-is pack units; <code class="docutils literal notranslate"><span class="pre">&quot;0&quot;</span></code> on 246/247. Ignore for disc-only. <code class="docutils literal notranslate"><span class="pre">MainVideoDefaultColor</span></code>
-is 6 hex YCbCr for the aperture outside scaled video.
-<code class="docutils literal notranslate"><span class="pre">[11,</span> <span class="pre">12]</span></code> <strong>VERIFIED</strong>. Wipe <strong>INFERRED</strong> (FIG.50; no player dump).</p>
+<strong>A.</strong> Empty the File Cache and the Streaming Buffer at Change System
+Configuration [23 §4.3.22.2]. Aperture is <code class="docutils literal notranslate"><span class="pre">1920x1080</span></code> on 247/247 (also allowed:
+<code class="docutils literal notranslate"><span class="pre">1280x720</span></code>). <code class="docutils literal notranslate"><span class="pre">StreamingBuffer&#64;size</span></code> is in kB of 1024 bytes (<code class="docutils literal notranslate"><span class="pre">1024</span></code> = 1 MB);
+<code class="docutils literal notranslate"><span class="pre">&quot;0&quot;</span></code> on 246/247. <code class="docutils literal notranslate"><span class="pre">MainVideoDefaultColor</span></code> is 6 hex YCrCb for the aperture
+outside scaled video.
+<code class="docutils literal notranslate"><span class="pre">[23]</span></code> <strong>SPEC</strong>; <code class="docutils literal notranslate"><span class="pre">[11,</span> <span class="pre">12]</span></code> <strong>VERIFIED</strong> (values).</p>
 </section>
 <section id="a9-a9b-selector">
 <h3>A9 / A9b Selector<a class="headerlink" href="#a9-a9b-selector" title="Link to this heading"></a></h3>
 <p><strong>Q.</strong> Highest XPL has no <code class="docutils literal notranslate"><span class="pre">PrimaryAudioVideoClip</span></code>. Open a lower <code class="docutils literal notranslate"><span class="pre">$$$</span></code>?
 <strong>A.</strong> No for this product. Run HDi so script can
-<code class="docutils literal notranslate"><span class="pre">Player.playlist.load(&quot;file:///dvddisc/ADV_OBJ/VPLST$$$.XPL&quot;)</span></code>. FIG.51 soft
-reset rebuilds mapping; it does <strong>not</strong> re-run DISCID or highest-$$$ search.
-Wipe File Cache then load the new XPL’s resources (FIG.51 <strong>body</strong>, A37).
-Opening a lower <code class="docutils literal notranslate"><span class="pre">$$$</span></code> (all 3 selectors have one with clips, <code class="docutils literal notranslate"><span class="pre">e14</span></code> A97) is
-research only.
-<code class="docutils literal notranslate"><span class="pre">[11]</span></code> <strong>VERIFIED</strong> (URI).
-<code class="docutils literal notranslate"><span class="pre">[1]</span></code> <strong>INFERRED</strong> (wipe).</p>
+<code class="docutils literal notranslate"><span class="pre">Player.playlist.load(&quot;file:///dvddisc/ADV_OBJ/VPLST$$$.XPL&quot;)</span></code>. The Soft Reset
+re-runs Change System Configuration on the new playlist (emptying the File Cache)
+and rebuilds the mapping; it does <strong>not</strong> re-read DISCID or re-run the highest-$$$
+search [23 §4.3.22.3]. Opening a lower <code class="docutils literal notranslate"><span class="pre">$$$</span></code> (all 3 selectors have one with clips,
+<code class="docutils literal notranslate"><span class="pre">e14</span></code> A97) is research only.
+<code class="docutils literal notranslate"><span class="pre">[23]</span></code> <strong>SPEC</strong>; <code class="docutils literal notranslate"><span class="pre">[11]</span></code> <strong>VERIFIED</strong> (URI).</p>
 </section>
 <section id="a10-firstplaytitle">
 <h3>A10 FirstPlayTitle<a class="headerlink" href="#a10-firstplaytitle" title="Link to this heading"></a></h3>
 <p><strong>Q.</strong> Schedule PlaylistApplication on the FBI/logo? May the user skip it?
-<strong>A.</strong> PlaylistApplication starts on Title 1, not FPT (<code class="docutils literal notranslate"><span class="pre">e12</span></code> / patent). FPT
-plays start→end, normal speed, video track 1 + audio track 1. Ignore user
-title-nav (Next / Prev / FF / FR / time-search / <code class="docutils literal notranslate"><span class="pre">jump</span></code>) until FPT ends,
-then Title 1. Next is <strong>not</strong> “skip to Title 1.” Missing File Cache resource
-during FPT: keep playing FPT video, skip that resource (same as 64 MB
-overflow). Do not abort the playlist. <code class="docutils literal notranslate"><span class="pre">THE_SEARCHERS</span></code> FPT
-<code class="docutils literal notranslate"><span class="pre">titleDuration</span></code> 23:00 vs last clip end 23:55; clamp to <code class="docutils literal notranslate"><span class="pre">titleDuration</span></code>.
-<code class="docutils literal notranslate"><span class="pre">[1]</span></code> <code class="docutils literal notranslate"><span class="pre">[11,</span> <span class="pre">12]</span></code> <strong>VERIFIED</strong>
-(scheduling, clamp). Skip key <strong>INFERRED</strong> (fail-closed; not demonstrated).
-Cache-miss <strong>INFERRED</strong>.</p>
+<strong>A.</strong> PlaylistApplication starts on Title 1, not FPT (<code class="docutils literal notranslate"><span class="pre">e12</span></code> / patent / book).
+FPT plays start→end, normal speed, video track 1 + audio track 1, subtitles
+off. Every user operation except STOP and EJECT is refused until it ends; then
+Title 1. No application runs and no event fires during it. An error during the
+FPT may stop playback [23 §4.3.19.6.1]. <code class="docutils literal notranslate"><span class="pre">THE_SEARCHERS</span></code> FPT <code class="docutils literal notranslate"><span class="pre">titleDuration</span></code>
+23:00 vs last clip end 23:55; clamp to <code class="docutils literal notranslate"><span class="pre">titleDuration</span></code>.
+<code class="docutils literal notranslate"><span class="pre">[23]</span></code> <strong>SPEC</strong>; <code class="docutils literal notranslate"><span class="pre">[1]</span></code> <code class="docutils literal notranslate"><span class="pre">[11,</span> <span class="pre">12]</span></code> <strong>VERIFIED</strong> (scheduling, clamp).</p>
 </section>
 <section id="a11-title-1">
 <h3>A11 Title 1<a class="headerlink" href="#a11-title-1" title="Link to this heading"></a></h3>
 <p><strong>Q.</strong> <code class="docutils literal notranslate"><span class="pre">titleNumber</span></code> gaps? Default tracks with no <code class="docutils literal notranslate"><span class="pre">TrackNavigationList</span></code>?
 <strong>A.</strong> After FPT, Title 1 (<code class="docutils literal notranslate"><span class="pre">titleNumber</span></code> required, max 999). 718 titles have
-no <code class="docutils literal notranslate"><span class="pre">TrackNavigationList</span></code>. Use the first mapped <code class="docutils literal notranslate"><span class="pre">Audio</span></code> child; if none, track 1
-(fail-closed). <code class="docutils literal notranslate"><span class="pre">PlaylistApplication&#64;language</span></code> is ISO 639-1 two-letter
+no <code class="docutils literal notranslate"><span class="pre">TrackNavigationList</span></code>. The book’s algorithm then takes the lowest available
+track (<a class="reference internal" href="03_playlist.html"><span class="std std-doc">03</span></a> §3.17), which is the first mapped <code class="docutils literal notranslate"><span class="pre">Audio</span></code> child on
+every such title. <code class="docutils literal notranslate"><span class="pre">PlaylistApplication&#64;language</span></code> is ISO 639-1 two-letter
 despite the XSD type name. Duplicate <code class="docutils literal notranslate"><span class="pre">Audio&#64;track</span></code> is 0 in corpus; treat a
 future duplicate as authoring error.
-<code class="docutils literal notranslate"><span class="pre">[11,</span> <span class="pre">12]</span></code> <strong>VERIFIED</strong> / <strong>INFERRED</strong> (default track).</p>
+<code class="docutils literal notranslate"><span class="pre">[23]</span></code> <strong>SPEC</strong>; <code class="docutils literal notranslate"><span class="pre">[11,</span> <span class="pre">12]</span></code> <strong>VERIFIED</strong>.</p>
 </section>
 <section id="b1b3-mapping">
 <h3>B1–B3 Mapping<a class="headerlink" href="#b1b3-mapping" title="Link to this heading"></a></h3>
@@ -967,24 +1015,27 @@ do not keep an app alive outside that window (A40, mapping wins).
 Soft lets the timeline run; the app may miss its window (14.Q52). Page /
 application clocks are independent of the media clock: a mapped page-clock
 menu keeps ticking when video is paused. Still unmap at exclusive end.
-<code class="docutils literal notranslate"><span class="pre">autorun</span></code> default true. <code class="docutils literal notranslate"><span class="pre">zOrder</span></code> is the graphics stack.
-<code class="docutils literal notranslate"><span class="pre">[11,</span> <span class="pre">12]</span></code> <strong>VERIFIED</strong> (window, counts).
-<code class="docutils literal notranslate"><span class="pre">[1]</span></code> <strong>VERIFIED</strong> / <strong>INFERRED</strong> (pause).</p>
+<code class="docutils literal notranslate"><span class="pre">autorun</span></code> default true. <code class="docutils literal notranslate"><span class="pre">zOrder</span></code> is the graphics stack. Leaving the window with
+an <code class="docutils literal notranslate"><span class="pre">application_end</span></code> listener pauses the title until the listener stops
+cancelling it [23 §8.4.7].
+<code class="docutils literal notranslate"><span class="pre">[23</span> <span class="pre">§4.3.19.9,</span> <span class="pre">§7.2.3]</span></code> <strong>SPEC</strong>; <code class="docutils literal notranslate"><span class="pre">[11,</span> <span class="pre">12]</span></code> <strong>VERIFIED</strong> (window, counts).</p>
 </section>
 <section id="b4-file-cache">
 <h3>B4 File Cache<a class="headerlink" href="#b4-file-cache" title="Link to this heading"></a></h3>
 <p><strong>Q.</strong> <code class="docutils literal notranslate"><span class="pre">&#64;size</span></code> vs file? Overflow? <code class="docutils literal notranslate"><span class="pre">multiplexed=&quot;2&quot;</span></code> but no ADV_PCK in the EVO?
 <strong>A.</strong> Declared <code class="docutils literal notranslate"><span class="pre">size</span></code> may be larger than the file, must not be smaller
 (Jumpstart; Xbox <code class="docutils literal notranslate"><span class="pre">0xC667000A</span></code>). Corpus: 532 equal, 2428 larger, <strong>1</strong> smaller
-(<code class="docutils literal notranslate"><span class="pre">PANS_LABYRINTH</span></code> <code class="docutils literal notranslate"><span class="pre">multi_angle.aca</span></code>: reject). Cap 64 MB of reserved <code class="docutils literal notranslate"><span class="pre">&#64;size</span></code>.
-If a new resource would exceed it: flush highest <code class="docutils literal notranslate"><span class="pre">&#64;priority</span></code> first; if it
-still does not fit, skip the resource (DLL strings). Always load <code class="docutils literal notranslate"><span class="pre">src</span></code>.
-Positive <code class="docutils literal notranslate"><span class="pre">multiplexed</span></code> is a slot id; OLIVER <code class="docutils literal notranslate"><span class="pre">LoopMenu.EVO</span></code> / <code class="docutils literal notranslate"><span class="pre">JpnTokuhou.EVO</span></code>
+(<code class="docutils literal notranslate"><span class="pre">PANS_LABYRINTH</span></code> <code class="docutils literal notranslate"><span class="pre">multi_angle.aca</span></code>: reject). The author keeps loading + ready +
+used resources within 64 MB minus the Streaming Buffer; space is counted in
+512-byte blocks. When space is needed, discard unused resources, highest
+<code class="docutils literal notranslate"><span class="pre">&#64;priority</span></code> first and application resources before title resources; an overflow
+while loading playlist resources goes to the Stop state [23 §4.3.20]. Always load
+<code class="docutils literal notranslate"><span class="pre">src</span></code>. Numeric <code class="docutils literal notranslate"><span class="pre">multiplexed</span></code> is the ADV_PCK <code class="docutils literal notranslate"><span class="pre">advanced_identifier</span></code>; OLIVER
+<code class="docutils literal notranslate"><span class="pre">LoopMenu.EVO</span></code> / <code class="docutils literal notranslate"><span class="pre">JpnTokuhou.EVO</span></code>
 have <strong>0</strong> <code class="docutils literal notranslate"><span class="pre">0x80</span></code> packs and still ship the ACA file. <code class="docutils literal notranslate"><span class="pre">STALINGRAD</span></code> <code class="docutils literal notranslate"><span class="pre">logo.EVO</span></code>
 concat equals the file (<code class="docutils literal notranslate"><span class="pre">e16</span></code>). <code class="docutils literal notranslate"><span class="pre">PlaylistApplicationResource&#64;multiplexed=&quot;0&quot;</span></code>
 (12) is integer 0, not token <code class="docutils literal notranslate"><span class="pre">false</span></code>. Still load <code class="docutils literal notranslate"><span class="pre">src</span></code> (those are ACA URIs).
-<code class="docutils literal notranslate"><span class="pre">[14]</span></code> <code class="docutils literal notranslate"><span class="pre">[11,</span> <span class="pre">12]</span></code> <strong>VERIFIED</strong>.
-Overflow policy <strong>INFERRED</strong>.</p>
+<code class="docutils literal notranslate"><span class="pre">[23]</span></code> <strong>SPEC</strong>; <code class="docutils literal notranslate"><span class="pre">[14]</span></code> <code class="docutils literal notranslate"><span class="pre">[11,</span> <span class="pre">12]</span></code> <strong>VERIFIED</strong>.</p>
 </section>
 <section id="b5-manifest">
 <h3>B5 Manifest<a class="headerlink" href="#b5-manifest" title="Link to this heading"></a></h3>
@@ -996,9 +1047,10 @@ are 1920×1080 on 247/247. Script + Resource as in Manifest.xsd.
 <section id="b6-aca">
 <h3>B6 ACA<a class="headerlink" href="#b6-aca" title="Link to this heading"></a></h3>
 <p><strong>Q.</strong> Fixed 58-byte directory? Reject <code class="docutils literal notranslate"><span class="pre">0xff</span></code> CRC?
-<strong>A.</strong> Record = <code class="docutils literal notranslate"><span class="pre">14+(flags&amp;0xFF)+32</span></code>. namelen 0 / <code class="docutils literal notranslate"><span class="pre">&gt;64</span></code> / <code class="docutils literal notranslate"><span class="pre">/</span></code> = 0 on 885
-members (<code class="docutils literal notranslate"><span class="pre">e17</span></code>). Magic <code class="docutils literal notranslate"><span class="pre">HDDVDACA</span></code>, VERN <code class="docutils literal notranslate"><span class="pre">0x0010</span></code>, encoding 1, file type 0.
-CRC of raw bytes matches only when flags high byte is not <code class="docutils literal notranslate"><span class="pre">0xff</span></code>; extract
+<strong>A.</strong> Record = <code class="docutils literal notranslate"><span class="pre">14+namelen+32</span></code> (byte 13 is the name length, byte 12 the MIME
+type code). namelen 0 / <code class="docutils literal notranslate"><span class="pre">&gt;64</span></code> / <code class="docutils literal notranslate"><span class="pre">/</span></code> = 0 on 885 members (<code class="docutils literal notranslate"><span class="pre">e17</span></code>). Magic
+<code class="docutils literal notranslate"><span class="pre">HDDVDACA</span></code>, VERN <code class="docutils literal notranslate"><span class="pre">0x0010</span></code>, file type 0, encoding type 1.
+CRC of raw bytes matches only when the MIME code is not <code class="docutils literal notranslate"><span class="pre">0xff</span></code>; extract
 <code class="docutils literal notranslate"><span class="pre">0xff</span></code> members by offset/length anyway. the 283-byte <code class="docutils literal notranslate"><span class="pre">AACS</span></code> sidecar is a per-member
 content-protection descriptor (structure in <a class="reference internal" href="04_aca.html"><span class="std std-doc">04</span></a> §4.2); linear extract does not need it.
 <code class="docutils literal notranslate"><span class="pre">[11,</span> <span class="pre">12]</span></code> <strong>VERIFIED</strong>. Sidecar internals <strong>OPEN</strong>.</p>
@@ -1011,55 +1063,61 @@ off-screen?
 <code class="docutils literal notranslate"><span class="pre">absolute</span></code> (1462). <code class="docutils literal notranslate"><span class="pre">&lt;p&gt;</span></code> (1390) is a child of a styled <code class="docutils literal notranslate"><span class="pre">div</span></code> (<code class="docutils literal notranslate"><span class="pre">font</span></code> /
 <code class="docutils literal notranslate"><span class="pre">fontSize</span></code> / <code class="docutils literal notranslate"><span class="pre">lineHeight</span></code> / <code class="docutils literal notranslate"><span class="pre">color</span></code>); <code class="docutils literal notranslate"><span class="pre">p</span></code> itself has no style attrs.
 Scale the OpenType em so <code class="docutils literal notranslate"><span class="pre">unitsPerEm</span></code> → <code class="docutils literal notranslate"><span class="pre">fontSize</span></code> px; line box =
-<code class="docutils literal notranslate"><span class="pre">lineHeight</span></code>. <code class="docutils literal notranslate"><span class="pre">anchor</span></code> is the named border-box point on <code class="docutils literal notranslate"><span class="pre">(x,y)</span></code>; even
-<code class="docutils literal notranslate"><span class="pre">center*</span></code> floors toward start/before. <code class="docutils literal notranslate"><span class="pre">backgroundImage</span></code> is a <code class="docutils literal notranslate"><span class="pre">url()</span></code> list;
-<code class="docutils literal notranslate"><span class="pre">backgroundFrame</span></code> 0/1/2 = normal / focused / actioned. <code class="docutils literal notranslate"><span class="pre">nav*</span></code> is an id
-graph. Initial <code class="docutils literal notranslate"><span class="pre">state:focused=&quot;true&quot;</span></code> may sit outside the aperture (<code class="docutils literal notranslate"><span class="pre">1408</span></code>
-<code class="docutils literal notranslate"><span class="pre">BT_dummy</span></code> at <code class="docutils literal notranslate"><span class="pre">y=&quot;1100px&quot;</span></code>). Clip paint, keep it in the graph. <code class="docutils literal notranslate"><span class="pre">navIndex</span></code>
-used twice, both <code class="docutils literal notranslate"><span class="pre">none</span></code> on a <code class="docutils literal notranslate"><span class="pre">mode=&quot;display&quot;</span></code> debug <code class="docutils literal notranslate"><span class="pre">input</span></code>. <code class="docutils literal notranslate"><span class="pre">accessKey</span></code> is
-<code class="docutils literal notranslate"><span class="pre">VK_*</span></code> (OLIVER / Resident Evil) → <code class="docutils literal notranslate"><span class="pre">actioned</span></code>. <code class="docutils literal notranslate"><span class="pre">input&#64;mode</span></code>: <code class="docutils literal notranslate"><span class="pre">multiline</span></code> 106,
-<code class="docutils literal notranslate"><span class="pre">display</span></code> 7; paint <code class="docutils literal notranslate"><span class="pre">state:value</span></code>.
-<code class="docutils literal notranslate"><span class="pre">[11,</span> <span class="pre">12]</span></code> <strong>VERIFIED</strong> (used path). Glyph/<code class="docutils literal notranslate"><span class="pre">anchor</span></code>
-<strong>INFERRED</strong> (fail-closed em scale / FO names).</p>
+<code class="docutils literal notranslate"><span class="pre">lineHeight</span></code>. <code class="docutils literal notranslate"><span class="pre">anchor</span></code> follows the book’s formulas (outer edge for start/end,
+content centre for center; <a class="reference internal" href="05_manifest_hdi.html"><span class="std std-doc">05</span></a> §5.9); odd halves floor
+toward start/before. <code class="docutils literal notranslate"><span class="pre">backgroundImage</span></code> is a <code class="docutils literal notranslate"><span class="pre">url()</span></code> list; <code class="docutils literal notranslate"><span class="pre">backgroundFrame</span></code>
+0/1/2 = normal / focused / actioned. <code class="docutils literal notranslate"><span class="pre">nav*</span></code> is an <code class="docutils literal notranslate"><span class="pre">[app#]id</span></code> graph; elements
+without it use the automatic <code class="docutils literal notranslate"><span class="pre">navIndex</span></code> numbering. Initial
+<code class="docutils literal notranslate"><span class="pre">state:focused=&quot;true&quot;</span></code> may sit outside the aperture (<code class="docutils literal notranslate"><span class="pre">1408</span></code> <code class="docutils literal notranslate"><span class="pre">BT_dummy</span></code> at
+<code class="docutils literal notranslate"><span class="pre">y=&quot;1100px&quot;</span></code>). Clip paint, keep it in the graph. <code class="docutils literal notranslate"><span class="pre">navIndex</span></code> used twice, both
+<code class="docutils literal notranslate"><span class="pre">none</span></code> on a <code class="docutils literal notranslate"><span class="pre">mode=&quot;display&quot;</span></code> debug <code class="docutils literal notranslate"><span class="pre">input</span></code>. <code class="docutils literal notranslate"><span class="pre">accessKey</span></code> is <code class="docutils literal notranslate"><span class="pre">VK_*</span></code> (OLIVER /
+Resident Evil) → <code class="docutils literal notranslate"><span class="pre">actioned</span></code>. <code class="docutils literal notranslate"><span class="pre">input&#64;mode</span></code>: <code class="docutils literal notranslate"><span class="pre">multiline</span></code> 106, <code class="docutils literal notranslate"><span class="pre">display</span></code> 7; paint
+<code class="docutils literal notranslate"><span class="pre">state:value</span></code>.
+<code class="docutils literal notranslate"><span class="pre">[23</span> <span class="pre">§7]</span></code> <strong>SPEC</strong>; <code class="docutils literal notranslate"><span class="pre">[11,</span> <span class="pre">12]</span></code> <strong>VERIFIED</strong> (used path).</p>
 </section>
 <section id="b8-script">
 <h3>B8 Script<a class="headerlink" href="#b8-script" title="Link to this heading"></a></h3>
 <p><strong>Q.</strong> UTF-8 JS? What does <code class="docutils literal notranslate"><span class="pre">jump</span></code>’s boolean mean? <code class="docutils literal notranslate"><span class="pre">elapsedTime</span></code> units?
 <strong>A.</strong> Every saved <code class="docutils literal notranslate"><span class="pre">.js</span></code> is UTF-16BE BOM <code class="docutils literal notranslate"><span class="pre">FE</span> <span class="pre">FF</span></code> (<code class="docutils literal notranslate"><span class="pre">e15</span></code> N=122), compact
-ES (ECMA-327). <code class="docutils literal notranslate"><span class="pre">ITitle.jump(time,</span> <span class="pre">pause)</span></code>: <code class="docutils literal notranslate"><span class="pre">time</span></code> is <code class="docutils literal notranslate"><span class="pre">HH:MM:SS:FF</span></code>;
-<code class="docutils literal notranslate"><span class="pre">pause</span></code> is <strong>always <code class="docutils literal notranslate"><span class="pre">false</span></code></strong> in saved sources (258/258). Fail-closed:
-<code class="docutils literal notranslate"><span class="pre">true</span></code> → seek then <code class="docutils literal notranslate"><span class="pre">PLAYSTATE_PAUSE</span></code>; <code class="docutils literal notranslate"><span class="pre">false</span></code> → seek and do not force
-pause. A jump that selects another Title starts that title playing (<code class="docutils literal notranslate"><span class="pre">1408</span></code>
-extras/trailers: <code class="docutils literal notranslate"><span class="pre">jump(...,</span> <span class="pre">false)</span></code> with no <code class="docutils literal notranslate"><span class="pre">play()</span></code>). If the current title
-was already paused, it stays paused unless script calls
-<code class="docutils literal notranslate"><span class="pre">Player.playlist.play()</span></code> (<code class="docutils literal notranslate"><span class="pre">1408</span></code> chapter buttons after <code class="docutils literal notranslate"><span class="pre">menubarHide()</span></code>).
+ES (ECMA-327). <code class="docutils literal notranslate"><span class="pre">ITitle.jump(time,</span> <span class="pre">bookmark)</span></code>: <code class="docutils literal notranslate"><span class="pre">time</span></code> is <code class="docutils literal notranslate"><span class="pre">HH:MM:SS:FF</span></code>;
+<code class="docutils literal notranslate"><span class="pre">bookmark</span></code> is <strong>always <code class="docutils literal notranslate"><span class="pre">false</span></code></strong> in saved sources (258/258); <code class="docutils literal notranslate"><span class="pre">true</span></code> would save
+a bookmark first. A jump within the title keeps the play state; a jump to another
+Title starts it playing (<code class="docutils literal notranslate"><span class="pre">1408</span></code> extras/trailers: <code class="docutils literal notranslate"><span class="pre">jump(...,</span> <span class="pre">false)</span></code> with no
+<code class="docutils literal notranslate"><span class="pre">play()</span></code>). A paused title stays paused unless script calls
+<code class="docutils literal notranslate"><span class="pre">Player.playlist.play()</span></code> (<code class="docutils literal notranslate"><span class="pre">1408</span></code> chapter buttons after <code class="docutils literal notranslate"><span class="pre">menubarHide()</span></code>)
+[23 Annex Z.10.13].
 Do not invent a third overload. <code class="docutils literal notranslate"><span class="pre">currentTitle.elapsedTime</span></code> is an
 <code class="docutils literal notranslate"><span class="pre">HH:MM:SS:FF</span></code> string. <code class="docutils literal notranslate"><span class="pre">menuLanguage</span></code> is two-letter.
 <code class="docutils literal notranslate"><span class="pre">document.setXPathVariable</span></code> binds <code class="docutils literal notranslate"><span class="pre">$name</span></code> for cues.
-<code class="docutils literal notranslate"><span class="pre">createTimer(time,</span> <span class="pre">type,</span> <span class="pre">cb)</span></code>: <code class="docutils literal notranslate"><span class="pre">type</span></code> is <code class="docutils literal notranslate"><span class="pre">1</span></code> (title clock, 150) or
-<code class="docutils literal notranslate"><span class="pre">TIMER_APPLICATION</span></code> (1); <code class="docutils literal notranslate"><span class="pre">ITimer.autoReset</span></code> is <code class="docutils literal notranslate"><span class="pre">false</span></code> (one-shot) on 142 but
-<code class="docutils literal notranslate"><span class="pre">true</span></code> on 7 (<code class="docutils literal notranslate"><span class="pre">resumeStoreTimer</span></code>, 15 s periodic). Honor as written.
+<code class="docutils literal notranslate"><span class="pre">createTimer(ticks,</span> <span class="pre">type,</span> <span class="pre">cb)</span></code>: <code class="docutils literal notranslate"><span class="pre">type</span></code> is <code class="docutils literal notranslate"><span class="pre">1</span></code> (150) or <code class="docutils literal notranslate"><span class="pre">TIMER_APPLICATION</span></code>
+(1), the <strong>application</strong> clock; <code class="docutils literal notranslate"><span class="pre">TIMER_TITLE</span></code> = 2 [23 Annex Z.1.1].
+<code class="docutils literal notranslate"><span class="pre">ITimer.autoReset</span></code> is <code class="docutils literal notranslate"><span class="pre">false</span></code> (one-shot) on 142 but <code class="docutils literal notranslate"><span class="pre">true</span></code> on 7
+(<code class="docutils literal notranslate"><span class="pre">resumeStoreTimer</span></code>, 15 s periodic). Honor as written.
 Selectors <code class="docutils literal notranslate"><span class="pre">switch</span> <span class="pre">(Player.menuLanguage)</span></code> on <code class="docutils literal notranslate"><span class="pre">en</span></code>/<code class="docutils literal notranslate"><span class="pre">fr</span></code>/<code class="docutils literal notranslate"><span class="pre">ja</span></code>/<code class="docutils literal notranslate"><span class="pre">de</span></code>.
 <code class="docutils literal notranslate"><span class="pre">[11,</span> <span class="pre">12,</span> <span class="pre">14]</span></code>
 <strong>VERIFIED</strong> (types, encoding, 258 <code class="docutils literal notranslate"><span class="pre">false</span></code>, 8-arg layout, timer, 2-letter).
-Pause-at-destination <strong>INFERRED</strong>.</p>
+<code class="docutils literal notranslate"><span class="pre">[23]</span></code> <strong>SPEC</strong> (bookmark, timer type). The earlier pause-at-destination reading
+is refuted.</p>
 </section>
 <section id="b9-packs-adv-pck">
 <h3>B9 Packs / ADV_PCK<a class="headerlink" href="#b9-packs-adv-pck" title="Link to this heading"></a></h3>
 <p><strong>Q.</strong> Codec from VTI <code class="docutils literal notranslate"><span class="pre">V_ATR</span></code>? ADV_PCK filename on every pack?
-<strong>A.</strong> Codec from <code class="docutils literal notranslate"><span class="pre">MediaAttributeList</span></code> via <code class="docutils literal notranslate"><span class="pre">&#64;mediaAttr</span></code>. <code class="docutils literal notranslate"><span class="pre">V_ATR</span></code> bits 31–30
-are never AVC/VC-1 on 1131 ATRIs (<code class="docutils literal notranslate"><span class="pre">e13</span></code>). Which PES carries a selected track:
+<strong>A.</strong> Codec from the VTI: <code class="docutils literal notranslate"><span class="pre">EVOB_VM_ATR</span></code> bits 31–29 (<a class="reference internal" href="06_vti.html"><span class="std std-doc">06</span></a>); it matches
+the streams, while <code class="docutils literal notranslate"><span class="pre">MediaAttributeList</span></code> is wrong on 125 clip videos
+(<a class="reference internal" href="03_playlist.html"><span class="std std-doc">03</span></a> §3.6). The old reading of bits 31–30 was the wrong layout.
+Which PES carries a selected track:
 <code class="docutils literal notranslate"><span class="pre">&#64;streamNumber</span></code> → <code class="docutils literal notranslate"><span class="pre">stream_id</span></code>/<code class="docutils literal notranslate"><span class="pre">sub_stream_id</span></code> per <a class="reference internal" href="08_evo.html"><span class="std std-doc">08</span></a> §8.7 (98219
 TABLE 45/46): video <code class="docutils literal notranslate"><span class="pre">0xE0</span></code>/<code class="docutils literal notranslate"><span class="pre">0xE2</span></code>/<code class="docutils literal notranslate"><span class="pre">0xFD</span></code>+ext<code class="docutils literal notranslate"><span class="pre">0x55</span></code>, audio <code class="docutils literal notranslate"><span class="pre">0xBD</span></code> sub
-<code class="docutils literal notranslate"><span class="pre">CODEC_BASE|(n-1)</span></code> (DD+ <code class="docutils literal notranslate"><span class="pre">0xC0</span></code>), subtitle <code class="docutils literal notranslate"><span class="pre">0xBD</span></code> sub <code class="docutils literal notranslate"><span class="pre">0x20|(n-1)</span></code>. Sibling of <code class="docutils literal notranslate"><span class="pre">FOO.MAP</span></code> is <code class="docutils literal notranslate"><span class="pre">FOO.EVO</span></code>
-(2421/2421). ADV_PCK: <code class="docutils literal notranslate"><span class="pre">0xBF</span></code> / <code class="docutils literal notranslate"><span class="pre">0x80</span></code>; first packet slot+filename+ADDTHD+
-<code class="docutils literal notranslate"><span class="pre">HDDVDACA</span></code>; middle/last skip 4 bytes; concat per slot (<code class="docutils literal notranslate"><span class="pre">e16</span></code>, 2383 packs).
-TABLE 91 “32-byte name on every packet” is wrong for middle/last. NV_PCK:
-parse <code class="docutils literal notranslate"><span class="pre">sub_stream_id</span></code> <code class="docutils literal notranslate"><span class="pre">0x00</span></code> PCI / <code class="docutils literal notranslate"><span class="pre">0x01</span></code> DSI / <code class="docutils literal notranslate"><span class="pre">0x04</span></code> GCI; PCI may be
-omitted. Parse the pack header (stuffing 0–7); do not hard-code byte 20.
-<code class="docutils literal notranslate"><span class="pre">[11,</span> <span class="pre">12]</span></code> <strong>VERIFIED</strong>. ADDTHD length is not a
-constant. Locate <code class="docutils literal notranslate"><span class="pre">HDDVDACA</span></code> after the 32-byte name field (STALINGRAD is
-225 zeros; do not hard-code 259).</p>
+<code class="docutils literal notranslate"><span class="pre">CODEC_BASE|(n-1)</span></code> (DD+ <code class="docutils literal notranslate"><span class="pre">0xC0</span></code>), subtitle <code class="docutils literal notranslate"><span class="pre">0xBD</span></code> sub <code class="docutils literal notranslate"><span class="pre">0x20|</span></code> the <code class="docutils literal notranslate"><span class="pre">SPST_ATR</span></code>
+number. Sibling of <code class="docutils literal notranslate"><span class="pre">FOO.MAP</span></code> is <code class="docutils literal notranslate"><span class="pre">FOO.EVO</span></code> (2421/2421). ADV_PCK: <code class="docutils literal notranslate"><span class="pre">0xBF</span></code> / <code class="docutils literal notranslate"><span class="pre">0x80</span></code>;
+a 12-bit <code class="docutils literal notranslate"><span class="pre">advanced_identifier</span></code>; a 255-byte name only on a first pack (status <code class="docutils literal notranslate"><span class="pre">01b</span></code>)
+or a whole-archive pack (<code class="docutils literal notranslate"><span class="pre">11b</span></code>), then the
+stuffing count; data at 259 (first) or 4 (others) plus stuffing; concat per
+identifier (<code class="docutils literal notranslate"><span class="pre">e16</span></code>, 2383 packs). TABLE 91 “32-byte name on every packet” is wrong.
+NV_PCK: <code class="docutils literal notranslate"><span class="pre">0x04</span></code> GCI, the 983-byte reserved area (PCI ignored), <code class="docutils literal notranslate"><span class="pre">0x01</span></code> DSI; PCI
+may be absent or zeroed. Parse the pack header (stuffing 0–7); do not hard-code
+byte 20.
+<code class="docutils literal notranslate"><span class="pre">[23</span> <span class="pre">§6.3.5]</span></code> <strong>SPEC</strong>; <code class="docutils literal notranslate"><span class="pre">[11,</span> <span class="pre">12]</span></code> <strong>VERIFIED</strong>.</p>
 </section>
 <section id="b10-composite">
 <h3>B10 Composite<a class="headerlink" href="#b10-composite" title="Link to this heading"></a></h3>
@@ -1068,32 +1126,34 @@ constant. Locate <code class="docutils literal notranslate"><span class="pre">HD
 <strong>always</strong> <code class="docutils literal notranslate"><span class="pre">(x,</span> <span class="pre">y,</span> <span class="pre">scale,</span> <span class="pre">cropX,</span> <span class="pre">cropY,</span> <span class="pre">cropW,</span> <span class="pre">cropH,</span> <span class="pre">time)</span></code> (101/101).
 <code class="docutils literal notranslate"><span class="pre">scale</span></code> is <code class="docutils literal notranslate"><span class="pre">Player.createVideoScale(1,1)</span></code> (71/71, IVideoScale numerator /
 denominator) or <code class="docutils literal notranslate"><span class="pre">null</span></code>. Used windows: SD <code class="docutils literal notranslate"><span class="pre">(96,166,…,720,480)</span></code> ×67 and full
-<code class="docutils literal notranslate"><span class="pre">(0,0,null,…,1920,1080)</span></code> ×30. <code class="docutils literal notranslate"><span class="pre">time</span></code> is <code class="docutils literal notranslate"><span class="pre">&quot;00:00:00:00&quot;</span></code> on every call (apply
-now). Graphics plane is <strong>src-over</strong> that scaled YCbCr: PNG per-pixel alpha ×
+<code class="docutils literal notranslate"><span class="pre">(0,0,null,…,1920,1080)</span></code> ×30. The last argument is the duration of the change
+(<code class="docutils literal notranslate"><span class="pre">&quot;00:00:00:00&quot;</span></code> on every call: apply now; required when paused); <code class="docutils literal notranslate"><span class="pre">null</span></code> scale =
+fit the Aperture height and centre, ignoring the other arguments; <code class="docutils literal notranslate"><span class="pre">x</span></code>, <code class="docutils literal notranslate"><span class="pre">y</span></code> even
+[23 Annex Z.10.19]. Planes top to bottom: cursor, graphics, sub-picture, sub
+video, main video, each <strong>src-over</strong> the ones below: PNG per-pixel alpha ×
 <code class="docutils literal notranslate"><span class="pre">opacity</span></code> (0–1, default 1.0). <code class="docutils literal notranslate"><span class="pre">object&#64;type=&quot;application/x-clearrect&quot;</span></code>
-punches alpha 0 in that box (MATRIX/BONNIE cards). <code class="docutils literal notranslate"><span class="pre">zOrder</span></code> among apps;
-cursor above graphics. Unmapped ticks: fill <code class="docutils literal notranslate"><span class="pre">MainVideoDefaultColor</span></code>.
-<code class="docutils literal notranslate"><span class="pre">[5,</span> <span class="pre">11,</span> <span class="pre">12]</span></code> <strong>VERIFIED</strong> (API, aperture).
-<code class="docutils literal notranslate"><span class="pre">[2,</span> <span class="pre">3]</span></code> <strong>INFERRED</strong>
-(fail-closed overlay; not screenshot-measured).</p>
+punches a hole in that box (MATRIX/BONNIE cards). <code class="docutils literal notranslate"><span class="pre">zOrder</span></code> among apps.
+Unmapped ticks: fill <code class="docutils literal notranslate"><span class="pre">MainVideoDefaultColor</span></code>.
+<code class="docutils literal notranslate"><span class="pre">[23]</span></code> <strong>SPEC</strong>; <code class="docutils literal notranslate"><span class="pre">[5,</span> <span class="pre">11,</span> <span class="pre">12]</span></code> <strong>VERIFIED</strong> (API, aperture).</p>
 </section>
 <section id="b11-cues-remote">
 <h3>B11 Cues / remote<a class="headerlink" href="#b11-cues-remote" title="Link to this heading"></a></h3>
 <p><strong>Q.</strong> Which clock? Full XPath? What does Enter do?
 <strong>A.</strong> Saved <code class="docutils literal notranslate"><span class="pre">timing&#64;clock</span></code>: <code class="docutils literal notranslate"><span class="pre">page</span></code> 66, <code class="docutils literal notranslate"><span class="pre">application</span></code> 9, <code class="docutils literal notranslate"><span class="pre">title</span></code> 3, omitted 6
 (<code class="docutils literal notranslate"><span class="pre">e17</span></code>). Used cue paths: <code class="docutils literal notranslate"><span class="pre">state:focused</span></code>, <code class="docutils literal notranslate"><span class="pre">state:actioned</span></code>, duration,
-timecode, <code class="docutils literal notranslate"><span class="pre">$vars</span></code>, <code class="docutils literal notranslate"><span class="pre">style:opacity()=1</span></code>. Implement that subset. An unknown
-<code class="docutils literal notranslate"><span class="pre">PathExpressionType</span></code> is false. The cue does <strong>not</strong> fire. This is not a general
-XPath 1.0 engine. Enter sets <code class="docutils literal notranslate"><span class="pre">state:actioned</span></code>; Jumpstart + <code class="docutils literal notranslate"><span class="pre">1408</span></code> run a
-short <code class="docutils literal notranslate"><span class="pre">seq</span></code> then <code class="docutils literal notranslate"><span class="pre">event</span></code>. Arrows follow <code class="docutils literal notranslate"><span class="pre">nav*</span></code>. <code class="docutils literal notranslate"><span class="pre">accessKey</span></code> <code class="docutils literal notranslate"><span class="pre">VK_*</span></code> →
-<code class="docutils literal notranslate"><span class="pre">actioned</span></code>. A <code class="docutils literal notranslate"><span class="pre">Title</span></code>’s <code class="docutils literal notranslate"><span class="pre">ScheduledControlList</span></code> (<a class="reference internal" href="03_playlist.html"><span class="std std-doc">03</span></a> §3.18)
-fires <code class="docutils literal notranslate"><span class="pre">Event&#64;id</span></code> to script and freezes the timeline at <code class="docutils literal notranslate"><span class="pre">PauseAt&#64;titleTime</span></code>
-(menu-loop hold) when the Title-Timeline clock crosses that time.
+timecode, <code class="docutils literal notranslate"><span class="pre">$vars</span></code>, <code class="docutils literal notranslate"><span class="pre">style:opacity()=1</span></code>. The book’s path grammar is an XPath 1.0
+subset (<a class="reference internal" href="14_markup.html"><span class="std std-doc">14</span></a> §14.8); a path that cannot be evaluated is false and
+the cue does <strong>not</strong> fire. Enter sets <code class="docutils literal notranslate"><span class="pre">state:actioned</span></code> for one tick; Jumpstart +
+<code class="docutils literal notranslate"><span class="pre">1408</span></code> run a short <code class="docutils literal notranslate"><span class="pre">seq</span></code> then <code class="docutils literal notranslate"><span class="pre">event</span></code>. Arrows follow <code class="docutils literal notranslate"><span class="pre">nav*</span></code>, else <code class="docutils literal notranslate"><span class="pre">navIndex</span></code>.
+<code class="docutils literal notranslate"><span class="pre">accessKey</span></code> <code class="docutils literal notranslate"><span class="pre">VK_*</span></code> → <code class="docutils literal notranslate"><span class="pre">actioned</span></code>. A <code class="docutils literal notranslate"><span class="pre">Title</span></code>’s <code class="docutils literal notranslate"><span class="pre">ScheduledControlList</span></code>
+(<a class="reference internal" href="03_playlist.html"><span class="std std-doc">03</span></a> §3.18) fires <code class="docutils literal notranslate"><span class="pre">scheduled_event</span></code> with <code class="docutils literal notranslate"><span class="pre">Event&#64;id</span></code> at normal
+speed and freezes the timeline at <code class="docutils literal notranslate"><span class="pre">PauseAt&#64;titleTime</span></code> (menu-loop hold) in forward
+play.
 <code class="docutils literal notranslate"><span class="pre">include&#64;href</span></code> loads <code class="docutils literal notranslate"><span class="pre">.xmu</span></code> / <code class="docutils literal notranslate"><span class="pre">.xts</span></code> / <code class="docutils literal notranslate"><span class="pre">.xss</span></code>. <code class="docutils literal notranslate"><span class="pre">.xul</span></code> is Mozilla
 XUL; ignore it. <code class="docutils literal notranslate"><span class="pre">set</span></code> snaps a style; <code class="docutils literal notranslate"><span class="pre">animate</span></code> spreads a <code class="docutils literal notranslate"><span class="pre">;</span></code> keyframe list
 across <code class="docutils literal notranslate"><span class="pre">cue&#64;dur</span></code> (<code class="docutils literal notranslate"><span class="pre">linear</span></code> default).
-<code class="docutils literal notranslate"><span class="pre">[5,</span> <span class="pre">11,</span> <span class="pre">12]</span></code> <strong>VERIFIED</strong> (used).
-Unknown path <strong>INFERRED</strong> (fail-closed).</p>
+<code class="docutils literal notranslate"><span class="pre">[23]</span></code> <strong>SPEC</strong>; <code class="docutils literal notranslate"><span class="pre">[5,</span> <span class="pre">11,</span> <span class="pre">12]</span></code> <strong>VERIFIED</strong> (used).
+Evaluation-failure rule <strong>INFERRED</strong> (fail-closed).</p>
 </section>
 <section id="b12-end-of-title">
 <h3>B12 End of title<a class="headerlink" href="#b12-end-of-title" title="Link to this heading"></a></h3>

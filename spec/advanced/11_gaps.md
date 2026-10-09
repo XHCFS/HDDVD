@@ -20,6 +20,10 @@ Grades: **BLOCKING** (a conforming disc feature will not work), **DEGRADED**
 outside libhddvd: a codec, a key, a drive), **RESEARCH** (closeable with more
 corpus/patent work), **UNCLOSEABLE** (needs firmware reverse-engineering or NDA books).
 
+The DVD Forum book v1.01 is now public [23]. It closes B1 and B3 below and most of
+§C; what it settles is marked **CLOSED [23]**. The discs were authored to the
+later schema v1.1, so a few disc behaviours newer than 1.01 remain RESEARCH.
+
 ---
 
 ## A. Fully specified (a C author CAN build these now)
@@ -36,7 +40,15 @@ title.
 
 ## B. BLOCKING (missing for a *general* engine; not for the corpus menus)
 
-### B1. Full HDi runtime semantics (event/timing execution model)
+### B1. Full HDi runtime semantics (event/timing execution model): CLOSED [23]
+
+The book's chapter 7 (markup: page lifecycle, tick processing, focus and implicit
+navigation, gestures, the timing algebra, the style property tables), chapter 8
+(script restrictions, system events and their order, event delivery across
+applications, application lifetime states, the work-item scheduler) and Annex Z
+(every API object, member and constant value) are the complete contract. Sheets
+[05](05_manifest_hdi.md), [12](12_hdi_scripting_abi.md) and [14](14_markup.md)
+summarise them. The text below is the history of the gap.
 Sheets 05/10 specify the **used subset** the retail corpus exercises: the ~18
 script calls with signatures, the used markup attributes, the used cue-path
 allowlist, the page/title/application clock rule. A *general* HDi engine (one
@@ -60,7 +72,12 @@ quirks (cue coercion, A102 tick instant), fail-closed in the sheets,
 **DEGRADED-safe**, not blocking.
 `[5, 6, 14]`
 
-### B2. HDi type-library signatures (ABI)
+### B2. HDi type-library signatures (ABI): CLOSED for 1.01 [23 Annex Z]
+
+Annex Z gives every member's parameter and return types and every constant's
+value for the 1.01 API ([12](12_hdi_scripting_abi.md)). The type library is
+still the only source for members added after 1.01 (for example `aacs`,
+`regionCode`, `captureWithMAC`); those stay RESEARCH.
 `iHD_Scripting_API.txt` is **106 typeinfos / 954 names only**, with no argument types
 or return types. Sheets 03/05/10 give *inferred* signatures for the members discs
 actually call (from call-sites). For any member a future disc calls that the
@@ -76,12 +93,12 @@ not inferred). Parameter/return **types** still need a Windows type-library view
 on the saved binary. That is a mechanical step; the artifact is in the repo.
 **RESEARCH** (artifact in hand).
 
-### B3. Advanced Subtitle
-`AdvancedSubtitleSegment` is 0/120 in this corpus and `AdvancedSubtitle` markup
-(a separate `ihd`-family timed-text) is not transcribed. Discs that caption via
-Advanced Subtitle rather than sub-picture (§8.8) would show no subtitles.
-**Best source:** iHD.xsd family + the Advanced Subtitle schema (not among the available sources).
-**RESEARCH** (no corpus specimen; low priority, 0 discs here use it).
+### B3. Advanced Subtitle: CLOSED [23 §7.9]
+An Advanced Subtitle is ordinary iHD markup (`.xas`) drawn on the sub-picture
+plane, without `area`/`button`/`input`/`object`, focus, inline styles, script or
+`event`, and usually with inline timing ([14](14_markup.md) §14.13a). Its
+playlist side is `AdvancedSubtitleSegment` ([03](03_playlist.md) §3.13). 0/120
+discs use it, so it has no corpus test.
 
 ---
 
@@ -91,8 +108,9 @@ Advanced Subtitle rather than sub-picture (§8.8) would show no subtitles.
 |---|---|---|
 | Glyph rasterisation / `anchor` pixel | text menus render, sub-pixel placement not screenshot-exact | 05 §5.9 |
 | Graphics-plane blend constants | src-over is correct; exact YCbCr matrix / rounding not measured | 05 §5.9 |
-| `jump(time, true)` pause-at-destination | never seen (`false` 258/258); fail-closed rule may differ from firmware | 05 §5.3 |
-| File Cache 64 MB overflow order | conforming titles never overflow; flush order is Scenarist-derived | 05 §5.7 |
+| `jump(time, true)` (was: pause-at-destination) | CLOSED [23 Annex Z.10.13]: the boolean is `bookmark`, not pause | 05 §5.3 |
+| File Cache 64 MB overflow order | CLOSED [23 §4.3.20]: priority order, application resources before title resources, Stop on overflow | 05 §5.7 |
+| Playlist `Event` delivered under its own id as event type | 1.01 delivers `scheduled_event` only; `1408_DC` listens on the id | 03 §3.18 |
 | ILVU angle interleave beyond Pan's 4 maps | linear play unaffected; multi-angle walk INFERRED | 07 |
 
 None desync a conforming linear title; all are cosmetic or unused-path.
@@ -144,6 +162,6 @@ in hand).
 Build order for a C author: **(1)** UDF→playlist→MAP→EVO demux→video/audio via
 §8.7 = linear playback of every corpus disc; **(2)** ACA→Manifest→used iHD→script
 subset→File Cache→graphics plane = PNG-button menus (the §5.0 gate). Both are
-closed. **What blocks a *general* engine** is B1 (full HDi behaviour) and B2
-(full typelib IDL). Neither blocks the corpus. Both are fail-closed or
-RESEARCH-closeable. No open-source player has ever crossed even the linear bar.
+closed. B1 and B3 are now closed by the book, and B2 for the 1.01 API. What
+remains is the post-1.01 API surface and the exact rendering of features no disc
+uses. No open-source player has ever crossed even the linear bar.
