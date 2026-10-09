@@ -461,6 +461,16 @@
 Magic: <code class="docutils literal notranslate"><span class="pre">HDDVDACA</span></code><br />
 Referenced as <code class="docutils literal notranslate"><span class="pre">file:///dvddisc/ADV_OBJ/foo.aca</span></code> and as
 <code class="docutils literal notranslate"><span class="pre">file:///dvddisc/ADV_OBJ/foo.aca/manifest.xmf</span></code>.</p>
+<p>The book calls it an <strong>archiving file</strong> [23 §6.5.4]. It packs files uncompressed
+so that they load into the File Cache as one item, and it is the only kind of file
+the Advanced Stream (ADV_PCK, <a class="reference internal" href="08_evo.html"><span class="std std-doc">08</span></a> §8.6) carries. It may hold playlists,
+manifests, markup (content, timing, style), Advanced Subtitle markup, scripts,
+images, effect audio, fonts, and Secondary Video Set EVOBs and time maps. It may
+not hold another archive, a certificate or a time-map backup. An archive that is
+multiplexed into a P-EVOB is also stored under <code class="docutils literal notranslate"><span class="pre">ADV_OBJ/</span></code> with the same name.</p>
+<p>In the File Cache an archive is stored whole, and its members are read in place
+(§4.4). At most 2048 members; archive and member names at most 255 characters
+[23 §4.3.20.5].</p>
 <p>Header checks from the reference decoder (<code class="docutils literal notranslate"><span class="pre">HDDVDPLAYDLL</span></code>):</p>
 <ul class="simple">
 <li><p>magic is not <code class="docutils literal notranslate"><span class="pre">HDDVDACA</span></code> → reject</p></li>
@@ -469,18 +479,21 @@ Referenced as <code class="docutils literal notranslate"><span class="pre">file:
 <li><p>encoding type is not 1 → reject</p></li>
 <li><p>size less than header → reject</p></li>
 <li><p>per-entry CRC mismatch → reject (reference decoder). On this corpus, CRC of
-the raw member matches <strong>only</strong> when <code class="docutils literal notranslate"><span class="pre">flags</span></code> high byte is not <code class="docutils literal notranslate"><span class="pre">0xff</span></code>; extract
-<code class="docutils literal notranslate"><span class="pre">0xff</span></code> members by offset/length and do not treat those CRCs as a raw-payload check.</p></li>
+the raw member matches <strong>only</strong> when the member’s MIME type code is not <code class="docutils literal notranslate"><span class="pre">0xff</span></code>;
+extract <code class="docutils literal notranslate"><span class="pre">0xff</span></code> members by offset/length and do not treat those CRCs as a
+raw-payload check.</p></li>
 </ul>
-<p>Encoding type 1 is treated as <strong>uncompressed</strong> members (XML, JS, TTF magics).</p>
+<p>File type 0 = uncompressed members; encoding type 1 = member names in ISO 8859-1
+[23 §6.5.4.1.1]. These are two one-byte fields.</p>
 <p><strong>Directory is not a fixed 58-byte stride.</strong> A 58-byte MATRIX record is
 <code class="docutils literal notranslate"><span class="pre">14</span> <span class="pre">+</span> <span class="pre">namelen</span> <span class="pre">+</span> <span class="pre">32</span></code> when the name is 12 characters (<code class="docutils literal notranslate"><span class="pre">manifest.xmf</span></code>). The same
 formula parses <strong>every member of every saved archive</strong>: 885 members across 97
-<code class="docutils literal notranslate"><span class="pre">*.aca</span></code> files, each satisfying <code class="docutils literal notranslate"><span class="pre">flags</span> <span class="pre">&amp;</span> <span class="pre">0xFF</span> <span class="pre">==</span> <span class="pre">len(name)</span></code>, 32-byte zero pad,
-and CRC-matches-iff-<code class="docutils literal notranslate"><span class="pre">flags</span></code>-high-byte-≠-<code class="docutils literal notranslate"><span class="pre">0xff</span></code>.
-<code class="docutils literal notranslate"><span class="pre">[11]</span></code>
-<strong>VERIFIED</strong>. <code class="docutils literal notranslate"><span class="pre">flags</span></code> high byte <code class="docutils literal notranslate"><span class="pre">0xff</span></code> on 868/885 (AACS-wrapped, CRC not a raw
-check); <code class="docutils literal notranslate"><span class="pre">0x02</span></code>–<code class="docutils literal notranslate"><span class="pre">0x07</span></code> on the other 17 (CRC matches the raw member).</p>
+<code class="docutils literal notranslate"><span class="pre">*.aca</span></code> files, each with the name-length byte equal to <code class="docutils literal notranslate"><span class="pre">len(name)</span></code>, a 32-byte zero
+pad, and CRC-matches-iff-MIME-code-≠-<code class="docutils literal notranslate"><span class="pre">0xff</span></code>.
+<code class="docutils literal notranslate"><span class="pre">[11]</span></code> <code class="docutils literal notranslate"><span class="pre">[23</span> <span class="pre">§6.5.4.1.2]</span></code>
+<strong>VERIFIED</strong>. MIME code <code class="docutils literal notranslate"><span class="pre">0xff</span></code> on 868/885 (AACS-wrapped, CRC not a raw
+check); <code class="docutils literal notranslate"><span class="pre">0x02</span></code> (3 <code class="docutils literal notranslate"><span class="pre">xmf</span></code>), <code class="docutils literal notranslate"><span class="pre">0x03</span></code> (5 <code class="docutils literal notranslate"><span class="pre">xmu</span></code>), <code class="docutils literal notranslate"><span class="pre">0x04</span></code> (1 <code class="docutils literal notranslate"><span class="pre">xts</span></code>), <code class="docutils literal notranslate"><span class="pre">0x07</span></code> (8 <code class="docutils literal notranslate"><span class="pre">js</span></code>) on the
+other 17, each matching its name’s extension, and their CRCs match the raw member.</p>
 <section id="archive-header">
 <h2>4.1 Archive header<a class="headerlink" href="#archive-header" title="Link to this heading"></a></h2>
 <p>Big-endian. Total header before the directory is 32 bytes.</p>
@@ -489,43 +502,48 @@ check); <code class="docutils literal notranslate"><span class="pre">0x02</span>
 <tr class="row-odd"><th class="head"><p>Offset</p></th>
 <th class="head"><p>Size</p></th>
 <th class="head"><p>Field</p></th>
-<th class="head"><p>Observed / required</p></th>
+<th class="head"><p>Observed / required [23 §6.5.4.1.1]</p></th>
 </tr>
 </thead>
 <tbody>
 <tr class="row-even"><td><p>0</p></td>
 <td><p>8</p></td>
-<td><p>magic</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">FILE_ID</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">&quot;HDDVDACA&quot;</span></code></p></td>
 </tr>
 <tr class="row-odd"><td><p>8</p></td>
 <td><p>2</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">VERN</span></code></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">0x0010</span></code> (1.0)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0x0010</span></code> (1.0) on 97/97</p></td>
 </tr>
 <tr class="row-even"><td><p>10</p></td>
-<td><p>2</p></td>
-<td><p>encoding type</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">1</span></code></p></td>
+<td><p>1</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">FILE_TY</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0x00</span></code> = uncompressed (the only value); 97/97</p></td>
 </tr>
-<tr class="row-odd"><td><p>12</p></td>
+<tr class="row-odd"><td><p>11</p></td>
+<td><p>1</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">ENC_TY</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0x01</span></code> = names in ISO 8859-1 (the only value); 97/97</p></td>
+</tr>
+<tr class="row-even"><td><p>12</p></td>
 <td><p>2</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">N</span></code> entry count</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">SRP_Ns</span></code>, entry count <code class="docutils literal notranslate"><span class="pre">N</span></code></p></td>
 <td><p>2–40 on the 97 saved archives</p></td>
 </tr>
-<tr class="row-even"><td><p>14</p></td>
+<tr class="row-odd"><td><p>14</p></td>
 <td><p>4</p></td>
-<td><p>total size</p></td>
-<td><p>equals file length</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">FILE_SZ</span></code>, total size in bytes</p></td>
+<td><p>equals file length on 97/97. The book allows <code class="docutils literal notranslate"><span class="pre">0</span></code> = unknown</p></td>
 </tr>
-<tr class="row-odd"><td><p>18</p></td>
+<tr class="row-even"><td><p>18</p></td>
 <td><p>14</p></td>
-<td><p>remainder of 32-byte header</p></td>
-<td><p>file type <code class="docutils literal notranslate"><span class="pre">0</span></code>; zero on all 97</p></td>
+<td><p>reserved</p></td>
+<td><p>zero on all 97</p></td>
 </tr>
-<tr class="row-even"><td><p>32</p></td>
+<tr class="row-odd"><td><p>32</p></td>
 <td><p>…</p></td>
-<td><p>directory</p></td>
+<td><p>directory (search pointers)</p></td>
 <td><p>then member payloads</p></td>
 </tr>
 </tbody>
@@ -533,7 +551,8 @@ check); <code class="docutils literal notranslate"><span class="pre">0x02</span>
 </section>
 <section id="directory-entry-variable-length">
 <h2>4.2 Directory entry (variable length)<a class="headerlink" href="#directory-entry-variable-length" title="Link to this heading"></a></h2>
-<p>Walk <code class="docutils literal notranslate"><span class="pre">N</span></code> records starting at byte 32. Each record is big-endian:</p>
+<p>Walk <code class="docutils literal notranslate"><span class="pre">N</span></code> records starting at byte 32. The book calls each one a Resource Data
+Search Pointer [23 §6.5.4.1.2]. Big-endian:</p>
 <table class="docutils align-default">
 <thead>
 <tr class="row-odd"><th class="head"><p>Offset</p></th>
@@ -544,31 +563,125 @@ check); <code class="docutils literal notranslate"><span class="pre">0x02</span>
 <tbody>
 <tr class="row-even"><td><p>0</p></td>
 <td><p>4</p></td>
-<td><p>member byte offset from start of file</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">DATA_SA</span></code>, member byte offset from start of file</p></td>
 </tr>
 <tr class="row-odd"><td><p>4</p></td>
 <td><p>4</p></td>
-<td><p>member length</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">DATA_SZ</span></code>, member length</p></td>
 </tr>
 <tr class="row-even"><td><p>8</p></td>
 <td><p>4</p></td>
-<td><p>CRC-32 (ISO 3309 / zlib) of the member bytes, when it is valid</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">DATA_CRC</span></code>, CRC-32 of the member bytes (ISO 3309 / ITU-T V.42: polynomial <code class="docutils literal notranslate"><span class="pre">04C11DB7</span></code>, the zlib <code class="docutils literal notranslate"><span class="pre">crc32</span></code>), when it is valid</p></td>
 </tr>
 <tr class="row-odd"><td><p>12</p></td>
-<td><p>2</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">flags</span></code>. Low 8 bits = <strong>name length</strong>. High 8 bits: <code class="docutils literal notranslate"><span class="pre">0xff</span></code> on AACS-wrapped members; <code class="docutils literal notranslate"><span class="pre">0x02</span></code>–<code class="docutils literal notranslate"><span class="pre">0x07</span></code> on STALINGRAD</p></td>
+<td><p>1</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">DATA_MIME_TY</span></code>, MIME type code (table below). <code class="docutils literal notranslate"><span class="pre">0xff</span></code> on AACS-wrapped members</p></td>
 </tr>
-<tr class="row-even"><td><p>14</p></td>
+<tr class="row-even"><td><p>13</p></td>
+<td><p>1</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">DATA_FNAME_LEN</span></code>, <strong>name length</strong></p></td>
+</tr>
+<tr class="row-odd"><td><p>14</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">namelen</span></code></p></td>
-<td><p>member name, ASCII, no NUL inside the counted length</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">DATA_FNAME</span></code>, member name, ISO 8859-1, no NUL inside the counted length</p></td>
 </tr>
-<tr class="row-odd"><td><p>14+<code class="docutils literal notranslate"><span class="pre">namelen</span></code></p></td>
+<tr class="row-even"><td><p>14+<code class="docutils literal notranslate"><span class="pre">namelen</span></code></p></td>
 <td><p>32</p></td>
-<td><p>padding, <strong>all zero</strong> on 885/885</p></td>
+<td><p>reserved, <strong>all zero</strong> on 885/885</p></td>
 </tr>
 </tbody>
 </table>
-<p>Record size = <code class="docutils literal notranslate"><span class="pre">46</span> <span class="pre">+</span> <span class="pre">namelen</span></code> = <code class="docutils literal notranslate"><span class="pre">14</span> <span class="pre">+</span> <span class="pre">(flags</span> <span class="pre">&amp;</span> <span class="pre">0xFF)</span> <span class="pre">+</span> <span class="pre">32</span></code>.</p>
+<p>Record size = <code class="docutils literal notranslate"><span class="pre">46</span> <span class="pre">+</span> <span class="pre">namelen</span></code>.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Code</p></th>
+<th class="head"><p>MIME type</p></th>
+<th class="head"><p>Extension</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">0x00</span></code></p></td>
+<td><p>reserved</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">0x01</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">text/hddvdpl+xml</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">xpl</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">0x02</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">text/hddvdmf+xml</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">xmf</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">0x03</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">text/hddvdmu+xml</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">xmu</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">0x04</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">text/hddvdts+xml</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">xts</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">0x05</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">text/hddvdas+xml</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">xas</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">0x06</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">text/hddvdvss+xml</span></code> as printed in the archive table; §3.3.5 writes <code class="docutils literal notranslate"><span class="pre">text/hddvdss+xml</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">xss</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">0x07</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">application/ecmascript</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">js</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">0x08</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">video/evob</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">evo</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">0x09</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">application/tmap</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">map</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">0x0A</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">image/jpeg</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">jpg</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">0x0B</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">image/png</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">png</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">0x0C</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">image/mng</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">mng</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">0x0D</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">image/cvi</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">cvi</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">0x0E</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">image/cdw</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">cdw</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">0x0F</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">audio/x-wav</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">wav</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">0x10</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">application/font</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">otf</span></code> <code class="docutils literal notranslate"><span class="pre">ttf</span></code> <code class="docutils literal notranslate"><span class="pre">ttc</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">0x11</span></code>–<code class="docutils literal notranslate"><span class="pre">0xFE</span></code></p></td>
+<td><p>reserved</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">0xFF</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">application/x-data</span></code>, any other data</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+<p>On disc every member whose bytes are AACS-wrapped is typed <code class="docutils literal notranslate"><span class="pre">0xFF</span></code>, whatever its
+name says (<code class="docutils literal notranslate"><span class="pre">js</span></code> 111, <code class="docutils literal notranslate"><span class="pre">png</span></code> 585, <code class="docutils literal notranslate"><span class="pre">ttf</span></code> 7, <code class="docutils literal notranslate"><span class="pre">xas</span></code> 2, <code class="docutils literal notranslate"><span class="pre">xmf</span></code> 83, <code class="docutils literal notranslate"><span class="pre">xmu</span></code> 77, <code class="docutils literal notranslate"><span class="pre">xts</span></code> 1,
+<code class="docutils literal notranslate"><span class="pre">xul</span></code> 2). The type of a member is its name’s extension once it is unwrapped
+(<a class="reference internal" href="01_volume.html"><span class="std std-doc">01</span></a> §1.5).</p>
 <p>Then <code class="docutils literal notranslate"><span class="pre">pos</span> <span class="pre">+=</span> <span class="pre">record</span> <span class="pre">size</span></code> and parse the next entry. First member offset is the
 u32 at byte 32, <strong>not</strong> <code class="docutils literal notranslate"><span class="pre">32</span> <span class="pre">+</span> <span class="pre">58×N</span></code>.</p>
 <table class="docutils align-default">
@@ -584,7 +697,7 @@ u32 at byte 32, <strong>not</strong> <code class="docutils literal notranslate">
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">STALINGRAD</span></code> <code class="docutils literal notranslate"><span class="pre">mainApp.aca</span></code></p></td>
 <td><p>9</p></td>
 <td><p>yes</p></td>
-<td><p><strong>9/9</strong> (<code class="docutils literal notranslate"><span class="pre">flags</span></code> high byte <code class="docutils literal notranslate"><span class="pre">0x02</span></code>–<code class="docutils literal notranslate"><span class="pre">0x07</span></code>)</p></td>
+<td><p><strong>9/9</strong> (MIME code <code class="docutils literal notranslate"><span class="pre">0x02</span></code>–<code class="docutils literal notranslate"><span class="pre">0x07</span></code>)</p></td>
 <td><p>0 (directory ends at first payload)</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">MATRIX_REVOLUTIONS</span></code> <code class="docutils literal notranslate"><span class="pre">selector.aca</span></code></p></td>
@@ -620,7 +733,7 @@ u32 at byte 32, <strong>not</strong> <code class="docutils literal notranslate">
 </tbody>
 </table>
 <p>IEEE CRC-32 of the slice <code class="docutils literal notranslate"><span class="pre">[offset,</span> <span class="pre">offset+length)</span></code> matches the stored CRC <strong>iff</strong>
-the flags high byte is not <code class="docutils literal notranslate"><span class="pre">0xff</span></code>. On <code class="docutils literal notranslate"><span class="pre">0xff</span></code> members the stored CRC is not the
+the MIME code is not <code class="docutils literal notranslate"><span class="pre">0xff</span></code>. On <code class="docutils literal notranslate"><span class="pre">0xff</span></code> members the stored CRC is not the
 raw-payload CRC (likely a wrapped/AACS digest). Extract anyway by offset/length;
 do not reject the archive because those CRCs fail.</p>
 <p>The 283-byte gap (<code class="docutils literal notranslate"><span class="pre">0xff</span></code> archives) is an <strong>AACS per-member content-protection
@@ -653,28 +766,31 @@ the first name is 12 bytes (<code class="docutils literal notranslate"><span cla
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">*.xmf</span></code></p></td>
 <td><p>Manifest XML (<a class="reference internal" href="05_manifest_hdi.html"><span class="std std-doc">05</span></a>)</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">*.xmu</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">*.xpl</span></code></p></td>
+<td><p>Playlist (allowed by the book; 0 on disc)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">*.xmu</span></code></p></td>
 <td><p>HDi markup</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">*.js</span></code></p></td>
-<td><p>ECMAScript. <strong>UTF-16BE with BOM <code class="docutils literal notranslate"><span class="pre">FE</span> <span class="pre">FF</span></code></strong> on every saved file (<code class="docutils literal notranslate"><span class="pre">e15</span></code> N≥77, including three loose <code class="docutils literal notranslate"><span class="pre">1408</span></code>). The earlier “1408 loose JS is UTF-8” claim is <strong>refuted</strong>.</p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">*.js</span></code></p></td>
+<td><p>ECMAScript. <strong>UTF-16BE with BOM <code class="docutils literal notranslate"><span class="pre">FE</span> <span class="pre">FF</span></code></strong> on every saved file (<code class="docutils literal notranslate"><span class="pre">e15</span></code> N≥77, including three loose <code class="docutils literal notranslate"><span class="pre">1408</span></code>; 122/122 readable scripts in 2026-10), which is what the book requires [23 §8.2.1]. The earlier “1408 loose JS is UTF-8” claim is <strong>refuted</strong>.</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">*.xas</span></code></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">*.xas</span></code></p></td>
 <td><p>Advanced Subtitle markup (empty iHD stub on HOT_FUZZ / ARMY_OF_SHADOWS)</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">*.xts</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">*.xts</span></code></p></td>
 <td><p>Timing-only iHD document (<code class="docutils literal notranslate"><span class="pre">include</span></code> target)</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">*.xul</span></code></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">*.xul</span></code></p></td>
 <td><p>Mozilla XUL, <strong>not</strong> iHD (PANS_LABYRINTH). Ignore in the HDi engine.</p></td>
 </tr>
-<tr class="row-even"><td><p>fonts, PNG, etc.</p></td>
+<tr class="row-odd"><td><p>fonts, PNG, etc.</p></td>
 <td><p>as named</p></td>
 </tr>
 </tbody>
 </table>
 <p>Extract: for each entry, slice <code class="docutils literal notranslate"><span class="pre">[offset,</span> <span class="pre">offset+length)</span></code>. CRC-check that slice
-when <code class="docutils literal notranslate"><span class="pre">flags</span></code> high byte is not <code class="docutils literal notranslate"><span class="pre">0xff</span></code>.</p>
+when the MIME code is not <code class="docutils literal notranslate"><span class="pre">0xff</span></code>.</p>
 </section>
 <section id="namespace">
 <h2>4.4 Namespace<a class="headerlink" href="#namespace" title="Link to this heading"></a></h2>
@@ -684,7 +800,10 @@ when <code class="docutils literal notranslate"><span class="pre">flags</span></
 </pre></div>
 </div>
 <p>Resolve <code class="docutils literal notranslate"><span class="pre">foo.aca/bar.xmf</span></code> by opening <code class="docutils literal notranslate"><span class="pre">ADV_OBJ/foo.aca</span></code> and taking directory name
-<code class="docutils literal notranslate"><span class="pre">bar.xmf</span></code>. The resource line names the whole archive (preload into File Cache).</p>
+<code class="docutils literal notranslate"><span class="pre">bar.xmf</span></code>. The resource line names the whole archive (preload into File Cache).
+The book’s general form is <code class="docutils literal notranslate"><span class="pre">file:///&lt;source&gt;/&lt;archive&gt;/&lt;member&gt;</span></code>, for any data
+source; the File Cache gives script and markup direct access to members of a
+cached archive [23 §4.3.20.4].</p>
 </section>
 </section>
 
