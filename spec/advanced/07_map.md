@@ -19,73 +19,79 @@ title time T
 
 ## 7.1 File layout
 
+The book's layout is [23 §6.3.2]. One map per EVOB of a contiguous block; one map
+for all EVOBs of an interleaved block, with one TMAPI per EVOB in order. The map
+is sector-aligned and may be followed by up to 2047 zero bytes.
+
 ```
-[0 .. 127]     TMAP_GI
-[128 .. 371]   zero on 2421/2421
-[372 .. 373]   u16be ILVU record count on the four interleaved maps (equals the walk until ILVU_SZ=0); **zero on 2417 contiguous maps**. TMAPI_SRP.ILVU_ENT_Ns is still 0. Do not use the SRP field.
-[374 .. 383]   zero
-[384 .. )      TMAPI_SRP, 10-byte record in a 32-byte slot, one per TMAPI
+[0 .. 383]     TMAP_GI (384 bytes)
+[384 .. )      TMAPI_SRP, one 32-byte record per TMAPI
 [TMAPI_SA ..)  TMAPI = EVOBU_ENT[EVOBU_ENT_Ns]
-[ILVUI_SA ..)  ILVUI only if present (not 0xFFFFFFFF)
+[ILVUI_SA ..)  ILVUI = ILVU_ENT[ILVU_ENT_Ns], only for an interleaved block
 ```
 
-`[128 .. 383]` is **not** reserved-zero on Pan’s four maps: only bytes **372–373** are live (`death` 180, `ofeliaDeath` 372, `ofeliaEnters` 500, `ofeliaFig` 240).
-`[11]` **VERIFIED**
+`TMAPI_SA` and `ILVUI_SA` are **byte offsets from the start of the file**: the book's
+RBN, as on every disc (the patent says LBN).
+`[23]` **SPEC**; `[11]` **VERIFIED**
 
-`TMAPI_SA` and `ILVUI_SA` are **byte offsets from the start of the file**, not LBNs
-(patent says LBN; every disc uses bytes).
-
-## 7.2 TMAP_GI (128 bytes): TABLE 80
+## 7.2 TMAP_GI (384 bytes) [23 Table 6.3.2.1-1]
 
 | RBP | Size | Field | Rule |
 |---|---|---|---|
-| 0 | 12 | `TMAP_ID` | `"HDDVD_TMAP00"` |
-| 12 | 4 | `TMAP_EA` | last sector of this file (`file_sectors − 1`); 2421/2421 |
+| 0 | 12 | `TMAP_ID` | `"HDDVD_TMAP00"` (patent text says `"HDDVD-V_TMAP"`; book and disc agree) |
+| 12 | 4 | `TMAP_EA` | last sector of this map (RLBN, `file_sectors − 1`); 2421/2421 |
 | 16 | 2 | reserved | 0 |
-| 18 | 2 | `VERN` | `0x0010` |
+| 18 | 2 | `VERN` | `0x0010` (low byte = book version 1.0) |
 | 20 | 2 | `TMAP_TY` | see below |
 | 22 | 28 | reserved | |
-| 50 | 5 | reserved | “VTMAP_LAST_MOD_TM” in patent |
-| 55 | 2 | `TMAPI_Ns` | `1` on Primary Video Set (2417/2421) |
+| 50 | 5 | reserved for the Interoperable VTS | patent: `VTMAP_LAST_MOD_TM` |
+| 55 | 2 | `TMAPI_Ns` | `1` for a contiguous block (2417/2421) |
 | 57 | 4 | `ILVUI_SA` | byte offset, or `0xFFFFFFFF` if none |
 | 61 | 4 | `EVOB_ATR_SA` | `0xFFFFFFFF` on primary maps |
 | 65 | 49 | reserved | |
-| 114 | 12 | VTI filename | `"HVA00001.VTI"` on 2421/2421 |
-| 126 | 2 | reserved | 0 |
+| 114 | 255 | `VTSI_FNAME` | VTI filename, ISO 8859-1, zero-filled: `"HVA00001.VTI"` on 2421/2421 |
+| 369 | 1 | reserved for copy protection | 0 |
+| 370 | 4 | `ILVU_ENT_Ns` | number of `ILVU_ENT` in the interleaved block; 0 when there is no ILVUI. Non-zero exactly on the four interleaved maps (`death` 180, `ofeliaDeath` 372, `ofeliaEnters` 500, `ofeliaFig` 240), equal to the walk until `ILVU_SZ=0` |
+| 374 | 10 | reserved | 0 |
 
-### TMAP_TY: TABLE 81 figure C00039
+An earlier version of this sheet took the GI as 128 bytes with an unexplained
+count at 372–373; the book's 384-byte GI explains both.
 
-16-bit, `b15` = MSB of byte 0. Figure: `spec/raw/patents/figures/US20080298219A1/US20080298219A1-20081204-C00039.png`.
+### TMAP_TY [23 §6.3.2.1]
+
+16-bit, `b15` = MSB of byte 0. Patent figure:
+`spec/raw/patents/figures/US20080298219A1/US20080298219A1-20081204-C00039.png`.
 
 | Bits | Mask | Field |
 |---|---|---|
-| 15–10 | | reserved (corpus always has **b13** set → `0x2000`) |
+| 15–12 | `0xF000` | Application type: `0001b` Standard VTS, `0010b` Advanced VTS, `0011b` Interoperable VTS; `0100b` Secondary Video Set (§7.6) |
+| 11–10 | | reserved for copy protection |
 | 9 | `0x0200` | `ILVUI`: `0b` no ILVUI (contiguous); `1b` ILVUI present (interleaved) |
 | 8 | `0x0100` | `ATR`: `0b` Primary, no `EVOB_ATR` in this file; `1b` Secondary (`EVOB_ATR` present; **not allowed on Primary**) |
 | 7–2 | | reserved |
-| 1–0 | `0x0003` | Angle: `00b` none, `01b` non-seamless, `10b` seamless, `11b` reserved |
+| 1–0 | `0x0003` | Angle: `00b` none, `01b` non-seamless angle block, `10b` seamless angle block, `11b` reserved. `01b` or `10b` when `ILVUI` is 1 |
 
 | Value | N | Meaning |
 |---|---|---|
-| `0x2000` | 2417 | contiguous primary (`TMAPI_Ns=1`, `TMAPI_SA=416`): b13 only |
-| `0x2202` | 4 | Pan’s interleaved: b13 + ILVUI + Angle `10b` seamless |
+| `0x2000` | 2417 | Advanced VTS, contiguous (`TMAPI_Ns=1`, `TMAPI_SA=416`) |
+| `0x2202` | 4 | Pan's interleaved: Advanced VTS + ILVUI + Angle `10b` seamless |
 
-`[2]`
-`[11, 12]` **VERIFIED** for the named bits. Bit 13 has no label in the figure.
+The `0x2000` bit that the patent figure leaves unlabelled is the application type.
+`[23]` **SPEC**; `[2]`; `[11, 12]` **VERIFIED**
 
-## 7.3 TMAPI_SRP: TABLE 82
+## 7.3 TMAPI_SRP (32 bytes each) [23 §6.3.2.2]
 
-Starts at **byte 384**. One 10-byte record in a **32-byte slot**: `384 + 32×i`.
+Starts at **byte 384**: record `i` at `384 + 32×i`.
 
-| Size | Field | Rule |
-|---|---|---|
-| 4 | `TMAPI_SA` | **byte** offset of this TMAPI |
-| 2 | `VTS_EVOBIN` | EVOBI index (not always the `EVOBnnn` number) |
-| 2 | `EVOBU_ENT_Ns` | entry count. `Ns×4 + TMAPI_SA` lands in the file |
-| 2 | `ILVU_ENT_Ns` | **0** on 2417 contiguous maps **and** on the four interleaved maps |
+| Offset | Size | Field | Rule |
+|---|---|---|---|
+| 0 | 4 | `TMAPI_SA` | **byte** offset of this TMAPI |
+| 4 | 2 | `EVOB_INDEX` | 1–1998: the `EVOB_INDEX` of the EVOB this TMAPI maps, as in its VTS_EVOBI ([06](06_vti.md) §6.3). Equal on 2420/2420 maps whose EVOB has an EVOBI. Look the EVOBI up by this number, not by position |
+| 6 | 2 | `EVOBU_ENT_Ns` | entry count. `Ns×4 + TMAPI_SA` lands in the file |
+| 8 | 24 | reserved | 0 on 2421/2421 (an earlier reading took 8–9 as an `ILVU_ENT_Ns`; the count is at 370 of the GI) |
 
 When `TMAPI_Ns=1`, `TMAPI_SA=416` (2417/2417).  
-When `Ns=3`, SA=480 (`PANS_LABYRINTH` `death.MAP`). When `Ns=4`, SA=512 (three `ofelia*` maps). Those four are the only `Ns≠1`. `Video@angleNumber` is **1-based** → TMAPI index `angleNumber − 1`.
+When `Ns=3`, SA=480 (`PANS_LABYRINTH` `death.MAP`). When `Ns=4`, SA=512 (three `ofelia*` maps). Those four are the only `Ns≠1`. `Video@angleNumber` *n* is the *n*-th TMAPI (1-based) → TMAPI index `angleNumber − 1` [23 §6.2.3.3].
 
 ## 7.4 EVOBU_ENT: TABLE 83 (4 bytes)
 
@@ -94,9 +100,11 @@ image `US20080298219A1-20081204-C00040.png`.
 
 | Bits | Width | Field | Unit |
 |---|---|---|---|
-| 31–21 | 11 | `1STREF_SZ` | packs from EVOBU start through last byte of first reference picture |
-| 20–13 | 8 | `EVOBU_PB_TM` | video **fields** in this EVOBU |
+| 31–21 | 11 | `1STREF_SZ` | packs from EVOBU start through the pack holding the last byte of the first I-coded-frame; 0 if the EVOBU has no video |
+| 20–13 | 8 | `EVOBU_PB_TM` | playback time in **VSTUs** (video system time units: one field period, 1.001/60 s or 1/50 s) |
 | 12–0 | 13 | `EVOBU_SZ` | packs in this EVOBU |
+
+`[23 §6.3.2.3]` **SPEC**
 
 Do not use an 11-bit size. Corpus: **108** entries have `EVOBU_SZ > 2047`, all on
 **contiguous** maps (`e14` A69). **0** on the four interleaved maps. 13-bit SZ is
@@ -138,10 +146,12 @@ Only four maps (`PANS_LABYRINTH` `death.MAP`, `ofeliaDeath.MAP`, `ofeliaEnters.M
 
 | Size | Field | Rule |
 |---|---|---|
-| 4 | `ILVU_ADR` | pack index in the sibling `.EVO`, ascending |
-| 2 | `ILVU_SZ` | **EVOBU count of this angle** in this contiguous run (patent TABLE 84), **not packs**. Authoring quantum is usually `TMAPI_Ns` (3 or 4) with a leftover tail (`death` SZ=1×3; `ofelia*` SZ=3×4) |
+| 4 | `ILVU_ADR` | start of the ILVU as an RLBN from the first sector of the interleaved block [23 §6.3.2.4]; the block is the whole `.EVO` file, so this is the pack index in it, ascending |
+| 2 | `ILVU_SZ` | **EVOBU count of this angle** in this ILVU (book and patent TABLE 84), **not packs**. Authoring quantum is usually `TMAPI_Ns` (3 or 4) with a leftover tail (`death` SZ=1×3; `ofelia*` SZ=3×4) |
 
-**No ILVUI header.** `ILVUI_SA` points at the first `ILVU_ENT`. Walk 6-byte records until `ILVU_SZ=0`. Count lives at **u16be @372** (equals the walk). `TMAPI_SRP.ILVU_ENT_Ns` is **0**. Do not use it.
+**No ILVUI header.** `ILVUI_SA` points at the first `ILVU_ENT`. There are
+`ILVU_ENT_Ns` records (GI offset 370); walking 6-byte records until `ILVU_SZ=0`
+gives the same count.
 
 Records **cycle angles**: record `i` belongs to TMAPI `i % TMAPI_Ns`. `ILVU_ADR` is a pack index in the sibling `.EVO`. The next `ADR` is this `ADR` plus the sum of that angle’s next `ILVU_SZ` `EVOBU_SZ` values. Verified 179/179 + 371 + 499 + 239 consecutive deltas (`e13`). Treating `SZ` as packs never matches (would step by 3 or 4, not hundreds).
 
@@ -150,3 +160,47 @@ To play angle `A` (1-based `Video@angleNumber` → `A = angleNumber − 1`): ski
 Contiguous titles (`TMAP_TY=0x2000`) never need this. AACS sequence-key files (`SKF`) are **0/120** here; user angle selection is the observed mechanism. Player SK path remains **OPEN**.
 
 Patent FIG.77 draws **one TMAP file per angle EVOB**, each with its own ILVUI; FIG.88 draws two EVOBs sharing one TMAP name. This corpus is neither: one `.MAP`, `Ns` TMAPIs, one cycling ILVU array, one `.EVO`. Implement the disc walk (`spec/clean/16_PATENT_FIGURES.md`).
+
+## 7.6 Secondary Video Set maps
+
+The map of a Secondary Video Set ([03](03_playlist.md) §3.10) differs [23 §6.4.1].
+0 on disc.
+
+| RBP | Size | Field |
+|---|---|---|
+| 0 | 12 | `TMAP_ID` `"HDDVD_TMAP00"` |
+| 12 | 4 | `TMAP_EA` |
+| 16 | 2 | reserved |
+| 18 | 2 | `VERN` |
+| 20 | 2 | `TMAP_TY`: application type `0100b`, `ILVUI` 0, `ATR` 1, Angle `00b` |
+| 22 | 33 | reserved |
+| 55 | 2 | `TMAPI_Ns`: 0 or 1 (0 allowed, for example for a live stream) |
+| 57 | 4 | `ILVUI_SA`: all 1s |
+| 61 | 4 | `EVOB_ATR_SA`: byte offset of the `EVOB_ATR` |
+| 65 | 49 | reserved |
+| 114 | 255 | `VTSI_FNAME`: all 1s |
+| 369 | 1 | reserved |
+| 370 | 255 | `EVOB_FNAME`: the S-EVOB this map belongs to; a network player fetches it from the map's location [23 §9.2.2.2] |
+| 625 | 1 | reserved |
+| 626 | 4 | `EVOB_V_S_PTM` (90 kHz; the first audio time if there is no video) |
+| 630 | 4 | `EVOB_FIRST_SCR` |
+| 634 | 6 | reserved |
+
+The GI is 640 bytes. Then at most one `TMAPI_SRP` (`TMAPI_SA`, 2 reserved bytes,
+`EVOBU_ENT_Ns`, 24 reserved), the TMAPI, and one 1024-byte `EVOB_ATR`: `EVOB_TY`
+(b3–b0 content: `0001b` Substitute Audio, `0010b` Secondary AV with sub video,
+`0100b` with sub audio, `0110b` with both, `1001b` Substitute AV), `EVOB_VM_ATR`,
+`EVOB_VS_ATR`, `EVOB_VS_LUMA`, reserved 2, `EVOB_AMST_Ns`, `EVOB_AMST_ATRT` (32),
+`EVOB_DM_COEFTS` (144), `EVOB_ASST_Ns`, `EVOB_ASST_ATRT` (32), reserved, laid out
+as in [06](06_vti.md) §6.2.
+
+An S-EVOB with video is mapped by `EVOBU_ENT` as above. One without video is
+divided into **Time Units** (each starting with a navigation pack, 0.4–1.001 s,
+the last at most 1.2012 s, a whole number of audio frames) and mapped by `TU_ENT`:
+
+| Bits | Field |
+|---|---|
+| 31–13 | `TU_DIFF` (19 bits): PTS of the next TU's first frame minus this TU's (90 kHz); for the last TU, its last frame minus its first |
+| 12–0 | `TU_SZ` (13 bits): packs in this TU |
+
+`[23 §6.4]` **SPEC**; 0 on disc.

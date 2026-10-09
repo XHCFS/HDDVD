@@ -31,7 +31,7 @@ URL, of the form https://archive.org/download/hd-dvd_archive_NN/<DISC>.iso
 | e10 | Live MAP walk: sum(EVOBU_SZ)=EVO packs; seek lands on 00 00 01 BA |
 | e11 | ACA 14+namelen+32; EVOBI+274/+278; ATRI +6/+391; no HVSO/APLST/Cat3; VTUF 144 B |
 | e12 | Implementer census (selectors, FirstPlayTitle, exclusive titleTimeEnd, …) |
-| e13 | MAP pad 128–371/374–383; u16@372=ILVU count; ILVU rotation walk; V_ATR 0 AVC/VC-1; ATRI@193; EVOBI 36-byte name |
+| e13 | TMAP_GI 384 B, `ILVU_ENT_Ns` u32@370 = ILVU count; ILVU rotation walk; `VM_ATR` compression b31–29 histogram; `ASST`@192; EVOBI 36-char name |
 | e14 | Adversarial search (SEARCH_FLG, PROVIDER_ID shapes, multiplexed, loadingBegin, …) |
 | e15 | HDi menu census: JS UTF-16BE, size vs listing, jump/load, used iHD attrs |
 | e16 | ADV_PCK `0x80`: `STALINGRAD` `logo.EVO` concat = ACA files; dump offline. `E16_FULL=1` re-fetches |

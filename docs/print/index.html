@@ -159,29 +159,30 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="#document-06_vti">6. HVA00001.VTI: Advanced VTSI</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#document-06_vti#vtsi-mat-first-2048-bytes">6.1 VTSI_MAT (first 2048 bytes)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#document-06_vti#vtsi-mat-1024-bytes-padded-to-2048">6.1 VTSI_MAT (1024 bytes, padded to 2048)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#document-06_vti#vts-evob-atrt-at-vts-evob-atrt-sa-2048">6.2 VTS_EVOB_ATRT (at <code class="docutils literal notranslate"><span class="pre">VTS_EVOB_ATRT_SA</span></code> × 2048)</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#document-06_vti#atri-1024-bytes">ATRI (1024 bytes)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#document-06_vti#vts-evob-atr-1024-bytes">VTS_EVOB_ATR (1024 bytes)</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#document-06_vti#vts-evobit-at-vts-evobit-sa-2048">6.3 VTS_EVOBIT (at <code class="docutils literal notranslate"><span class="pre">VTS_EVOBIT_SA</span></code> × 2048)</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#document-06_vti#evobi-320-bytes">EVOBI (320 bytes)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#document-06_vti#vts-evobi-320-bytes-23-6-3-1-3-3">VTS_EVOBI (320 bytes) [23 §6.3.1.3.3]</a></li>
 </ul>
 </li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="#document-07_map">7. MAP: time map</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#document-07_map#file-layout">7.1 File layout</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#document-07_map#tmap-gi-128-bytes-table-80">7.2 TMAP_GI (128 bytes): TABLE 80</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#document-07_map#tmap-ty-table-81-figure-c00039">TMAP_TY: TABLE 81 figure C00039</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#document-07_map#tmap-gi-384-bytes-23-table-6-3-2-1-1">7.2 TMAP_GI (384 bytes) [23 Table 6.3.2.1-1]</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#document-07_map#tmap-ty-23-6-3-2-1">TMAP_TY [23 §6.3.2.1]</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#document-07_map#tmapi-srp-table-82">7.3 TMAPI_SRP: TABLE 82</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#document-07_map#tmapi-srp-32-bytes-each-23-6-3-2-2">7.3 TMAPI_SRP (32 bytes each) [23 §6.3.2.2]</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#document-07_map#evobu-ent-table-83-4-bytes">7.4 EVOBU_ENT: TABLE 83 (4 bytes)</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#document-07_map#seek-algorithm">Seek algorithm</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#document-07_map#ilvu-ent-table-84-6-bytes">7.5 ILVU_ENT: TABLE 84 (6 bytes)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#document-07_map#secondary-video-set-maps">7.6 Secondary Video Set maps</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="#document-08_evo">8. EVO: MPEG-2 program stream</a><ul>
@@ -7065,10 +7066,16 @@ One file per Advanced disc (119/119).<br />
 Magic: <code class="docutils literal notranslate"><span class="pre">ADVANCED-VTS</span></code><br />
 <code class="docutils literal notranslate"><span class="pre">VERN</span></code>: <code class="docutils literal notranslate"><span class="pre">0x0010</span></code><br />
 <code class="docutils literal notranslate"><span class="pre">VTSI_EA</span></code> == (file sectors − 1) on 119/119.</p>
-<p>Patent: US20080298219A1 TABLE 77. Disc agrees on identifiers and the SA fields below.</p>
-<p>Addresses <code class="docutils literal notranslate"><span class="pre">*_SA</span></code> are <strong>sector</strong> numbers from the start of this file (× 2048 = byte).</p>
-<section id="vtsi-mat-first-2048-bytes">
-<h4>6.1 VTSI_MAT (first 2048 bytes)<a class="headerlink" href="#vtsi-mat-first-2048-bytes" title="Link to this heading"></a></h4>
+<p>The book’s layout is [23 §6.3.1]; the patent (US20080298219A1 TABLE 77) agrees on
+identifiers and the SA fields. The VTSI is three tables, each starting on a sector
+boundary and followed by up to 2047 zero bytes: <code class="docutils literal notranslate"><span class="pre">VTSI_MAT</span></code>, <code class="docutils literal notranslate"><span class="pre">VTS_EVOB_ATRT</span></code>,
+<code class="docutils literal notranslate"><span class="pre">VTS_EVOBIT</span></code>. A backup <code class="docutils literal notranslate"><span class="pre">HVA00001.BUP</span></code> may follow the same layout; the VTSI and its
+backup are never in the same ECC block [23 §3.3].</p>
+<p>Addresses <code class="docutils literal notranslate"><span class="pre">*_SA</span></code> and <code class="docutils literal notranslate"><span class="pre">VTSI_EA</span></code> are <strong>sector</strong> numbers (RLBN) from the start of this
+file (× 2048 = byte). <code class="docutils literal notranslate"><span class="pre">*_EA</span></code> inside a table and the search pointers are <strong>byte</strong>
+offsets (RBN) from the start of that table.</p>
+<section id="vtsi-mat-1024-bytes-padded-to-2048">
+<h4>6.1 VTSI_MAT (1024 bytes, padded to 2048)<a class="headerlink" href="#vtsi-mat-1024-bytes-padded-to-2048" title="Link to this heading"></a></h4>
 <table class="docutils align-default">
 <thead>
 <tr class="row-odd"><th class="head"><p>RBP</p></th>
@@ -7081,79 +7088,68 @@ Magic: <code class="docutils literal notranslate"><span class="pre">ADVANCED-VTS
 <tr class="row-even"><td><p>0</p></td>
 <td><p>12</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">VTS_ID</span></code></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">&quot;ADVANCED-VTS&quot;</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&quot;ADVANCED-VTS&quot;</span></code>, ISO 8859-1</p></td>
 </tr>
 <tr class="row-odd"><td><p>12</p></td>
-<td><p>4</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">VTS_EA</span></code></p></td>
-<td><p>patent: end of VTS as RLBN. <strong>Disc: <code class="docutils literal notranslate"><span class="pre">0</span></code> on 119/119</strong> (<code class="docutils literal notranslate"><span class="pre">e14</span></code>). EVOBs are separate files (<code class="docutils literal notranslate"><span class="pre">VTS_EVOBS_SA=0</span></code>). Do not add this to pack addresses.</p></td>
-</tr>
-<tr class="row-even"><td><p>16</p></td>
-<td><p>12</p></td>
+<td><p>16</p></td>
 <td><p>reserved</p></td>
-<td><p>0</p></td>
+<td><p>0 on 119/119. The patent calls 12–15 <code class="docutils literal notranslate"><span class="pre">VTS_EA</span></code>; the book reserves it. Do not add it to pack addresses</p></td>
 </tr>
-<tr class="row-odd"><td><p>28</p></td>
+<tr class="row-even"><td><p>28</p></td>
 <td><p>4</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">VTSI_EA</span></code></p></td>
-<td><p>last sector of this file</p></td>
+<td><p>last sector of the VTSI (= file sectors − 1 on 119/119)</p></td>
 </tr>
-<tr class="row-even"><td><p>32</p></td>
+<tr class="row-odd"><td><p>32</p></td>
 <td><p>2</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">VERN</span></code></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">0x0010</span></code></p></td>
+<td><p>b7–b0 book version, <code class="docutils literal notranslate"><span class="pre">0x10</span></code> = 1.0; b15–b8 reserved. <code class="docutils literal notranslate"><span class="pre">0x0010</span></code> on 119/119</p></td>
 </tr>
-<tr class="row-odd"><td><p>34</p></td>
+<tr class="row-even"><td><p>34</p></td>
 <td><p>4</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">VTS_CAT</span></code></p></td>
-<td><p><strong>2</strong> = Advanced VTS (<code class="docutils literal notranslate"><span class="pre">0010b</span></code> application type)</p></td>
+<td><p>b3–b0 application type: <code class="docutils literal notranslate"><span class="pre">0010b</span></code> Advanced VTS, <code class="docutils literal notranslate"><span class="pre">0011b</span></code> Interoperable VTS; the rest reserved. <strong>2</strong> on 119/119</p></td>
 </tr>
-<tr class="row-even"><td><p>38</p></td>
+<tr class="row-odd"><td><p>38</p></td>
 <td><p>90</p></td>
 <td><p>reserved</p></td>
 <td><p>0</p></td>
 </tr>
-<tr class="row-odd"><td><p>128</p></td>
+<tr class="row-even"><td><p>128</p></td>
 <td><p>4</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">VTSI_MAT_EA</span></code></p></td>
-<td><p>end of this MAT</p></td>
+<td><p>end of this table, byte offset</p></td>
 </tr>
-<tr class="row-even"><td><p>132</p></td>
+<tr class="row-odd"><td><p>132</p></td>
 <td><p>52</p></td>
 <td><p>reserved</p></td>
 <td><p>0</p></td>
 </tr>
-<tr class="row-odd"><td><p>184</p></td>
+<tr class="row-even"><td><p>184</p></td>
 <td><p>4</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">VTS_EVOB_ATRT_SA</span></code></p></td>
 <td><p><strong>1</strong> on 119/119 (ATRT starts at byte 2048)</p></td>
 </tr>
-<tr class="row-even"><td><p>188</p></td>
+<tr class="row-odd"><td><p>188</p></td>
 <td><p>4</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">VTS_EVOBIT_SA</span></code></p></td>
-<td><p>varies (sector of EVOBI table)</p></td>
+<td><p>varies (sector of the EVOBI table)</p></td>
 </tr>
-<tr class="row-odd"><td><p>192</p></td>
-<td><p>4</p></td>
+<tr class="row-even"><td><p>192</p></td>
+<td><p>832</p></td>
 <td><p>reserved</p></td>
-<td><p>0</p></td>
+<td><p>0. The patent calls 196–199 <code class="docutils literal notranslate"><span class="pre">VTS_EVOBS_SA</span></code>; the book reserves it (EVOBs are separate <code class="docutils literal notranslate"><span class="pre">.EVO</span></code> files). 0 on 119/119</p></td>
 </tr>
-<tr class="row-even"><td><p>196</p></td>
-<td><p>4</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">VTS_EVOBS_SA</span></code></p></td>
-<td><p><strong>0</strong> on 119/119 (EVOBs are separate <code class="docutils literal notranslate"><span class="pre">.EVO</span></code> files)</p></td>
-</tr>
-<tr class="row-odd"><td><p>200</p></td>
-<td><p>1848</p></td>
-<td><p>reserved</p></td>
-<td><p>0</p></td>
+<tr class="row-odd"><td><p>1024</p></td>
+<td><p>1024</p></td>
+<td><p>padding to the sector</p></td>
+<td><p>0 on 119/119</p></td>
 </tr>
 </tbody>
 </table>
 </section>
 <section id="vts-evob-atrt-at-vts-evob-atrt-sa-2048">
 <h4>6.2 VTS_EVOB_ATRT (at <code class="docutils literal notranslate"><span class="pre">VTS_EVOB_ATRT_SA</span></code> × 2048)<a class="headerlink" href="#vts-evob-atrt-at-vts-evob-atrt-sa-2048" title="Link to this heading"></a></h4>
-<p>DVD-style search table, 1024-byte entries.</p>
 <table class="docutils align-default">
 <thead>
 <tr class="row-odd"><th class="head"><p>Offset</p></th>
@@ -7164,7 +7160,7 @@ Magic: <code class="docutils literal notranslate"><span class="pre">ADVANCED-VTS
 <tbody>
 <tr class="row-even"><td><p>0</p></td>
 <td><p>2</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">nr</span></code> number of ATRI</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">VTS_EVOB_ATR_Ns</span></code>, number of attribute records, 1–511</p></td>
 </tr>
 <tr class="row-odd"><td><p>2</p></td>
 <td><p>2</p></td>
@@ -7172,134 +7168,295 @@ Magic: <code class="docutils literal notranslate"><span class="pre">ADVANCED-VTS
 </tr>
 <tr class="row-even"><td><p>4</p></td>
 <td><p>4</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">last_byte</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">VTS_EVOB_ATRT_EA</span></code>, last byte of the table</p></td>
 </tr>
 <tr class="row-odd"><td><p>8</p></td>
-<td><p>4×<code class="docutils literal notranslate"><span class="pre">nr</span></code></p></td>
-<td><p>start offsets of each ATRI (from start of this table)</p></td>
+<td><p>4×<code class="docutils literal notranslate"><span class="pre">Ns</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">VTS_EVOB_ATR_SA</span></code>, byte offset of each record from the start of this table</p></td>
 </tr>
 </tbody>
 </table>
-<p>First offset is always <code class="docutils literal notranslate"><span class="pre">8</span> <span class="pre">+</span> <span class="pre">4×nr</span></code>.<br />
-<code class="docutils literal notranslate"><span class="pre">(last_byte+1</span> <span class="pre">−</span> <span class="pre">first_SA)</span> <span class="pre">/</span> <span class="pre">nr</span> <span class="pre">=</span> <span class="pre">1024</span></code> on every specimen.</p>
-<section id="atri-1024-bytes">
-<h5>ATRI (1024 bytes)<a class="headerlink" href="#atri-1024-bytes" title="Link to this heading"></a></h5>
+<p>First offset is always <code class="docutils literal notranslate"><span class="pre">8</span> <span class="pre">+</span> <span class="pre">4×Ns</span></code>.
+<code class="docutils literal notranslate"><span class="pre">(last_byte+1</span> <span class="pre">−</span> <span class="pre">first_SA)</span> <span class="pre">/</span> <span class="pre">Ns</span> <span class="pre">=</span> <span class="pre">1024</span></code> on every specimen. One record may serve
+several EVOBs; the EVOBs of an interleaved block for seamless angle change share
+one record [23 §6.3.1.2].</p>
+<section id="vts-evob-atr-1024-bytes">
+<h5>VTS_EVOB_ATR (1024 bytes)<a class="headerlink" href="#vts-evob-atr-1024-bytes" title="Link to this heading"></a></h5>
 <table class="docutils align-default">
 <thead>
 <tr class="row-odd"><th class="head"><p>Offset</p></th>
 <th class="head"><p>Size</p></th>
 <th class="head"><p>Field</p></th>
+<th class="head"><p>Disc (1131 records)</p></th>
 </tr>
 </thead>
 <tbody>
 <tr class="row-even"><td><p>0</p></td>
 <td><p>2</p></td>
-<td><p>flags</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">EVOB_TY</span></code></p></td>
+<td><p>b13–b12 Advanced Stream present (<code class="docutils literal notranslate"><span class="pre">01b</span></code>), b11–b10 sub video present, b9–b8 sub audio present; the rest reserved. <code class="docutils literal notranslate"><span class="pre">0x0000</span></code> 987, <code class="docutils literal notranslate"><span class="pre">0x1000</span></code> 125 (Advanced Stream), <code class="docutils literal notranslate"><span class="pre">0x0500</span></code> 16 (sub video + sub audio), <code class="docutils literal notranslate"><span class="pre">0x0400</span></code> 3 (sub video). In an interleaved block the sub video and sub audio bits are 0</p></td>
 </tr>
 <tr class="row-odd"><td><p>2</p></td>
 <td><p>4</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">V_ATR</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">EVOB_VM_ATR</span></code></p></td>
+<td><p>main video, bits below</p></td>
 </tr>
 <tr class="row-even"><td><p>6</p></td>
 <td><p>4</p></td>
-<td><p>extra attr / reserved</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">EVOB_VS_ATR</span></code></p></td>
+<td><p>sub video, same layout as <code class="docutils literal notranslate"><span class="pre">VM_ATR</span></code> (no closed caption; b9 = Luma flag). 0 when there is no sub video. 0 on 1112; 19 records carry one (<code class="docutils literal notranslate"><span class="pre">60105000</span></code> ×12: VC-1 480-line 4:3 progressive)</p></td>
 </tr>
 <tr class="row-odd"><td><p>10</p></td>
-<td><p>4</p></td>
-<td><p>reserved</p></td>
-</tr>
-<tr class="row-even"><td><p>14</p></td>
 <td><p>2</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">AST_Ns</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">EVOB_VS_LUMA</span></code></p></td>
+<td><p>high byte start, low byte end of the luma range (0–235) made transparent when the Luma flag is 1 (luma key). 0 on 1131</p></td>
 </tr>
-<tr class="row-odd"><td><p>16</p></td>
-<td><p>4×<code class="docutils literal notranslate"><span class="pre">AST_Ns</span></code></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">AST_ATR</span></code></p></td>
+<tr class="row-even"><td><p>12</p></td>
+<td><p>2</p></td>
+<td><p>reserved</p></td>
+<td><p>0</p></td>
 </tr>
-<tr class="row-even"><td><p>80</p></td>
-<td><p>149</p></td>
-<td><p>mid-slot</p></td>
+<tr class="row-odd"><td><p>14</p></td>
+<td><p>2</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">EVOB_AMST_Ns</span></code></p></td>
+<td><p>b3–b0 number of main audio streams, 0–8. 1 (793), 0 (136), 2 (59), 3 (42), …</p></td>
 </tr>
-<tr class="row-odd"><td><p>229</p></td>
-<td><p>1</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">SP_Ns</span></code></p></td>
+<tr class="row-even"><td><p>16</p></td>
+<td><p>32</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">EVOB_AMST_ATRT</span></code></p></td>
+<td><p>8 × 4-byte <code class="docutils literal notranslate"><span class="pre">AMST_ATR</span></code>, one per decoding audio stream number 0–7; unused all 0. Zero past <code class="docutils literal notranslate"><span class="pre">AMST_Ns</span></code> on 1131/1131</p></td>
+</tr>
+<tr class="row-odd"><td><p>48</p></td>
+<td><p>144</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">EVOB_DM_COEFTS</span></code></p></td>
+<td><p>8 × 18-byte down-mix tables, only for multichannel LPCM; otherwise 0 [23 Annex D]. 0 on 1131</p></td>
+</tr>
+<tr class="row-even"><td><p>192</p></td>
+<td><p>2</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">EVOB_ASST_Ns</span></code></p></td>
+<td><p>b3–b0 number of sub audio streams, 0–8. 1 on 16 records</p></td>
+</tr>
+<tr class="row-odd"><td><p>194</p></td>
+<td><p>32</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">EVOB_ASST_ATRT</span></code></p></td>
+<td><p>8 × 4-byte <code class="docutils literal notranslate"><span class="pre">ASST_ATR</span></code>. The 16 records each hold <code class="docutils literal notranslate"><span class="pre">1c00c400</span></code> (DD+ 48 kHz 2 ch)</p></td>
+</tr>
+<tr class="row-even"><td><p>226</p></td>
+<td><p>2</p></td>
+<td><p>reserved</p></td>
+<td><p>0</p></td>
+</tr>
+<tr class="row-odd"><td><p>228</p></td>
+<td><p>2</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">EVOB_SPST_Ns</span></code></p></td>
+<td><p>number of sub-picture streams, 0–32 (<code class="docutils literal notranslate"><span class="pre">0</span></code> on 826/1131)</p></td>
 </tr>
 <tr class="row-even"><td><p>230</p></td>
-<td><p>5×<code class="docutils literal notranslate"><span class="pre">SP_Ns</span></code></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">SP_ATR</span></code></p></td>
+<td><p>160</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">EVOB_SPST_ATRT</span></code></p></td>
+<td><p>32 × 5-byte <code class="docutils literal notranslate"><span class="pre">SPST_ATR</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>390</p></td>
+<td><p>64</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">EVOB_SDSP_PLT</span></code></p></td>
+<td><p>16 colours for SD 2-bit sub-pictures: reserved, Y, Cr, Cb (BT.601)</p></td>
+</tr>
+<tr class="row-even"><td><p>454</p></td>
+<td><p>64</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">EVOB_HDSP_PLT</span></code></p></td>
+<td><p>16 colours for HD 2-bit sub-pictures: reserved, Y, Cr, Cb (BT.709)</p></td>
+</tr>
+<tr class="row-odd"><td><p>518</p></td>
+<td><p>506</p></td>
+<td><p>reserved</p></td>
+<td><p>0</p></td>
 </tr>
 </tbody>
 </table>
-<p><code class="docutils literal notranslate"><span class="pre">AST_Ns</span></code> is <strong>not</strong> at +6 (that slot is usually zero; never the stream count).
-Decoder setup still follows the playlist, not these ATR words.
-<code class="docutils literal notranslate"><span class="pre">[11,</span> <span class="pre">12]</span></code> <strong>VERIFIED</strong></p>
-<p><strong>SP palettes: uncloseable as a named table.</strong> After <code class="docutils literal notranslate"><span class="pre">SP_ATR</span></code>, 1124/1131 ATRIs
-are zero through the rest of the 1024-byte slot. 7 ATRIs (<code class="docutils literal notranslate"><span class="pre">DOOM</span></code>, <code class="docutils literal notranslate"><span class="pre">GOODFELLAS</span></code>,
-<code class="docutils literal notranslate"><span class="pre">LAST_SAMURAI</span></code>, <code class="docutils literal notranslate"><span class="pre">U2_RATTLE_AND_HUM</span></code>) fill 32×4-byte words from offset <strong>391</strong>
-with <code class="docutils literal notranslate"><span class="pre">7f7f7f00</span></code> (dummy gray, not a Y/Cr/Cb palette). No specimen has a
-DVD-style 16-colour YCrCb palette in the ATRI, and none is needed: the sub-picture
-colour/contrast comes from the <code class="docutils literal notranslate"><span class="pre">83h</span></code> colour-table and <code class="docutils literal notranslate"><span class="pre">84h</span></code> contrast-table commands in the
-SP_DCSQ (<a class="reference internal" href="#document-08_evo"><span class="std std-doc">08</span></a> §8.8), not from the ATRI. The ATRI palette slot being unused is
-expected, not a decoder gap.
-<code class="docutils literal notranslate"><span class="pre">[11,</span> <span class="pre">12]</span></code> <strong>OPEN</strong> / uncloseable from this corpus.</p>
-<p><code class="docutils literal notranslate"><span class="pre">V_ATR</span></code> bit fields (MSB = bit 31 of the u32). Layout from patent figures C00003 / C00008
-(C00008 names b16 <strong>Film camera mode</strong>; C00003 leaves b17–16 reserved):</p>
+<p><code class="docutils literal notranslate"><span class="pre">[23</span> <span class="pre">§6.3.1.2.3]</span></code> <strong>SPEC</strong>; <code class="docutils literal notranslate"><span class="pre">[11,</span> <span class="pre">12]</span></code> <strong>VERIFIED</strong> (every offset above against the
+1131 records).</p>
+<p><strong>Palettes.</strong> Both palettes are all 0 when the EVOB has no 2-bit sub-picture; unused
+entries must still be in range. 1124/1131 records are 0 there. 7 (<code class="docutils literal notranslate"><span class="pre">DOOM</span></code>,
+<code class="docutils literal notranslate"><span class="pre">GOODFELLAS</span></code>, <code class="docutils literal notranslate"><span class="pre">LAST_SAMURAI</span></code>, <code class="docutils literal notranslate"><span class="pre">U2_RATTLE_AND_HUM</span></code>) fill both with <code class="docutils literal notranslate"><span class="pre">00</span> <span class="pre">7f</span> <span class="pre">7f</span> <span class="pre">7f</span></code>
+(mid-grey). Advanced Content discs use 8-bit sub-pictures, whose colours come from
+the <code class="docutils literal notranslate"><span class="pre">SET_COLOR2</span></code> command in the sub-picture unit (<a class="reference internal" href="#document-08_evo"><span class="std std-doc">08</span></a> §8.8), so these
+palettes are not used for them.</p>
+<p><code class="docutils literal notranslate"><span class="pre">EVOB_VM_ATR</span></code> / <code class="docutils literal notranslate"><span class="pre">EVOB_VS_ATR</span></code> bit fields (MSB = bit 31 of the u32) [23 §6.3.1.2.3]:</p>
 <table class="docutils align-default">
 <thead>
 <tr class="row-odd"><th class="head"><p>Bits</p></th>
 <th class="head"><p>Field</p></th>
-<th class="head"><p>Disc</p></th>
+<th class="head"><p>Values</p></th>
+<th class="head"><p>Disc (<code class="docutils literal notranslate"><span class="pre">VM_ATR</span></code>, 1131)</p></th>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>31–30</p></td>
-<td><p>compression</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">01b</span></code> MPEG-2 ×692, <code class="docutils literal notranslate"><span class="pre">00b</span></code> reserved ×439, <strong><code class="docutils literal notranslate"><span class="pre">10b</span></code> AVC = 0, <code class="docutils literal notranslate"><span class="pre">11b</span></code> VC-1 = 0</strong> of 1131. Feature VC-1/AVC is in the XPL, never here. <strong>Use the playlist.</strong></p></td>
+<tr class="row-even"><td><p>31–29</p></td>
+<td><p>video compression</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">000</span></code> reserved (MPEG-1, Interoperable only), <code class="docutils literal notranslate"><span class="pre">001</span></code> MPEG-2, <code class="docutils literal notranslate"><span class="pre">010</span></code> MPEG-4 AVC, <code class="docutils literal notranslate"><span class="pre">011</span></code> VC-1</p></td>
+<td><p>VC-1 635, MPEG-2 436, AVC 57, <code class="docutils literal notranslate"><span class="pre">000</span></code> 3</p></td>
 </tr>
-<tr class="row-odd"><td><p>29–28</p></td>
+<tr class="row-odd"><td><p>28–26</p></td>
 <td><p>TV system</p></td>
-<td><p>often <code class="docutils literal notranslate"><span class="pre">10b</span></code> HD/60</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">000</span></code> 525/60, <code class="docutils literal notranslate"><span class="pre">001</span></code> 625/50, <code class="docutils literal notranslate"><span class="pre">010</span></code> HD 60 Hz, <code class="docutils literal notranslate"><span class="pre">011</span></code> HD 50 Hz</p></td>
+<td><p>HD/60 677, 525/60 454</p></td>
 </tr>
-<tr class="row-even"><td><p>27–26</p></td>
-<td><p>aspect</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">10b</span></code> on 1920×1080; patent only defines <code class="docutils literal notranslate"><span class="pre">00b</span></code> 4:3 / <code class="docutils literal notranslate"><span class="pre">11b</span></code> 16:9; treat <code class="docutils literal notranslate"><span class="pre">10b</span></code> as 16:9 HD</p></td>
+<tr class="row-even"><td><p>25–24</p></td>
+<td><p>aspect ratio</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">00</span></code> 4:3, <code class="docutils literal notranslate"><span class="pre">11</span></code> 16:9</p></td>
+<td><p>16:9 764, 4:3 367</p></td>
 </tr>
-<tr class="row-odd"><td><p>25–24</p></td>
-<td><p>display mode</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">11b</span></code> ×764, <code class="docutils literal notranslate"><span class="pre">00b</span></code> ×367 (<code class="docutils literal notranslate"><span class="pre">e14</span></code>)</p></td>
+<tr class="row-odd"><td><p>23</p></td>
+<td><p>CC1</p></td>
+<td><p>closed caption for field 1 in the video</p></td>
+<td><p>1 on 245</p></td>
 </tr>
-<tr class="row-even"><td><p>23, 22</p></td>
-<td><p>CC1, CC2</p></td>
-<td><p>patent field; not separately histogrammed</p></td>
+<tr class="row-even"><td><p>22</p></td>
+<td><p>CC2</p></td>
+<td><p>closed caption for field 2</p></td>
+<td><p>0</p></td>
 </tr>
 <tr class="row-odd"><td><p>21–20</p></td>
-<td><p>source progressive</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">00b</span></code> ×552, <code class="docutils literal notranslate"><span class="pre">01b</span></code> ×506, <code class="docutils literal notranslate"><span class="pre">10b</span></code> ×73 (<code class="docutils literal notranslate"><span class="pre">e14</span></code>)</p></td>
+<td><p>source picture progressive</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">00</span></code> interlaced, <code class="docutils literal notranslate"><span class="pre">01</span></code> progressive, <code class="docutils literal notranslate"><span class="pre">10</span></code> unspecified</p></td>
+<td><p>552 / 506 / 73</p></td>
 </tr>
-<tr class="row-even"><td><p>18</p></td>
+<tr class="row-even"><td><p>19–18</p></td>
+<td><p>reserved</p></td>
+<td><p></p></td>
+<td><p>0</p></td>
+</tr>
+<tr class="row-odd"><td><p>17</p></td>
 <td><p>source letterboxed</p></td>
-<td><p><strong>0</strong> on 1131/1131</p></td>
+<td><p>0 for 16:9; 4:3 may be 1</p></td>
+<td><p>0</p></td>
 </tr>
-<tr class="row-odd"><td><p>16</p></td>
-<td><p>film camera (C00008 only)</p></td>
-<td><p><strong>0</strong> on 1131/1131</p></td>
+<tr class="row-even"><td><p>16</p></td>
+<td><p>film camera mode</p></td>
+<td><p>625/50 only: 0 camera, 1 film</p></td>
+<td><p>0</p></td>
 </tr>
-<tr class="row-even"><td><p>15–12</p></td>
+<tr class="row-odd"><td><p>15–12</p></td>
 <td><p>source resolution</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">1100b</span></code> 1920×1080 (677), <code class="docutils literal notranslate"><span class="pre">0101b</span></code> 720×480/576 (451), <code class="docutils literal notranslate"><span class="pre">0000b</span></code> 352×240/288 (3)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0000</span></code> 352×240/288, <code class="docutils literal notranslate"><span class="pre">0001</span></code> 352×480/576, <code class="docutils literal notranslate"><span class="pre">0010</span></code> 480×480/576, <code class="docutils literal notranslate"><span class="pre">0011</span></code> 544×480/576, <code class="docutils literal notranslate"><span class="pre">0100</span></code> 704×480/576, <code class="docutils literal notranslate"><span class="pre">0101</span></code> 720×480/576, <code class="docutils literal notranslate"><span class="pre">1000</span></code> 1280×720, <code class="docutils literal notranslate"><span class="pre">1001</span></code> 960×1080, <code class="docutils literal notranslate"><span class="pre">1010</span></code> 1280×1080, <code class="docutils literal notranslate"><span class="pre">1011</span></code> 1440×1080, <code class="docutils literal notranslate"><span class="pre">1100</span></code> 1920×1080</p></td>
+<td><p>1920×1080 677, 720×480/576 451, 352×240/288 3</p></td>
+</tr>
+<tr class="row-even"><td><p>11–10</p></td>
+<td><p>reserved for the Interoperable application flag</p></td>
+<td><p></p></td>
+<td><p>0</p></td>
+</tr>
+<tr class="row-odd"><td><p>9</p></td>
+<td><p>Luma flag (<code class="docutils literal notranslate"><span class="pre">VS_ATR</span></code> only)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">EVOB_VS_LUMA</span></code> is valid</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p>9–0</p></td>
+<td><p>reserved (<code class="docutils literal notranslate"><span class="pre">VM_ATR</span></code>)</p></td>
+<td><p></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0x060</span></code> on 5 records, else 0</p></td>
 </tr>
 </tbody>
 </table>
-<p>WO FIG.111 draws ATRI as <code class="docutils literal notranslate"><span class="pre">V_ATR</span></code>, <code class="docutils literal notranslate"><span class="pre">AST_Ns</span></code>, <code class="docutils literal notranslate"><span class="pre">AST_ATR</span></code>, <code class="docutils literal notranslate"><span class="pre">MU_AST_ATR</span></code>, <code class="docutils literal notranslate"><span class="pre">SPST_*</span></code>, palettes,
-a <strong>logical tree</strong>, not these 1024-byte offsets. C00010’s 64-bit <code class="docutils literal notranslate"><span class="pre">A_ATR</span></code> is not the
-4-byte disc <code class="docutils literal notranslate"><span class="pre">AST_ATR</span></code>. Observed 4-byte words (<code class="docutils literal notranslate"><span class="pre">e14</span></code>, 9 unique): <code class="docutils literal notranslate"><span class="pre">1c00c400</span></code> ×878,
-<code class="docutils literal notranslate"><span class="pre">1c00d400</span></code> ×474, plus 7 rarer. Bit layout vs C00010’s 64-bit <code class="docutils literal notranslate"><span class="pre">A_ATR</span></code> remains <strong>OPEN</strong>.
-Language is not in this word (XPL <code class="docutils literal notranslate"><span class="pre">langcode</span></code>).</p>
+<p>The compression field is the codec source: it matches the stream on every EVO
+read, where the playlist’s <code class="docutils literal notranslate"><span class="pre">MediaAttributeList</span></code> is wrong on 125 clip videos
+(<a class="reference internal" href="#document-03_playlist"><span class="std std-doc">03</span></a> §3.6). An earlier version of this sheet read the word with
+the patent-figure layout (compression at 31–30) and wrongly concluded the field was
+unreliable.</p>
+<p><strong><code class="docutils literal notranslate"><span class="pre">AMST_ATR</span></code></strong> (main audio) [23 §6.3.1.2.3]:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Bits</p></th>
+<th class="head"><p>Field</p></th>
+<th class="head"><p>Values</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>31–26</p></td>
+<td><p>audio coding mode</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">000000</span></code> reserved (AC-3, Interoperable), <code class="docutils literal notranslate"><span class="pre">000001</span></code> MLP, <code class="docutils literal notranslate"><span class="pre">000010</span></code> MPEG-1 / MPEG-2 without extension, <code class="docutils literal notranslate"><span class="pre">000011</span></code> MPEG-2 with extension, <code class="docutils literal notranslate"><span class="pre">000100</span></code> reserved (LPCM 1/600 s, Interoperable), <code class="docutils literal notranslate"><span class="pre">000101</span></code> LPCM (1/1200 s), <code class="docutils literal notranslate"><span class="pre">000110</span></code> DTS-HD, <code class="docutils literal notranslate"><span class="pre">000111</span></code> DD+</p></td>
+</tr>
+<tr class="row-odd"><td><p>25–24</p></td>
+<td><p>reserved</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p>23–21</p></td>
+<td><p>sampling frequency</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">000</span></code> 48 kHz, <code class="docutils literal notranslate"><span class="pre">001</span></code> 96 kHz, <code class="docutils literal notranslate"><span class="pre">010</span></code> 192 kHz</p></td>
+</tr>
+<tr class="row-odd"><td><p>20–16</p></td>
+<td><p>reserved</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p>15–14</p></td>
+<td><p>quantization / DRC</p></td>
+<td><p>DD+, DTS-HD: <code class="docutils literal notranslate"><span class="pre">11</span></code>; MPEG: <code class="docutils literal notranslate"><span class="pre">00</span></code> no DRC, <code class="docutils literal notranslate"><span class="pre">01</span></code> DRC; MLP, LPCM: <code class="docutils literal notranslate"><span class="pre">00</span></code> 16-bit, <code class="docutils literal notranslate"><span class="pre">01</span></code> 20-bit, <code class="docutils literal notranslate"><span class="pre">10</span></code> 24-bit</p></td>
+</tr>
+<tr class="row-odd"><td><p>13–10</p></td>
+<td><p>number of channels − 1</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0000</span></code> 1 ch … <code class="docutils literal notranslate"><span class="pre">0111</span></code> 8 ch; the <code class="docutils literal notranslate"><span class="pre">.1</span></code> counts as one (5.1 = <code class="docutils literal notranslate"><span class="pre">0101</span></code>)</p></td>
+</tr>
+<tr class="row-even"><td><p>9–8</p></td>
+<td><p>reserved for the Interoperable application flag</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p>7–0</p></td>
+<td><p>reserved</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+<p><strong><code class="docutils literal notranslate"><span class="pre">ASST_ATR</span></code></strong> (sub audio): the same layout with coding modes <code class="docutils literal notranslate"><span class="pre">000110</span></code> DTS-HD,
+<code class="docutils literal notranslate"><span class="pre">000111</span></code> DD+, and the optional <code class="docutils literal notranslate"><span class="pre">100000</span></code> mp3, <code class="docutils literal notranslate"><span class="pre">100001</span></code> MPEG-4 HE-AAC v2, <code class="docutils literal notranslate"><span class="pre">100010</span></code>
+WMA Pro [23 Annex Q]; sampling <code class="docutils literal notranslate"><span class="pre">000</span></code> 48 kHz, <code class="docutils literal notranslate"><span class="pre">100</span></code> 12 kHz, <code class="docutils literal notranslate"><span class="pre">101</span></code> 24 kHz; channels
+<code class="docutils literal notranslate"><span class="pre">0000</span></code> mono, <code class="docutils literal notranslate"><span class="pre">0001</span></code> stereo.</p>
+<p>On disc (<code class="docutils literal notranslate"><span class="pre">e14</span></code>, 9 unique words): <code class="docutils literal notranslate"><span class="pre">1c00c400</span></code> ×878 = DD+ 48 kHz 2 ch,
+<code class="docutils literal notranslate"><span class="pre">1c00d400</span></code> ×474 = DD+ 48 kHz 6 ch, plus 7 rarer. Language is not in this word
+(XPL <code class="docutils literal notranslate"><span class="pre">langcode</span></code>). WO FIG.111 draws the ATR as a logical tree; C00010’s 64-bit
+<code class="docutils literal notranslate"><span class="pre">A_ATR</span></code> is not this word.</p>
+<p><strong><code class="docutils literal notranslate"><span class="pre">SPST_ATR</span></code></strong> (5 bytes per sub-picture stream; unused 0) [23 §6.3.1.2.3]:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Byte</p></th>
+<th class="head"><p>Bits</p></th>
+<th class="head"><p>Field</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0</p></td>
+<td><p>7–5</p></td>
+<td><p>coding mode: <code class="docutils literal notranslate"><span class="pre">000</span></code> 2-bit RLC with <code class="docutils literal notranslate"><span class="pre">PRE_HEAD</span></code> ≠ 0, <code class="docutils literal notranslate"><span class="pre">001</span></code> 2-bit RLC with <code class="docutils literal notranslate"><span class="pre">PRE_HEAD</span></code> = 0, <code class="docutils literal notranslate"><span class="pre">100</span></code> 8-bit RLC (<a class="reference internal" href="#document-08_evo"><span class="std std-doc">08</span></a> §8.8); 4–0 reserved</p></td>
+</tr>
+<tr class="row-odd"><td><p>1</p></td>
+<td><p>5 / 4–0</p></td>
+<td><p>HD stream present / its decoding sub-picture stream number</p></td>
+</tr>
+<tr class="row-even"><td><p>2</p></td>
+<td><p>5 / 4–0</p></td>
+<td><p>SD wide (16:9) stream present / number</p></td>
+</tr>
+<tr class="row-odd"><td><p>3</p></td>
+<td><p>5 / 4–0</p></td>
+<td><p>SD letterbox (4:3) stream present / number, only if the title allows letterbox</p></td>
+</tr>
+<tr class="row-even"><td><p>4</p></td>
+<td><p>5 / 4–0</p></td>
+<td><p>SD pan-scan (4:3) stream present / number, only if the title allows pan-scan</p></td>
+</tr>
+</tbody>
+</table>
+<p>The decoding number is the low 5 bits of the sub-picture <code class="docutils literal notranslate"><span class="pre">sub_stream_id</span></code>
+(<code class="docutils literal notranslate"><span class="pre">001nnnnn</span></code>). A flag of 0 makes its number meaningless (it is not stream 0). With
+the HD flag 0 every SD flag is 0. On disc 1258/1258 are <code class="docutils literal notranslate"><span class="pre">80</span> <span class="pre">2n</span> <span class="pre">00</span> <span class="pre">00</span> <span class="pre">00</span></code> (<code class="docutils literal notranslate"><span class="pre">e25</span></code>):
+8-bit RLC, HD stream <code class="docutils literal notranslate"><span class="pre">n</span></code> only; <code class="docutils literal notranslate"><span class="pre">0x20</span> <span class="pre">|</span> <span class="pre">n</span></code> therefore equals the <code class="docutils literal notranslate"><span class="pre">sub_stream_id</span></code>.
+The player picks the number for its output: HD, or SD wide / letterbox / pan-scan
+when it down-converts [23 §4.3.13.3.6].</p>
+<p><code class="docutils literal notranslate"><span class="pre">[23]</span></code> <strong>SPEC</strong>; <code class="docutils literal notranslate"><span class="pre">[11,</span> <span class="pre">12]</span></code> <strong>VERIFIED</strong></p>
 </section>
 </section>
 <section id="vts-evobit-at-vts-evobit-sa-2048">
 <h4>6.3 VTS_EVOBIT (at <code class="docutils literal notranslate"><span class="pre">VTS_EVOBIT_SA</span></code> × 2048)<a class="headerlink" href="#vts-evobit-at-vts-evobit-sa-2048" title="Link to this heading"></a></h4>
-<p>320-byte entries. <code class="docutils literal notranslate"><span class="pre">nr</span></code> equals <code class="docutils literal notranslate"><span class="pre">.MAP</span></code> count on 117/119 discs
+<p>320-byte entries. <code class="docutils literal notranslate"><span class="pre">EVOB_Ns</span></code> equals <code class="docutils literal notranslate"><span class="pre">.MAP</span></code> count on 117/119 discs
 (exceptions: <code class="docutils literal notranslate"><span class="pre">PANS_LABYRINTH</span></code> extra EVOBIs for angles; <code class="docutils literal notranslate"><span class="pre">ETERNAL_SUNSHINE</span></code> 28 EVOBI vs 29 MAP; extra is <code class="docutils literal notranslate"><span class="pre">DELEXT8</span></code>, not in VTI).</p>
 <table class="docutils align-default">
 <thead>
@@ -7310,87 +7467,120 @@ Language is not in this word (XPL <code class="docutils literal notranslate"><sp
 </thead>
 <tbody>
 <tr class="row-even"><td><p>0</p></td>
-<td><p>2</p></td>
-<td><p>reserved</p></td>
-</tr>
-<tr class="row-odd"><td><p>2</p></td>
-<td><p>2</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">nr</span></code></p></td>
-</tr>
-<tr class="row-even"><td><p>4</p></td>
 <td><p>4</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">last_byte</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">EVOB_Ns</span></code>, number of EVOBs, at most 1998</p></td>
 </tr>
-<tr class="row-odd"><td><p>8</p></td>
-<td><p>4×<code class="docutils literal notranslate"><span class="pre">nr</span></code></p></td>
-<td><p>start offsets</p></td>
+<tr class="row-odd"><td><p>4</p></td>
+<td><p>4</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">VTS_EVOBIT_EA</span></code>, last byte of the table</p></td>
+</tr>
+<tr class="row-even"><td><p>8</p></td>
+<td><p>4×<code class="docutils literal notranslate"><span class="pre">Ns</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">VTS_EVOBI_SA</span></code>, byte offset of each entry from the start of this table</p></td>
 </tr>
 </tbody>
 </table>
-<p>First offset = <code class="docutils literal notranslate"><span class="pre">8</span> <span class="pre">+</span> <span class="pre">4×nr</span></code>.</p>
-<section id="evobi-320-bytes">
-<h5>EVOBI (320 bytes)<a class="headerlink" href="#evobi-320-bytes" title="Link to this heading"></a></h5>
+<p>First offset = <code class="docutils literal notranslate"><span class="pre">8</span> <span class="pre">+</span> <span class="pre">4×Ns</span></code>.</p>
+<section id="vts-evobi-320-bytes-23-6-3-1-3-3">
+<h5>VTS_EVOBI (320 bytes) [23 §6.3.1.3.3]<a class="headerlink" href="#vts-evobi-320-bytes-23-6-3-1-3-3" title="Link to this heading"></a></h5>
 <table class="docutils align-default">
 <thead>
 <tr class="row-odd"><th class="head"><p>Offset</p></th>
 <th class="head"><p>Size</p></th>
 <th class="head"><p>Field</p></th>
+<th class="head"><p>Disc</p></th>
 </tr>
 </thead>
 <tbody>
 <tr class="row-even"><td><p>0</p></td>
 <td><p>2</p></td>
-<td><p>type/flags</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">EVOB_ID</span></code></p></td>
+<td><p>b15–b12 application type (<code class="docutils literal notranslate"><span class="pre">0001b</span></code> Standard, <code class="docutils literal notranslate"><span class="pre">0010b</span></code> Advanced, <code class="docutils literal notranslate"><span class="pre">0011b</span></code> Interoperable); b6–b5 <code class="docutils literal notranslate"><span class="pre">A0_GAP_LOC</span></code>, b4–b3 <code class="docutils literal notranslate"><span class="pre">A1_GAP_LOC</span></code> (Interoperable only, else 0); the rest reserved. <code class="docutils literal notranslate"><span class="pre">0x2000</span></code> on 2431/2431</p></td>
 </tr>
 <tr class="row-odd"><td><p>2</p></td>
-<td><p>36</p></td>
-<td><p>EVOB <strong>filename</strong></p></td>
+<td><p>255</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">EVOB_FNAME</span></code></p></td>
+<td><p>EVO filename, ISO 8859-1, zero-filled. 1/2431 has a 36-byte name (<code class="docutils literal notranslate"><span class="pre">SMOKEY_AND_THE_BANDIT</span></code> <code class="docutils literal notranslate"><span class="pre">SMOKEYANDBANDIT_LOADEDUPMPEG2_HD.EVO</span></code>); match a listed <code class="docutils literal notranslate"><span class="pre">.EVO</span></code></p></td>
 </tr>
-<tr class="row-even"><td><p>38</p></td>
-<td><p>226</p></td>
+<tr class="row-even"><td><p>257</p></td>
+<td><p>1</p></td>
 <td><p>reserved</p></td>
+<td><p>0</p></td>
 </tr>
-<tr class="row-odd"><td><p>264</p></td>
-<td><p>2</p></td>
+<tr class="row-odd"><td><p>258</p></td>
+<td><p>4</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">EVOB_ADR_OFS</span></code></p></td>
+<td><p>RLBN of the EVOB in its EVOBS for Standard/Interoperable; 0 for Advanced</p></td>
+</tr>
+<tr class="row-even"><td><p>262</p></td>
+<td><p>4</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">EVOB_ATRN</span></code></p></td>
+<td><p>1-based <code class="docutils literal notranslate"><span class="pre">VTS_EVOB_ATR</span></code> number, 1–511; all EVOBs of one angle block have the same. 2431/2431 in <code class="docutils literal notranslate"><span class="pre">1…Ns</span></code></p></td>
 </tr>
-<tr class="row-even"><td><p>266</p></td>
+<tr class="row-odd"><td><p>266</p></td>
 <td><p>4</p></td>
-<td><p>EVOB start PTM (90 kHz)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">EVOB_V_S_PTM</span></code></p></td>
+<td><p>first video presentation time, 90 kHz. Matches the first EVOBU’s start PTM on DOWNFALL</p></td>
 </tr>
-<tr class="row-odd"><td><p>270</p></td>
+<tr class="row-even"><td><p>270</p></td>
 <td><p>4</p></td>
-<td><p>EVOB end PTM</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">EVOB_V_E_PTM</span></code></p></td>
+<td><p>video presentation end time; two-part features: part 2 start = part 1 end</p></td>
 </tr>
-<tr class="row-even"><td><p>274</p></td>
+<tr class="row-odd"><td><p>274</p></td>
 <td><p>4</p></td>
-<td><p>EVOB size in <strong>packs</strong></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">EVOB_SZ</span></code></p></td>
+<td><p>size in <strong>packs</strong> (sectors). Equals listing <code class="docutils literal notranslate"><span class="pre">.EVO</span></code> size / 2048 on <strong>2416/2431</strong>. The 15 misses are <code class="docutils literal notranslate"><span class="pre">PANS_LABYRINTH</span></code> interleaved angles (several EVOBI share one EVO file; each row is one angle’s pack count)</p></td>
 </tr>
-<tr class="row-odd"><td><p>278</p></td>
+<tr class="row-even"><td><p>278</p></td>
 <td><p>2</p></td>
-<td><p>EVOB serial</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">EVOB_INDEX</span></code></p></td>
+<td><p>1–1998, unique in the VTS; the same number as <code class="docutils literal notranslate"><span class="pre">EVOB_INDEX</span></code> in this EVOB’s time-map search pointer (<a class="reference internal" href="#document-07_map"><span class="std std-doc">07</span></a>). Equals table position on 2419/2431; <code class="docutils literal notranslate"><span class="pre">SPARTACUS</span></code> skips 12. Find an EVOB by this number, not by position</p></td>
 </tr>
-<tr class="row-even"><td><p>280</p></td>
+<tr class="row-odd"><td><p>280</p></td>
 <td><p>2</p></td>
 <td><p>reserved</p></td>
+<td><p>0</p></td>
 </tr>
-<tr class="row-odd"><td><p>282</p></td>
+<tr class="row-even"><td><p>282</p></td>
 <td><p>4</p></td>
-<td><p>part/layer start</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">EVOB_FIRST_SCR</span></code></p></td>
+<td><p>SCR of the first pack, 90 kHz; used when the clip joins the previous one seamlessly. <code class="docutils literal notranslate"><span class="pre">0</span></code> on first/only parts; non-zero on 100 rows, almost all <code class="docutils literal notranslate"><span class="pre">FEATURE_2</span></code> / <code class="docutils literal notranslate"><span class="pre">PEVOB_2</span></code> / dual-layer tails (<code class="docutils literal notranslate"><span class="pre">0x80000000</span></code> on some)</p></td>
 </tr>
-<tr class="row-even"><td><p>286</p></td>
-<td><p>16</p></td>
-<td><p></p></td>
+<tr class="row-odd"><td><p>286</p></td>
+<td><p>4</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">PREV_EVOB_LAST_SCR</span></code></p></td>
+<td><p>Interoperable only; Advanced: all 1s. <code class="docutils literal notranslate"><span class="pre">FF</span></code> ×4</p></td>
 </tr>
-<tr class="row-odd"><td><p>302</p></td>
-<td><p>18</p></td>
+<tr class="row-even"><td><p>290</p></td>
+<td><p>8</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">EVOB_A_STP_PTM</span></code> ×2</p></td>
+<td><p>audio stop times (Interoperable); Advanced: all 1s. <code class="docutils literal notranslate"><span class="pre">FF</span></code> ×8</p></td>
+</tr>
+<tr class="row-odd"><td><p>298</p></td>
+<td><p>4</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">EVOB_A_GAP_LEN</span></code> ×2</p></td>
+<td><p>audio gap lengths (Interoperable); Advanced: all 1s. <code class="docutils literal notranslate"><span class="pre">FF</span></code> ×4</p></td>
+</tr>
+<tr class="row-even"><td><p>302</p></td>
+<td><p>4</p></td>
+<td><p>reserved for copy protection</p></td>
+<td><p>0</p></td>
+</tr>
+<tr class="row-odd"><td><p>306</p></td>
+<td><p>14</p></td>
 <td><p>reserved</p></td>
+<td><p>0</p></td>
 </tr>
 </tbody>
 </table>
 <p>There is <strong>no</strong> MAP filename in EVOBI. Playlist <code class="docutils literal notranslate"><span class="pre">src</span></code> is the MAP; EVOBI names the EVO.
-Same basename: <code class="docutils literal notranslate"><span class="pre">FEATURE_1.MAP</span></code> ↔ <code class="docutils literal notranslate"><span class="pre">FEATURE_1.EVO</span></code>.
-WO FIG.112 labels the third field <code class="docutils literal notranslate"><span class="pre">TMAP_FILE_NAME</span></code>. <strong>Disc wins</strong> (<code class="docutils literal notranslate"><span class="pre">.EVO</span></code> name at +2).</p>
+The book gives the map the same name body as its EVO file (<a class="reference internal" href="#document-01_volume"><span class="std std-doc">01</span></a> §1.4):
+<code class="docutils literal notranslate"><span class="pre">FEATURE_1.MAP</span></code> ↔ <code class="docutils literal notranslate"><span class="pre">FEATURE_1.EVO</span></code>. WO FIG.112 labels this field <code class="docutils literal notranslate"><span class="pre">TMAP_FILE_NAME</span></code>;
+the book and the disc say EVO.</p>
+<p>A seamless join converts time between EVOBs with
+<code class="docutils literal notranslate"><span class="pre">STC</span> <span class="pre">offset</span> <span class="pre">=</span> <span class="pre">EVOB_V_E_PTM(earlier)</span> <span class="pre">−</span> <span class="pre">EVOB_V_S_PTM(later)</span></code> [23 §4.2.3.2].</p>
+<p><code class="docutils literal notranslate"><span class="pre">[23]</span></code> <strong>SPEC</strong>; <code class="docutils literal notranslate"><span class="pre">[11,</span> <span class="pre">12]</span></code> <strong>VERIFIED</strong></p>
 </section>
 </section>
 </section>
@@ -7410,22 +7600,21 @@ Magic: <code class="docutils literal notranslate"><span class="pre">HDDVD_TMAP00
 </div>
 <section id="file-layout">
 <h4>7.1 File layout<a class="headerlink" href="#file-layout" title="Link to this heading"></a></h4>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="mi">0</span> <span class="o">..</span> <span class="mi">127</span><span class="p">]</span>     <span class="n">TMAP_GI</span>
-<span class="p">[</span><span class="mi">128</span> <span class="o">..</span> <span class="mi">371</span><span class="p">]</span>   <span class="n">zero</span> <span class="n">on</span> <span class="mi">2421</span><span class="o">/</span><span class="mi">2421</span>
-<span class="p">[</span><span class="mi">372</span> <span class="o">..</span> <span class="mi">373</span><span class="p">]</span>   <span class="n">u16be</span> <span class="n">ILVU</span> <span class="n">record</span> <span class="n">count</span> <span class="n">on</span> <span class="n">the</span> <span class="n">four</span> <span class="n">interleaved</span> <span class="n">maps</span> <span class="p">(</span><span class="n">equals</span> <span class="n">the</span> <span class="n">walk</span> <span class="n">until</span> <span class="n">ILVU_SZ</span><span class="o">=</span><span class="mi">0</span><span class="p">);</span> <span class="o">**</span><span class="n">zero</span> <span class="n">on</span> <span class="mi">2417</span> <span class="n">contiguous</span> <span class="n">maps</span><span class="o">**.</span> <span class="n">TMAPI_SRP</span><span class="o">.</span><span class="n">ILVU_ENT_Ns</span> <span class="ow">is</span> <span class="n">still</span> <span class="mf">0.</span> <span class="n">Do</span> <span class="ow">not</span> <span class="n">use</span> <span class="n">the</span> <span class="n">SRP</span> <span class="n">field</span><span class="o">.</span>
-<span class="p">[</span><span class="mi">374</span> <span class="o">..</span> <span class="mi">383</span><span class="p">]</span>   <span class="n">zero</span>
-<span class="p">[</span><span class="mi">384</span> <span class="o">..</span> <span class="p">)</span>      <span class="n">TMAPI_SRP</span><span class="p">,</span> <span class="mi">10</span><span class="o">-</span><span class="n">byte</span> <span class="n">record</span> <span class="ow">in</span> <span class="n">a</span> <span class="mi">32</span><span class="o">-</span><span class="n">byte</span> <span class="n">slot</span><span class="p">,</span> <span class="n">one</span> <span class="n">per</span> <span class="n">TMAPI</span>
+<p>The book’s layout is [23 §6.3.2]. One map per EVOB of a contiguous block; one map
+for all EVOBs of an interleaved block, with one TMAPI per EVOB in order. The map
+is sector-aligned and may be followed by up to 2047 zero bytes.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="mi">0</span> <span class="o">..</span> <span class="mi">383</span><span class="p">]</span>     <span class="n">TMAP_GI</span> <span class="p">(</span><span class="mi">384</span> <span class="nb">bytes</span><span class="p">)</span>
+<span class="p">[</span><span class="mi">384</span> <span class="o">..</span> <span class="p">)</span>      <span class="n">TMAPI_SRP</span><span class="p">,</span> <span class="n">one</span> <span class="mi">32</span><span class="o">-</span><span class="n">byte</span> <span class="n">record</span> <span class="n">per</span> <span class="n">TMAPI</span>
 <span class="p">[</span><span class="n">TMAPI_SA</span> <span class="o">..</span><span class="p">)</span>  <span class="n">TMAPI</span> <span class="o">=</span> <span class="n">EVOBU_ENT</span><span class="p">[</span><span class="n">EVOBU_ENT_Ns</span><span class="p">]</span>
-<span class="p">[</span><span class="n">ILVUI_SA</span> <span class="o">..</span><span class="p">)</span>  <span class="n">ILVUI</span> <span class="n">only</span> <span class="k">if</span> <span class="n">present</span> <span class="p">(</span><span class="ow">not</span> <span class="mh">0xFFFFFFFF</span><span class="p">)</span>
+<span class="p">[</span><span class="n">ILVUI_SA</span> <span class="o">..</span><span class="p">)</span>  <span class="n">ILVUI</span> <span class="o">=</span> <span class="n">ILVU_ENT</span><span class="p">[</span><span class="n">ILVU_ENT_Ns</span><span class="p">],</span> <span class="n">only</span> <span class="k">for</span> <span class="n">an</span> <span class="n">interleaved</span> <span class="n">block</span>
 </pre></div>
 </div>
-<p><code class="docutils literal notranslate"><span class="pre">[128</span> <span class="pre">..</span> <span class="pre">383]</span></code> is <strong>not</strong> reserved-zero on Pan’s four maps: only bytes <strong>372–373</strong> are live (<code class="docutils literal notranslate"><span class="pre">death</span></code> 180, <code class="docutils literal notranslate"><span class="pre">ofeliaDeath</span></code> 372, <code class="docutils literal notranslate"><span class="pre">ofeliaEnters</span></code> 500, <code class="docutils literal notranslate"><span class="pre">ofeliaFig</span></code> 240).
-<code class="docutils literal notranslate"><span class="pre">[11]</span></code> <strong>VERIFIED</strong></p>
-<p><code class="docutils literal notranslate"><span class="pre">TMAPI_SA</span></code> and <code class="docutils literal notranslate"><span class="pre">ILVUI_SA</span></code> are <strong>byte offsets from the start of the file</strong>, not LBNs
-(patent says LBN; every disc uses bytes).</p>
+<p><code class="docutils literal notranslate"><span class="pre">TMAPI_SA</span></code> and <code class="docutils literal notranslate"><span class="pre">ILVUI_SA</span></code> are <strong>byte offsets from the start of the file</strong>: the book’s
+RBN, as on every disc (the patent says LBN).
+<code class="docutils literal notranslate"><span class="pre">[23]</span></code> <strong>SPEC</strong>; <code class="docutils literal notranslate"><span class="pre">[11]</span></code> <strong>VERIFIED</strong></p>
 </section>
-<section id="tmap-gi-128-bytes-table-80">
-<h4>7.2 TMAP_GI (128 bytes): TABLE 80<a class="headerlink" href="#tmap-gi-128-bytes-table-80" title="Link to this heading"></a></h4>
+<section id="tmap-gi-384-bytes-23-table-6-3-2-1-1">
+<h4>7.2 TMAP_GI (384 bytes) [23 Table 6.3.2.1-1]<a class="headerlink" href="#tmap-gi-384-bytes-23-table-6-3-2-1-1" title="Link to this heading"></a></h4>
 <table class="docutils align-default">
 <thead>
 <tr class="row-odd"><th class="head"><p>RBP</p></th>
@@ -7438,12 +7627,12 @@ Magic: <code class="docutils literal notranslate"><span class="pre">HDDVD_TMAP00
 <tr class="row-even"><td><p>0</p></td>
 <td><p>12</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">TMAP_ID</span></code></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">&quot;HDDVD_TMAP00&quot;</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&quot;HDDVD_TMAP00&quot;</span></code> (patent text says <code class="docutils literal notranslate"><span class="pre">&quot;HDDVD-V_TMAP&quot;</span></code>; book and disc agree)</p></td>
 </tr>
 <tr class="row-odd"><td><p>12</p></td>
 <td><p>4</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">TMAP_EA</span></code></p></td>
-<td><p>last sector of this file (<code class="docutils literal notranslate"><span class="pre">file_sectors</span> <span class="pre">−</span> <span class="pre">1</span></code>); 2421/2421</p></td>
+<td><p>last sector of this map (RLBN, <code class="docutils literal notranslate"><span class="pre">file_sectors</span> <span class="pre">−</span> <span class="pre">1</span></code>); 2421/2421</p></td>
 </tr>
 <tr class="row-even"><td><p>16</p></td>
 <td><p>2</p></td>
@@ -7453,7 +7642,7 @@ Magic: <code class="docutils literal notranslate"><span class="pre">HDDVD_TMAP00
 <tr class="row-odd"><td><p>18</p></td>
 <td><p>2</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">VERN</span></code></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">0x0010</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0x0010</span></code> (low byte = book version 1.0)</p></td>
 </tr>
 <tr class="row-even"><td><p>20</p></td>
 <td><p>2</p></td>
@@ -7467,13 +7656,13 @@ Magic: <code class="docutils literal notranslate"><span class="pre">HDDVD_TMAP00
 </tr>
 <tr class="row-even"><td><p>50</p></td>
 <td><p>5</p></td>
-<td><p>reserved</p></td>
-<td><p>“VTMAP_LAST_MOD_TM” in patent</p></td>
+<td><p>reserved for the Interoperable VTS</p></td>
+<td><p>patent: <code class="docutils literal notranslate"><span class="pre">VTMAP_LAST_MOD_TM</span></code></p></td>
 </tr>
 <tr class="row-odd"><td><p>55</p></td>
 <td><p>2</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">TMAPI_Ns</span></code></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">1</span></code> on Primary Video Set (2417/2421)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">1</span></code> for a contiguous block (2417/2421)</p></td>
 </tr>
 <tr class="row-even"><td><p>57</p></td>
 <td><p>4</p></td>
@@ -7491,20 +7680,33 @@ Magic: <code class="docutils literal notranslate"><span class="pre">HDDVD_TMAP00
 <td><p></p></td>
 </tr>
 <tr class="row-odd"><td><p>114</p></td>
-<td><p>12</p></td>
-<td><p>VTI filename</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">&quot;HVA00001.VTI&quot;</span></code> on 2421/2421</p></td>
+<td><p>255</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">VTSI_FNAME</span></code></p></td>
+<td><p>VTI filename, ISO 8859-1, zero-filled: <code class="docutils literal notranslate"><span class="pre">&quot;HVA00001.VTI&quot;</span></code> on 2421/2421</p></td>
 </tr>
-<tr class="row-even"><td><p>126</p></td>
-<td><p>2</p></td>
+<tr class="row-even"><td><p>369</p></td>
+<td><p>1</p></td>
+<td><p>reserved for copy protection</p></td>
+<td><p>0</p></td>
+</tr>
+<tr class="row-odd"><td><p>370</p></td>
+<td><p>4</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">ILVU_ENT_Ns</span></code></p></td>
+<td><p>number of <code class="docutils literal notranslate"><span class="pre">ILVU_ENT</span></code> in the interleaved block; 0 when there is no ILVUI. Non-zero exactly on the four interleaved maps (<code class="docutils literal notranslate"><span class="pre">death</span></code> 180, <code class="docutils literal notranslate"><span class="pre">ofeliaDeath</span></code> 372, <code class="docutils literal notranslate"><span class="pre">ofeliaEnters</span></code> 500, <code class="docutils literal notranslate"><span class="pre">ofeliaFig</span></code> 240), equal to the walk until <code class="docutils literal notranslate"><span class="pre">ILVU_SZ=0</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>374</p></td>
+<td><p>10</p></td>
 <td><p>reserved</p></td>
 <td><p>0</p></td>
 </tr>
 </tbody>
 </table>
-<section id="tmap-ty-table-81-figure-c00039">
-<h5>TMAP_TY: TABLE 81 figure C00039<a class="headerlink" href="#tmap-ty-table-81-figure-c00039" title="Link to this heading"></a></h5>
-<p>16-bit, <code class="docutils literal notranslate"><span class="pre">b15</span></code> = MSB of byte 0. Figure: <code class="docutils literal notranslate"><span class="pre">spec/raw/patents/figures/US20080298219A1/US20080298219A1-20081204-C00039.png</span></code>.</p>
+<p>An earlier version of this sheet took the GI as 128 bytes with an unexplained
+count at 372–373; the book’s 384-byte GI explains both.</p>
+<section id="tmap-ty-23-6-3-2-1">
+<h5>TMAP_TY [23 §6.3.2.1]<a class="headerlink" href="#tmap-ty-23-6-3-2-1" title="Link to this heading"></a></h5>
+<p>16-bit, <code class="docutils literal notranslate"><span class="pre">b15</span></code> = MSB of byte 0. Patent figure:
+<code class="docutils literal notranslate"><span class="pre">spec/raw/patents/figures/US20080298219A1/US20080298219A1-20081204-C00039.png</span></code>.</p>
 <table class="docutils align-default">
 <thead>
 <tr class="row-odd"><th class="head"><p>Bits</p></th>
@@ -7513,25 +7715,29 @@ Magic: <code class="docutils literal notranslate"><span class="pre">HDDVD_TMAP00
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>15–10</p></td>
-<td><p></p></td>
-<td><p>reserved (corpus always has <strong>b13</strong> set → <code class="docutils literal notranslate"><span class="pre">0x2000</span></code>)</p></td>
+<tr class="row-even"><td><p>15–12</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0xF000</span></code></p></td>
+<td><p>Application type: <code class="docutils literal notranslate"><span class="pre">0001b</span></code> Standard VTS, <code class="docutils literal notranslate"><span class="pre">0010b</span></code> Advanced VTS, <code class="docutils literal notranslate"><span class="pre">0011b</span></code> Interoperable VTS; <code class="docutils literal notranslate"><span class="pre">0100b</span></code> Secondary Video Set (§7.6)</p></td>
 </tr>
-<tr class="row-odd"><td><p>9</p></td>
+<tr class="row-odd"><td><p>11–10</p></td>
+<td><p></p></td>
+<td><p>reserved for copy protection</p></td>
+</tr>
+<tr class="row-even"><td><p>9</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">0x0200</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">ILVUI</span></code>: <code class="docutils literal notranslate"><span class="pre">0b</span></code> no ILVUI (contiguous); <code class="docutils literal notranslate"><span class="pre">1b</span></code> ILVUI present (interleaved)</p></td>
 </tr>
-<tr class="row-even"><td><p>8</p></td>
+<tr class="row-odd"><td><p>8</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">0x0100</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">ATR</span></code>: <code class="docutils literal notranslate"><span class="pre">0b</span></code> Primary, no <code class="docutils literal notranslate"><span class="pre">EVOB_ATR</span></code> in this file; <code class="docutils literal notranslate"><span class="pre">1b</span></code> Secondary (<code class="docutils literal notranslate"><span class="pre">EVOB_ATR</span></code> present; <strong>not allowed on Primary</strong>)</p></td>
 </tr>
-<tr class="row-odd"><td><p>7–2</p></td>
+<tr class="row-even"><td><p>7–2</p></td>
 <td><p></p></td>
 <td><p>reserved</p></td>
 </tr>
-<tr class="row-even"><td><p>1–0</p></td>
+<tr class="row-odd"><td><p>1–0</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">0x0003</span></code></p></td>
-<td><p>Angle: <code class="docutils literal notranslate"><span class="pre">00b</span></code> none, <code class="docutils literal notranslate"><span class="pre">01b</span></code> non-seamless, <code class="docutils literal notranslate"><span class="pre">10b</span></code> seamless, <code class="docutils literal notranslate"><span class="pre">11b</span></code> reserved</p></td>
+<td><p>Angle: <code class="docutils literal notranslate"><span class="pre">00b</span></code> none, <code class="docutils literal notranslate"><span class="pre">01b</span></code> non-seamless angle block, <code class="docutils literal notranslate"><span class="pre">10b</span></code> seamless angle block, <code class="docutils literal notranslate"><span class="pre">11b</span></code> reserved. <code class="docutils literal notranslate"><span class="pre">01b</span></code> or <code class="docutils literal notranslate"><span class="pre">10b</span></code> when <code class="docutils literal notranslate"><span class="pre">ILVUI</span></code> is 1</p></td>
 </tr>
 </tbody>
 </table>
@@ -7545,49 +7751,54 @@ Magic: <code class="docutils literal notranslate"><span class="pre">HDDVD_TMAP00
 <tbody>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">0x2000</span></code></p></td>
 <td><p>2417</p></td>
-<td><p>contiguous primary (<code class="docutils literal notranslate"><span class="pre">TMAPI_Ns=1</span></code>, <code class="docutils literal notranslate"><span class="pre">TMAPI_SA=416</span></code>): b13 only</p></td>
+<td><p>Advanced VTS, contiguous (<code class="docutils literal notranslate"><span class="pre">TMAPI_Ns=1</span></code>, <code class="docutils literal notranslate"><span class="pre">TMAPI_SA=416</span></code>)</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">0x2202</span></code></p></td>
 <td><p>4</p></td>
-<td><p>Pan’s interleaved: b13 + ILVUI + Angle <code class="docutils literal notranslate"><span class="pre">10b</span></code> seamless</p></td>
+<td><p>Pan’s interleaved: Advanced VTS + ILVUI + Angle <code class="docutils literal notranslate"><span class="pre">10b</span></code> seamless</p></td>
 </tr>
 </tbody>
 </table>
-<p><code class="docutils literal notranslate"><span class="pre">[2]</span></code>
-<code class="docutils literal notranslate"><span class="pre">[11,</span> <span class="pre">12]</span></code> <strong>VERIFIED</strong> for the named bits. Bit 13 has no label in the figure.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">0x2000</span></code> bit that the patent figure leaves unlabelled is the application type.
+<code class="docutils literal notranslate"><span class="pre">[23]</span></code> <strong>SPEC</strong>; <code class="docutils literal notranslate"><span class="pre">[2]</span></code>; <code class="docutils literal notranslate"><span class="pre">[11,</span> <span class="pre">12]</span></code> <strong>VERIFIED</strong></p>
 </section>
 </section>
-<section id="tmapi-srp-table-82">
-<h4>7.3 TMAPI_SRP: TABLE 82<a class="headerlink" href="#tmapi-srp-table-82" title="Link to this heading"></a></h4>
-<p>Starts at <strong>byte 384</strong>. One 10-byte record in a <strong>32-byte slot</strong>: <code class="docutils literal notranslate"><span class="pre">384</span> <span class="pre">+</span> <span class="pre">32×i</span></code>.</p>
+<section id="tmapi-srp-32-bytes-each-23-6-3-2-2">
+<h4>7.3 TMAPI_SRP (32 bytes each) [23 §6.3.2.2]<a class="headerlink" href="#tmapi-srp-32-bytes-each-23-6-3-2-2" title="Link to this heading"></a></h4>
+<p>Starts at <strong>byte 384</strong>: record <code class="docutils literal notranslate"><span class="pre">i</span></code> at <code class="docutils literal notranslate"><span class="pre">384</span> <span class="pre">+</span> <span class="pre">32×i</span></code>.</p>
 <table class="docutils align-default">
 <thead>
-<tr class="row-odd"><th class="head"><p>Size</p></th>
+<tr class="row-odd"><th class="head"><p>Offset</p></th>
+<th class="head"><p>Size</p></th>
 <th class="head"><p>Field</p></th>
 <th class="head"><p>Rule</p></th>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>4</p></td>
+<tr class="row-even"><td><p>0</p></td>
+<td><p>4</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">TMAPI_SA</span></code></p></td>
 <td><p><strong>byte</strong> offset of this TMAPI</p></td>
 </tr>
-<tr class="row-odd"><td><p>2</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">VTS_EVOBIN</span></code></p></td>
-<td><p>EVOBI index (not always the <code class="docutils literal notranslate"><span class="pre">EVOBnnn</span></code> number)</p></td>
+<tr class="row-odd"><td><p>4</p></td>
+<td><p>2</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">EVOB_INDEX</span></code></p></td>
+<td><p>1–1998: the <code class="docutils literal notranslate"><span class="pre">EVOB_INDEX</span></code> of the EVOB this TMAPI maps, as in its VTS_EVOBI (<a class="reference internal" href="#document-06_vti"><span class="std std-doc">06</span></a> §6.3). Equal on 2420/2420 maps whose EVOB has an EVOBI. Look the EVOBI up by this number, not by position</p></td>
 </tr>
-<tr class="row-even"><td><p>2</p></td>
+<tr class="row-even"><td><p>6</p></td>
+<td><p>2</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">EVOBU_ENT_Ns</span></code></p></td>
 <td><p>entry count. <code class="docutils literal notranslate"><span class="pre">Ns×4</span> <span class="pre">+</span> <span class="pre">TMAPI_SA</span></code> lands in the file</p></td>
 </tr>
-<tr class="row-odd"><td><p>2</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">ILVU_ENT_Ns</span></code></p></td>
-<td><p><strong>0</strong> on 2417 contiguous maps <strong>and</strong> on the four interleaved maps</p></td>
+<tr class="row-odd"><td><p>8</p></td>
+<td><p>24</p></td>
+<td><p>reserved</p></td>
+<td><p>0 on 2421/2421 (an earlier reading took 8–9 as an <code class="docutils literal notranslate"><span class="pre">ILVU_ENT_Ns</span></code>; the count is at 370 of the GI)</p></td>
 </tr>
 </tbody>
 </table>
 <p>When <code class="docutils literal notranslate"><span class="pre">TMAPI_Ns=1</span></code>, <code class="docutils literal notranslate"><span class="pre">TMAPI_SA=416</span></code> (2417/2417).<br />
-When <code class="docutils literal notranslate"><span class="pre">Ns=3</span></code>, SA=480 (<code class="docutils literal notranslate"><span class="pre">PANS_LABYRINTH</span></code> <code class="docutils literal notranslate"><span class="pre">death.MAP</span></code>). When <code class="docutils literal notranslate"><span class="pre">Ns=4</span></code>, SA=512 (three <code class="docutils literal notranslate"><span class="pre">ofelia*</span></code> maps). Those four are the only <code class="docutils literal notranslate"><span class="pre">Ns≠1</span></code>. <code class="docutils literal notranslate"><span class="pre">Video&#64;angleNumber</span></code> is <strong>1-based</strong> → TMAPI index <code class="docutils literal notranslate"><span class="pre">angleNumber</span> <span class="pre">−</span> <span class="pre">1</span></code>.</p>
+When <code class="docutils literal notranslate"><span class="pre">Ns=3</span></code>, SA=480 (<code class="docutils literal notranslate"><span class="pre">PANS_LABYRINTH</span></code> <code class="docutils literal notranslate"><span class="pre">death.MAP</span></code>). When <code class="docutils literal notranslate"><span class="pre">Ns=4</span></code>, SA=512 (three <code class="docutils literal notranslate"><span class="pre">ofelia*</span></code> maps). Those four are the only <code class="docutils literal notranslate"><span class="pre">Ns≠1</span></code>. <code class="docutils literal notranslate"><span class="pre">Video&#64;angleNumber</span></code> <em>n</em> is the <em>n</em>-th TMAPI (1-based) → TMAPI index <code class="docutils literal notranslate"><span class="pre">angleNumber</span> <span class="pre">−</span> <span class="pre">1</span></code> [23 §6.2.3.3].</p>
 </section>
 <section id="evobu-ent-table-83-4-bytes">
 <h4>7.4 EVOBU_ENT: TABLE 83 (4 bytes)<a class="headerlink" href="#evobu-ent-table-83-4-bytes" title="Link to this heading"></a></h4>
@@ -7605,12 +7816,12 @@ image <code class="docutils literal notranslate"><span class="pre">US20080298219
 <tr class="row-even"><td><p>31–21</p></td>
 <td><p>11</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">1STREF_SZ</span></code></p></td>
-<td><p>packs from EVOBU start through last byte of first reference picture</p></td>
+<td><p>packs from EVOBU start through the pack holding the last byte of the first I-coded-frame; 0 if the EVOBU has no video</p></td>
 </tr>
 <tr class="row-odd"><td><p>20–13</p></td>
 <td><p>8</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">EVOBU_PB_TM</span></code></p></td>
-<td><p>video <strong>fields</strong> in this EVOBU</p></td>
+<td><p>playback time in <strong>VSTUs</strong> (video system time units: one field period, 1.001/60 s or 1/50 s)</p></td>
 </tr>
 <tr class="row-even"><td><p>12–0</p></td>
 <td><p>13</p></td>
@@ -7619,6 +7830,7 @@ image <code class="docutils literal notranslate"><span class="pre">US20080298219
 </tr>
 </tbody>
 </table>
+<p><code class="docutils literal notranslate"><span class="pre">[23</span> <span class="pre">§6.3.2.3]</span></code> <strong>SPEC</strong></p>
 <p>Do not use an 11-bit size. Corpus: <strong>108</strong> entries have <code class="docutils literal notranslate"><span class="pre">EVOBU_SZ</span> <span class="pre">&gt;</span> <span class="pre">2047</span></code>, all on
 <strong>contiguous</strong> maps (<code class="docutils literal notranslate"><span class="pre">e14</span></code> A69). <strong>0</strong> on the four interleaved maps. 13-bit SZ is
 required even if you never play Pan’s.
@@ -7661,19 +7873,130 @@ Sum <code class="docutils literal notranslate"><span class="pre">EVOBU_PB_TM</sp
 <tbody>
 <tr class="row-even"><td><p>4</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">ILVU_ADR</span></code></p></td>
-<td><p>pack index in the sibling <code class="docutils literal notranslate"><span class="pre">.EVO</span></code>, ascending</p></td>
+<td><p>start of the ILVU as an RLBN from the first sector of the interleaved block [23 §6.3.2.4]; the block is the whole <code class="docutils literal notranslate"><span class="pre">.EVO</span></code> file, so this is the pack index in it, ascending</p></td>
 </tr>
 <tr class="row-odd"><td><p>2</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">ILVU_SZ</span></code></p></td>
-<td><p><strong>EVOBU count of this angle</strong> in this contiguous run (patent TABLE 84), <strong>not packs</strong>. Authoring quantum is usually <code class="docutils literal notranslate"><span class="pre">TMAPI_Ns</span></code> (3 or 4) with a leftover tail (<code class="docutils literal notranslate"><span class="pre">death</span></code> SZ=1×3; <code class="docutils literal notranslate"><span class="pre">ofelia*</span></code> SZ=3×4)</p></td>
+<td><p><strong>EVOBU count of this angle</strong> in this ILVU (book and patent TABLE 84), <strong>not packs</strong>. Authoring quantum is usually <code class="docutils literal notranslate"><span class="pre">TMAPI_Ns</span></code> (3 or 4) with a leftover tail (<code class="docutils literal notranslate"><span class="pre">death</span></code> SZ=1×3; <code class="docutils literal notranslate"><span class="pre">ofelia*</span></code> SZ=3×4)</p></td>
 </tr>
 </tbody>
 </table>
-<p><strong>No ILVUI header.</strong> <code class="docutils literal notranslate"><span class="pre">ILVUI_SA</span></code> points at the first <code class="docutils literal notranslate"><span class="pre">ILVU_ENT</span></code>. Walk 6-byte records until <code class="docutils literal notranslate"><span class="pre">ILVU_SZ=0</span></code>. Count lives at <strong>u16be &#64;372</strong> (equals the walk). <code class="docutils literal notranslate"><span class="pre">TMAPI_SRP.ILVU_ENT_Ns</span></code> is <strong>0</strong>. Do not use it.</p>
+<p><strong>No ILVUI header.</strong> <code class="docutils literal notranslate"><span class="pre">ILVUI_SA</span></code> points at the first <code class="docutils literal notranslate"><span class="pre">ILVU_ENT</span></code>. There are
+<code class="docutils literal notranslate"><span class="pre">ILVU_ENT_Ns</span></code> records (GI offset 370); walking 6-byte records until <code class="docutils literal notranslate"><span class="pre">ILVU_SZ=0</span></code>
+gives the same count.</p>
 <p>Records <strong>cycle angles</strong>: record <code class="docutils literal notranslate"><span class="pre">i</span></code> belongs to TMAPI <code class="docutils literal notranslate"><span class="pre">i</span> <span class="pre">%</span> <span class="pre">TMAPI_Ns</span></code>. <code class="docutils literal notranslate"><span class="pre">ILVU_ADR</span></code> is a pack index in the sibling <code class="docutils literal notranslate"><span class="pre">.EVO</span></code>. The next <code class="docutils literal notranslate"><span class="pre">ADR</span></code> is this <code class="docutils literal notranslate"><span class="pre">ADR</span></code> plus the sum of that angle’s next <code class="docutils literal notranslate"><span class="pre">ILVU_SZ</span></code> <code class="docutils literal notranslate"><span class="pre">EVOBU_SZ</span></code> values. Verified 179/179 + 371 + 499 + 239 consecutive deltas (<code class="docutils literal notranslate"><span class="pre">e13</span></code>). Treating <code class="docutils literal notranslate"><span class="pre">SZ</span></code> as packs never matches (would step by 3 or 4, not hundreds).</p>
 <p>To play angle <code class="docutils literal notranslate"><span class="pre">A</span></code> (1-based <code class="docutils literal notranslate"><span class="pre">Video&#64;angleNumber</span></code> → <code class="docutils literal notranslate"><span class="pre">A</span> <span class="pre">=</span> <span class="pre">angleNumber</span> <span class="pre">−</span> <span class="pre">1</span></code>): skip ILVU records whose <code class="docutils literal notranslate"><span class="pre">i</span> <span class="pre">%</span> <span class="pre">Ns</span> <span class="pre">≠</span> <span class="pre">A</span></code>; at each matching record, decode <code class="docutils literal notranslate"><span class="pre">SZ</span></code> EVOBUs from <code class="docutils literal notranslate"><span class="pre">TMAPI[A]</span></code> starting at <code class="docutils literal notranslate"><span class="pre">ADR</span> <span class="pre">×</span> <span class="pre">2048</span></code>. The walk consumes every EVOBU on every TMAPI.</p>
 <p>Contiguous titles (<code class="docutils literal notranslate"><span class="pre">TMAP_TY=0x2000</span></code>) never need this. AACS sequence-key files (<code class="docutils literal notranslate"><span class="pre">SKF</span></code>) are <strong>0/120</strong> here; user angle selection is the observed mechanism. Player SK path remains <strong>OPEN</strong>.</p>
 <p>Patent FIG.77 draws <strong>one TMAP file per angle EVOB</strong>, each with its own ILVUI; FIG.88 draws two EVOBs sharing one TMAP name. This corpus is neither: one <code class="docutils literal notranslate"><span class="pre">.MAP</span></code>, <code class="docutils literal notranslate"><span class="pre">Ns</span></code> TMAPIs, one cycling ILVU array, one <code class="docutils literal notranslate"><span class="pre">.EVO</span></code>. Implement the disc walk (<code class="docutils literal notranslate"><span class="pre">spec/clean/16_PATENT_FIGURES.md</span></code>).</p>
+</section>
+<section id="secondary-video-set-maps">
+<h4>7.6 Secondary Video Set maps<a class="headerlink" href="#secondary-video-set-maps" title="Link to this heading"></a></h4>
+<p>The map of a Secondary Video Set (<a class="reference internal" href="#document-03_playlist"><span class="std std-doc">03</span></a> §3.10) differs [23 §6.4.1].
+0 on disc.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>RBP</p></th>
+<th class="head"><p>Size</p></th>
+<th class="head"><p>Field</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0</p></td>
+<td><p>12</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">TMAP_ID</span></code> <code class="docutils literal notranslate"><span class="pre">&quot;HDDVD_TMAP00&quot;</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>12</p></td>
+<td><p>4</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">TMAP_EA</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>16</p></td>
+<td><p>2</p></td>
+<td><p>reserved</p></td>
+</tr>
+<tr class="row-odd"><td><p>18</p></td>
+<td><p>2</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">VERN</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>20</p></td>
+<td><p>2</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">TMAP_TY</span></code>: application type <code class="docutils literal notranslate"><span class="pre">0100b</span></code>, <code class="docutils literal notranslate"><span class="pre">ILVUI</span></code> 0, <code class="docutils literal notranslate"><span class="pre">ATR</span></code> 1, Angle <code class="docutils literal notranslate"><span class="pre">00b</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>22</p></td>
+<td><p>33</p></td>
+<td><p>reserved</p></td>
+</tr>
+<tr class="row-even"><td><p>55</p></td>
+<td><p>2</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">TMAPI_Ns</span></code>: 0 or 1 (0 allowed, for example for a live stream)</p></td>
+</tr>
+<tr class="row-odd"><td><p>57</p></td>
+<td><p>4</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">ILVUI_SA</span></code>: all 1s</p></td>
+</tr>
+<tr class="row-even"><td><p>61</p></td>
+<td><p>4</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">EVOB_ATR_SA</span></code>: byte offset of the <code class="docutils literal notranslate"><span class="pre">EVOB_ATR</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>65</p></td>
+<td><p>49</p></td>
+<td><p>reserved</p></td>
+</tr>
+<tr class="row-even"><td><p>114</p></td>
+<td><p>255</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">VTSI_FNAME</span></code>: all 1s</p></td>
+</tr>
+<tr class="row-odd"><td><p>369</p></td>
+<td><p>1</p></td>
+<td><p>reserved</p></td>
+</tr>
+<tr class="row-even"><td><p>370</p></td>
+<td><p>255</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">EVOB_FNAME</span></code>: the S-EVOB this map belongs to; a network player fetches it from the map’s location [23 §9.2.2.2]</p></td>
+</tr>
+<tr class="row-odd"><td><p>625</p></td>
+<td><p>1</p></td>
+<td><p>reserved</p></td>
+</tr>
+<tr class="row-even"><td><p>626</p></td>
+<td><p>4</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">EVOB_V_S_PTM</span></code> (90 kHz; the first audio time if there is no video)</p></td>
+</tr>
+<tr class="row-odd"><td><p>630</p></td>
+<td><p>4</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">EVOB_FIRST_SCR</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>634</p></td>
+<td><p>6</p></td>
+<td><p>reserved</p></td>
+</tr>
+</tbody>
+</table>
+<p>The GI is 640 bytes. Then at most one <code class="docutils literal notranslate"><span class="pre">TMAPI_SRP</span></code> (<code class="docutils literal notranslate"><span class="pre">TMAPI_SA</span></code>, 2 reserved bytes,
+<code class="docutils literal notranslate"><span class="pre">EVOBU_ENT_Ns</span></code>, 24 reserved), the TMAPI, and one 1024-byte <code class="docutils literal notranslate"><span class="pre">EVOB_ATR</span></code>: <code class="docutils literal notranslate"><span class="pre">EVOB_TY</span></code>
+(b3–b0 content: <code class="docutils literal notranslate"><span class="pre">0001b</span></code> Substitute Audio, <code class="docutils literal notranslate"><span class="pre">0010b</span></code> Secondary AV with sub video,
+<code class="docutils literal notranslate"><span class="pre">0100b</span></code> with sub audio, <code class="docutils literal notranslate"><span class="pre">0110b</span></code> with both, <code class="docutils literal notranslate"><span class="pre">1001b</span></code> Substitute AV), <code class="docutils literal notranslate"><span class="pre">EVOB_VM_ATR</span></code>,
+<code class="docutils literal notranslate"><span class="pre">EVOB_VS_ATR</span></code>, <code class="docutils literal notranslate"><span class="pre">EVOB_VS_LUMA</span></code>, reserved 2, <code class="docutils literal notranslate"><span class="pre">EVOB_AMST_Ns</span></code>, <code class="docutils literal notranslate"><span class="pre">EVOB_AMST_ATRT</span></code> (32),
+<code class="docutils literal notranslate"><span class="pre">EVOB_DM_COEFTS</span></code> (144), <code class="docutils literal notranslate"><span class="pre">EVOB_ASST_Ns</span></code>, <code class="docutils literal notranslate"><span class="pre">EVOB_ASST_ATRT</span></code> (32), reserved, laid out
+as in <a class="reference internal" href="#document-06_vti"><span class="std std-doc">06</span></a> §6.2.</p>
+<p>An S-EVOB with video is mapped by <code class="docutils literal notranslate"><span class="pre">EVOBU_ENT</span></code> as above. One without video is
+divided into <strong>Time Units</strong> (each starting with a navigation pack, 0.4–1.001 s,
+the last at most 1.2012 s, a whole number of audio frames) and mapped by <code class="docutils literal notranslate"><span class="pre">TU_ENT</span></code>:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Bits</p></th>
+<th class="head"><p>Field</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>31–13</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">TU_DIFF</span></code> (19 bits): PTS of the next TU’s first frame minus this TU’s (90 kHz); for the last TU, its last frame minus its first</p></td>
+</tr>
+<tr class="row-odd"><td><p>12–0</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">TU_SZ</span></code> (13 bits): packs in this TU</p></td>
+</tr>
+</tbody>
+</table>
+<p><code class="docutils literal notranslate"><span class="pre">[23</span> <span class="pre">§6.4]</span></code> <strong>SPEC</strong>; 0 on disc.</p>
 </section>
 </section>
 <span id="document-08_evo"></span><section id="evo-mpeg-2-program-stream">
