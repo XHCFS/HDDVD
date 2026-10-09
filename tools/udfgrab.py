@@ -23,6 +23,7 @@ class Remote:
             try:
                 with urllib.request.urlopen(req, timeout=90) as r:
                     d = r.read()
+                    self.url = r.geturl()
                     if self.size is None:
                         cr = r.headers.get('Content-Range', '')
                         if '/' in cr:
