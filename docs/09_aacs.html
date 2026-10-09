@@ -195,10 +195,10 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="08_evo.html">8. EVO: MPEG-2 program stream</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="08_evo.html#pack-types-table-85">8.1 Pack types (TABLE 85)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="08_evo.html#pack-types-23-6-3-5">8.1 Pack types [23 §6.3.5]</a></li>
 <li class="toctree-l2"><a class="reference internal" href="08_evo.html#nv-pck-first-pack-of-each-evobu">8.2 NV_PCK: first pack of each EVOBU</a></li>
 <li class="toctree-l2"><a class="reference internal" href="08_evo.html#pci-gi-offsets-from-the-substream-id-byte">8.3 PCI GI (offsets from the substream id byte)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="08_evo.html#dsi-gi-offsets-from-the-substream-id-byte">8.4 DSI GI (offsets from the substream id byte)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="08_evo.html#dsi-offsets-from-the-substream-id-byte">8.4 DSI (offsets from the substream id byte)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="08_evo.html#gci-substream-0x04">8.5 GCI (substream <code class="docutils literal notranslate"><span class="pre">0x04</span></code>)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="08_evo.html#adv-pck-sub-stream-id-0x80">8.6 ADV_PCK (<code class="docutils literal notranslate"><span class="pre">sub_stream_id</span> <span class="pre">=</span> <span class="pre">0x80</span></code>)</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="08_evo.html#pack-grammar-e16-stalingrad-logo-evo-n-2383">Pack grammar (<code class="docutils literal notranslate"><span class="pre">e16</span></code>, <code class="docutils literal notranslate"><span class="pre">STALINGRAD</span></code> <code class="docutils literal notranslate"><span class="pre">logo.EVO</span></code>, N=2383)</a></li>
@@ -813,6 +813,12 @@ and derives the <strong>name of the provider’s directory</strong> from DISCID 
 name is a keyed transform of it, reproducible only with <code class="docutils literal notranslate"><span class="pre">KDIR</span></code>. The <code class="docutils literal notranslate"><span class="pre">&lt;CONTENT_ID&gt;</span></code>
 folder is the GUID string of DISCID <code class="docutils literal notranslate"><span class="pre">CONTENT_ID</span></code>. <code class="docutils literal notranslate"><span class="pre">[4]</span></code> <strong>SPEC</strong>; 0 on-device
 directory specimens.</p>
+<p>The DVD Forum book describes the same tree without AACS: the provider folder is
+named with the Provider ID itself, as an upper-case GUID string; <code class="docutils literal notranslate"><span class="pre">common/</span></code> sits next
+to the provider folders; the three <code class="docutils literal notranslate"><span class="pre">info.txt</span></code> files are UTF-16BE key/value files
+(<code class="docutils literal notranslate"><span class="pre">/HD_DVD/info.txt</span></code> the Device Information File) [23 §10.3–10.4]
+(<a class="reference internal" href="05_manifest_hdi.html"><span class="std std-doc">05</span></a> §5.8). The AACS rule above replaces only the provider
+folder’s name.</p>
 <p>Corpus (<code class="docutils literal notranslate"><span class="pre">e21</span></code>): all fields above hold on <strong>208/208</strong> files (104 discs, primary + BAK);
 <code class="docutils literal notranslate"><span class="pre">KDIRe</span></code> is real data on every disc (never <code class="docutils literal notranslate"><span class="pre">00</span></code>×16 or <code class="docutils literal notranslate"><span class="pre">FF</span></code>×16) and distinct on every
 disc (104 values). Distinct ciphertext is expected even if a provider reused one
@@ -950,7 +956,8 @@ replicator or authoring facility that applied to AACS LA. <strong>INFERRED</stro
 <code class="docutils literal notranslate"><span class="pre">CPI</span></code> = 16 bytes in GCI_PKT of that EVOBU’s NV_PCK (Table 4-1).</p>
 <p><strong>CPI byte offset inside GCI_PKT: CLOSED for typical NV_PCK framing. Pack offset 0x3C.</strong>
 If the pack has stuffing or omits the system header, parse GCI by <code class="docutils literal notranslate"><span class="pre">sub_stream_id</span> <span class="pre">0x04</span></code>
-and take CPI from that PES (GCI-payload offset 12 on the observed layout). Corpus
+and take CPI from that PES (GCI data offset 12, i.e. payload byte 13 counting the
+<code class="docutils literal notranslate"><span class="pre">sub_stream_id</span></code>; [23 Vol 2 §5.2.5.1]). Corpus
 <code class="docutils literal notranslate"><span class="pre">e09</span></code>: 704/704 packs <code class="docutils literal notranslate"><span class="pre">PES_scrambling_control=00</span></code>; no encrypted pack to re-test.</p>
 <p><code class="docutils literal notranslate"><span class="pre">[9]</span></code>
 <code class="docutils literal notranslate"><span class="pre">[11]</span></code>
@@ -975,9 +982,13 @@ do not decrypt. Cannot test <code class="docutils literal notranslate"><span cla
 <p>Two facts about <em>this corpus</em> remain, and they are why no encrypted pack is present
 to exercise the above:</p>
 <ol class="arabic">
-<li><p><strong>The book defers it by design.</strong> §4.2 verbatim: <em>“A CPI field is located in a
+<li><p><strong>The AACS book defers it by design.</strong> §4.2 verbatim: <em>“A CPI field is located in a
 GCI packet (GCI_PKT)… See the HD DVD-Video Specifications for the detailed
-location of CPI field in a GCI_PKT.”</em> That book never leaked.
+location of CPI field in a GCI_PKT.”</em> Those specifications are now public
+[23]: <code class="docutils literal notranslate"><span class="pre">GCI_GI</span></code> bytes 12–27 are the 16-byte <code class="docutils literal notranslate"><span class="pre">CPI</span></code>, “reserved for copy
+protection” [23 Vol 2 §5.2.5.1], which is GCI payload byte 13 counting the
+<code class="docutils literal notranslate"><span class="pre">0x04</span></code> (<a class="reference internal" href="08_evo.html"><span class="std std-doc">08</span></a> §8.5) and pack byte <code class="docutils literal notranslate"><span class="pre">0x3C</span></code> on the usual framing. The
+book, BackupHDDVD and the disc agree.
 <code class="docutils literal notranslate"><span class="pre">WO2006070920A1</span></code> FIG.109 gives GCI’s field <strong>order</strong> (<code class="docutils literal notranslate"><span class="pre">GCI_GI</span></code>, <code class="docutils literal notranslate"><span class="pre">DCI_CCI_SS</span></code>,
 <code class="docutils literal notranslate"><span class="pre">DCI</span></code>, <code class="docutils literal notranslate"><span class="pre">CCI</span></code>, <code class="docutils literal notranslate"><span class="pre">RECI</span></code>) but no byte counts - the sizes live in the figure image.</p></li>
 <li><p><strong>This corpus has no encrypted pack to solve against.</strong> Table 4-7 [4]: <em>“When a Pack

@@ -198,6 +198,13 @@ name is a keyed transform of it, reproducible only with `KDIR`. The `<CONTENT_ID
 folder is the GUID string of DISCID `CONTENT_ID`. `[4]` **SPEC**; 0 on-device
 directory specimens.
 
+The DVD Forum book describes the same tree without AACS: the provider folder is
+named with the Provider ID itself, as an upper-case GUID string; `common/` sits next
+to the provider folders; the three `info.txt` files are UTF-16BE key/value files
+(`/HD_DVD/info.txt` the Device Information File) [23 §10.3–10.4]
+([05](05_manifest_hdi.md) §5.8). The AACS rule above replaces only the provider
+folder's name.
+
 Corpus (`e21`): all fields above hold on **208/208** files (104 discs, primary + BAK);
 `KDIRe` is real data on every disc (never `00`×16 or `FF`×16) and distinct on every
 disc (104 values). Distinct ciphertext is expected even if a provider reused one
@@ -260,7 +267,8 @@ Kc = AES-G(Kt, Dtk || CPI_lsb_96)
 
 **CPI byte offset inside GCI_PKT: CLOSED for typical NV_PCK framing. Pack offset 0x3C.**
 If the pack has stuffing or omits the system header, parse GCI by `sub_stream_id 0x04`
-and take CPI from that PES (GCI-payload offset 12 on the observed layout). Corpus
+and take CPI from that PES (GCI data offset 12, i.e. payload byte 13 counting the
+`sub_stream_id`; [23 Vol 2 §5.2.5.1]). Corpus
 `e09`: 704/704 packs `PES_scrambling_control=00`; no encrypted pack to re-test.
 
 `[9]`
@@ -290,9 +298,13 @@ do not decrypt. Cannot test `10b` on stripped ISOs.
 Two facts about *this corpus* remain, and they are why no encrypted pack is present
 to exercise the above:
 
-1. **The book defers it by design.** §4.2 verbatim: *"A CPI field is located in a
+1. **The AACS book defers it by design.** §4.2 verbatim: *"A CPI field is located in a
    GCI packet (GCI_PKT)... See the HD DVD-Video Specifications for the detailed
-   location of CPI field in a GCI_PKT."* That book never leaked.
+   location of CPI field in a GCI_PKT."* Those specifications are now public
+   [23]: `GCI_GI` bytes 12–27 are the 16-byte `CPI`, "reserved for copy
+   protection" [23 Vol 2 §5.2.5.1], which is GCI payload byte 13 counting the
+   `0x04` ([08](08_evo.md) §8.5) and pack byte `0x3C` on the usual framing. The
+   book, BackupHDDVD and the disc agree.
    `WO2006070920A1` FIG.109 gives GCI's field **order** (`GCI_GI`, `DCI_CCI_SS`,
    `DCI`, `CCI`, `RECI`) but no byte counts - the sizes live in the figure image.
 

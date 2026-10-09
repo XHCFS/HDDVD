@@ -195,10 +195,10 @@
 </ul>
 </li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">8. EVO: MPEG-2 program stream</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#pack-types-table-85">8.1 Pack types (TABLE 85)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pack-types-23-6-3-5">8.1 Pack types [23 §6.3.5]</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#nv-pck-first-pack-of-each-evobu">8.2 NV_PCK: first pack of each EVOBU</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#pci-gi-offsets-from-the-substream-id-byte">8.3 PCI GI (offsets from the substream id byte)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#dsi-gi-offsets-from-the-substream-id-byte">8.4 DSI GI (offsets from the substream id byte)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#dsi-offsets-from-the-substream-id-byte">8.4 DSI (offsets from the substream id byte)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#gci-substream-0x04">8.5 GCI (substream <code class="docutils literal notranslate"><span class="pre">0x04</span></code>)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#adv-pck-sub-stream-id-0x80">8.6 ADV_PCK (<code class="docutils literal notranslate"><span class="pre">sub_stream_id</span> <span class="pre">=</span> <span class="pre">0x80</span></code>)</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#pack-grammar-e16-stalingrad-logo-evo-n-2383">Pack grammar (<code class="docutils literal notranslate"><span class="pre">e16</span></code>, <code class="docutils literal notranslate"><span class="pre">STALINGRAD</span></code> <code class="docutils literal notranslate"><span class="pre">logo.EVO</span></code>, N=2383)</a></li>
@@ -463,8 +463,8 @@ Container: MPEG-2 program stream, <strong>2048-byte packs</strong>.<br />
 Pack start: <code class="docutils literal notranslate"><span class="pre">00</span> <span class="pre">00</span> <span class="pre">01</span> <span class="pre">BA</span></code> at every 2048-byte boundary; MPEG-2 marker bits <code class="docutils literal notranslate"><span class="pre">01</span></code>.</p>
 <p>Any MPEG-2 PS demuxer that accepts 2048-byte packs can demux this. Navigation
 headers are in the clear even on AACS discs.</p>
-<section id="pack-types-table-85">
-<h2>8.1 Pack types (TABLE 85)<a class="headerlink" href="#pack-types-table-85" title="Link to this heading"></a></h2>
+<section id="pack-types-23-6-3-5">
+<h2>8.1 Pack types [23 §6.3.5]<a class="headerlink" href="#pack-types-23-6-3-5" title="Link to this heading"></a></h2>
 <table class="docutils align-default">
 <thead>
 <tr class="row-odd"><th class="head"><p>Pack</p></th>
@@ -473,33 +473,39 @@ headers are in the clear even on AACS discs.</p>
 </thead>
 <tbody>
 <tr class="row-even"><td><p>NV_PCK</p></td>
-<td><p>Navigation: GCI + PCI + DSI (first pack of each EVOBU)</p></td>
+<td><p>Navigation: GCI + DSI (first pack of each EVOBU)</p></td>
 </tr>
 <tr class="row-odd"><td><p>VM_PCK</p></td>
 <td><p>Main video (MPEG-2 / AVC / VC-1)</p></td>
 </tr>
 <tr class="row-even"><td><p>AM_PCK</p></td>
-<td><p>Main audio</p></td>
+<td><p>Main audio (DD+, MPEG, LPCM, DTS-HD, MLP)</p></td>
 </tr>
 <tr class="row-odd"><td><p>VS_PCK</p></td>
 <td><p>Sub video</p></td>
 </tr>
 <tr class="row-even"><td><p>AS_PCK</p></td>
-<td><p>Sub audio</p></td>
+<td><p>Sub audio (DD+, DTS-HD; optional mp3, HE-AAC v2, WMA Pro)</p></td>
 </tr>
 <tr class="row-odd"><td><p>SP_PCK</p></td>
 <td><p>Sub-picture</p></td>
 </tr>
 <tr class="row-even"><td><p>ADV_PCK</p></td>
-<td><p>Advanced stream (File Cache); <code class="docutils literal notranslate"><span class="pre">sub_stream_id</span> <span class="pre">=</span> <span class="pre">0x80</span></code></p></td>
+<td><p>Advanced stream (archive files for the File Cache); <code class="docutils literal notranslate"><span class="pre">sub_stream_id</span> <span class="pre">=</span> <span class="pre">0x80</span></code></p></td>
 </tr>
 <tr class="row-odd"><td><p>HLI_PCK</p></td>
 <td><p>Highlight (Standard menus); <code class="docutils literal notranslate"><span class="pre">sub_stream_id</span> <span class="pre">=</span> <span class="pre">0x08</span></code>; <strong>ignore on Advanced</strong></p></td>
 </tr>
 </tbody>
 </table>
-<p>Patents: HLI and PCI “shall be ignored in Advanced Content.” Seek uses MAP + DSI,
-not PCI buttons.</p>
+<p>The book: a PCI or HLI in a Primary Video Set EVOB <strong>shall be ignored</strong> [23 §6.3.5.1].
+Seek uses MAP + DSI, not PCI buttons.</p>
+<p>An EVOBU starts with exactly one NV_PCK and runs to the next one or the end of the
+EVOB. It plays 0.4 to 1.001 s (the last of an EVOB up to 1.2012 s), a whole number
+of VSTUs, and starts where the previous one ended. The first EVOBU of an EVOB has
+main video. Every stream is complete inside its EVOB. Rates: the EVOB at most
+30.24 Mbit/s, main video 29.40 (HD) or 15.00 (SD), main audio 19.60 in total and
+18.43 per stream, sub audio 4.00 in total and 512 kbit/s per stream [23 §6.3.5].</p>
 </section>
 <section id="nv-pck-first-pack-of-each-evobu">
 <h2>8.2 NV_PCK: first pack of each EVOBU<a class="headerlink" href="#nv-pck-first-pack-of-each-evobu" title="Link to this heading"></a></h2>
@@ -512,20 +518,27 @@ not PCI buttons.</p>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">0x00</span></code></p></td>
-<td><p>977</p></td>
-<td><p>PCI</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">0x01</span></code></p></td>
-<td><p>755</p></td>
-<td><p>DSI</p></td>
-</tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">0x04</span></code></p></td>
-<td><p>257</p></td>
+<td><p>257 (<code class="docutils literal notranslate"><span class="pre">0x0101</span></code>)</p></td>
 <td><p>GCI</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">0x00</span></code></p></td>
+<td><p>977</p></td>
+<td><p>PCI (Standard VTS only; inside the reserved area)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">0x01</span></code></p></td>
+<td><p>755 (<code class="docutils literal notranslate"><span class="pre">0x02F3</span></code>)</p></td>
+<td><p>DSI</p></td>
 </tr>
 </tbody>
 </table>
+<p>The book’s NV_PCK [23 §6.3.5.2.2]: pack header (14), system header, GCI packet
+(6-byte header, <code class="docutils literal notranslate"><span class="pre">sub_stream_id</span></code>, 256 bytes), a <strong>reserved area</strong> of one 983-byte PES
+packet, then the DSI packet (<code class="docutils literal notranslate"><span class="pre">sub_stream_id</span></code>, 754 bytes). The reserved area may
+hold a PCI packet (when a Standard VTS EVOB is reused) or an RDI packet
+(Interoperable); a player ignores it. <code class="docutils literal notranslate"><span class="pre">private_stream_2</span></code> sub stream ids
+[23 Table 6.3.5.1.1-3]: <code class="docutils literal notranslate"><span class="pre">0x00</span></code> PCI (reserved), <code class="docutils literal notranslate"><span class="pre">0x01</span></code> DSI, <code class="docutils literal notranslate"><span class="pre">0x04</span></code> GCI, <code class="docutils literal notranslate"><span class="pre">0x08</span></code> HLI
+(reserved), <code class="docutils literal notranslate"><span class="pre">0x50</span></code> RDI (reserved), <code class="docutils literal notranslate"><span class="pre">0x80</span></code> Advanced stream, <code class="docutils literal notranslate"><span class="pre">0xFF</span></code> provider defined.</p>
 <p>Verified on Standard and Advanced (RESERVOIR_DOGS, MYSTERY_MEN, DOWNFALL).</p>
 <p>DVD-Video uses <code class="docutils literal notranslate"><span class="pre">0x00</span></code>/<code class="docutils literal notranslate"><span class="pre">0x01</span></code> at lengths 980/1018. HD DVD lengths differ.
 <code class="docutils literal notranslate"><span class="pre">0x04</span></code> is <strong>not</strong> ADV_PCK (<code class="docutils literal notranslate"><span class="pre">0x80</span></code>).
@@ -540,17 +553,20 @@ here use <code class="docutils literal notranslate"><span class="pre">0x04</span
 00 00 01 BF &lt;PCI or GCI or DSI PES&gt; …
 </pre></div>
 </div>
-<p>Order of the three PES packets is GCI/PCI/DSI as listed in the patent; parse by
-substream id, not by order. Some Advanced clips omit PCI: <code class="docutils literal notranslate"><span class="pre">STALINGRAD</span></code>
-<code class="docutils literal notranslate"><span class="pre">black.EVO</span></code> is GCI <code class="docutils literal notranslate"><span class="pre">0x04</span></code> + DSI <code class="docutils literal notranslate"><span class="pre">0x01</span></code> only (35/35 VOBUs). On <code class="docutils literal notranslate"><span class="pre">RAMBO_1_FRA</span></code> the PCI
-slot is still present but <strong>zero-filled, start code included</strong> (983 zero bytes =
-6-byte PES header + 977): the DSI follows at pack offset 1287. A parser that walks PES
-packets back to back stops at the gap, so <strong>scan for the next <code class="docutils literal notranslate"><span class="pre">00</span> <span class="pre">00</span> <span class="pre">01</span> <span class="pre">BF</span></code></strong> instead
-(<code class="docutils literal notranslate"><span class="pre">e23</span></code>). <code class="docutils literal notranslate"><span class="pre">[11]</span></code> <strong>VERIFIED</strong></p>
+<p>Order is GCI, reserved area, DSI; parse by substream id, not by order. Some
+Advanced clips omit PCI: <code class="docutils literal notranslate"><span class="pre">STALINGRAD</span></code> <code class="docutils literal notranslate"><span class="pre">black.EVO</span></code> is GCI <code class="docutils literal notranslate"><span class="pre">0x04</span></code> + DSI <code class="docutils literal notranslate"><span class="pre">0x01</span></code> only
+(35/35 VOBUs). On <code class="docutils literal notranslate"><span class="pre">RAMBO_1_FRA</span></code> the reserved area is <strong>zero-filled, start code
+included</strong>: exactly the book’s 983 bytes. The DSI follows at pack offset 1287. A
+parser that walks PES packets back to back stops at the gap, so <strong>scan for the next
+<code class="docutils literal notranslate"><span class="pre">00</span> <span class="pre">00</span> <span class="pre">01</span> <span class="pre">BF</span></code></strong> instead (<code class="docutils literal notranslate"><span class="pre">e23</span></code>). <code class="docutils literal notranslate"><span class="pre">[23]</span></code> <strong>SPEC</strong>; <code class="docutils literal notranslate"><span class="pre">[11]</span></code> <strong>VERIFIED</strong></p>
+<p>System header values [23 Table 6.3.5.2.2-1]: <code class="docutils literal notranslate"><span class="pre">rate_bound</span></code> <code class="docutils literal notranslate"><span class="pre">0x824EA1</span></code> (30.24 Mbit/s),
+<code class="docutils literal notranslate"><span class="pre">audio_bound</span></code> 0–8, <code class="docutils literal notranslate"><span class="pre">video_bound</span></code> 1 or 2, buffer bounds <code class="docutils literal notranslate"><span class="pre">0xB9</span></code> (all video) 1808 kB,
+<code class="docutils literal notranslate"><span class="pre">0xB8</span></code> (all audio) 8192 B, <code class="docutils literal notranslate"><span class="pre">0xBD</span></code> 1568 kB, <code class="docutils literal notranslate"><span class="pre">0xBF</span></code> 2 kB, <code class="docutils literal notranslate"><span class="pre">0xFD</span></code> 1808 kB.</p>
 </section>
 <section id="pci-gi-offsets-from-the-substream-id-byte">
 <h2>8.3 PCI GI (offsets from the substream id byte)<a class="headerlink" href="#pci-gi-offsets-from-the-substream-id-byte" title="Link to this heading"></a></h2>
-<p>DVD <code class="docutils literal notranslate"><span class="pre">pci_gi_t</span></code> layout holds for the GI.</p>
+<p>The book’s Standard-content PCI [23 Vol 2 §5.2.6] is <code class="docutils literal notranslate"><span class="pre">PCI_GI</span></code> 60 bytes,
+<code class="docutils literal notranslate"><span class="pre">NSML_AGLI</span></code> 36, reserved. A player ignores it on Advanced Content.</p>
 <table class="docutils align-default">
 <thead>
 <tr class="row-odd"><th class="head"><p>Off</p></th>
@@ -565,27 +581,35 @@ packets back to back stops at the gap, so <strong>scan for the next <code class=
 </tr>
 <tr class="row-odd"><td><p>1</p></td>
 <td><p>4</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">nv_pck_lbn</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">NV_PCK_LBN</span></code></p></td>
 </tr>
 <tr class="row-even"><td><p>5</p></td>
-<td><p>2</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">vobu_cat</span></code></p></td>
-</tr>
-<tr class="row-odd"><td><p>7</p></td>
-<td><p>2</p></td>
-<td><p>reserved (DVD hole: a packed C struct must include this, not jump 5→9)</p></td>
-</tr>
-<tr class="row-even"><td><p>9</p></td>
 <td><p>4</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">vobu_uop_ctl</span></code></p></td>
+<td><p>reserved (DVD has <code class="docutils literal notranslate"><span class="pre">vobu_cat</span></code> at 5; the HD DVD book reserves it)</p></td>
 </tr>
-<tr class="row-odd"><td><p>13</p></td>
+<tr class="row-odd"><td><p>9</p></td>
 <td><p>4</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">vobu_s_ptm</span></code> 90 kHz</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">EVOBU_UOP_CTL</span></code> (Standard Content user-operation bits)</p></td>
 </tr>
-<tr class="row-even"><td><p>17</p></td>
+<tr class="row-even"><td><p>13</p></td>
 <td><p>4</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">vobu_e_ptm</span></code> 90 kHz</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">EVOBU_S_PTM</span></code> 90 kHz</p></td>
+</tr>
+<tr class="row-odd"><td><p>17</p></td>
+<td><p>4</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">EVOBU_E_PTM</span></code> 90 kHz</p></td>
+</tr>
+<tr class="row-even"><td><p>21</p></td>
+<td><p>4</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">EVOBU_SE_E_PTM</span></code> (end at a sequence end code; 0 if none)</p></td>
+</tr>
+<tr class="row-odd"><td><p>25</p></td>
+<td><p>4</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">C_ELTM</span></code> (BCD time)</p></td>
+</tr>
+<tr class="row-even"><td><p>29</p></td>
+<td><p>32</p></td>
+<td><p>reserved</p></td>
 </tr>
 </tbody>
 </table>
@@ -594,9 +618,12 @@ checked VOBUs. Next VOBU <code class="docutils literal notranslate"><span class=
 <p>Advanced PCI GI may be filled (DOWNFALL) or zeroed (MYSTERY_MEN VOBU0).
 Highlight buttons are <strong>not</strong> in this packet on HD DVD; they are HLI_PCK <code class="docutils literal notranslate"><span class="pre">0x08</span></code>.</p>
 </section>
-<section id="dsi-gi-offsets-from-the-substream-id-byte">
-<h2>8.4 DSI GI (offsets from the substream id byte)<a class="headerlink" href="#dsi-gi-offsets-from-the-substream-id-byte" title="Link to this heading"></a></h2>
-<p>DVD <code class="docutils literal notranslate"><span class="pre">dsi_gi_t</span></code> layout holds for the GI.</p>
+<section id="dsi-offsets-from-the-substream-id-byte">
+<h2>8.4 DSI (offsets from the substream id byte)<a class="headerlink" href="#dsi-offsets-from-the-substream-id-byte" title="Link to this heading"></a></h2>
+<p>754 bytes after the <code class="docutils literal notranslate"><span class="pre">0x01</span></code>: <code class="docutils literal notranslate"><span class="pre">DSI_GI</span></code> 32 at offset 1, <code class="docutils literal notranslate"><span class="pre">SML_PBI</span></code> 276 at 33,
+<code class="docutils literal notranslate"><span class="pre">SML_AGLI</span></code> 54 at 309, <code class="docutils literal notranslate"><span class="pre">EVOBU_SRI</span></code> 168 at 363, <code class="docutils literal notranslate"><span class="pre">SYNCI</span></code> 168 at 531, reserved 56
+[23 Vol 2 §5.2.7, §6.3.4].</p>
+<p><strong>DSI_GI</strong></p>
 <table class="docutils align-default">
 <thead>
 <tr class="row-odd"><th class="head"><p>Off</p></th>
@@ -611,53 +638,68 @@ Highlight buttons are <strong>not</strong> in this packet on HD DVD; they are HL
 </tr>
 <tr class="row-odd"><td><p>1</p></td>
 <td><p>4</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">nv_pck_scr</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">NV_PCK_SCR</span></code>, low 32 bits of this pack’s <code class="docutils literal notranslate"><span class="pre">SCR_base</span></code></p></td>
 </tr>
 <tr class="row-even"><td><p>5</p></td>
 <td><p>4</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">nv_pck_lbn</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">NV_PCK_LBN</span></code>, on Advanced Content the RLBN from the first sector of the EVOB</p></td>
 </tr>
 <tr class="row-odd"><td><p>9</p></td>
 <td><p>4</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">vobu_ea</span></code> <strong>relative</strong> pack count minus one</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">EVOBU_EA</span></code>, last pack of the EVOBU as RLBN from its first: pack count minus one</p></td>
 </tr>
 <tr class="row-even"><td><p>13</p></td>
 <td><p>4</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">vobu_1stref_ea</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">EVOBU_1STREF_EA</span></code>, end of the first reference picture (RLBN; 0 without video)</p></td>
 </tr>
 <tr class="row-odd"><td><p>17</p></td>
 <td><p>4</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">vobu_2ndref_ea</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">EVOBU_2NDREF_EA</span></code></p></td>
 </tr>
 <tr class="row-even"><td><p>21</p></td>
 <td><p>4</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">vobu_3rdref_ea</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">EVOBU_3RDREF_EA</span></code> (0 if absent)</p></td>
 </tr>
 <tr class="row-odd"><td><p>25</p></td>
 <td><p>2</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">vobu_vob_idn</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">EVOBU_EVOB_IDN</span></code>, EVOB ID number</p></td>
 </tr>
 <tr class="row-even"><td><p>27</p></td>
 <td><p>1</p></td>
-<td><p>reserved (DVD hole)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">EVOBU_ADP_ID</span></code> / upper cell id bits (reserved on Advanced)</p></td>
 </tr>
 <tr class="row-odd"><td><p>28</p></td>
 <td><p>1</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">vobu_c_idn</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">EVOBU_C_IDN</span></code>, 0 on Advanced</p></td>
+</tr>
+<tr class="row-even"><td><p>29</p></td>
+<td><p>4</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">C_ELTM</span></code>, 0 on Advanced</p></td>
 </tr>
 </tbody>
 </table>
-<p>Walk: <code class="docutils literal notranslate"><span class="pre">next_lbn</span> <span class="pre">=</span> <span class="pre">this_lbn</span> <span class="pre">+</span> <span class="pre">vobu_ea</span> <span class="pre">+</span> <span class="pre">1</span></code>.<br />
-<code class="docutils literal notranslate"><span class="pre">vobu_ea</span> <span class="pre">+</span> <span class="pre">1</span></code> equals MAP <code class="docutils literal notranslate"><span class="pre">EVOBU_SZ</span></code> on Advanced content checked.</p>
-<p>DSI tail (<code class="docutils literal notranslate"><span class="pre">sml_pbi</span></code>, <code class="docutils literal notranslate"><span class="pre">vobu_sri</span></code>, <code class="docutils literal notranslate"><span class="pre">synci</span></code>) is not a closed table. Not required for
-MAP-based seek.</p>
+<p>Walk: <code class="docutils literal notranslate"><span class="pre">next_lbn</span> <span class="pre">=</span> <span class="pre">this_lbn</span> <span class="pre">+</span> <span class="pre">EVOBU_EA</span> <span class="pre">+</span> <span class="pre">1</span></code>.<br />
+<code class="docutils literal notranslate"><span class="pre">EVOBU_EA</span> <span class="pre">+</span> <span class="pre">1</span></code> equals MAP <code class="docutils literal notranslate"><span class="pre">EVOBU_SZ</span></code> on Advanced content checked.</p>
+<p><strong>SML_PBI</strong> (seamless playback, 276 bytes): <code class="docutils literal notranslate"><span class="pre">EVOBU_SML_CAT</span></code> (2; b15 PREU, b14 ILVU,
+b13 unit start, b12 unit end), <code class="docutils literal notranslate"><span class="pre">ILVU_EA</span></code> (4), <code class="docutils literal notranslate"><span class="pre">NXT_ILVU_SA</span></code> (4), <code class="docutils literal notranslate"><span class="pre">NXT_ILVU_SZ</span></code> (2),
+<code class="docutils literal notranslate"><span class="pre">EVOB_V_S_PTM</span></code> (4), <code class="docutils literal notranslate"><span class="pre">EVOB_V_E_PTM</span></code> (4; the same in every EVOBU of the EVOB), then
+for each of the 8 decoding audio numbers the main-audio stop times and gap lengths
+(<code class="docutils literal notranslate"><span class="pre">EVOB_AM_STP_PTM</span></code>, <code class="docutils literal notranslate"><span class="pre">EVOB_AM_GAP_LEN</span></code>, two 4-byte values per stream each) and the
+same for sub audio (<code class="docutils literal notranslate"><span class="pre">AS</span></code>). <strong>SML_AGLI</strong> (54): 9 × 6-byte seamless-angle
+destinations (b46–b16 destination ILVU start RLBN, b15–b0 its size), all 0 unless
+the block is a seamless angle block. <strong>SYNCI</strong> (168): the nearest AM_PCK per main
+audio stream (8 × 2), SP_PCK per sub-picture stream (32 × 4), reserved, sub video
+(2) and sub audio (8 × 2), each indexed by decoding stream number.
+<strong>EVOBU_SRI</strong> is recorded but a player need not use it [23 Annex N.2].</p>
+<p>Not required for MAP-based seek; required for seamless joins (<a class="reference internal" href="03_playlist.html"><span class="std std-doc">03</span></a>
+§3.10) and angle changes.</p>
 </section>
 <section id="gci-substream-0x04">
 <h2>8.5 GCI (substream <code class="docutils literal notranslate"><span class="pre">0x04</span></code>)<a class="headerlink" href="#gci-substream-0x04" title="Link to this heading"></a></h2>
-<p>257-byte PES payload. The patent’s TABLE 52 field list (<code class="docutils literal notranslate"><span class="pre">GCI_GI</span></code> 16 bytes of
-<code class="docutils literal notranslate"><span class="pre">GCI_CAT</span></code>, reserved, <code class="docutils literal notranslate"><span class="pre">DCI_CCI_SS</span></code>, <code class="docutils literal notranslate"><span class="pre">DCI</span></code>, <code class="docutils literal notranslate"><span class="pre">CCI</span></code>, then <code class="docutils literal notranslate"><span class="pre">RECI</span></code> 189 + reserved 51) <strong>does
-not match the disc</strong>. Observed layout (offsets in the PES payload, <code class="docutils literal notranslate"><span class="pre">0x04</span></code> = byte 0;
-<code class="docutils literal notranslate"><span class="pre">e23</span></code>, 24 EVOBUs on each of 12 discs):</p>
+<p>257-byte PES payload: <code class="docutils literal notranslate"><span class="pre">GCI_GI</span></code> 32 bytes, <code class="docutils literal notranslate"><span class="pre">RECI</span></code> 189, reserved 35
+[23 Vol 2 §5.2.5, §6.3.3]. The patent’s TABLE 52 (16-byte GI, <code class="docutils literal notranslate"><span class="pre">RECI</span></code> + 51) does
+not match the disc; the book does. Offsets in the PES payload, <code class="docutils literal notranslate"><span class="pre">0x04</span></code> = byte 0
+(<code class="docutils literal notranslate"><span class="pre">e23</span></code>, 24 EVOBUs on each of 12 discs):</p>
 <table class="docutils align-default">
 <thead>
 <tr class="row-odd"><th class="head"><p>Off</p></th>
@@ -675,30 +717,59 @@ not match the disc</strong>. Observed layout (offsets in the PES payload, <code 
 <tr class="row-odd"><td><p>1</p></td>
 <td><p>1</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">GCI_CAT</span></code></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">0x40</span></code> on Advanced (AACS and unencrypted); <code class="docutils literal notranslate"><span class="pre">0x00</span></code> on Standard Content (<code class="docutils literal notranslate"><span class="pre">RESERVOIR_DOGS</span></code>)</p></td>
+<td><p>b7–b6 EVOBU category: <code class="docutils literal notranslate"><span class="pre">00</span></code> Standard, <code class="docutils literal notranslate"><span class="pre">01</span></code> Advanced, <code class="docutils literal notranslate"><span class="pre">10</span></code> Interoperable; the rest reserved. <code class="docutils literal notranslate"><span class="pre">0x40</span></code> on Advanced (AACS and unencrypted); <code class="docutils literal notranslate"><span class="pre">0x00</span></code> on Standard Content (<code class="docutils literal notranslate"><span class="pre">RESERVOIR_DOGS</span></code>)</p></td>
 </tr>
 <tr class="row-even"><td><p>2</p></td>
-<td><p>5</p></td>
-<td><p><strong>EVOBU start PTM</strong>, 90 kHz</p></td>
-<td><p>equals <code class="docutils literal notranslate"><span class="pre">EVOBI</span></code> start PTM (<a class="reference internal" href="06_vti.html"><span class="std std-doc">06</span></a>) at the EVOB’s first EVOBU on 12/12 discs, then advances by each EVOBU’s duration (45 045, or 87 087 for a longer EVOBU). Top byte 0 on every sample; width 32 vs 40 bits undetermined</p></td>
-</tr>
-<tr class="row-odd"><td><p>7</p></td>
-<td><p>6</p></td>
+<td><p>1</p></td>
 <td><p>reserved</p></td>
-<td><p>zero on every sample</p></td>
+<td><p>0</p></td>
+</tr>
+<tr class="row-odd"><td><p>3</p></td>
+<td><p>4</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">EVOBU_S_PTM</span></code>, 90 kHz</p></td>
+<td><p>start of the first picture of the EVOBU in display order. Equals <code class="docutils literal notranslate"><span class="pre">EVOB_V_S_PTM</span></code> (<a class="reference internal" href="06_vti.html"><span class="std std-doc">06</span></a>) at the EVOB’s first EVOBU on 12/12 discs, then advances by each EVOBU’s duration (45 045, or 87 087 for a longer EVOBU)</p></td>
+</tr>
+<tr class="row-even"><td><p>7</p></td>
+<td><p>2</p></td>
+<td><p>reserved</p></td>
+<td><p>0</p></td>
+</tr>
+<tr class="row-odd"><td><p>9</p></td>
+<td><p>4</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">DCI</span></code></p></td>
+<td><p>reserved for Interoperable Content; 0 on Standard and Advanced</p></td>
 </tr>
 <tr class="row-even"><td><p>13</p></td>
 <td><p>16</p></td>
-<td><p><strong>AACS CPI</strong></p></td>
-<td><p>Table 4-1 layout, <a class="reference internal" href="09_aacs.html"><span class="std std-doc">09</span></a> §9.6. All zero on the unencrypted <code class="docutils literal notranslate"><span class="pre">1408_DC</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">CPI</span></code>, copy protection information</p></td>
+<td><p>AACS Table 4-1 layout, <a class="reference internal" href="09_aacs.html"><span class="std std-doc">09</span></a> §9.6. All zero on the unencrypted <code class="docutils literal notranslate"><span class="pre">1408_DC</span></code></p></td>
 </tr>
 <tr class="row-odd"><td><p>29</p></td>
-<td><p>228</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">RECI</span></code> and reserved</p></td>
-<td><p>zero on 10 of 12 discs. <code class="docutils literal notranslate"><span class="pre">AEON_FLUX</span></code> and <code class="docutils literal notranslate"><span class="pre">TRANSFORMERS</span></code> (both Paramount) carry an identical repeating 10-byte record from byte 33, <code class="docutils literal notranslate"><span class="pre">80</span> <span class="pre">25</span> <span class="pre">23</span> <span class="pre">25</span> <span class="pre">1e</span> <span class="pre">19</span> <span class="pre">20</span> <span class="pre">01</span> <span class="pre">23</span> <span class="pre">40</span></code>; undecoded (TABLE 53 names ISRC blocks)</p></td>
+<td><p>4</p></td>
+<td><p>reserved</p></td>
+<td><p>0</p></td>
+</tr>
+<tr class="row-even"><td><p>33</p></td>
+<td><p>189</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">RECI</span></code>, recording information</p></td>
+<td><p>zero on 10 of 12 discs</p></td>
+</tr>
+<tr class="row-odd"><td><p>222</p></td>
+<td><p>35</p></td>
+<td><p>reserved</p></td>
+<td><p>0</p></td>
 </tr>
 </tbody>
 </table>
+<p><strong>RECI</strong> [23 Vol 2 §5.2.5.2, Annex T]: ISRC of the video (10 bytes), of decoding
+audio streams 0–7 (8 × 10), of 8 sub-picture streams (8 × 10), then three select
+bytes (<code class="docutils literal notranslate"><span class="pre">ISRC_V_SEL</span></code>, <code class="docutils literal notranslate"><span class="pre">ISRC_A_SEL</span></code>, <code class="docutils literal notranslate"><span class="pre">ISRC_SP_SEL</span></code>: b7 main/sub, and for sub-pictures
+which group of 8 streams) and 16 reserved. Each ISRC: b79 valid flag, two 6-bit
+country characters, three 6-bit owner characters, year and recording number in
+BCD; characters <code class="docutils literal notranslate"><span class="pre">0</span></code>–<code class="docutils literal notranslate"><span class="pre">9</span></code> = 0–9, <code class="docutils literal notranslate"><span class="pre">A</span></code>–<code class="docutils literal notranslate"><span class="pre">Z</span></code> = <code class="docutils literal notranslate"><span class="pre">0x11</span></code>–<code class="docutils literal notranslate"><span class="pre">0x2A</span></code>. <code class="docutils literal notranslate"><span class="pre">AEON_FLUX</span></code> and
+<code class="docutils literal notranslate"><span class="pre">TRANSFORMERS</span></code> (both Paramount) repeat <code class="docutils literal notranslate"><span class="pre">80</span> <span class="pre">25</span> <span class="pre">23</span> <span class="pre">25</span> <span class="pre">1e</span> <span class="pre">19</span> <span class="pre">20</span> <span class="pre">01</span> <span class="pre">23</span> <span class="pre">40</span></code> from byte
+33: valid, country <code class="docutils literal notranslate"><span class="pre">US</span></code>, owner <code class="docutils literal notranslate"><span class="pre">UNI</span></code>, year <code class="docutils literal notranslate"><span class="pre">20</span></code>, number <code class="docutils literal notranslate"><span class="pre">01234</span></code>, a placeholder
+ISRC.</p>
 <p>The CPI sits at pack <strong><code class="docutils literal notranslate"><span class="pre">0x3C</span></code></strong> on the observed framing (pack header 14 bytes, system
 header, GCI start code at <code class="docutils literal notranslate"><span class="pre">0x29</span></code>, <code class="docutils literal notranslate"><span class="pre">sub_stream_id</span></code> at <code class="docutils literal notranslate"><span class="pre">0x2F</span></code>). Locate the GCI by
 <code class="docutils literal notranslate"><span class="pre">sub_stream_id</span></code> rather than hard-coding the pack offset, since stuffing or a missing
@@ -707,20 +778,28 @@ would decode as “segment key”. <code class="docutils literal notranslate"><s
 </section>
 <section id="adv-pck-sub-stream-id-0x80">
 <h2>8.6 ADV_PCK (<code class="docutils literal notranslate"><span class="pre">sub_stream_id</span> <span class="pre">=</span> <span class="pre">0x80</span></code>)<a class="headerlink" href="#adv-pck-sub-stream-id-0x80" title="Link to this heading"></a></h2>
-<p><code class="docutils literal notranslate"><span class="pre">private_stream_2</span></code>, pack not encryptable. FIG.81A: pack header then one Advanced
-PES (no NV_PCK system header). File Cache, never the AV decoder.</p>
+<p><code class="docutils literal notranslate"><span class="pre">private_stream_2</span></code>. The book allows <code class="docutils literal notranslate"><span class="pre">PES_scrambling_control</span></code> <code class="docutils literal notranslate"><span class="pre">01b</span></code> (a
+copy-protection structure) [23 Table 6.3.5.2.8-1]; every observed pack has 0.
+FIG.81A: pack header then one Advanced
+PES (no NV_PCK system header). File Cache, never the AV decoder. The Advanced
+Stream carries only archive files (<a class="reference internal" href="04_aca.html"><span class="std std-doc">04</span></a>); each starts on a pack
+boundary, and only the last pack of a file may hold stuffing (1–7 bytes) or a
+padding packet (8 or more) [23 §6.3.5.2.8, §6.3.5.3.5].</p>
 <p>Playlist <code class="docutils literal notranslate"><span class="pre">ApplicationResource&#64;multiplexed</span></code> / <code class="docutils literal notranslate"><span class="pre">PlaylistApplicationResource&#64;multiplexed</span></code>
-as a positive integer is the <strong>slot</strong> carried in every ADV_PCK. <code class="docutils literal notranslate"><span class="pre">false</span></code> means
-load only from the <code class="docutils literal notranslate"><span class="pre">src</span></code> URI. A positive slot does <strong>not</strong> guarantee packs in
-that title’s EVO: <code class="docutils literal notranslate"><span class="pre">OLIVER_TWIST_JPN</span></code> <code class="docutils literal notranslate"><span class="pre">LoopMenu.EVO</span></code> (46 MB, <code class="docutils literal notranslate"><span class="pre">multiplexed=&quot;1&quot;</span></code>)
+as an integer is the <strong><code class="docutils literal notranslate"><span class="pre">advanced_identifier</span></code></strong> carried in every ADV_PCK of that
+archive. Different archives never share an identifier; one archive may be
+multiplexed into several EVOBs under the same one. <code class="docutils literal notranslate"><span class="pre">false</span></code> means load only from
+the <code class="docutils literal notranslate"><span class="pre">src</span></code> URI. A numeric identifier does <strong>not</strong> guarantee packs in that title’s
+EVO: <code class="docutils literal notranslate"><span class="pre">OLIVER_TWIST_JPN</span></code> <code class="docutils literal notranslate"><span class="pre">LoopMenu.EVO</span></code> (46 MB, <code class="docutils literal notranslate"><span class="pre">multiplexed=&quot;1&quot;</span></code>)
 and <code class="docutils literal notranslate"><span class="pre">JpnTokuhou.EVO</span></code> (64 MB, <code class="docutils literal notranslate"><span class="pre">multiplexed=&quot;2&quot;</span></code>) have <strong>0</strong> <code class="docutils literal notranslate"><span class="pre">0x80</span></code> packs; the
-ACA still exists under <code class="docutils literal notranslate"><span class="pre">ADV_OBJ</span></code>. Always load <code class="docutils literal notranslate"><span class="pre">src</span></code>. If ADV_PCK for that slot
-appears in the playing EVOB, concat it. On <code class="docutils literal notranslate"><span class="pre">STALINGRAD</span></code> <code class="docutils literal notranslate"><span class="pre">logo.EVO</span></code> the bytes
-<strong>equal</strong> the <code class="docutils literal notranslate"><span class="pre">ADV_OBJ</span></code> file (<code class="docutils literal notranslate"><span class="pre">e16</span></code>).</p>
+ACA still exists under <code class="docutils literal notranslate"><span class="pre">ADV_OBJ</span></code>, as the book requires. Always load <code class="docutils literal notranslate"><span class="pre">src</span></code>. If
+ADV_PCK for that identifier appears in the playing EVOB, concat it. On
+<code class="docutils literal notranslate"><span class="pre">STALINGRAD</span></code> <code class="docutils literal notranslate"><span class="pre">logo.EVO</span></code> the bytes <strong>equal</strong> the <code class="docutils literal notranslate"><span class="pre">ADV_OBJ</span></code> file (<code class="docutils literal notranslate"><span class="pre">e16</span></code>).</p>
 <section id="pack-grammar-e16-stalingrad-logo-evo-n-2383">
 <h3>Pack grammar (<code class="docutils literal notranslate"><span class="pre">e16</span></code>, <code class="docutils literal notranslate"><span class="pre">STALINGRAD</span></code> <code class="docutils literal notranslate"><span class="pre">logo.EVO</span></code>, N=2383)<a class="headerlink" href="#pack-grammar-e16-stalingrad-logo-evo-n-2383" title="Link to this heading"></a></h3>
 <p>Stuffing length 0. PES at pack offset 14: <code class="docutils literal notranslate"><span class="pre">00</span> <span class="pre">00</span> <span class="pre">01</span> <span class="pre">BF</span></code>, <code class="docutils literal notranslate"><span class="pre">PES_packet_length</span></code>
 2028 on full packs (14+6+2028=2048). Payload:</p>
+<p>The book’s ADV_PKT [23 §6.3.5.2.8]:</p>
 <table class="docutils align-default">
 <thead>
 <tr class="row-odd"><th class="head"><p>Off</p></th>
@@ -734,35 +813,48 @@ appears in the playing EVOB, concat it. On <code class="docutils literal notrans
 <td><p><code class="docutils literal notranslate"><span class="pre">sub_stream_id</span></code> = <code class="docutils literal notranslate"><span class="pre">0x80</span></code></p></td>
 </tr>
 <tr class="row-odd"><td><p>1</p></td>
-<td><p>1</p></td>
-<td><p>packed: <code class="docutils literal notranslate"><span class="pre">PES_scrambling_control</span></code> 2b + <code class="docutils literal notranslate"><span class="pre">adv_pkt_status</span></code> 2b + reserved 4b</p></td>
+<td><p>2</p></td>
+<td><p>b15–b14 <code class="docutils literal notranslate"><span class="pre">PES_scrambling_control</span></code> (<code class="docutils literal notranslate"><span class="pre">00</span></code> none, <code class="docutils literal notranslate"><span class="pre">01</span></code> copy-protection structure present); b13–b12 <code class="docutils literal notranslate"><span class="pre">advanced_pkt_status</span></code>; b11–b0 <code class="docutils literal notranslate"><span class="pre">advanced_identifier</span></code> = XPL <code class="docutils literal notranslate"><span class="pre">&#64;multiplexed</span></code> (<code class="docutils literal notranslate"><span class="pre">1</span></code>…<code class="docutils literal notranslate"><span class="pre">6</span></code> here)</p></td>
 </tr>
-<tr class="row-even"><td><p>2</p></td>
+<tr class="row-even"><td><p>3</p></td>
+<td><p>255</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">advanced_file_name</span></code>, the archive’s name, ISO 8859-1, zero-filled. <strong>Only when the status is <code class="docutils literal notranslate"><span class="pre">01b</span></code> or <code class="docutils literal notranslate"><span class="pre">11b</span></code></strong></p></td>
+</tr>
+<tr class="row-odd"><td><p>next</p></td>
 <td><p>1</p></td>
-<td><p>slot = XPL <code class="docutils literal notranslate"><span class="pre">&#64;multiplexed</span></code> (<code class="docutils literal notranslate"><span class="pre">1</span></code>…<code class="docutils literal notranslate"><span class="pre">6</span></code> here)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">number_of_stuffing_bytes</span></code>, 0–7</p></td>
+</tr>
+<tr class="row-even"><td><p>next</p></td>
+<td><p>n</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0xFF</span></code> stuffing</p></td>
+</tr>
+<tr class="row-odd"><td><p>next</p></td>
+<td><p>…</p></td>
+<td><p>archive bytes</p></td>
 </tr>
 </tbody>
 </table>
-<p><code class="docutils literal notranslate"><span class="pre">adv_pkt_status</span></code>: <code class="docutils literal notranslate"><span class="pre">01b</span></code> first (6 packs), <code class="docutils literal notranslate"><span class="pre">00b</span></code> middle (2371), <code class="docutils literal notranslate"><span class="pre">10b</span></code> last (6).
-Reserved nibble 0. Scramble 0 (clear packs).</p>
-<p><strong>First packet only</strong> (<code class="docutils literal notranslate"><span class="pre">01b</span></code>): bytes 2–33 are slot + ASCII ACA filename + NUL
-(<code class="docutils literal notranslate"><span class="pre">\x01mainApp.aca</span></code> … <code class="docutils literal notranslate"><span class="pre">\x06ineditsMenu.aca</span></code>). After that 32-byte name field,
-ADDTHD is <strong>padding until</strong> <code class="docutils literal notranslate"><span class="pre">HDDVDACA</span></code> (or until the first nonzero, then
-require the magic). STALINGRAD is 225 zero bytes then <code class="docutils literal notranslate"><span class="pre">HDDVDACA</span></code> at payload
-offset 259. <strong>Do not hard-code 259.</strong> A second disc is not required; the
-locator is the decoder. The ACA header <code class="docutils literal notranslate"><span class="pre">total</span> <span class="pre">size</span></code> at +14 equals the
-<code class="docutils literal notranslate"><span class="pre">ADV_OBJ</span></code> file length (<code class="docutils literal notranslate"><span class="pre">mainApp.aca</span></code> 260447).</p>
-<p><strong>Middle and last</strong> (<code class="docutils literal notranslate"><span class="pre">00b</span></code> / <code class="docutils literal notranslate"><span class="pre">10b</span></code>): byte 3 is <code class="docutils literal notranslate"><span class="pre">0x00</span></code>. ACA bytes start at
-offset <strong>4</strong>. No filename field.</p>
-<p>Concat per slot, pack order:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="n">status</span> <span class="o">==</span> <span class="mi">01</span><span class="n">b</span><span class="p">:</span>  <span class="n">out</span> <span class="o">+=</span> <span class="n">payload</span><span class="p">[</span><span class="n">payload</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="sa">b</span><span class="s2">"HDDVDACA"</span><span class="p">,</span> <span class="mi">34</span><span class="p">):]</span>
-<span class="k">else</span><span class="p">:</span>              <span class="n">out</span> <span class="o">+=</span> <span class="n">payload</span><span class="p">[</span><span class="mi">4</span><span class="p">:]</span>
+<p><code class="docutils literal notranslate"><span class="pre">advanced_pkt_status</span></code>: <code class="docutils literal notranslate"><span class="pre">01b</span></code> first pack of the archive, <code class="docutils literal notranslate"><span class="pre">00b</span></code> middle, <code class="docutils literal notranslate"><span class="pre">10b</span></code> last,
+<code class="docutils literal notranslate"><span class="pre">11b</span></code> the whole archive in one pack. On disc <code class="docutils literal notranslate"><span class="pre">01b</span></code> 6 packs, <code class="docutils literal notranslate"><span class="pre">00b</span></code> 2371, <code class="docutils literal notranslate"><span class="pre">10b</span></code> 6.
+Scramble 0 (clear packs).</p>
+<p>So the archive bytes start at <code class="docutils literal notranslate"><span class="pre">3</span> <span class="pre">+</span> <span class="pre">255</span> <span class="pre">+</span> <span class="pre">1</span> <span class="pre">+</span> <span class="pre">n</span></code> = <strong>259</strong> (no stuffing) in a first
+pack and at <code class="docutils literal notranslate"><span class="pre">3</span> <span class="pre">+</span> <span class="pre">1</span> <span class="pre">+</span> <span class="pre">n</span></code> = <strong>4</strong> in the others. <code class="docutils literal notranslate"><span class="pre">STALINGRAD</span></code> agrees: the name
+(<code class="docutils literal notranslate"><span class="pre">mainApp.aca</span></code> … <code class="docutils literal notranslate"><span class="pre">ineditsMenu.aca</span></code>) is zero-filled to 255 bytes, byte 258 is 0,
+and <code class="docutils literal notranslate"><span class="pre">HDDVDACA</span></code> starts at 259; middle and last packs have byte 3 = 0 and data at 4.
+The ACA header <code class="docutils literal notranslate"><span class="pre">FILE_SZ</span></code> at +14 equals the <code class="docutils literal notranslate"><span class="pre">ADV_OBJ</span></code> file length (<code class="docutils literal notranslate"><span class="pre">mainApp.aca</span></code>
+260447).</p>
+<p>Concat per identifier, pack order:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">off</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="k">if</span> <span class="n">status</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">01</span><span class="n">b</span><span class="p">,</span> <span class="mi">11</span><span class="n">b</span><span class="p">):</span> <span class="n">off</span> <span class="o">+=</span> <span class="mi">255</span>
+<span class="n">n</span> <span class="o">=</span> <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="p">];</span> <span class="n">off</span> <span class="o">+=</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">n</span>
+<span class="n">out</span> <span class="o">+=</span> <span class="n">payload</span><span class="p">[</span><span class="n">off</span><span class="p">:]</span>
 </pre></div>
 </div>
-<p><code class="docutils literal notranslate"><span class="pre">E16_FULL=1</span></code> reconstituted all six slots; each blob matched <code class="docutils literal notranslate"><span class="pre">/ADV_OBJ/&lt;name&gt;.aca</span></code>.
-TABLE 91’s “32-byte name then data on every packet” is <strong>wrong</strong> for middle/last
-(that would drop or insert 32 bytes). Disc wins.
-<code class="docutils literal notranslate"><span class="pre">[11,</span> <span class="pre">12]</span></code> <strong>VERIFIED</strong>
+<p><code class="docutils literal notranslate"><span class="pre">E16_FULL=1</span></code> reconstituted all six identifiers; each blob matched
+<code class="docutils literal notranslate"><span class="pre">/ADV_OBJ/&lt;name&gt;.aca</span></code>. An earlier version of this sheet located the data by
+searching for <code class="docutils literal notranslate"><span class="pre">HDDVDACA</span></code> and read byte 2 alone as the identifier; the book’s rule
+replaces both. TABLE 91’s “32-byte name then data on every packet” is <strong>wrong</strong>.
+<code class="docutils literal notranslate"><span class="pre">[23]</span></code> <strong>SPEC</strong>; <code class="docutils literal notranslate"><span class="pre">[11,</span> <span class="pre">12]</span></code> <strong>VERIFIED</strong>
 <code class="docutils literal notranslate"><span class="pre">[2]</span></code> <strong>VERIFIED</strong> (<code class="docutils literal notranslate"><span class="pre">0xBF</span></code>/<code class="docutils literal notranslate"><span class="pre">0x80</span></code> / status bits); <strong>superseded</strong> (per-packet 32-byte name)
 <code class="docutils literal notranslate"><span class="pre">[10]</span></code></p>
 <p>Eight packs: <code class="docutils literal notranslate"><span class="pre">spec/raw/adv_obj/samples/advpck_stalingrad_logo.bin</span></code>.</p>
@@ -790,22 +882,24 @@ despite the name).</p>
 <tr class="row-even"><td><p>VC-1</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">stream_id</span> <span class="pre">=</span> <span class="pre">0xFD</span></code>, <code class="docutils literal notranslate"><span class="pre">stream_id_extension</span> <span class="pre">=</span> <span class="pre">0x55</span></code></p></td>
 </tr>
-<tr class="row-odd"><td><p>AC-3 / DD+ / DTS-HD / LPCM / MLP</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">0xBD</span></code> + TABLE 46 <code class="docutils literal notranslate"><span class="pre">sub_stream_id</span></code> (<code class="docutils literal notranslate"><span class="pre">***</span></code> = stream number, 0-based vs XPL <code class="docutils literal notranslate"><span class="pre">streamNumber</span></code> 1-based)</p></td>
+<tr class="row-odd"><td><p>DD+ / DTS-HD / LPCM / MLP</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0xBD</span></code> + <code class="docutils literal notranslate"><span class="pre">sub_stream_id</span></code> (§8.7; <code class="docutils literal notranslate"><span class="pre">nnn</span></code> = decoding stream number, 0-based vs XPL <code class="docutils literal notranslate"><span class="pre">streamNumber</span></code> 1-based)</p></td>
 </tr>
 <tr class="row-even"><td><p>Sub-picture</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">0xBD</span></code>, <code class="docutils literal notranslate"><span class="pre">sub_stream_id</span> <span class="pre">=</span> <span class="pre">001*****b</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0xBD</span></code>, <code class="docutils literal notranslate"><span class="pre">sub_stream_id</span> <span class="pre">=</span> <span class="pre">001nnnnnb</span></code></p></td>
 </tr>
-<tr class="row-odd"><td><p>Secondary video (PiP)</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">0xBD</span></code> + <code class="docutils literal notranslate"><span class="pre">sub_stream_id</span></code> <code class="docutils literal notranslate"><span class="pre">0x91</span></code> MPEG-2 / <code class="docutils literal notranslate"><span class="pre">0x92</span></code> AVC / <code class="docutils literal notranslate"><span class="pre">0x93</span></code> VC-1 (WO FIG.120). <strong>Not</strong> how primary AVC/VC-1 is muxed here</p></td>
+<tr class="row-odd"><td><p>Sub video (PiP)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">stream_id</span></code> <code class="docutils literal notranslate"><span class="pre">0xE1</span></code> MPEG-2, <code class="docutils literal notranslate"><span class="pre">0xE3</span></code> AVC, <code class="docutils literal notranslate"><span class="pre">0xFD</span></code> with extension <code class="docutils literal notranslate"><span class="pre">0x56</span></code> VC-1 [23 Table 6.3.5.1.1-1]</p></td>
 </tr>
-<tr class="row-even"><td><p>ADV_PCK</p></td>
+<tr class="row-even"><td><p>Sub audio</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0xBD</span></code> + <code class="docutils literal notranslate"><span class="pre">sub_stream_id</span></code> <code class="docutils literal notranslate"><span class="pre">0xC8</span></code>+ DD+, <code class="docutils literal notranslate"><span class="pre">0x98</span></code>+ DTS-HD, <code class="docutils literal notranslate"><span class="pre">0xB8</span></code>+ WMA Pro; <code class="docutils literal notranslate"><span class="pre">stream_id</span></code> <code class="docutils literal notranslate"><span class="pre">0xC8</span></code>–<code class="docutils literal notranslate"><span class="pre">0xCF</span></code> mp3, <code class="docutils literal notranslate"><span class="pre">0xD8</span></code>–<code class="docutils literal notranslate"><span class="pre">0xDF</span></code> HE-AAC v2</p></td>
+</tr>
+<tr class="row-odd"><td><p>ADV_PCK</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">0xBF</span></code>, <code class="docutils literal notranslate"><span class="pre">sub_stream_id</span> <span class="pre">=</span> <span class="pre">0x80</span></code> → <strong>File Cache, never the AV decoder</strong></p></td>
 </tr>
 </tbody>
 </table>
-<p><code class="docutils literal notranslate"><span class="pre">[2]</span></code>
-<code class="docutils literal notranslate"><span class="pre">[11]</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">[23]</span></code> <code class="docutils literal notranslate"><span class="pre">[2]</span></code> <code class="docutils literal notranslate"><span class="pre">[11]</span></code></p>
 </section>
 </section>
 <section id="elementary-stream-routing-table-45-46-how-streamnumber-finds-its-pes">
@@ -826,19 +920,35 @@ number) and <code class="docutils literal notranslate"><span class="pre">&#64;me
 <tbody>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">110x</span> <span class="pre">0nnn</span></code> (<code class="docutils literal notranslate"><span class="pre">0xC0..0xC7</span></code>,<code class="docutils literal notranslate"><span class="pre">0xD0..0xD7</span></code>)</p></td>
 <td><p></p></td>
-<td><p>MPEG audio, decoding audio number = <code class="docutils literal notranslate"><span class="pre">nnn</span></code></p></td>
+<td><p>MPEG audio, main; decoding audio number = <code class="docutils literal notranslate"><span class="pre">nnn</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">1100</span> <span class="pre">1nnn</span></code> (<code class="docutils literal notranslate"><span class="pre">0xC8..0xCF</span></code>)</p></td>
+<td><p></p></td>
+<td><p>mp3, sub audio (optional)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">1101</span> <span class="pre">1nnn</span></code> (<code class="docutils literal notranslate"><span class="pre">0xD8..0xDF</span></code>)</p></td>
+<td><p></p></td>
+<td><p>MPEG-4 HE-AAC v2, sub audio (optional)</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">1110</span> <span class="pre">0000</span></code> (<code class="docutils literal notranslate"><span class="pre">0xE0</span></code>)</p></td>
 <td><p></p></td>
 <td><p>Main video MPEG-2</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">1110</span> <span class="pre">0010</span></code> (<code class="docutils literal notranslate"><span class="pre">0xE2</span></code>)</p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">1110</span> <span class="pre">0001</span></code> (<code class="docutils literal notranslate"><span class="pre">0xE1</span></code>)</p></td>
+<td><p></p></td>
+<td><p>Sub video MPEG-2</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">1110</span> <span class="pre">0010</span></code> (<code class="docutils literal notranslate"><span class="pre">0xE2</span></code>)</p></td>
 <td><p></p></td>
 <td><p>Main video MPEG-4 AVC (H.264)</p></td>
 </tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">1110</span> <span class="pre">0011</span></code> (<code class="docutils literal notranslate"><span class="pre">0xE3</span></code>)</p></td>
+<td><p></p></td>
+<td><p>Sub video MPEG-4 AVC</p></td>
+</tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">1011</span> <span class="pre">1101</span></code> (<code class="docutils literal notranslate"><span class="pre">0xBD</span></code>)</p></td>
 <td><p></p></td>
-<td><p>private_stream_1 (audio + sub-picture, TABLE 46)</p></td>
+<td><p>private_stream_1 (audio + sub-picture, below)</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">1011</span> <span class="pre">1111</span></code> (<code class="docutils literal notranslate"><span class="pre">0xBF</span></code>)</p></td>
 <td><p></p></td>
@@ -848,11 +958,15 @@ number) and <code class="docutils literal notranslate"><span class="pre">&#64;me
 <td><p><code class="docutils literal notranslate"><span class="pre">101</span> <span class="pre">0101</span></code> (<code class="docutils literal notranslate"><span class="pre">0x55</span></code>)</p></td>
 <td><p>Main video <strong>VC-1</strong> (extended_stream_id; ext byte in the PES extension)</p></td>
 </tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">1111</span> <span class="pre">1101</span></code> (<code class="docutils literal notranslate"><span class="pre">0xFD</span></code>)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">101</span> <span class="pre">0110</span></code> (<code class="docutils literal notranslate"><span class="pre">0x56</span></code>)</p></td>
+<td><p>Sub video VC-1</p></td>
+</tr>
 </tbody>
 </table>
-<p><code class="docutils literal notranslate"><span class="pre">[2]</span></code>
-<code class="docutils literal notranslate"><span class="pre">[11]</span></code>
-<strong>VERIFIED</strong></p>
+<p>A Secondary Video Set uses decoding number 0 for its optional-codec sub audio
+(<code class="docutils literal notranslate"><span class="pre">0xC8</span></code> mp3, <code class="docutils literal notranslate"><span class="pre">0xD8</span></code> HE-AAC v2, <code class="docutils literal notranslate"><span class="pre">0xB8</span></code> WMA Pro) [23 Annex Q].
+<code class="docutils literal notranslate"><span class="pre">[23</span> <span class="pre">Table</span> <span class="pre">6.3.5.1.1-1]</span></code> <strong>SPEC</strong>; <code class="docutils literal notranslate"><span class="pre">[2]</span></code>; <code class="docutils literal notranslate"><span class="pre">[11]</span></code> <strong>VERIFIED</strong> (main video ids)</p>
 <p>VC-1 is the AMD2:2004 extended-stream-id mechanism: <code class="docutils literal notranslate"><span class="pre">stream_id=0xFD</span></code>, real type in
 <code class="docutils literal notranslate"><span class="pre">stream_id_extension</span></code> (<code class="docutils literal notranslate"><span class="pre">0x55</span></code>). Parse the PES extension flags to reach it; do not
 treat <code class="docutils literal notranslate"><span class="pre">0xFD</span></code> as generic private data.</p>
@@ -870,53 +984,68 @@ treat <code class="docutils literal notranslate"><span class="pre">0xFD</span></
 <tbody>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">001x</span> <span class="pre">xxxx</span></code> (<code class="docutils literal notranslate"><span class="pre">0x20..0x3F</span></code>)</p></td>
 <td><p><strong>Sub-picture</strong> (subtitle)</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">xxxx</span></code> = sub-picture number</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">xxxx</span></code> = decoding sub-picture number</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">011x</span> <span class="pre">xxxx</span></code> (<code class="docutils literal notranslate"><span class="pre">0x60..0x7F</span></code>)</p></td>
-<td><p>reserved (extended sub-picture)</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">1000</span> <span class="pre">0nnn</span></code> (<code class="docutils literal notranslate"><span class="pre">0x80..0x87</span></code>)</p></td>
-<td><p>Dolby AC-3 audio</p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">1000</span> <span class="pre">0nnn</span></code> (<code class="docutils literal notranslate"><span class="pre">0x80..0x87</span></code>)</p></td>
+<td><p>reserved (AC-3, Interoperable Content)</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">nnn</span></code></p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">1000</span> <span class="pre">1nnn</span></code> (<code class="docutils literal notranslate"><span class="pre">0x88..0x8F</span></code>)</p></td>
-<td><p>DTS-HD audio</p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">1000</span> <span class="pre">1nnn</span></code> (<code class="docutils literal notranslate"><span class="pre">0x88..0x8F</span></code>)</p></td>
+<td><p>DTS-HD main audio</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">nnn</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">1001</span> <span class="pre">1nnn</span></code> (<code class="docutils literal notranslate"><span class="pre">0x98..0x9F</span></code>)</p></td>
+<td><p>DTS-HD sub audio</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">nnn</span></code></p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">1010</span> <span class="pre">0nnn</span></code> (<code class="docutils literal notranslate"><span class="pre">0xA0..0xA7</span></code>)</p></td>
-<td><p>Linear PCM audio</p></td>
+<td><p>Linear PCM main audio (1/1200 s frames)</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">nnn</span></code></p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">1011</span> <span class="pre">0nnn</span></code> (<code class="docutils literal notranslate"><span class="pre">0xB0..0xB7</span></code>)</p></td>
-<td><p>MLP (Dolby TrueHD) audio</p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">1010</span> <span class="pre">1nnn</span></code> (<code class="docutils literal notranslate"><span class="pre">0xA8..0xAF</span></code>)</p></td>
+<td><p>reserved (LPCM 1/600 s, Interoperable)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">1011</span> <span class="pre">0nnn</span></code> (<code class="docutils literal notranslate"><span class="pre">0xB0..0xB7</span></code>)</p></td>
+<td><p>MLP (Dolby TrueHD) main audio</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">nnn</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">1011</span> <span class="pre">1nnn</span></code> (<code class="docutils literal notranslate"><span class="pre">0xB8..0xBF</span></code>)</p></td>
+<td><p>WMA Pro sub audio (optional)</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">nnn</span></code></p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">1100</span> <span class="pre">0nnn</span></code> (<code class="docutils literal notranslate"><span class="pre">0xC0..0xC7</span></code>)</p></td>
-<td><p><strong>DD+ (E-AC-3)</strong> audio</p></td>
+<td><p><strong>DD+ (E-AC-3)</strong> main audio</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">nnn</span></code></p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">1111</span> <span class="pre">1111</span></code> (<code class="docutils literal notranslate"><span class="pre">0xFF</span></code>)</p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">1100</span> <span class="pre">1nnn</span></code> (<code class="docutils literal notranslate"><span class="pre">0xC8..0xCF</span></code>)</p></td>
+<td><p>DD+ sub audio</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">nnn</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">1111</span> <span class="pre">1111</span></code> (<code class="docutils literal notranslate"><span class="pre">0xFF</span></code>)</p></td>
 <td><p>provider-defined</p></td>
 <td><p></p></td>
 </tr>
 </tbody>
 </table>
-<p><code class="docutils literal notranslate"><span class="pre">[2]</span></code>
-<code class="docutils literal notranslate"><span class="pre">[11]</span></code>
-<strong>VERIFIED</strong> (DD+ range on disc; other ranges patent-only, marked below)</p>
+<p>Every other value is reserved and must not appear [23 Table 6.3.5.1.1-2].
+<code class="docutils literal notranslate"><span class="pre">[23]</span></code> <strong>SPEC</strong>; <code class="docutils literal notranslate"><span class="pre">[2]</span></code>; <code class="docutils literal notranslate"><span class="pre">[11]</span></code> <strong>VERIFIED</strong> (DD+ range on disc)</p>
 </section>
 <section id="the-rule-a-demuxer-applies">
 <h3>The rule a demuxer applies<a class="headerlink" href="#the-rule-a-demuxer-applies" title="Link to this heading"></a></h3>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">decoding_number</span> <span class="o">=</span> <span class="nd">@streamNumber</span> <span class="o">-</span> <span class="mi">1</span>          <span class="c1"># 1-based -&gt; 0-based nnn</span>
-<span class="n">codec</span>           <span class="o">=</span> <span class="n">MediaAttributeList</span><span class="p">[</span><span class="nd">@mediaAttr</span><span class="p">]</span><span class="o">.</span><span class="n">codec</span>
-<span class="n">Audio</span><span class="p">:</span>  <span class="n">find</span> <span class="mh">0xBD</span> <span class="n">packs</span> <span class="n">whose</span> <span class="n">sub_stream_id</span> <span class="o">=</span> <span class="n">CODEC_BASE</span> <span class="o">|</span> <span class="n">decoding_number</span>
-        <span class="n">CODEC_BASE</span><span class="p">:</span> <span class="n">DD</span><span class="o">+</span> <span class="mh">0xC0</span><span class="p">,</span> <span class="n">AC</span><span class="o">-</span><span class="mi">3</span> <span class="mh">0x80</span><span class="p">,</span> <span class="n">DTS</span><span class="o">-</span><span class="n">HD</span> <span class="mh">0x88</span><span class="p">,</span> <span class="n">LPCM</span> <span class="mh">0xA0</span><span class="p">,</span> <span class="n">MLP</span> <span class="mh">0xB0</span>
-        <span class="p">(</span><span class="n">MPEG</span> <span class="n">audio</span> <span class="n">instead</span> <span class="n">uses</span> <span class="n">stream_id</span> <span class="mh">0xC0</span><span class="o">|</span><span class="n">nnn</span><span class="p">,</span> <span class="n">no</span> <span class="mh">0xBD</span> <span class="n">wrapper</span><span class="p">)</span>
-<span class="n">Video</span> <span class="p">(</span><span class="n">main</span><span class="p">):</span> <span class="mh">0xE0</span> <span class="p">(</span><span class="n">MPEG</span><span class="o">-</span><span class="mi">2</span><span class="p">)</span> <span class="o">|</span> <span class="mh">0xE2</span> <span class="p">(</span><span class="n">AVC</span><span class="p">)</span> <span class="o">|</span> <span class="mh">0xFD</span> <span class="n">ext</span> <span class="mh">0x55</span> <span class="p">(</span><span class="n">VC</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="n">per</span> <span class="nd">@mediaAttr</span> <span class="n">codec</span>
-<span class="n">Subtitle</span><span class="p">:</span> <span class="mh">0xBD</span> <span class="n">packs</span> <span class="n">whose</span> <span class="n">sub_stream_id</span> <span class="o">=</span> <span class="mh">0x20</span> <span class="o">|</span> <span class="n">decoding_number</span>  <span class="p">(</span><span class="mh">0x20</span><span class="o">.</span><span class="mf">.0</span><span class="n">x3F</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>decoding_number = @streamNumber - 1          # 1-based -&gt; 0-based nnn
+codec           = MediaAttributeList[@mediaAttr].codec
+Audio:  find 0xBD packs whose sub_stream_id = CODEC_BASE | decoding_number
+        CODEC_BASE: DD+ 0xC0, AC-3 0x80, DTS-HD 0x88, LPCM 0xA0, MLP 0xB0
+        (MPEG audio instead uses stream_id 0xC0|nnn, no 0xBD wrapper)
+Video (main): 0xE0 (MPEG-2) | 0xE2 (AVC) | 0xFD ext 0x55 (VC-1) per @mediaAttr codec
+Subtitle: n = SPST_ATR[@streamNumber - 1] decoding number for the output
+        (HD, or SD wide / letterbox / pan-scan; sheet 06 §6.2)
+        0xBD packs whose sub_stream_id = 0x20 | n  (0x20..0x3F)
 </pre></div>
 </div>
+<p>On disc every <code class="docutils literal notranslate"><span class="pre">SPST_ATR</span></code> gives HD number <code class="docutils literal notranslate"><span class="pre">streamNumber</span> <span class="pre">−</span> <span class="pre">1</span></code>, so the two readings
+agree; the table lookup is still the rule.</p>
 <p><strong>Feeding the decoder.</strong> In a <code class="docutils literal notranslate"><span class="pre">0xBD</span></code> pack, after the PES header the payload starts with
 the DVD-style 4-byte <code class="docutils literal notranslate"><span class="pre">private_stream_1</span></code> sub-header: <code class="docutils literal notranslate"><span class="pre">sub_stream_id</span></code>(1), frame-header
 count(1), first-access-unit pointer(2, BE). Observed on DOWNFALL DD+ as <code class="docutils literal notranslate"><span class="pre">c0</span> <span class="pre">01</span> <span class="pre">03</span> <span class="pre">84</span> <span class="pre">…</span></code>.
@@ -927,15 +1056,15 @@ DOWNFALL). No reconstructed extradata. <code class="docutils literal notranslate
 <p>Sub-picture range <code class="docutils literal notranslate"><span class="pre">0x20..0x3F</span></code> gives 32 streams, exactly <code class="docutils literal notranslate"><span class="pre">SubtitleTrack</span></code> max 32
 (<a class="reference internal" href="03_playlist.html"><span class="std std-doc">03</span></a> §3.17). Audio decoding number is 3 bits → 8 per codec, matching
 <code class="docutils literal notranslate"><span class="pre">AudioTrack</span></code> max 8.</p>
-<p><strong>Grades.</strong> Video VC-1 <code class="docutils literal notranslate"><span class="pre">0xFD</span></code>/<code class="docutils literal notranslate"><span class="pre">0x55</span></code> and DD+ audio <code class="docutils literal notranslate"><span class="pre">0xC0+</span></code> VERIFIED on disc. AC-3 /
-DTS-HD / LPCM / MLP audio bases and the <code class="docutils literal notranslate"><span class="pre">0x20</span></code> sub-picture base are <strong>INFERRED</strong>
-from TABLE 46 (patent). Not all codecs appear in the sampled clips, but the bit
-patterns are a closed table and the demuxer applies them uniformly. Sub / secondary video (VS_PCK, picture-in-picture) is carried <strong>inside</strong>
-<code class="docutils literal notranslate"><span class="pre">private_stream_1</span></code> (<code class="docutils literal notranslate"><span class="pre">0xBD</span></code>), sub_stream_id <code class="docutils literal notranslate"><span class="pre">0x91</span></code> MPEG-2 / <code class="docutils literal notranslate"><span class="pre">0x92</span></code> AVC / <code class="docutils literal notranslate"><span class="pre">0x93</span></code>
-VC-1 (WO2006070920A1 FIG.119–120), not the <code class="docutils literal notranslate"><span class="pre">0xE0</span></code>/<code class="docutils literal notranslate"><span class="pre">0xE2</span></code>/<code class="docutils literal notranslate"><span class="pre">0xFD</span></code> main-video ids.
-Sub audio (AS_PCK) uses the TABLE 46 audio ranges. PiP is selected by the clip’s
-<code class="docutils literal notranslate"><span class="pre">SubVideo</span></code>/<code class="docutils literal notranslate"><span class="pre">SubAudio</span></code> mapping, is not on the linear-playback path, and no sampled
-clip carries it, so those ids are patent-only here. <code class="docutils literal notranslate"><span class="pre">[3]</span></code> <strong>INFERRED</strong>.</p>
+<p><strong>Grades.</strong> Video VC-1 <code class="docutils literal notranslate"><span class="pre">0xFD</span></code>/<code class="docutils literal notranslate"><span class="pre">0x55</span></code>, MPEG-2 <code class="docutils literal notranslate"><span class="pre">0xE0</span></code> and DD+ audio <code class="docutils literal notranslate"><span class="pre">0xC0+</span></code> VERIFIED
+on disc. Every id above is in the book’s tables [23 §6.3.5.1.1], so the rest are
+<strong>SPEC</strong>. Sub video (VS_PCK, picture-in-picture) has its own <code class="docutils literal notranslate"><span class="pre">stream_id</span></code>s
+<code class="docutils literal notranslate"><span class="pre">0xE1</span></code> / <code class="docutils literal notranslate"><span class="pre">0xE3</span></code> / <code class="docutils literal notranslate"><span class="pre">0xFD</span></code>+<code class="docutils literal notranslate"><span class="pre">0x56</span></code>. An earlier version of this sheet took them from
+WO2006070920A1 FIG.119–120 as <code class="docutils literal notranslate"><span class="pre">0xBD</span></code> sub-streams <code class="docutils literal notranslate"><span class="pre">0x91</span></code>–<code class="docutils literal notranslate"><span class="pre">0x93</span></code>; the book refutes
+that. Sub audio (AS_PCK) is <code class="docutils literal notranslate"><span class="pre">0xBD</span></code> <code class="docutils literal notranslate"><span class="pre">0xC8</span></code>+ (DD+) or <code class="docutils literal notranslate"><span class="pre">0x98</span></code>+ (DTS-HD), or the
+optional codecs above, with the same 4-byte private header as main audio. PiP is
+selected by the clip’s <code class="docutils literal notranslate"><span class="pre">SubVideo</span></code>/<code class="docutils literal notranslate"><span class="pre">SubAudio</span></code> mapping, is not on the linear-playback
+path, and no sampled clip carries it.</p>
 </section>
 </section>
 <section id="sub-picture-sp-pck-sub-picture-unit">
@@ -947,7 +1076,8 @@ then bottom field), then the display-control sequence table <code class="docutil
 spans one or more SP_PCKs; reassemble the payload bytes after the
 <code class="docutils literal notranslate"><span class="pre">sub_stream_id</span></code> until <code class="docutils literal notranslate"><span class="pre">SPU_SZ</span></code> bytes are collected. The first SP_PCK of an SPU
 carries the PES PTS, which is the SPU’s time origin.</p>
-<p>Every Advanced title in the corpus uses the <strong>8-bit</strong> SPU of patent §5.5.4. All
+<p>Every Advanced title in the corpus uses the <strong>8-bit</strong> SPU of [23 Vol 2 §5.5.4]
+(patent §5.5.4). All
 1258 <code class="docutils literal notranslate"><span class="pre">SP_ATR</span></code> words say so (<a class="reference internal" href="06_vti.html"><span class="std std-doc">06</span></a>), and all SPUs sampled carry the
 10-byte header below. <code class="docutils literal notranslate"><span class="pre">e25</span></code> checks three SPUs saved in <code class="docutils literal notranslate"><span class="pre">spec/raw/evo_samples/</span></code>
 (12_MONKEYS, 1408_DC, STALINGRAD) and, with <code class="docutils literal notranslate"><span class="pre">E25_LIVE=1</span></code>, every SPU in 12 EVOBUs
@@ -977,15 +1107,22 @@ Advanced title here uses the 2-bit form.</p>
 <tr class="row-odd"><td><p>2</p></td>
 <td><p>4</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">SPU_SZ</span></code></p></td>
-<td><p>SPU size in bytes; always even (odd sizes get one <code class="docutils literal notranslate"><span class="pre">FFh</span></code>)</p></td>
+<td><p>SPU size in bytes, at most 1536 kB; always even (odd sizes get one <code class="docutils literal notranslate"><span class="pre">FFh</span></code>)</p></td>
 </tr>
 <tr class="row-even"><td><p>6</p></td>
 <td><p>4</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">SP_DCSQT_SA</span></code></p></td>
-<td><p>offset of <code class="docutils literal notranslate"><span class="pre">SP_DCSQT</span></code> from the first SPU byte</p></td>
+<td><p>offset of <code class="docutils literal notranslate"><span class="pre">SP_DCSQT</span></code> from the first SPU byte; the table is at most half the SPU</p></td>
 </tr>
 </tbody>
 </table>
+<p>An SPU is valid from its PTS until the next SPU of the same stream; it fills whole
+SP_PCKs and only its last pack may carry stuffing or padding. SPU PTSs strictly
+increase per stream, the first is not before <code class="docutils literal notranslate"><span class="pre">EVOB_V_S_PTM</span></code> and the last
+presentation ends by <code class="docutils literal notranslate"><span class="pre">EVOB_V_E_PTM</span></code>. In Advanced Content the display area is a
+rectangle inside the Aperture for HD streams (x 0–1919, y 2–1079) or inside the SD
+output for SD streams (x 0–719, y 2–479 at 60 Hz, 2–574 at 50 Hz), not inside the
+video [23 §6.3.5.3.3, Vol 2 §5.5.4].</p>
 <p><code class="docutils literal notranslate"><span class="pre">PXD</span></code> starts right after the header: the top-field address is <strong>10</strong> on every SPU.</p>
 </section>
 <section id="sp-dcsqt-display-control-sequences">
@@ -1001,7 +1138,7 @@ Advanced title here uses the 2-bit form.</p>
 <tbody>
 <tr class="row-even"><td><p>0</p></td>
 <td><p>2</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">SP_DCSQ_STM</span></code>: start time relative to the SPU PTS, in units of 1024 / 90 000 s (≈11.4 ms, DVD parity)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">SP_DCSQ_STM</span></code>: start time relative to the SPU PTS: bits 25–10 of a 90 kHz count, so units of 1024 / 90 000 s (≈11.4 ms). It lands on the VSTU grid: <code class="docutils literal notranslate"><span class="pre">STM</span> <span class="pre">=</span> <span class="pre">(3003·n)/2048</span></code> at 60 Hz, <code class="docutils literal notranslate"><span class="pre">(225·n)/128</span></code> at 50 Hz, <code class="docutils literal notranslate"><span class="pre">n</span></code> VSTUs after the PTS (even <code class="docutils literal notranslate"><span class="pre">n</span></code> for 29.97 / 25 fps video). The first DCSQ has <code class="docutils literal notranslate"><span class="pre">STM</span></code> 0; no two DCSQs share a time</p></td>
 </tr>
 <tr class="row-odd"><td><p>2</p></td>
 <td><p>4</p></td>
@@ -1020,6 +1157,7 @@ SPU (at most <code class="docutils literal notranslate"><span class="pre">FFh</s
 </section>
 <section id="display-control-commands">
 <h3>Display-control commands<a class="headerlink" href="#display-control-commands" title="Link to this heading"></a></h3>
+<p>The book’s commands [23 Vol 2 §5.5.4.4]; each appears at most once per DCSQ:</p>
 <table class="docutils align-default">
 <thead>
 <tr class="row-odd"><th class="head"><p>Opcode</p></th>
@@ -1029,35 +1167,45 @@ SPU (at most <code class="docutils literal notranslate"><span class="pre">FFh</s
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">01h</span></code></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">00h</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">FSTA_DSP</span></code></p></td>
+<td><p>none</p></td>
+<td><p>start display <strong>even if</strong> the user has sub-pictures off (forced captions)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">01h</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">STA_DSP</span></code></p></td>
 <td><p>none</p></td>
-<td><p>start display</p></td>
+<td><p>start display; overruled when sub-pictures are off</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">02h</span></code></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">02h</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">STP_DSP</span></code></p></td>
 <td><p>none</p></td>
-<td><p>stop display</p></td>
+<td><p>stop display (a later <code class="docutils literal notranslate"><span class="pre">STA_DSP</span></code> may show it again)</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">83h</span></code></p></td>
-<td><p>colour table</p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">83h</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">SET_COLOR2</span></code></p></td>
 <td><p>768 bytes</p></td>
-<td><p>256 × (<code class="docutils literal notranslate"><span class="pre">Y</span></code>, <code class="docutils literal notranslate"><span class="pre">Cr</span></code>, <code class="docutils literal notranslate"><span class="pre">Cb</span></code>), one per pixel value: 0–3 the specified pixels (background, pattern, emphasis-1, emphasis-2), 4–255 the 8-bit pixels (patent Table 61)</p></td>
+<td><p>256 × (<code class="docutils literal notranslate"><span class="pre">Y</span></code>, <code class="docutils literal notranslate"><span class="pre">Cr</span></code>, <code class="docutils literal notranslate"><span class="pre">Cb</span></code>), one per pixel value: 0–3 the specified pixels (background, pattern, emphasis-1, emphasis-2), 4–255 the 8-bit pixels. Kept until changed within the SPU</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">84h</span></code></p></td>
-<td><p>contrast table</p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">84h</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">SET_CONTR2</span></code></p></td>
 <td><p>256 bytes</p></td>
-<td><p>one contrast per pixel value (Table 62). <strong><code class="docutils literal notranslate"><span class="pre">FFh</span></code> = fully transparent, lower = more opaque</strong></p></td>
+<td><p>one contrast per pixel value: video weight <code class="docutils literal notranslate"><span class="pre">k/256</span></code>, sub-picture weight <code class="docutils literal notranslate"><span class="pre">(256−k)/256</span></code>, <code class="docutils literal notranslate"><span class="pre">k</span></code> = value, or value + 1 when the value is not 0. <strong><code class="docutils literal notranslate"><span class="pre">00h</span></code> opaque, <code class="docutils literal notranslate"><span class="pre">FFh</span></code> fully transparent</strong></p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">85h</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">85h</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">SET_DAREA2</span></code></p></td>
 <td><p>6 bytes</p></td>
-<td><p>display area, two 24-bit words of 12-bit start + 12-bit end: x (<code class="docutils literal notranslate"><span class="pre">x0</span> <span class="pre">&lt;&lt;</span> <span class="pre">12</span> <span class="pre">|</span> <span class="pre">x1</span></code>), then y. Width = <code class="docutils literal notranslate"><span class="pre">x1</span> <span class="pre">−</span> <span class="pre">x0</span> <span class="pre">+</span> <span class="pre">1</span></code></p></td>
+<td><p>display area, bits below</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">86h</span></code></p></td>
-<td><p>PXD addresses</p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">86h</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">SET_DSPXA2</span></code></p></td>
 <td><p>8 bytes</p></td>
-<td><p>top-field and bottom-field <code class="docutils literal notranslate"><span class="pre">PXD</span></code> offsets from the first SPU byte, 4 bytes each</p></td>
+<td><p>top-field and bottom-field <code class="docutils literal notranslate"><span class="pre">PXD</span></code> offsets from the first SPU byte, 4 bytes each; top-field data is lines <code class="docutils literal notranslate"><span class="pre">Ystart</span></code>, <code class="docutils literal notranslate"><span class="pre">Ystart+2</span></code>, …, bottom-field <code class="docutils literal notranslate"><span class="pre">Ystart+1</span></code>, …</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">87h</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">CHG_COLCON2</span></code></p></td>
+<td><p>2-byte size + <code class="docutils literal notranslate"><span class="pre">PXCD</span></code></p></td>
+<td><p>colour and contrast changes inside the area (below)</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FFh</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">CMD_END</span></code></p></td>
@@ -1066,10 +1214,25 @@ SPU (at most <code class="docutils literal notranslate"><span class="pre">FFh</s
 </tr>
 </tbody>
 </table>
-<p>No other opcode appears on disc. Typical first DCSQ: <code class="docutils literal notranslate"><span class="pre">01</span> <span class="pre">83</span> <span class="pre">84</span> <span class="pre">85</span> <span class="pre">86</span> <span class="pre">FF</span></code>, and the
-last DCSQ: <code class="docutils literal notranslate"><span class="pre">02</span> <span class="pre">FF</span></code> at the stop time. The high bit separates these HD commands from
-the DVD ones they replace (<code class="docutils literal notranslate"><span class="pre">03h</span></code> SET_COLOR, <code class="docutils literal notranslate"><span class="pre">04h</span></code> SET_CONTR, <code class="docutils literal notranslate"><span class="pre">05h</span></code> SET_DAREA,
-<code class="docutils literal notranslate"><span class="pre">06h</span></code> SET_DSPXA with 16-colour, 4-bit fields and 2-byte addresses).</p>
+<p><code class="docutils literal notranslate"><span class="pre">SET_DAREA2</span></code> operand (6 bytes): byte 1 b7 reserved, b6–b0 start X high 7 bits;
+byte 2 b7–b4 start X low 4 bits, b3 reserved, b2–b0 end X high 3 bits; byte 3 end X
+low 8 bits; bytes 4–6 the same for Y. Each coordinate is 11 bits; start Y is even.
+Width = <code class="docutils literal notranslate"><span class="pre">endX</span> <span class="pre">−</span> <span class="pre">startX</span> <span class="pre">+</span> <span class="pre">1</span></code> = the pixels per PXD line. On disc the reserved bits are
+0, so a reader of 12-bit fields gets the same numbers; mask them anyway.</p>
+<p><code class="docutils literal notranslate"><span class="pre">CHG_COLCON2</span></code> (<code class="docutils literal notranslate"><span class="pre">PXCD</span></code>): a list of line groups, each a 4-byte <code class="docutils literal notranslate"><span class="pre">LN_CTLI</span></code> (change start
+line, number of change points 1–8, change end line; lines in ascending,
+non-overlapping order) followed by that many 1026-byte <code class="docutils literal notranslate"><span class="pre">PX_CTLI</span></code> (11-bit change
+start pixel in the low bits of the first 2 bytes, then 768 colour bytes and 256
+contrast bytes for the pixels from that point on). <code class="docutils literal notranslate"><span class="pre">0x0FFFFFFF</span></code> as an <code class="docutils literal notranslate"><span class="pre">LN_CTLI</span></code>
+ends the list; a <code class="docutils literal notranslate"><span class="pre">PXCD</span></code> holding only it cancels an earlier <code class="docutils literal notranslate"><span class="pre">CHG_COLCON2</span></code>. Each line
+starts with the <code class="docutils literal notranslate"><span class="pre">SET_COLOR2</span></code>/<code class="docutils literal notranslate"><span class="pre">SET_CONTR2</span></code> values. Not allowed while Highlight
+Information is in use.</p>
+<p>No other opcode appears on disc; <code class="docutils literal notranslate"><span class="pre">00h</span></code> and <code class="docutils literal notranslate"><span class="pre">87h</span></code> do not occur in the sampled SPUs.
+Typical first DCSQ: <code class="docutils literal notranslate"><span class="pre">01</span> <span class="pre">83</span> <span class="pre">84</span> <span class="pre">85</span> <span class="pre">86</span> <span class="pre">FF</span></code>, and the last DCSQ: <code class="docutils literal notranslate"><span class="pre">02</span> <span class="pre">FF</span></code> at the stop
+time. The high bit separates these HD commands from the DVD ones they replace
+(<code class="docutils literal notranslate"><span class="pre">03h</span></code> SET_COLOR, <code class="docutils literal notranslate"><span class="pre">04h</span></code> SET_CONTR, <code class="docutils literal notranslate"><span class="pre">05h</span></code> SET_DAREA, <code class="docutils literal notranslate"><span class="pre">06h</span></code> SET_DSPXA with
+16-colour, 4-bit fields and 2-byte addresses).
+<code class="docutils literal notranslate"><span class="pre">[23]</span></code> <strong>SPEC</strong>; <code class="docutils literal notranslate"><span class="pre">[11,</span> <span class="pre">12]</span></code> <strong>VERIFIED</strong> (<code class="docutils literal notranslate"><span class="pre">e25</span></code>)</p>
 <p>Contrast direction, from the discs: the clear area around the text is the most-used
 pixel value on every SPU and has contrast <code class="docutils literal notranslate"><span class="pre">FFh</span></code>, and the text itself <code class="docutils literal notranslate"><span class="pre">00h</span></code>.
 STALINGRAD fades a subtitle in and out with contrast-only DCSQs (<code class="docutils literal notranslate"><span class="pre">84</span></code> alone) that
