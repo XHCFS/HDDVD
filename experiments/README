@@ -39,3 +39,4 @@ URL, of the form https://archive.org/download/hd-dvd_archive_NN/<DISC>.iso
 | e21 | AACS DKF / VTKF / VTUF / CONTENT_CERT field by field vs book Tables 3-8…3-17, 6-2; Pan's VTKF padding; HASH_SIZE 8 on 2 discs |
 | e22 | Keyless: CHT #1/#2 sizes, certificate digests = SHA-1(CHT), CHT #2 hashes of DISCID / DKF / manifest / VTUF; "-SLY" DISCID rewrites |
 | e23 | CPI and GCI in real NV_PCKs: CPI at pack 0x3C, CH_PTR +1 per EVOBU within NHV, GCI PTM = EVOBI start PTM, zero-filled PCI slot |
+| e28 | Title clock: one title count = one VSTU = 1501.5 ticks of 90 kHz; MAP PB_TM sums = EVOB end − start; clip time counts from EVOB_V_S_PTM |

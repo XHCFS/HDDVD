@@ -37,7 +37,7 @@ specification such as [23] that the corpus cannot show.
 - **[8]** libaacs, VideoLAN: source. <https://code.videolan.org/videolan/libaacs>
 - **[9]** muslix64, *BackupHDDVD* (2006): source `src/aacs/{decoder/EVOBPack.java, decoder/DecryptEVOB.java, math/AESFunc.java}`. <https://archive.org/details/backup-hddvd>
 - **[10]** Reference-decoder (`HDDVDPLAYDLL`) File Cache / ACA strings, as surfaced by the DumpHD tooling discussed in [16]. <http://forum.doom9.org/archive/index.php/t-123282.html>
-- **[12]** Verification experiments `e01`–`e27` accompanying this specification (`experiments/run.py`).
+- **[12]** Verification experiments `e01`–`e28` accompanying this specification (`experiments/run.py`).
 
 ## Disc & firmware corpus (Internet Archive)
 

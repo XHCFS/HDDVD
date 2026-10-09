@@ -335,6 +335,7 @@ T = requested title time (HH:MM:SS:FF)
 clip = PrimaryAudioVideoClip where titleTimeBegin ≤ T < titleTimeEnd
 local = T − titleTimeBegin + clipTimeBegin
 byte_off = map_seek(MAP, local)           # 07_map.md
+pts = EVOB_V_S_PTM + local × 1501.5       # 90 kHz; × 1800 at 50 fps (03 §3.2)
 read packs from EVO at byte_off
 optional: DSI.vobu_1stref_ea / MAP 1STREF_SZ to land on a reference picture
 ```

@@ -1113,7 +1113,7 @@ the defaults are part of the meaning.</p></li>
 <tbody>
 <tr class="row-even"><td><p>time expression</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">HH:MM:SS:FF</span></code>; HH <code class="docutils literal notranslate"><span class="pre">00</span></code>–<code class="docutils literal notranslate"><span class="pre">23</span></code>, MM and SS <code class="docutils literal notranslate"><span class="pre">00</span></code>–<code class="docutils literal notranslate"><span class="pre">59</span></code>, FF <code class="docutils literal notranslate"><span class="pre">00</span></code>–<code class="docutils literal notranslate"><span class="pre">49</span></code> at 50 fps or <code class="docutils literal notranslate"><span class="pre">00</span></code>–<code class="docutils literal notranslate"><span class="pre">59</span></code> at 60 fps</p></td>
-<td><p>A <strong>non-drop frame count</strong> on a title timeline: <code class="docutils literal notranslate"><span class="pre">(3600·HH</span> <span class="pre">+</span> <span class="pre">60·MM</span> <span class="pre">+</span> <span class="pre">SS)</span> <span class="pre">·</span> <span class="pre">rate</span> <span class="pre">+</span> <span class="pre">FF</span></code>, where <code class="docutils literal notranslate"><span class="pre">rate</span></code> is <code class="docutils literal notranslate"><span class="pre">TitleSet&#64;timeBase</span></code>. <code class="docutils literal notranslate"><span class="pre">00:00:01:00</span></code> at 60 fps is 60 counts, not one second of 29.97 video. FF ≥ 50 appears 3590 times on 60 fps titles (<code class="docutils literal notranslate"><span class="pre">e14</span></code>): do not clamp to 49.</p></td>
+<td><p>A <strong>non-drop frame count</strong> on a title timeline: <code class="docutils literal notranslate"><span class="pre">(3600·HH</span> <span class="pre">+</span> <span class="pre">60·MM</span> <span class="pre">+</span> <span class="pre">SS)</span> <span class="pre">·</span> <span class="pre">rate</span> <span class="pre">+</span> <span class="pre">FF</span></code>, where <code class="docutils literal notranslate"><span class="pre">rate</span></code> is <code class="docutils literal notranslate"><span class="pre">TitleSet&#64;timeBase</span></code>. <code class="docutils literal notranslate"><span class="pre">00:00:01:00</span></code> at 60 fps is 60 counts, not one second of 29.97 video. One count is one video field (VSTU): 1.001/60 s, <strong>1501.5</strong> ticks of 90 kHz, at 60 fps; 1/50 s, 1800 ticks, at 50 fps. A clip’s length in counts times 1501.5 equals its EVOB’s 90 kHz length on 3538/3538 whole-EVOB clips and times 1500 on none (<code class="docutils literal notranslate"><span class="pre">e28</span></code>). Times shown to a viewer or handed to a demuxer in 90 kHz must use 1501.5, or a 2-hour title drifts about 7 s. FF ≥ 50 appears 3590 times on 60 fps titles (<code class="docutils literal notranslate"><span class="pre">e14</span></code>): do not clamp to 49.</p></td>
 </tr>
 <tr class="row-odd"><td><p>frame rate</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">50fps</span></code> | <code class="docutils literal notranslate"><span class="pre">60fps</span></code></p></td>
@@ -1844,7 +1844,11 @@ elements share <code class="docutils literal notranslate"><span class="pre">Clip
 <p><strong>Time model.</strong> At title time <code class="docutils literal notranslate"><span class="pre">t</span></code> in <code class="docutils literal notranslate"><span class="pre">[titleTimeBegin,</span> <span class="pre">titleTimeEnd)</span></code> the clip
 shows object time <code class="docutils literal notranslate"><span class="pre">clipTimeBegin</span> <span class="pre">+</span> <span class="pre">(t</span> <span class="pre">−</span> <span class="pre">titleTimeBegin)</span></code>. The span must fit in
 the object: <code class="docutils literal notranslate"><span class="pre">clipTimeBegin</span> <span class="pre">+</span> <span class="pre">titleTimeEnd</span> <span class="pre">−</span> <span class="pre">titleTimeBegin</span></code> ≤ the object’s
-length. The object time converts to a disc address through the time map. If the
+length. The object time converts to a disc address through the time map.
+Object time counts from the EVOB’s first video frame, not from PTS 0: the PTS is
+<code class="docutils literal notranslate"><span class="pre">EVOB_V_S_PTM</span> <span class="pre">+</span> <span class="pre">object_time</span> <span class="pre">×</span> <span class="pre">1501.5</span></code> (<a class="reference internal" href="#document-06_vti"><span class="std std-doc">06</span></a> §6.3). Every EVOB start
+PTM under a clip is above zero, and 4839/4839 clips fit inside their EVOB when
+counted this way (<code class="docutils literal notranslate"><span class="pre">e28</span></code>). If the
 object’s video ends before <code class="docutils literal notranslate"><span class="pre">titleTimeEnd</span></code>, the main-video plane shows the outer
 frame colour (a sub-video plane goes invisible) until <code class="docutils literal notranslate"><span class="pre">titleTimeEnd</span></code>; if it runs
 longer, it is cut at <code class="docutils literal notranslate"><span class="pre">titleTimeEnd</span></code> [23 §4.3.19.2.1]. Audio that ends between two
@@ -8111,7 +8115,14 @@ EVOBUs 5/5; MYSTERY_MEN VOBU0 = 81).</p>
 </pre></div>
 </div>
 <p>On <code class="docutils literal notranslate"><span class="pre">60fps</span></code> titles, a 0.5 s VOBU has <code class="docutils literal notranslate"><span class="pre">EVOBU_PB_TM=30</span></code> (fields) and 30 title ticks.
-Sum <code class="docutils literal notranslate"><span class="pre">EVOBU_PB_TM</span></code> directly against that tick count (do not ×2).</p>
+Sum <code class="docutils literal notranslate"><span class="pre">EVOBU_PB_TM</span></code> directly against that tick count (do not ×2). Both count VSTUs
+from the EVOB’s first video frame: <code class="docutils literal notranslate"><span class="pre">sum(EVOBU_PB_TM)</span> <span class="pre">×</span> <span class="pre">1501.5</span></code> equals
+<code class="docutils literal notranslate"><span class="pre">EVOB_V_E_PTM</span> <span class="pre">−</span> <span class="pre">EVOB_V_S_PTM</span></code> to one 90 kHz tick on 2415/2417 contiguous maps with an
+EVOBI (<code class="docutils literal notranslate"><span class="pre">e28</span></code>; the two others are <code class="docutils literal notranslate"><span class="pre">ETERNAL_SUNSHINE</span></code> <code class="docutils literal notranslate"><span class="pre">DELEXT8</span></code>, which has no EVOBI of
+its own, and <code class="docutils literal notranslate"><span class="pre">DOWNFALL</span></code> <code class="docutils literal notranslate"><span class="pre">EVOB002</span></code>, whose map runs one 30-field EVOBU past
+<code class="docutils literal notranslate"><span class="pre">EVOB_V_E_PTM</span></code>). The PTS of EVOBU <em>k</em> is <code class="docutils literal notranslate"><span class="pre">EVOB_V_S_PTM</span> <span class="pre">+</span> <span class="pre">1501.5</span> <span class="pre">×</span> <span class="pre">(sum</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">PB_TM</span> <span class="pre">before</span> <span class="pre">it)</span></code>, which is its GCI <code class="docutils literal notranslate"><span class="pre">EVOBU_S_PTM</span></code> (<code class="docutils literal notranslate"><span class="pre">ARMY_OF_DARKNESS</span></code> <code class="docutils literal notranslate"><span class="pre">BLACK.EVO</span></code>,
+120/120 within two ticks).
+<code class="docutils literal notranslate"><span class="pre">[23</span> <span class="pre">§6.3.2.3]</span></code> <strong>SPEC</strong>; <code class="docutils literal notranslate"><span class="pre">[11,</span> <span class="pre">12]</span></code> <strong>VERIFIED</strong></p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">need</span> <span class="o">=</span> <span class="n">ticks</span><span class="p">(</span><span class="n">local_time</span><span class="p">)</span>
 <span class="n">acc_tm</span> <span class="o">=</span> <span class="mi">0</span>
 <span class="n">acc_packs</span> <span class="o">=</span> <span class="mi">0</span>
@@ -10442,6 +10453,7 @@ missing disc file named by a URI, or an uncaught script exception.</p>
 clip = PrimaryAudioVideoClip where titleTimeBegin ≤ T &lt; titleTimeEnd
 local = T − titleTimeBegin + clipTimeBegin
 byte_off = map_seek(MAP, local)           # 07_map.md
+pts = EVOB_V_S_PTM + local × 1501.5       # 90 kHz; × 1800 at 50 fps (03 §3.2)
 read packs from EVO at byte_off
 optional: DSI.vobu_1stref_ea / MAP 1STREF_SZ to land on a reference picture
 </pre></div>
@@ -11753,7 +11765,7 @@ specification such as [23] that the corpus cannot show.</p>
 <li><p><strong>[8]</strong> libaacs, VideoLAN: source. <a class="reference external" href="https://code.videolan.org/videolan/libaacs">https://code.videolan.org/videolan/libaacs</a></p></li>
 <li><p><strong>[9]</strong> muslix64, <em>BackupHDDVD</em> (2006): source <code class="docutils literal notranslate"><span class="pre">src/aacs/{decoder/EVOBPack.java,</span> <span class="pre">decoder/DecryptEVOB.java,</span> <span class="pre">math/AESFunc.java}</span></code>. <a class="reference external" href="https://archive.org/details/backup-hddvd">https://archive.org/details/backup-hddvd</a></p></li>
 <li><p><strong>[10]</strong> Reference-decoder (<code class="docutils literal notranslate"><span class="pre">HDDVDPLAYDLL</span></code>) File Cache / ACA strings, as surfaced by the DumpHD tooling discussed in [16]. <a class="reference external" href="http://forum.doom9.org/archive/index.php/t-123282.html">http://forum.doom9.org/archive/index.php/t-123282.html</a></p></li>
-<li><p><strong>[12]</strong> Verification experiments <code class="docutils literal notranslate"><span class="pre">e01</span></code>–<code class="docutils literal notranslate"><span class="pre">e27</span></code> accompanying this specification (<code class="docutils literal notranslate"><span class="pre">experiments/run.py</span></code>).</p></li>
+<li><p><strong>[12]</strong> Verification experiments <code class="docutils literal notranslate"><span class="pre">e01</span></code>–<code class="docutils literal notranslate"><span class="pre">e28</span></code> accompanying this specification (<code class="docutils literal notranslate"><span class="pre">experiments/run.py</span></code>).</p></li>
 </ul>
 </section>
 <section id="disc-firmware-corpus-internet-archive">

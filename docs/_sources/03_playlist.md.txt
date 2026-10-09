@@ -61,7 +61,7 @@ v1.01 matches the v1.0 schema on every row below. The differences:
 
 | Type | Syntax | Meaning |
 |---|---|---|
-| time expression | `HH:MM:SS:FF`; HH `00`–`23`, MM and SS `00`–`59`, FF `00`–`49` at 50 fps or `00`–`59` at 60 fps | A **non-drop frame count** on a title timeline: `(3600·HH + 60·MM + SS) · rate + FF`, where `rate` is `TitleSet@timeBase`. `00:00:01:00` at 60 fps is 60 counts, not one second of 29.97 video. FF ≥ 50 appears 3590 times on 60 fps titles (`e14`): do not clamp to 49. |
+| time expression | `HH:MM:SS:FF`; HH `00`–`23`, MM and SS `00`–`59`, FF `00`–`49` at 50 fps or `00`–`59` at 60 fps | A **non-drop frame count** on a title timeline: `(3600·HH + 60·MM + SS) · rate + FF`, where `rate` is `TitleSet@timeBase`. `00:00:01:00` at 60 fps is 60 counts, not one second of 29.97 video. One count is one video field (VSTU): 1.001/60 s, **1501.5** ticks of 90 kHz, at 60 fps; 1/50 s, 1800 ticks, at 50 fps. A clip's length in counts times 1501.5 equals its EVOB's 90 kHz length on 3538/3538 whole-EVOB clips and times 1500 on none (`e28`). Times shown to a viewer or handed to a demuxer in 90 kHz must use 1501.5, or a 2-hour title drifts about 7 s. FF ≥ 50 appears 3590 times on 60 fps titles (`e14`): do not clamp to 49. |
 | frame rate | `50fps` \| `60fps` | Rate of the title timeline (the media clock) |
 | tick rate | `24fps` \| `50fps` \| `60fps` | Rate of the application tick clock (page and application clocks). Must be `50fps` or `24fps` when the frame rate is 50, `60fps` or `24fps` when it is 60 |
 | language | two lowercase letters, ISO 639-1 (`en`, `fr`, `ja`, …) | A menu / application language. The v1.0 type is *named* `ISO639-2` but its values are two-letter codes; match two letters |
@@ -373,7 +373,11 @@ elements share `ClipMappingType`:
 **Time model.** At title time `t` in `[titleTimeBegin, titleTimeEnd)` the clip
 shows object time `clipTimeBegin + (t − titleTimeBegin)`. The span must fit in
 the object: `clipTimeBegin + titleTimeEnd − titleTimeBegin` ≤ the object's
-length. The object time converts to a disc address through the time map. If the
+length. The object time converts to a disc address through the time map.
+Object time counts from the EVOB's first video frame, not from PTS 0: the PTS is
+`EVOB_V_S_PTM + object_time × 1501.5` ([06](06_vti.md) §6.3). Every EVOB start
+PTM under a clip is above zero, and 4839/4839 clips fit inside their EVOB when
+counted this way (`e28`). If the
 object's video ends before `titleTimeEnd`, the main-video plane shows the outer
 frame colour (a sub-video plane goes invisible) until `titleTimeEnd`; if it runs
 longer, it is cut at `titleTimeEnd` [23 §4.3.19.2.1]. Audio that ends between two

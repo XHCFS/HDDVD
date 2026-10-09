@@ -720,7 +720,14 @@ EVOBUs 5/5; MYSTERY_MEN VOBU0 = 81).</p>
 </pre></div>
 </div>
 <p>On <code class="docutils literal notranslate"><span class="pre">60fps</span></code> titles, a 0.5 s VOBU has <code class="docutils literal notranslate"><span class="pre">EVOBU_PB_TM=30</span></code> (fields) and 30 title ticks.
-Sum <code class="docutils literal notranslate"><span class="pre">EVOBU_PB_TM</span></code> directly against that tick count (do not ×2).</p>
+Sum <code class="docutils literal notranslate"><span class="pre">EVOBU_PB_TM</span></code> directly against that tick count (do not ×2). Both count VSTUs
+from the EVOB’s first video frame: <code class="docutils literal notranslate"><span class="pre">sum(EVOBU_PB_TM)</span> <span class="pre">×</span> <span class="pre">1501.5</span></code> equals
+<code class="docutils literal notranslate"><span class="pre">EVOB_V_E_PTM</span> <span class="pre">−</span> <span class="pre">EVOB_V_S_PTM</span></code> to one 90 kHz tick on 2415/2417 contiguous maps with an
+EVOBI (<code class="docutils literal notranslate"><span class="pre">e28</span></code>; the two others are <code class="docutils literal notranslate"><span class="pre">ETERNAL_SUNSHINE</span></code> <code class="docutils literal notranslate"><span class="pre">DELEXT8</span></code>, which has no EVOBI of
+its own, and <code class="docutils literal notranslate"><span class="pre">DOWNFALL</span></code> <code class="docutils literal notranslate"><span class="pre">EVOB002</span></code>, whose map runs one 30-field EVOBU past
+<code class="docutils literal notranslate"><span class="pre">EVOB_V_E_PTM</span></code>). The PTS of EVOBU <em>k</em> is <code class="docutils literal notranslate"><span class="pre">EVOB_V_S_PTM</span> <span class="pre">+</span> <span class="pre">1501.5</span> <span class="pre">×</span> <span class="pre">(sum</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">PB_TM</span> <span class="pre">before</span> <span class="pre">it)</span></code>, which is its GCI <code class="docutils literal notranslate"><span class="pre">EVOBU_S_PTM</span></code> (<code class="docutils literal notranslate"><span class="pre">ARMY_OF_DARKNESS</span></code> <code class="docutils literal notranslate"><span class="pre">BLACK.EVO</span></code>,
+120/120 within two ticks).
+<code class="docutils literal notranslate"><span class="pre">[23</span> <span class="pre">§6.3.2.3]</span></code> <strong>SPEC</strong>; <code class="docutils literal notranslate"><span class="pre">[11,</span> <span class="pre">12]</span></code> <strong>VERIFIED</strong></p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">need</span> <span class="o">=</span> <span class="n">ticks</span><span class="p">(</span><span class="n">local_time</span><span class="p">)</span>
 <span class="n">acc_tm</span> <span class="o">=</span> <span class="mi">0</span>
 <span class="n">acc_packs</span> <span class="o">=</span> <span class="mi">0</span>

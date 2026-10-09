@@ -124,7 +124,15 @@ ticks(HH:MM:SS:FF) = ((HH*60 + MM)*60 + SS) * fps + FF
 ```
 
 On `60fps` titles, a 0.5 s VOBU has `EVOBU_PB_TM=30` (fields) and 30 title ticks.
-Sum `EVOBU_PB_TM` directly against that tick count (do not ×2).
+Sum `EVOBU_PB_TM` directly against that tick count (do not ×2). Both count VSTUs
+from the EVOB's first video frame: `sum(EVOBU_PB_TM) × 1501.5` equals
+`EVOB_V_E_PTM − EVOB_V_S_PTM` to one 90 kHz tick on 2415/2417 contiguous maps with an
+EVOBI (`e28`; the two others are `ETERNAL_SUNSHINE` `DELEXT8`, which has no EVOBI of
+its own, and `DOWNFALL` `EVOB002`, whose map runs one 30-field EVOBU past
+`EVOB_V_E_PTM`). The PTS of EVOBU *k* is `EVOB_V_S_PTM + 1501.5 × (sum of the
+PB_TM before it)`, which is its GCI `EVOBU_S_PTM` (`ARMY_OF_DARKNESS` `BLACK.EVO`,
+120/120 within two ticks).
+`[23 §6.3.2.3]` **SPEC**; `[11, 12]` **VERIFIED**
 
 ```
 need = ticks(local_time)
