@@ -14,11 +14,11 @@ order. Each element section gives its content model, then one table of
 attributes (type, required, default, what it is for), then the rules that
 connect it to other elements, then what the discs carry.
 
-Sources: the DVD Forum schemas [5] (v1.0, 16 Jul 2006, and v1.1, 5 Nov 2007);
-the specification text quoted in US 2007/0091495 [1] (every "Describes …"
-attribute definition below comes from there); the Scenarist AC 4.5 User Guide
-[7]; and the corpus, checked by `e26` (all 247 playlists) together with the
-earlier `e12` / `e14`.
+Sources: the DVD Forum book v1.01 [23 §6.2.3] (the normative syntax and rules;
+its attribute definitions are the "Describes …" text that US 2007/0091495 [1]
+quotes); the DVD Forum schemas [5] (v1.0, 16 Jul 2006, and v1.1, 5 Nov 2007);
+the Scenarist AC 4.5 User Guide [7]; and the corpus, checked by `e26` (all 247
+playlists) together with the earlier `e12` / `e14`.
 
 ## 3.1 File, versions, schema
 
@@ -27,14 +27,14 @@ earlier `e12` / `e14`.
 | Path | `ADV_OBJ/VPLST$$$.XPL`, `$$$` = `000`…`999` (see §3.20 for which one plays) |
 | Namespace | `http://www.dvdforum.org/2005/HDDVDVideo/Playlist` |
 | Root element | `Playlist` (one per file) |
-| Encoding | UTF-8 XML |
+| Encoding | XML 1.0, `UTF-8` or `UTF-16` (UTF-16 needs a byte-order mark). `standalone`, if present, is `yes`. The discs use UTF-8 [23 §6.2.1] |
 | Schema | `spec/raw/adv_obj/v1.1/Playlist.xsd` (use this one); `v1.0/Playlist.xsd` for reference |
 
 **Two schema versions.** Every playlist in the corpus declares
 `majorVersion="1" minorVersion="0"`, but all 247 validate against the **v1.1**
 schema and 33 of them fail v1.0 (`e26`). The failures are exactly the v1.1
-additions, so discs were authored with the 1.1 tools. Read against v1.1. The
-differences:
+additions, so discs were authored with the 1.1 tools. Read against v1.1. The book
+v1.01 matches the v1.0 schema on every row below. The differences:
 
 | v1.1 change | Effect |
 |---|---|
@@ -47,6 +47,9 @@ differences:
 
 **Reading rules.**
 
+- The document must be well formed; a player does not have to validate it, and an
+  invalid one has no guaranteed behaviour. No DTD or schema declaration is needed;
+  a schema location is ignored [23 §6.2.1].
 - Match elements and attributes by namespace and local name, never by prefix.
 - Ignore XML comments (discs put them inside lists) and `xsi:schemaLocation`
   (170 roots carry one; the URLs are dead authoring debris).
@@ -62,30 +65,39 @@ differences:
 | frame rate | `50fps` \| `60fps` | Rate of the title timeline (the media clock) |
 | tick rate | `24fps` \| `50fps` \| `60fps` | Rate of the application tick clock (page and application clocks). Must be `50fps` or `24fps` when the frame rate is 50, `60fps` or `24fps` when it is 60 |
 | language | two lowercase letters, ISO 639-1 (`en`, `fr`, `ja`, …) | A menu / application language. The v1.0 type is *named* `ISO639-2` but its values are two-letter codes; match two letters |
-| langCode | `xx:NN` or `*:NN`; `xx` ISO 639-1, `NN` two hex digits | Track language plus **code extension** (what kind of track in that language). `*` = language not specified. Table below |
-| parentalList | space-separated `CC:n` or `*:n`; `CC` ISO 3166 alpha-2 country, `n` `1`–`8` | Minimum parental level needed to play, per country. `*` = every country not listed. Each country (and `*`) at most once |
+| langCode | `xx:NN` or `*:NN`; `xx` ISO 639-1, `NN` two upper-case hex digits `[0-9A-F]{2}` | Track language plus **code extension** (what kind of track in that language). `*` = language not specified. Table below |
+| parentalList | space-separated `CC:n` or `*:n`; `CC` ISO 3166 alpha-2 country in upper case, `n` `1`–`8` | Minimum parental level needed to play, per country. `*` = every country not listed. Each country (and `*`) at most once |
 | multiplexed | `false` or a non-negative integer | How a resource reaches the File Cache (§3.14) |
-| URI | `anyURI`, at most 1024 bytes | `file:///dvddisc/…` (the disc), `file:///filecache/…` (File Cache), `file:///fixed/…` and `file:///removable/…` (persistent storage), `http://…` / `https://…` (network). An ACA member is addressed as `…/name.aca/member` |
+| URI | `anyURI`, shorter than 1024 bytes in total | `file:///dvddisc/…` (the disc), `file:///filecache/…` (the File Cache's script area), `file:///required/…`, `file:///additional/<BasePath>/…`, `file:///common/required/…`, `file:///common/additional/<BasePath>/…` (persistent storage), `http://…` / `https://…` (network). An ACA member is addressed as `…/name.aca/member`. Relative URIs resolve per RFC 3986 §5 against the file's own location or `xml:base`; a path segment `..` is not allowed [23 §6.2.2] |
 | boolean | `true` \| `false` | |
 | ID / IDREF | XML name | `id` values are unique in the document; `onEnd` refers to one |
 
-**Language code extension** (`NN` in langCode). The table is the
-specification's Annex B, which is not among the available sources. The one
-value the sources quote, **`09` = Forced Caption** for sub-pictures [2], matches
-DVD-Video's code-extension numbering, and the values on disc fit that numbering:
+**Language code extension** (`NN` in langCode), from the book's Annex B
+[23 Annex B]. The language half is two lower-case ISO 639 letters; `FF` as the
+first byte of a binary language code means an additional code (`FFFF` = not
+specified).
 
-| NN | Audio | Subtitle | On disc (audio / subtitle tracks) |
+| NN | Audio | Subtitle (sub-picture) | On disc (audio / subtitle tracks) |
 |---|---|---|---|
 | `00` | not specified | not specified | 866 / 606 |
-| `01` | normal | normal | 2336 / 9305 |
-| `02` | for the visually impaired | large characters | 23 / 23 |
-| `03` | director's comments | for children | 210 / 271 |
-| `04` | alternate director's comments | | 14 / 0 |
-| `05` | | normal captions | 1 / 601 |
-| `09` | | **forced** caption | 0 / 97 |
-| `0D` | | director's comments | 0 / 356 |
+| `01` | normal | caption, normal size | 2336 / 9305 |
+| `02` | for the visually impaired | caption, bigger size | 23 / 23 |
+| `03` | director's comments 1 | caption for children | 210 / 271 |
+| `04` | director's comments 2 | reserved | 14 / 0 |
+| `05` | reserved | closed caption, normal size | 1 / 601 |
+| `06` | reserved | closed caption, bigger size | 0 / 0 |
+| `07` | reserved | closed caption for children | 0 / 0 |
+| `09` | reserved | **forced** caption | 0 / 97 |
+| `0D` | reserved | director's comments, normal size | 0 / 356 |
+| `0E` | reserved | director's comments, bigger size | 0 / 0 |
+| `0F` | reserved | director's comments for children | 0 / 0 |
+| `80`–`FF` | provider defined | provider defined | 0 / 0 |
 
-`[2, 11, 12]` **INFERRED** (DVD parity; `09` quoted).
+Every other value is reserved. A title holds at most one forced-caption (`09`)
+sub-picture stream per language [23 Annex B.2]. The one audio track on `05` is
+outside the table.
+
+`[23 Annex B]` **SPEC**; `[11, 12]` counts.
 
 ## 3.3 Document tree
 
@@ -151,8 +163,8 @@ The root. One per file.
 
 | Attribute | Type | Req. | Default | What it is for |
 |---|---|---|---|---|
-| `majorVersion` | non-negative integer | yes | | Integer part of the Advanced Content version (`1`) |
-| `minorVersion` | non-negative integer | yes | | Fractional part (`0`; see §3.1) |
+| `majorVersion` | non-negative integer | yes | | Integer part of the Advanced Content version. Must be `1` [23 §6.2.3.14] |
+| `minorVersion` | non-negative integer | yes | | Fractional part. Must be `0` in v1.01 (see §3.1) |
 | `type` | `Advanced` \| `Interoperable` | no | `Advanced` | `Interoperable` marks content recorded in the user-recordable HD DVD video format rather than authored Advanced Content |
 | `displayName` | string | no | | Human-readable name |
 | `description` | string | no | | Free text |
@@ -166,13 +178,18 @@ System settings the player applies before any title starts. Children, in order:
 
 | Element | Occurs | Attribute | Type | Req. | What it is for |
 |---|---|---|---|---|---|
-| `StreamingBuffer` | 1 | `size` | even integer | yes | Size of the Streaming Buffer carved out of the Data Cache, **in 2048-byte packs** (`1024` = 2 MB). It holds network-streamed secondary video. `0` = none. The File Cache gets what remains |
+| `StreamingBuffer` | 1 | `size` | even integer | yes | Size of the Streaming Buffer carved out of the Data Cache, **in kB of 1024 bytes**, so the size is a multiple of 2048 bytes (`1024` = 1 MB) [23 §4.3.9.1, §6.2.3.8]. It holds network-streamed secondary video. `0` = none. The File Cache gets what remains |
 | `Aperture` | 1 | `size` | `1920x1080` \| `1280x720` | yes | Full visible image size: the size of the graphics plane that applications draw on |
-| `MainVideoDefaultColor` | 1 | `color` | six hex digits `YYCrCb` | yes | Colour of the main-video plane outside the (scaled) main video. Y 16–235, Cr and Cb 16–240 |
-| `NetworkTimeout` | 0–1 | `timeout` | non-negative integer | yes | Network request timeout, in milliseconds |
+| `MainVideoDefaultColor` | 1 | `color` | six upper-case hex digits `YYCrCb` | yes | Colour of the main-video plane outside the (scaled) main video, the "Outer Frame Color". Y 16–235, Cr and Cb 16–240. Kept across title changes; script may change it |
+| `NetworkTimeout` | 0–1 | `timeout` | non-negative integer | yes | How long the title timeline may wait for a hard-synchronised network download before the Network Timeout event, in milliseconds [23 §9.6.2] |
 
 The Data Cache is at least 64 MB; the Streaming Buffer comes out of it, and
-applications' resources must fit in the rest (§3.14).
+applications' resources must fit in the rest (§3.14). The player applies this
+section at "Change System Configuration" in the startup sequence and on every
+`Playlist.load`; doing so empties the File Cache and the Streaming Buffer
+[23 §4.3.22.2]. In Restricted Mode (no trusted signature) `StreamingBuffer` must be
+`0` and `NetworkTimeout` must be absent, or the playlist does not load
+[23 Annex X.4.6.1].
 
 On disc: `StreamingBuffer` `0` on 246, `1024` on 1; `Aperture` `1920x1080` on
 247/247; `MainVideoDefaultColor` `108080` (112) or `107F7F` (135), both black;
@@ -185,9 +202,9 @@ Codec and format of the elementary streams the clips use, indexed so that track
 elements can point at them (`@mediaAttr`, §3.12). Children, in order: any number
 of `VideoAttributeItem`, then `AudioAttributeItem`, then
 `SubpictureAttributeItem`. `index` is unique per item type (a video item and an
-audio item can both be `1`). Values should match the stream attributes in the
-VTI; in practice the **playlist is the source of the codec** because the VTI
-`V_ATR` codec field is unreliable ([06](06_vti.md)).
+audio item can both be `1`). `codec` is required; any other attribute that is
+present must equal the matching field of the stream's `VTS_EVOB_ATR` in the VTI
+([06](06_vti.md)) [23 §6.2.3.7].
 
 **`VideoAttributeItem`** (main and sub video):
 
@@ -227,6 +244,16 @@ plus `channels` on 107 audio items (`6`, `2`, `1`, `8`). Video codecs: `MPEG-2`
 269, `VC-1` 251, `AVC` 124. Audio: `DD+` 344, `DTS-HD` 85, `MLP` 71, `AC-3` 21
 (despite the Interoperable-only note), `LPCM` 11. Sub-picture: `8bitRLC` 302/302.
 
+**Codec source: the VTI.** The video compression mode in `EVOB_VM_ATR` bits 31–29
+([06](06_vti.md)) equals the codec of the clip's `Video@mediaAttr` item on 4744 of
+4869 clip videos. The 125 disagreements are on 17 discs (most on `THE_ANT_BULLY`,
+`THE_MUMMY`, `MANCHURIAN_CANDIDIATE`, `CASABLANCA`). Ten of their EVOs on five discs
+were read over HTTP: every one carries the codec the VTI names (`0xE0` MPEG-2 where
+the playlist says VC-1 or AVC; `0xFD` VC-1 where it says MPEG-2). The playlist item
+is the authoring error. Take the codec from the VTI; use `MediaAttributeList` only
+as a hint.
+`[11]` **VERIFIED** (2026-10 range reads)
+
 ## 3.7 TitleSet
 
 The set of titles, in order: an optional `FirstPlayTitle`, then 1–999 `Title`,
@@ -254,27 +281,32 @@ Children, in order: 0–299 presentation clips and segments in any mix (the
 
 | Attribute | Type | Req. | Default | What it is for |
 |---|---|---|---|---|
-| `titleNumber` | positive integer | yes | | The title's number. Must equal its position among the `Title` elements (1, 2, …) |
+| `titleNumber` | positive integer | yes | | The title's number. Starts at 1 and, in document order, either goes up by 1 or repeats the previous number. Titles that share a number form a **Parental Block**: each has `parentalLevel`, and the last one of the block is `*:1` [23 §6.2.3.1]. Fewer than 1000 titles |
 | `id` | ID | no | | Name used by `onEnd` and by script |
 | `type` | `Advanced` \| `Original` \| `UserDefined` | no | `Advanced` | `Original` / `UserDefined`: original or user-edited title of Interoperable (recorded) content |
 | `selectable` | boolean | no | `true` | `false`: the user cannot navigate to this title (title menu, title search, next/previous title); script still can |
 | `titleDuration` | time expression | yes | | Length of the title timeline. Every mapped object ends at or before it |
-| `onEnd` | IDREF | no | | `id` of the title to play when this one ends. **Absent: stop** after the title (script may still continue) |
+| `onEnd` | IDREF | no | | `id` of the title to play when this one ends. **Absent, or no such title: stop** after the title (script may still continue). Evaluated only when forward play (normal or fast forward) crosses the end; reverse play that reaches the start of the title resumes normal play in the same title [23 §4.3.19.5.1] |
 | `tickBaseDivisor` | positive integer | no | `1` | Reduces the application tick rate for this title: with `3`, the Advanced Application Manager processes one tick in three and ignores the rest |
-| `parentalLevel` | parentalList | no | `*:1` | Minimum parental level to play the title, per country |
+| `parentalLevel` | parentalList | no | `*:1` | Minimum parental level to play the title, per country. In a Parental Block the player plays the first title, in document order, whose level for the player's country (SPRM 12) is at most the player's level (SPRM 13) [23 §4.3.19.5.2] |
 | `alternativeSDDisplayMode` | `panscanOrLetterbox` \| `panscan` \| `letterbox` | no | `panscanOrLetterbox` | Display modes allowed when outputting to a 4:3 monitor; the player must use an allowed one |
 | `displayName` | string | no | | Title name a player may show |
 | `description` | string | no | | Free text |
 | `xml:base` | URI | no | | Base URI for relative URIs inside this title (XML Base) |
-| `outputFrameRate` (v1.1) | `24p` \| `Other` \| `Unspecified` | no | `Unspecified` | Declares whether the title is 24-frame content, so a player can choose 24 Hz output. Meaning beyond the value names is not in the sources |
+| `outputFrameRate` (v1.1) | `24p` \| `Other` \| `Unspecified` | no | `Unspecified` | Declares whether the title is 24-frame content, so a player can choose 24 Hz output. Not in the book v1.01; meaning beyond the value names is not in the sources |
 
 **Rules.**
 
 - Presentation objects on one title timeline must not overlap within a kind:
   no two `PrimaryAudioVideoClip`, no two `SecondaryAudioVideoClip`, no two
-  `SubstituteAudioClip`, no two `SubstituteAudioVideoClip`, and a
+  `SubstituteAudioClip`, no two `SubstituteAudioVideoClip`. A
   `PrimaryAudioVideoClip` must not overlap a `SubstituteAudioVideoClip`.
+  `SubstituteAudioVideoClip`, `SecondaryAudioVideoClip` and `SubstituteAudioClip`
+  never overlap one another (they share the Secondary Video Player). No two clips
+  with `dataSource="Disc"` overlap [23 §6.2.3.2].
   There is one main-video decoder and one sub-video decoder.
+- `titleDuration` is greater than `00:00:00:00`; every `titleTimeEnd` is at most
+  `titleDuration`.
 - Where no clip is mapped, the timeline still runs and the main-video plane shows
   `MainVideoDefaultColor`.
 - `titleDuration` is authoritative. On disc (`e14`, titles with clips): last
@@ -282,6 +314,8 @@ Children, in order: 0–299 presentation clips and segments in any mix (the
   shows the default colour), and longer once (`THE_SEARCHERS` FirstPlayTitle,
   `00:00:23:55` vs `00:00:23:00`: authoring error; stop at `titleDuration`).
 - `onEnd` omitted means stop; it is not a loop and not a hidden menu.
+- Starting a title resets the sub video's scale, position and alpha and the main
+  video's layout; the outer-frame colour is kept [23 §4.3.13.3, Annex W].
 
 On disc (3196 titles): `titleNumber` equals document order 3196/3196; `onEnd`
 on 3192, all resolving to a title `id`; `selectable` only ever `true` (265);
@@ -298,7 +332,10 @@ It has no number and cannot be navigated to.
 
 Children: `PrimaryAudioVideoClip` and `SubstituteAudioVideoClip`, any order
 (v1.1: at least one). Only video track 1 and audio track 1 may be assigned;
-no subtitle, sub-video or sub-audio.
+no subtitle, sub-video or sub-audio. A `SubstituteAudioVideoClip` here must come
+from the File Cache or persistent storage. It has no `titleNumber`,
+`parentalLevel`, `type`, `tickBaseDivisor`, `selectable`, `displayName`, `onEnd` or
+`description` [23 §6.2.3.1].
 
 | Attribute | Type | Req. | Default | What it is for |
 |---|---|---|---|---|
@@ -307,11 +344,15 @@ no subtitle, sub-video or sub-audio.
 | `xml:base` | URI | no | | As `Title` |
 | `outputFrameRate` (v1.1) | as `Title` | no | `Unspecified` | As `Title` |
 
-Playback rules [1]: play it start to end at normal speed, video track 1 and audio
-track 1; ignore user title navigation (next, previous, fast-forward, rewind, time
-search, `jump`) until it ends; then play Title 1. `PlaylistApplication` is not
-active during it. If a File Cache resource is missing, keep playing the video and
-skip the resource. `[1]` **INFERRED** (fail-closed; skip key not demonstrated).
+Playback rules [23 §4.3.19.6.1] (matching [1]): play it start to end at normal
+speed, video track 1 and audio track 1, subtitles off whatever the system
+parameters say. The title number is `0` meanwhile. Every user operation except
+STOP and EJECT is refused. No Advanced Application runs (not even the
+`PlaylistApplication`) and no event is raised. Then play Title 1; it never comes
+back to the FirstPlayTitle. Its purpose is to cover the loading of
+`PlaylistApplicationResource`s, which may be multiplexed into its video (§3.14).
+If an error happens during it, the player may stop.
+`[23]` **SPEC**
 
 On disc: 119 of 247 playlists; `alternativeSDDisplayMode` `letterbox` 90.
 
@@ -324,15 +365,19 @@ elements share `ClipMappingType`:
 |---|---|---|---|---|
 | `src` | URI | yes | | The object's **index file**, the time map (`.MAP`, [07](07_map.md)), not the `.EVO` (§3.19) |
 | `titleTimeBegin` | time expression | yes | | Where the clip starts on the title timeline |
-| `titleTimeEnd` | time expression | yes | | Where it ends; **exclusive** (`[begin, end)`) |
-| `clipTimeBegin` | time expression | no | `00:00:00:00` | Where playback starts **inside** the object, on the object's own clock. Must be the PTS of a coded video frame |
+| `titleTimeEnd` | time expression | yes | | Where it ends; **exclusive** (`[begin, end)`): a frame mapped at `10` shows during `[10, 11)` [23 §4.3.19.2.1] |
+| `clipTimeBegin` | time expression | no | `00:00:00:00` | Where playback starts **inside** the object, on the object's own clock. Must be the PTS of a coded frame ([23 Annex R.1.3]: a frame picture or a pair of field pictures) |
 | `id` | ID | no | | Name for script |
 | `description` | string | no | | Free text |
 
 **Time model.** At title time `t` in `[titleTimeBegin, titleTimeEnd)` the clip
 shows object time `clipTimeBegin + (t − titleTimeBegin)`. The span must fit in
 the object: `clipTimeBegin + titleTimeEnd − titleTimeBegin` ≤ the object's
-length. The object time converts to a disc address through the time map.
+length. The object time converts to a disc address through the time map. If the
+object's video ends before `titleTimeEnd`, the main-video plane shows the outer
+frame colour (a sub-video plane goes invisible) until `titleTimeEnd`; if it runs
+longer, it is cut at `titleTimeEnd` [23 §4.3.19.2.1]. Audio that ends between two
+title-timeline frames is rounded up to the next frame boundary [23 §4.3.19.7].
 
 The four clip elements:
 
@@ -348,14 +393,42 @@ Extra attributes:
 | Attribute | On | Type | Req. | Default | What it is for |
 |---|---|---|---|---|---|
 | `dataSource` | all four | `Disc` \| `P-Storage` \| `Network` \| `FileCache` | no | see table | Where the object lives: the disc, persistent storage (pre-downloaded), streamed from a server, or already in the File Cache. `PrimaryAudioVideoClip` allows only `Disc` |
-| `seamless` | `PrimaryAudioVideoClip` | boolean | no | `false` | `true`: this clip and the one mapped directly before it meet the seamless-connection conditions, so the decoder must not break between them |
-| `sync` | the three secondary / substitute clips | `hard` \| `soft` \| `none` | no | see table | What happens if the object is not ready at `titleTimeBegin`. **hard**: the title timeline stops until it is. **soft**: the timeline keeps running and the object starts late. **none**: the object is not synchronised to the timeline |
+| `seamless` | `PrimaryAudioVideoClip` | boolean | no | `false` | `true`: this clip and the one mapped directly before it meet the seamless-connection conditions, so the decoder must not break between them (conditions below) |
+| `sync` | the three secondary / substitute clips | `hard` \| `soft` \| `none` | no | see table | What happens if the object is not ready at `titleTimeBegin`. **hard**: the title timeline stops until it is. **soft**: the timeline keeps running and the object starts late. **none**: the object runs on its own time base, not the timeline's [23 §4.3.19.1] |
 | `preload` | the three | time expression | no | | Title time at which the player should start prefetching the object |
 | `noCache` | the three | boolean | no | `false` | Only with `dataSource="Network"` (otherwise absent): `true` adds `no-cache` to both `Cache-Control` and `Pragma` in the HTTP request; `false` adds it to neither |
 
 Streaming (`Network`) objects go through the Streaming Buffer (§3.5);
 `P-Storage`, `FileCache` and some `Disc` objects are read from the Data Cache so
-the disc head is not shared with the primary clip.
+the disc head is not shared with the primary clip. A network clip downloads its
+time map first, completely, then streams the `.EVO` named by `EVOB_FNAME` in that
+map, at the same location [23 §9.2.2.2].
+
+**Which streams a secondary clip replaces** [23 §4.3.3, §4.3.19.2.2]. A
+`SubstituteAudioVideoClip` replaces the primary main video and main audio; the two
+never play together. A `SubstituteAudioClip` adds main-audio tracks; while one of
+them plays, the primary main audio does not. A `SecondaryAudioVideoClip` replaces
+the primary sub video and sub audio for its whole valid period; when its S-EVOB
+carries both sub video and sub audio, its sub audio cannot be played without its
+sub video.
+
+**Seamless join** (`seamless="true"`) is allowed only when all of these hold
+[23 §4.3.21.6, Annex K.1.4]; otherwise the attribute counts as `false` and the
+timeline may break at the join:
+
+- the two EVOBs are contiguous on the disc, or meet the jump conditions of
+  [23 Annex K.7];
+- `titleTimeEnd` of the earlier clip = `titleTimeBegin` of the later one;
+- the earlier clip runs to the end of its EVOB:
+  `clipTimeBegin + titleTimeEnd − titleTimeBegin = EVOB_V_E_PTM − EVOB_V_S_PTM`;
+- the later clip starts at the start of its EVOB (`clipTimeBegin` = 0);
+- the two EVOBs have identical `VTS_EVOB_ATR` (DD+ and AC-3 count as different);
+- for interlaced video, the first field of the later EVOB is the opposite parity of
+  the last field of the earlier one.
+
+The begin and end of a primary clip are non-seamless points unless `seamless` is
+`true`. A synchronised `SecondaryAudioVideoClip` must not span a non-seamless point
+[23 §6.2.3.2].
 
 On disc: only `PrimaryAudioVideoClip` (4847; the other three 0). Every `src` is
 a `.MAP` whose `.EVO` has an EVOBI in the VTI (4847/4847). `seamless` on 1379:
@@ -374,7 +447,7 @@ player's network throughput.
 | Attribute | Type | Req. | What it is for |
 |---|---|---|---|
 | `src` | URI (`http`/`https`) | yes | In a clip: the time map of the alternative stream. In a resource: the alternative archive or file |
-| `networkThroughput` | non-negative integer | yes | Minimum network throughput needed to use this source, in **1000 bit/s** units. Unique within the parent |
+| `networkThroughput` | non-negative integer | yes | Minimum network throughput needed to use this source, in **kbit/s** (1000 bit/s). Unique within the parent |
 
 Allowed in a clip only when its `dataSource="Network"` and its `src` is
 `http`/`https`; in `ApplicationResource` / `TitleResource` only when their `src`
@@ -385,7 +458,7 @@ Selection, done once while the title timeline is being set up: take the
 Throughput parameter. If exactly one qualifies, use it; if several, use the one
 with the largest `networkThroughput`; if none, use the parent's own `src`. For
 resources, the file is still **referred to** by the parent's `src` URI whichever
-source it was fetched from.
+source it was fetched from. Not allowed in Restricted Mode [23 Annex X.4.6.1].
 
 On disc: 0.
 
@@ -403,15 +476,17 @@ Inside a clip, these elements say which elementary streams exist and which
 
 | Element | `track` | Stream attribute | Maps to |
 |---|---|---|---|
-| `Video` | 1–9 | `angleNumber` 1–9, default `1` | Main video (VM_PCK). `angleNumber` is used only when the clip's `src` is an **interleaved block**: it picks which P-EVOB of the block (which angle) this track is. Otherwise omit it; main video is track 1 |
+| `Video` | 1–9 | `angleNumber` 1–9, default `1` | Main video (VM_PCK). `angleNumber` is used only when the clip's `src` is an **interleaved block**: it is the number *n* of the *n*-th TMAPI in that map, which picks the P-EVOB of the block (the angle) this track is. Otherwise omit it; main video is track 1. Must be `1` in a `SubstituteAudioVideoClip` |
 | `Audio` | 1–8 | `streamNumber` 1–8, default `1` | Main audio (AM_PCK). `streamNumber` = audio stream number **+ 1**: the low 3 bits of `sub_stream_id` for LPCM / DD+ / DTS-HD / MLP, of `stream_id` for MPEG audio |
-| `Subtitle` | 1–32 | `streamNumber` 1–32, default `1` | Sub-picture (SP_PCK). `streamNumber` = sub-picture stream number **+ 1**; the stream number converts to the decoding stream through the VTI `SP_ATR` table, whose entry gives the `sub_stream_id` ([06](06_vti.md)). In `AdvancedSubtitleSegment`: `streamNumber` omitted, `mediaAttr` ignored |
-| `SubVideo` | fixed `1` | | Sub video (VS_PCK) of the P-EVOB, or of the S-EVOB in a secondary clip. Present = enabled |
+| `Subtitle` | 1–32 | `streamNumber` 1–32, default `1` | Sub-picture (SP_PCK). `streamNumber` = sub-picture stream number **+ 1**. The player looks that stream up in the EVOB's `EVOB_SPST_ATRT` ([06](06_vti.md)) and takes the decoding stream number for the current display (HD, SD wide, SD letterbox or SD pan-scan); that number is the low 5 bits of the `sub_stream_id` [23 §4.3.19.4.1, §6.3.1.2.3]. In `AdvancedSubtitleSegment`: `streamNumber` omitted, `mediaAttr` ignored |
+| `SubVideo` | fixed `1` | | Sub video (VS_PCK) of the P-EVOB, or of the S-EVOB in a secondary clip. Present = enabled. A `SubVideo` and the `SubAudio` assigned at the same time come from the same clip |
 | `SubAudio` | 1–8 | `streamNumber` 1–8, default `1` | Sub audio (AS_PCK); `streamNumber` = audio stream number + 1 |
 
-Only streams listed here are available in that clip. The assignment can change
-from clip to clip, so a track number means "whatever stream the current clip
-maps to it".
+Only streams listed here are available in that clip; an unassigned stream is
+disabled. The assignment can change from clip to clip, so a track number means
+"whatever stream the current clip maps to it". The number of streams and their
+attributes do not change inside one EVOB [23 §4.3.19.4.1]. Track numbers of one
+kind are unique at any one time [23 §6.2.3.3].
 
 On disc: `Video` 4869, `track` 1 on 4847 (the rest are Pan's Labyrinth angles
 2–4 with `angleNumber` 2–4); `Audio` 6399; `Subtitle` 19992; `SubVideo` 84;
@@ -441,8 +516,8 @@ timeline. Both share `ObjectMappingType`:
 
 | Attribute | Type | Req. | Default | What it is for |
 |---|---|---|---|---|
-| `sync` | `hard` \| `soft` | no | `hard` | Start-up mode. **hard**: the title timeline holds until the resources are loaded and the application has started. **soft**: the timeline keeps running; the application appears late, or not at all if its window passes |
-| `zOrder` | non-negative integer | yes | | Stacking order of this application on the graphics plane relative to other applications |
+| `sync` | `hard` \| `soft` | no | `hard` | Start-up mode [23 §4.3.19.9]. **hard**: the title timeline holds while the resources load and the scripts' global code runs. **soft**: the timeline never holds; the application starts once its resources are in the File Cache, late, or not at all if the timeline jumped into its valid period or came back from trick play there. A resource that cannot be read without stopping the timeline must not belong to a soft application |
+| `zOrder` | non-negative integer | yes | | Initial stacking order of this application on the graphics plane. Unique within the title and contiguous from 0; higher is drawn later (on top). Script can change it [23 §6.2.3.2, §7.3.1.2] |
 | `language` | language | no | | The application's language. Absent: any language |
 | `appBlock` | positive integer | no | | Application Block this segment belongs to (see below) |
 | `group` | positive integer | no | | Application Group this segment belongs to (see below) |
@@ -460,8 +535,8 @@ Information**: they decide whether the application runs in its valid period.
   (a block of one is allowed).
 - **Application Group**: segments with the same `group` value that script
   activates and deactivates together (for example a row of buttons).
-- **Decision** (per segment, when the timeline enters its valid period; patent
-  FIG.58 [1]):
+- **Decision** (per segment, when the timeline enters its valid period;
+  [23 §6.2.3.9], patent FIG.58 [1]):
   1. `autorun="false"` → inactive. Script may activate it later.
   2. Else, if `group` is present → active only while that group is the selected
      (valid) group. Script can change which group is selected.
@@ -469,22 +544,25 @@ Information**: they decide whether the application runs in its valid period.
      equals the player's menu language; if no segment of the block matches the
      menu language, the one whose `language` equals `TitleSet@defaultLanguage`
      is active; the others are inactive.
-  4. Else (no activation information) → **active**. The patent's prose for this
-     branch says "invalid", which contradicts its own resource rule ("loads the
-     Resource … if these Application Segments do not have any Application
-     Activation Information") and every disc: 2275 segments with no activation
-     information (or only `autorun="true"`) are the discs' working menus.
+  4. Else (no activation information) → **active**. The book says so
+     [23 §6.2.3.9]. The patent's prose for this branch says "invalid", which
+     contradicts its own resource rule and every disc: 2275 segments with no
+     activation information (or only `autorun="true"`) are the discs' working
+     menus.
 - Resources are loaded only for segments that will run: no activation
   information, or selected and `autorun="true"`.
 
 Timing: the title timeline keeps counting while a soft application's resources
 load; the application's execution period starts at or after `titleTimeBegin`.
+No top-level script runs before the valid period starts, even if the files are
+already loaded [23 §7.2.4.1].
 Page and application clocks are independent of the media clock, so a markup
 page with `timing@clock="page"` keeps ticking while the user pauses video.
 Unmap at the exclusive `titleTimeEnd`.
 
 On disc: 2529 `ApplicationSegment`; `sync` `hard` 2120, `soft` 304, absent 105
-(= hard); `autorun` `true` 2168, `false` 136; `zOrder` `0` on 2227; `group` on
+(= hard); `autorun` `true` 2168, `false` 136; `zOrder` `0` on 2227, unique and
+contiguous within the title on 2225 of 2226 titles; `group` on
 118 (values 1–8); `language` and `appBlock` on 0 (no disc uses Application Blocks;
 language-specific menus appear as `PlaylistApplication` languages, §3.15, and
 as separate playlists chosen by a selector, §3.20). `titleTimeBegin`
@@ -515,9 +593,9 @@ before something uses it. Three elements:
 |---|---|---|---|---|
 | `src` | URI | yes | | The file to load. With `NetworkSource`, the file is still referred to by this URI |
 | `size` | positive integer | yes | | Size in bytes to reserve. May be larger than the file, **must not be smaller** ([05](05_manifest_hdi.md) §5.7) |
-| `priority` | non-negative integer | yes | | Removal priority when the File Cache needs space and the resource is no longer used by an active application or title. `ApplicationResource` ≥ 1, `TitleResource` ≥ 0, so application resources are removed before title resources |
-| `multiplexed` | `false` \| non-negative integer | yes | | `false`: load from `src`. An integer: the resource is also multiplexed into the video as ADV_PCK packs with that slot number ([08](08_evo.md) §8.6) |
-| `loadingBegin` | time expression | no | application: its `titleTimeBegin`; title resource: `00:00:00:00` | When loading starts on the title timeline |
+| `priority` | non-negative integer | yes | | Removal priority when the File Cache needs space and the resource is no longer in use. `0` is kept longest; a higher number goes first. `ApplicationResource` 1 to 2³¹−1, `TitleResource` 0 to 2³¹−1. Every title resource outranks every application resource, so application resources are removed first [23 §4.3.20.2.2, §4.3.20.3.3] |
+| `multiplexed` | `false` \| non-negative integer | yes | | `false`: the File Cache Manager fetches `src`. An integer: the resource is also multiplexed into the video as ADV_PCK packs whose `advanced_identifier` equals it ([08](08_evo.md) §8.6); `loadingBegin` is then required, the packs come before `titleTimeBegin`, and the same file is also stored at `src` [23 §4.3.20.2.2, §6.5.4] |
+| `loadingBegin` | time expression | no | application: its `titleTimeBegin`; title resource: `00:00:00:00` | When loading starts on the title timeline. The File Cache reserves the space then. `loadingBegin` ≤ `titleTimeBegin` < `titleTimeEnd` ≤ `titleDuration` |
 | `noCache` | boolean | no | `false` | Only when `src` is `http`/`https`: `true` adds `no-cache` to `Cache-Control` and `Pragma` |
 | `description` | string | no | | Free text |
 
@@ -528,18 +606,22 @@ resource's valid period.
 
 | Attribute | Type | Req. | What it is for |
 |---|---|---|---|
-| `src` | URI | yes | File to load; must be on the disc or in persistent storage (not the network, not the script-managed File Cache area) |
+| `src` | URI | yes | File to load; must be on the disc or in persistent storage (not the network, not the script-managed File Cache area). Loaded before Title 1's other resources, during the FirstPlayTitle if there is one, else at `00:00:00:00` of Title 1; if not loaded by then, Title 1's timeline waits [23 §4.3.19.6.2.2] |
 | `size` | positive integer | yes | Bytes to reserve (as above) |
 | `multiplexed` | `false` \| non-negative integer | yes | As above |
 | `description` | string | no | Free text |
 
-**`multiplexed` is not a boolean.** An integer is an ADV_PCK slot, and the packs
-may be absent from the clip that plays (OLIVER_TWIST_JPN `LoopMenu.EVO`), so
-**always load `src`**. `"0"` is the integer 0, not `false`; no ADV_PCK uses slot 0,
-and the 12 rows with `"0"` are ordinary ACA files. Load them from `src` like
-`false`.
+**`multiplexed` is not a boolean.** An integer is an ADV_PCK `advanced_identifier`,
+and the packs may be absent from the clip that plays (OLIVER_TWIST_JPN
+`LoopMenu.EVO`), so **always load `src`**. The book requires the file at `src` for
+this reason: a jump can cut the pack stream, and the File Cache Manager then reads
+the file from the disc [23 §4.3.6, §6.5.4]. `"0"` is the integer 0, not `false`;
+no ADV_PCK uses identifier 0, and the 12 rows with `"0"` are ordinary ACA files.
+Load them from `src` like `false`. A numeric `multiplexed` on a
+`PlaylistApplicationResource` needs a FirstPlayTitle to carry the packs
+[23 §6.2.3.6].
 
-**File Cache state machine.** Each resource is in one of five states:
+**File Cache state machine** [23 §4.3.20.3]. Each resource is in one of five states:
 non-exist → loading → ready (loaded, application not yet active) → used (at least
 one active application uses it) → available (loaded, no valid application uses
 it) → non-exist when the File Cache Manager discards it. Loading starts at
@@ -553,6 +635,10 @@ jump inside a title, every resource whose valid period (or loading period)
 contains the target time must be fully loaded before playback resumes there.
 Resources in the loading, ready and used states must fit in 64 MB minus the
 Streaming Buffer; that is the author's obligation ([05](05_manifest_hdi.md) §5.7).
+If loading the playlist's resources overflows the File Cache anyway, the player
+goes to the Stop state [23 §4.3.20.4]. Resources are loaded only for segments with
+no activation information, or that are selected with `autorun="true"`, or that
+are scheduled to be active [23 §4.3.20.3.2].
 
 On disc: `ApplicationResource` 2506 (`multiplexed` `false` 2495, `1` 8, `2` 3;
 `priority` `1` 2440, `2` 32, `3` 34; `loadingBegin` on 30, all `00:00:00:00`;
@@ -576,11 +662,18 @@ except FirstPlayTitle, typically the persistent menu bar. Children:
 | `id` | ID | no | Name for script |
 | `description` | string | no | Free text |
 
-Rules [1]: all `PlaylistApplication` elements form one Application Block; only
-the one matching the player's menu language is activated. It is always
-hard-synchronised; its resources come from the disc or persistent storage; its
-markup must not use the title clock. Match `language` as two letters (script
-compares `Player.menuLanguage`, sometimes after `.slice(0,2)`).
+Rules [23 §4.3.19.6.2, §6.2.3.10] (matching [1]): all `PlaylistApplication`
+elements form one Application Block; only the one matching the player's menu
+language (SPRM 0) is activated, else the one matching `TitleSet@defaultLanguage`.
+The choice is made once and kept even if the menu language changes. It is always
+hard-synchronised; its resources come from the disc or persistent storage and
+nothing loaded by `TitleResource` or `ApplicationResource` is visible to it; its
+markup must not use the title clock. It starts before Title 1's other
+applications and stops after them at the end of the playlist. It keeps running
+through title jumps; during the jump the title number and time are the old
+title's until playback of the new one starts. At each title start it is the
+topmost application. Match `language` as two letters (script compares
+`Player.menuLanguage`, sometimes after `.slice(0,2)`).
 
 On disc: 203 playlists; `language` `en` 186, `de` 11, `ja` 3, `fr` 3, unique in
 every playlist.
@@ -588,7 +681,11 @@ every playlist.
 ## 3.16 ChapterList
 
 The title's chapters. Children: `Chapter` (1–1999). Chapters are **numbered by
-document order from 1**.
+document order from 1**. Fewer than 2000 per title and 100 000 per playlist.
+Chapter 1 starts at `00:00:00:00`; start times increase in document order and
+are at most `titleDuration`; a chapter ends where the next starts or at the end
+of the title. A title without `ChapterList` is one chapter from
+`00:00:00:00` [23 §6.2.3.5].
 
 | Attribute | Type | Req. | What it is for |
 |---|---|---|---|
@@ -610,7 +707,7 @@ may select them, forced subtitles. Children, in order: `VideoTrack` (0–9),
 
 | Attribute | Type | Req. | Default | What it is for |
 |---|---|---|---|---|
-| `selectable` | boolean | no | `true` | `false`: the user cannot select this track (script still can) |
+| `selectable` | boolean | no | `true` | `false`: the remote's angle / audio / subtitle keys skip this track (the Default Input Handler, [23 Annex V]); script still can select it |
 | `description` | string | no | | Free text |
 
 | Element | Attribute | Type | Req. | Default | What it is for |
@@ -625,11 +722,31 @@ may select them, forced subtitles. Children, in order: `VideoTrack` (0–9),
 `forced` and the langCode extension `09` (forced caption) are separate signals:
 95 of the 97 `…:09` subtitle tracks do not set `forced`.
 
-When a title has no usable list (718 omit it, 15 have an empty one): use the
-first mapped `Audio` track, else track 1, and video track 1. On disc these never
-differ from track 1 (all 493 list-less titles with an `Audio` child start with
-track 1). Do not invent a `defaultLanguage` match. `[11, 12]` **VERIFIED**
-(fail-closed).
+**Choosing the current audio and subtitle track** [23 §4.3.19.4.2]. The player
+keeps a *selected* track number, language code and code extension for audio and
+for subtitles (system parameters set by the user or script; at start the
+languages come from SPRM 16–19 and the numbers are unset). Whenever the clip
+changes, it picks the *current* track:
+
+1. Subtitles only: if a `SubtitleTrack` has `forced="true"`, take the lowest such
+   track.
+2. Else, if the selected track number is available, take it.
+3. Else, among the available tracks (languages from this list), take the lowest
+   track whose language and extension both match the selected ones; else whose
+   language matches; else whose extension matches.
+4. Else take the lowest available track. None available: no track.
+
+The selected values stay as they were, so the choice is re-made at the next clip.
+A track is available when the current clip assigns a stream to it (§3.12). Video
+(the angle): the selected video track if available, else the lowest available.
+Sub audio: the current `SubAudio` track if available, else track 1, else none.
+Sub video is invisible and sub audio muted until script shows them
+[23 §4.3.19.4.3–4].
+
+When a title has no usable list (718 omit it, 15 have an empty one), step 4
+applies: the lowest mapped `Audio` track and video track 1. On disc these are
+always track 1 (all 493 list-less titles with an `Audio` child start with
+track 1). `[23]` **SPEC**; `[11, 12]` **VERIFIED**.
 
 On disc: 2478 lists; `AudioTrack` 3450 (`selectable="false"` 59), `SubtitleTrack`
 11259 (`selectable="false"` 260; `forced` only ever `false`), `VideoTrack` 956.
@@ -642,13 +759,20 @@ Frame-accurate pauses and script events on the title timeline. Children:
 
 | Element | Attribute | Type | Req. | What it is for |
 |---|---|---|---|---|
-| `PauseAt` | `titleTime` | time expression | yes | When the timeline reaches it, **pause** the title timeline (video freezes on that frame) until script resumes (`Player.playlist.play()`, or a `jump`). Inside a clip's valid period the time must fall on a coded video frame's PTS |
+| `PauseAt` | `titleTime` | time expression | yes | When the timeline reaches it in forward play (normal, fast or slow forward), **pause** the title timeline (video freezes on that frame) until script resumes (`Player.playlist.play()`, or a `jump`). Ignored in reverse play and when a jump lands on it. Fires a `play_state` event. Inside a clip's valid period the time must fall on a coded frame's PTS |
 | | `id` | ID | no | Name for script |
-| `Event` | `titleTime` | time expression | yes | When the timeline reaches it, the Playlist Manager fires a **Playlist Manager Event** named by `id`; script catches it with `addEventListener("<id>", …)` ([05](05_manifest_hdi.md) §5.3). No effect on video. Script may handle it late |
-| | `id` | ID | no | Event name. Without one, nothing can listen |
+| `Event` | `titleTime` | time expression | yes | When the timeline reaches it **at normal speed**, the Playlist Manager fires a `ScheduledEvent` (type `"scheduled_event"`, property `id`) [23 §4.3.19.2.5, Annex Z.6]. Not fired in trick play or by a jump. No effect on video. Script may handle it late |
+| | `id` | ID | no | Event name, read by script as `evt.id` |
+
+How discs listen: 14 listeners use `addEventListener("scheduled_event", …)` and
+test `evt.id`, as the book says. `1408_DC` instead listens with the id as the event
+type (`addEventListener("endFeature", …)`, `"endMenu"`) and nothing else fires that
+type. A player that also dispatches an event whose type is the `id` runs both
+patterns; no disc listens to both, so nothing runs twice. `[23]` **SPEC**;
+`[11]` **VERIFIED** (122 scripts); the second dispatch **INFERRED**.
 
 Fire each entry once, when the timeline clock crosses `titleTime`; after a
-backward `jump` a re-crossing may fire it again (edge-triggered). This is how a
+backward `jump` a later normal-speed crossing fires it again. This is how a
 menu-loop clip holds its last frame: `BATMAN_BEGINS` has a loader clip with
 `PauseAt id="end-loader" titleTime="00:00:04:59"` and `Event
 id="enable-mainmenu" titleTime="00:00:05:01"`.
@@ -667,9 +791,11 @@ FirstPlayTitle) and then the playlist's own location.
 
 ## 3.20 Which playlist to open
 
-Boot file: **the highest `$$$` present** among `ADV_OBJ/VPLST$$$.XPL`
-(Scenarist: "The highest-numbered Playlist is loaded first"). `.BAK` playlists
-are not searched. Audio-only players search `APLST$$$.XPL` instead (0 on disc).
+Boot file: **the highest `$$$` present** among `ADV_OBJ/VPLST$$$.XPL`, and in
+persistent storage when `SEARCH_FLG` is 0 ([02](02_discid.md) §2.3)
+[23 §4.3.22.2] (Scenarist: "The highest-numbered Playlist is loaded first").
+`.BAK` playlists are not searched. Players without a display search
+`APLST$$$.XPL` instead (0 on disc).
 
 | Rule | N |
 |---|---|
@@ -690,20 +816,21 @@ three. Opening a lower `VPLST` without HDi is a research fallback only (`e14`:
 
 ## 3.21 Specification text versus schema and discs
 
-Where the sources disagree, the schema wins over the specification text, and
-the discs show what players accept.
+Where the sources disagree, the book v1.01 [23] and the schema win over the patent
+text, and the discs show what players accept.
 
-| Point | Specification text [1] | Schema / discs |
+| Point | Patent text [1] | Book [23] / schema / discs |
 |---|---|---|
-| `Title@onEnd` | an early passage calls it a title **number**, `0` = pause | XSD: IDREF to a Title `id`; normative text: absent = stop. Discs: 3192/3192 resolve to an `id` |
-| Titles per playlist | "512 or less" | XSD: 999 |
-| Chapters per list | "512 or less" | XSD: 1999 |
-| `ApplicationResource@size` | "can be omitted" | XSD: required; present on every row |
-| `PlaylistApplication` z-order | "Describes the Application z-order" | no `zOrder` attribute in either XSD |
+| `Title@onEnd` | an early passage calls it a title **number**, `0` = pause | Book and XSD: IDREF to a Title `id`; absent = stop. Discs: 3192/3192 resolve to an `id` |
+| Titles per playlist | "512 or less" | Book: fewer than 1000; XSD: 999 |
+| Chapters per list | "512 or less" | Book: fewer than 2000 per title; XSD: 1999 |
+| `ApplicationResource@size` | "can be omitted" | Book (§4.3.20.2.2) and XSD: required; present on every row |
+| `PlaylistApplication` z-order | "Describes the Application z-order" | no `zOrder` attribute; the book puts it on top at each title start (§3.15) |
 | `noCache` on resources | "if the URI scheme **is** http, the attribute shall be absent" | a typo for "is not": the attribute only has meaning for http/https |
-| Version | `minorVersion` `0` | discs declare `0` but use v1.1 attributes (§3.1) |
-| `mediaAttr` | must name an existing item | 2 discs point at missing sub-picture items (§3.12) |
-| Manifest `Resource@src` | "absolute URI … relative URI shall not be used" | 12 manifests use relative script names ([05](05_manifest_hdi.md) §5.1) |
+| Version | `minorVersion` `0` | book: `0`; discs declare `0` but use v1.1 attributes (§3.1) |
+| `mediaAttr` | must name an existing item | 2 discs point at missing sub-picture items (§3.12); 125 clip videos name the wrong codec (§3.6) |
+| Manifest `Resource@src` | "absolute URI … relative URI shall not be used" | book says the same; 12 manifests use relative script names ([05](05_manifest_hdi.md) §5.1) |
+| Playlist `Event` | "Playlist Manager Event" | book: `scheduled_event` with `id`; one disc listens on the id (§3.18) |
 
 ## 3.22 On disc
 
