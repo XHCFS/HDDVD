@@ -461,9 +461,13 @@
 Size: <strong>128 bytes</strong> on 119/119 Advanced discs<br />
 Magic: <code class="docutils literal notranslate"><span class="pre">HDDVD-V_CONF</span></code><br />
 This is <strong>not</strong> AACS Volume ID.</p>
+<p>The book calls it the Configuration File. It is required directly in <code class="docutils literal notranslate"><span class="pre">ADV_OBJ/</span></code> on
+every Category 2 and 3 disc. It names the disc’s area in persistent storage and
+identifies the disc to a network server [23 §6.6]. Its presence is what marks a
+disc as Category 2 or 3 [23 §4.1.1].</p>
 <p>The Playlist Manager reads this <strong>before</strong> choosing a playlist.</p>
 <p><code class="docutils literal notranslate"><span class="pre">[11,</span> <span class="pre">12]</span></code> <strong>VERIFIED</strong>
-<code class="docutils literal notranslate"><span class="pre">[1]</span></code></p>
+<code class="docutils literal notranslate"><span class="pre">[1]</span></code> <code class="docutils literal notranslate"><span class="pre">[23</span> <span class="pre">§6.6]</span></code></p>
 <section id="layout">
 <h2>2.1 Layout<a class="headerlink" href="#layout" title="Link to this heading"></a></h2>
 <p>All fields big-endian where numeric. Strings are ASCII, not necessarily NUL-terminated
@@ -479,28 +483,28 @@ if they fill the field.</p>
 <tbody>
 <tr class="row-even"><td><p>0</p></td>
 <td><p>12</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">ID</span></code></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">&quot;HDDVD-V_CONF&quot;</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">CONFIG_ID</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&quot;HDDVD-V_CONF&quot;</span></code>, ISO 8859-1</p></td>
 </tr>
 <tr class="row-odd"><td><p>12</p></td>
 <td><p>16</p></td>
-<td><p>Disc ID (network)</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">0xFF</span></code>×16 on 109 discs; UUID on 10. <strong>Not</strong> Volume ID.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">DISC_ID</span></code></p></td>
+<td><p>Disc ID for the network, binary GUID [23 §9]. All <code class="docutils literal notranslate"><span class="pre">0xFF</span></code> if the disc uses no network. <strong>Not</strong> Volume ID.</p></td>
 </tr>
 <tr class="row-even"><td><p>28</p></td>
 <td><p>16</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">PROVIDER_ID</span></code></p></td>
-<td><p>ASCII studio tag or 16-byte binary. Input to the persistent-storage provider directory name (below).</p></td>
+<td><p>Provider ID, binary GUID [23 §10.2]. All <code class="docutils literal notranslate"><span class="pre">0xFF</span></code> if the disc uses no provider directory in persistent storage. Discs: ASCII studio tag or 16-byte binary (below). Input to the persistent-storage provider directory name.</p></td>
 </tr>
 <tr class="row-odd"><td><p>44</p></td>
 <td><p>16</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">CONTENT_ID</span></code></p></td>
-<td><p>16-byte UUID</p></td>
+<td><p>Content ID, binary GUID [23 §10.2]. All <code class="docutils literal notranslate"><span class="pre">0xFF</span></code> if the provider directory is not used.</p></td>
 </tr>
 <tr class="row-even"><td><p>60</p></td>
 <td><p>1</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">SEARCH_FLG</span></code></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">0</span></code> = also search persistent storage for <code class="docutils literal notranslate"><span class="pre">VPLST$$$.XPL</span></code>; <code class="docutils literal notranslate"><span class="pre">1</span></code> = disc only</p></td>
+<td><p>Bit 0: <code class="docutils literal notranslate"><span class="pre">0</span></code> = search persistent storage and the disc for the startup playlist; <code class="docutils literal notranslate"><span class="pre">1</span></code> = disc only. Bits 7–1 reserved. Must be <code class="docutils literal notranslate"><span class="pre">1</span></code> when <code class="docutils literal notranslate"><span class="pre">PROVIDER_ID</span></code> and <code class="docutils literal notranslate"><span class="pre">CONTENT_ID</span></code> are all <code class="docutils literal notranslate"><span class="pre">0xFF</span></code></p></td>
 </tr>
 <tr class="row-odd"><td><p>61</p></td>
 <td><p>67</p></td>
@@ -509,15 +513,21 @@ if they fill the field.</p>
 </tr>
 </tbody>
 </table>
-<p><code class="docutils literal notranslate"><span class="pre">SEARCH_FLG</span></code>: 0 on 106 discs, 1 on 13. No other values (<code class="docutils literal notranslate"><span class="pre">e14</span></code>).
+<p>The three IDs are stored as 16 binary bytes, not as text [23 §6.6]. Shown to people
+and in paths, a GUID is the RFC 4122 string in upper case, for example
+<code class="docutils literal notranslate"><span class="pre">F81D4FAE-7DEC-11D0-A765-00A0C91E6BF6</span></code> [23 §10.2].</p>
+<p><code class="docutils literal notranslate"><span class="pre">SEARCH_FLG</span></code>: 0 on 106 discs, 1 on 13. No other values (<code class="docutils literal notranslate"><span class="pre">e14</span></code>). A player in
+Restricted Mode treats it as <code class="docutils literal notranslate"><span class="pre">1</span></code> (<a class="reference internal" href="10_playback.html"><span class="std std-doc">10</span></a>, [23 Annex X.4.2]).
 Reserved 61–127: <strong>zeros 119/119</strong> (<code class="docutils literal notranslate"><span class="pre">e11</span></code>). A non-zero byte is a different format
 version. Fail closed.</p>
 <p>Disc ID &#64;12: <code class="docutils literal notranslate"><span class="pre">0xFF</span></code>×16 on <strong>109</strong>, other (UUID-shaped) on <strong>10</strong> (<code class="docutils literal notranslate"><span class="pre">e14</span></code>).
 <code class="docutils literal notranslate"><span class="pre">PROVIDER_ID</span></code>: 9 distinct ASCII tags (95 discs) + <strong>24 binary</strong>. Binary shapes
 include all-<code class="docutils literal notranslate"><span class="pre">FF</span></code>, UUID-like 16 bytes, and mixed (<code class="docutils literal notranslate"><span class="pre">BROTHERS_GRIMM</span></code> ends <code class="docutils literal notranslate"><span class="pre">SLY</span></code>).
-On an AACS disc the provider’s persistent-storage directory is <strong>not</strong> named
-<code class="docutils literal notranslate"><span class="pre">PROVIDER_ID</span></code>: it is <code class="docutils literal notranslate"><span class="pre">PROVIDER_DIR</span> <span class="pre">=</span> <span class="pre">AES-G(KDIR,</span> <span class="pre">PROVIDER_ID)</span></code> written as a GUID,
-with <code class="docutils literal notranslate"><span class="pre">KDIR</span></code> from the DKF (<a class="reference internal" href="09_aacs.html"><span class="std std-doc">09</span></a> §9.4, [4 §6.3]). Scripts never see it; they
+The book wants a binary GUID [23 §6.6]; the ASCII tags are still 16 bytes and work
+the same way. The book names the provider’s persistent-storage directory with the
+Provider ID [23 §10.3.2]. On an AACS disc it is <strong>not</strong> named <code class="docutils literal notranslate"><span class="pre">PROVIDER_ID</span></code>: it is
+<code class="docutils literal notranslate"><span class="pre">PROVIDER_DIR</span> <span class="pre">=</span> <span class="pre">AES-G(KDIR,</span> <span class="pre">PROVIDER_ID)</span></code> written as a GUID, with <code class="docutils literal notranslate"><span class="pre">KDIR</span></code> from the
+DKF (<a class="reference internal" href="09_aacs.html"><span class="std std-doc">09</span></a> §9.4, [4 §6.3]). Scripts never see it; they
 use <code class="docutils literal notranslate"><span class="pre">file:///required/{contentId}/</span></code> (<a class="reference internal" href="05_manifest_hdi.html"><span class="std std-doc">05</span></a> §5.8).</p>
 </section>
 <section id="observed-provider-id-tags-ascii">
@@ -534,17 +544,27 @@ image was processed; see <a class="reference internal" href="09_aacs.html"><span
 </section>
 <section id="player-use">
 <h2>2.3 Player use<a class="headerlink" href="#player-use" title="Link to this heading"></a></h2>
+<p>The book’s startup sequence [23 §4.3.22.2, §10.3.2]:</p>
 <ol class="arabic simple">
 <li><p>Read <code class="docutils literal notranslate"><span class="pre">PROVIDER_ID</span></code>, <code class="docutils literal notranslate"><span class="pre">CONTENT_ID</span></code>, <code class="docutils literal notranslate"><span class="pre">SEARCH_FLG</span></code>.</p></li>
-<li><p>If <code class="docutils literal notranslate"><span class="pre">SEARCH_FLG</span> <span class="pre">==</span> <span class="pre">0</span></code>, search persistent storage for <code class="docutils literal notranslate"><span class="pre">VPLST000.XPL</span></code>…<code class="docutils literal notranslate"><span class="pre">VPLST999.XPL</span></code>
-under that provider/content.</p></li>
+<li><p>If the player is connected to a display, look for <code class="docutils literal notranslate"><span class="pre">VPLST$$$.XPL</span></code>; otherwise for
+<code class="docutils literal notranslate"><span class="pre">APLST###.XPL</span></code> (same steps, <code class="docutils literal notranslate"><span class="pre">000</span></code>–<code class="docutils literal notranslate"><span class="pre">999</span></code>).</p></li>
+<li><p>If <code class="docutils literal notranslate"><span class="pre">SEARCH_FLG</span> <span class="pre">==</span> <span class="pre">0</span></code>, search every connected persistent storage device for
+<code class="docutils literal notranslate"><span class="pre">/HD_DVD/&lt;Provider</span> <span class="pre">ID&gt;/&lt;Content</span> <span class="pre">ID&gt;/VPLST$$$.XPL</span></code>.</p></li>
 <li><p>Search <code class="docutils literal notranslate"><span class="pre">ADV_OBJ/</span></code> (not subdirectories) for <code class="docutils literal notranslate"><span class="pre">VPLST$$$.XPL</span></code>.</p></li>
-<li><p>Open the file with the <strong>highest</strong> <code class="docutils literal notranslate"><span class="pre">$$$</span></code> among files that exist.
-Empty persistent storage under <code class="docutils literal notranslate"><span class="pre">SEARCH_FLG=0</span></code> still boots the disc playlist.</p></li>
+<li><p>Open the file with the <strong>highest</strong> <code class="docutils literal notranslate"><span class="pre">$$$</span></code> among all files found.
+Empty persistent storage under <code class="docutils literal notranslate"><span class="pre">SEARCH_FLG=0</span></code> still boots the disc playlist.
+No <code class="docutils literal notranslate"><span class="pre">VPLST</span></code> at all: run the same search for <code class="docutils literal notranslate"><span class="pre">APLST</span></code>. Neither: failure, and what
+happens next is up to the player.</p></li>
 </ol>
+<p>A playlist read from persistent storage comes with its Assignment Information File
+(<code class="docutils literal notranslate"><span class="pre">VPSAI$$$.TXT</span></code> / <code class="docutils literal notranslate"><span class="pre">APSAI###.TXT</span></code>, same directory, same number), which maps Base Paths
+to additional storage devices [23 §10.6]. In Restricted Mode the persistent-storage
+search is skipped, and a persistent-storage playlist must be signed like the disc
+[23 Annex X.2.1, X.4.2].</p>
 <p>See <a class="reference internal" href="10_playback.html"><span class="std std-doc">10_playback.md</span></a>.
-<code class="docutils literal notranslate"><span class="pre">[1]</span></code>
-<code class="docutils literal notranslate"><span class="pre">[11,</span> <span class="pre">12]</span></code> <strong>VERIFIED</strong> (disc half). P-storage search <strong>INFERRED</strong> (0 specimens).</p>
+<code class="docutils literal notranslate"><span class="pre">[1]</span></code> <code class="docutils literal notranslate"><span class="pre">[23</span> <span class="pre">§4.3.22.2]</span></code>
+<code class="docutils literal notranslate"><span class="pre">[11,</span> <span class="pre">12]</span></code> <strong>VERIFIED</strong> (disc half). P-storage search <strong>SPEC</strong> [23]; 0 specimens.</p>
 </section>
 </section>
 

@@ -551,18 +551,29 @@ ISO URL is line 1 of that listing.</p>
 <tr class="row-odd"><td><p>Official “is this HD DVD?” MMC probe</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">CONFIGURATION</span></code> current profile <strong><code class="docutils literal notranslate"><span class="pre">0x0050</span></code></strong> = HD DVD-ROM (<code class="docutils literal notranslate"><span class="pre">0x0051</span></code> HD DVD-R, <code class="docutils literal notranslate"><span class="pre">0x0052</span></code> HD DVD-RAM) [21]. Drive-level, not exercised on an ISO</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ADV_OBJ/</span></code> contains <code class="docutils literal notranslate"><span class="pre">VPLST*.XPL</span></code> (not in subdirectories)</p></td>
-<td><p><strong>Category 2 or 3</strong> → this spec</p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ADV_OBJ/DISCID.DAT</span></code> exists</p></td>
+<td><p><strong>Category 2 or 3</strong> → this spec. The book’s test [23 §4.1.1]; DISCID.DAT is required on every Category 2/3 disc</p></td>
 </tr>
-<tr class="row-odd"><td><p>No playlist; <code class="docutils literal notranslate"><span class="pre">HVDVD_TS/HV000I01.IFO</span></code> magic <code class="docutils literal notranslate"><span class="pre">HVDVD-VMG100</span></code></p></td>
+<tr class="row-odd"><td><p>No DISCID; <code class="docutils literal notranslate"><span class="pre">HVDVD_TS/HV000I01.IFO</span></code> magic <code class="docutils literal notranslate"><span class="pre">HVDVD-VMG100</span></code>, <code class="docutils literal notranslate"><span class="pre">VMG_CAT</span></code> b3–b0 = no Advanced VTS</p></td>
 <td><p>Category 1 (Standard Content); <strong>out of scope</strong></p></td>
 </tr>
-<tr class="row-even"><td><p>Both playlist and Standard VMG</p></td>
+<tr class="row-even"><td><p>Neither</p></td>
+<td><p>player-dependent [23 §4.1.1]</p></td>
+</tr>
+<tr class="row-odd"><td><p>Advanced Content plus Standard VTSs</p></td>
 <td><p>Category 3; <strong>0/120</strong> here</p></td>
 </tr>
 </tbody>
 </table>
-<p>Audio-only players search <code class="docutils literal notranslate"><span class="pre">APLST###.XPL</span></code> instead. <strong>0</strong> such files in this corpus.</p>
+<p>Category 1 is Standard Content only; Category 2 is Advanced Content only (no VMG, no
+Standard VTS); Category 3 is Advanced Content that may also play Standard VTSs.
+A Category 3 disc always starts in Advanced Content and moves to Standard Content
+through the script <code class="docutils literal notranslate"><span class="pre">StandardContentPlayer</span></code> object; Standard Content returns with the
+<code class="docutils literal notranslate"><span class="pre">CallAdvancedContentPlayer</span></code> navigation command; SPRMs and GPRMs are shared
+[23 §3.1, §4.3.22.4].</p>
+<p>The startup playlist is <code class="docutils literal notranslate"><span class="pre">VPLST$$$.XPL</span></code> for a player connected to a display and
+<code class="docutils literal notranslate"><span class="pre">APLST###.XPL</span></code> for a player without one (Display Mode system parameter) [23 §3.3.2,
+§4.3.22.2]. <strong>0</strong> <code class="docutils literal notranslate"><span class="pre">APLST</span></code> files in this corpus.</p>
 <p><code class="docutils literal notranslate"><span class="pre">[1]</span></code>
 <code class="docutils literal notranslate"><span class="pre">[11,</span> <span class="pre">12]</span></code> <strong>VERIFIED</strong> as disc classification. <code class="docutils literal notranslate"><span class="pre">[21]</span></code> The official drive probe is <code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">CONFIGURATION</span></code> → current profile <code class="docutils literal notranslate"><span class="pre">0x0050</span></code> (HD DVD-ROM); an ISO cannot answer it, the directory test does.</p>
 </section>
@@ -622,7 +633,7 @@ ISO URL is line 1 of that listing.</p>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">HVA00001.BUP</span></code></p></td>
 <td><p>36 saved</p></td>
-<td><p>Byte-identical copy of the VTI (<code class="docutils literal notranslate"><span class="pre">e08</span></code>, 0 differ)</p></td>
+<td><p>Byte-identical copy of the VTI (<code class="docutils literal notranslate"><span class="pre">e08</span></code>, 0 differ). Optional [23 §3.3.2]</p></td>
 <td><p>same as VTI; player fallback not observed</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">*.MAP</span></code></p></td>
@@ -632,7 +643,7 @@ ISO URL is line 1 of that listing.</p>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">*.BUP</span></code> next to a MAP</p></td>
 <td><p><strong>773 saved</strong> (more may be listed)</p></td>
-<td><p>Byte-identical copy of the MAP (<code class="docutils literal notranslate"><span class="pre">e08</span></code>, 0 differ)</p></td>
+<td><p>Byte-identical copy of the MAP (<code class="docutils literal notranslate"><span class="pre">e08</span></code>, 0 differ). Optional</p></td>
 <td><p>same as MAP</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">*.EVO</span></code></p></td>
@@ -643,9 +654,15 @@ ISO URL is line 1 of that listing.</p>
 </tbody>
 </table>
 <p>Clip basenames are free-form (<code class="docutils literal notranslate"><span class="pre">FEATURE_1</span></code>, <code class="docutils literal notranslate"><span class="pre">EVOB002</span></code>, <code class="docutils literal notranslate"><span class="pre">PEVOB</span></code>). The playlist <code class="docutils literal notranslate"><span class="pre">src</span></code>
-is the <strong><code class="docutils literal notranslate"><span class="pre">.MAP</span></code></strong>, never the <code class="docutils literal notranslate"><span class="pre">.EVO</span></code>. The EVO filename is in EVOBI (<a class="reference internal" href="#document-06_vti"><span class="std std-doc">06</span></a>);
-in practice the sibling of <code class="docutils literal notranslate"><span class="pre">FOO.MAP</span></code> is <code class="docutils literal notranslate"><span class="pre">FOO.EVO</span></code>.</p>
-<p><code class="docutils literal notranslate"><span class="pre">HVSO&#64;&#64;&#64;&#64;.MAP</span></code> (Standard VTS map referenced from Advanced): <strong>0/120</strong>.
+is the <strong><code class="docutils literal notranslate"><span class="pre">.MAP</span></code></strong>, never the <code class="docutils literal notranslate"><span class="pre">.EVO</span></code>. The EVO filename is in EVOBI (<a class="reference internal" href="#document-06_vti"><span class="std std-doc">06</span></a>).
+The book fixes the pairing: a map has the same name body as its EVOB file, with
+extension <code class="docutils literal notranslate"><span class="pre">MAP</span></code>; its backup has the same body with extension <code class="docutils literal notranslate"><span class="pre">BUP</span></code> [23 §3.3.2].</p>
+<p>One Advanced VTS holds up to 1998 EVOBs. An EVOB in a Contiguous Block is one <code class="docutils literal notranslate"><span class="pre">.EVO</span></code>
+file with its own <code class="docutils literal notranslate"><span class="pre">.MAP</span></code>. All EVOBs of one Interleaved Block share one <code class="docutils literal notranslate"><span class="pre">.EVO</span></code> file and
+one <code class="docutils literal notranslate"><span class="pre">.MAP</span></code> [23 §3.3.1].</p>
+<p><code class="docutils literal notranslate"><span class="pre">HVS0&#64;&#64;&#64;&#64;.MAP</span></code> (the map of a Standard VTS played from Advanced Content, Category 3;
+<code class="docutils literal notranslate"><span class="pre">&#64;&#64;&#64;&#64;</span></code> = <code class="docutils literal notranslate"><span class="pre">0001</span></code>–<code class="docutils literal notranslate"><span class="pre">1998</span></code>, the EVOB index of that EVOBI and TMAP) [23 §3.3.2]: <strong>0/120</strong>.
+The Standard VTS’s PCI and HLI are ignored in that case [23 §3.2].
 Four <code class="docutils literal notranslate"><span class="pre">*_load.log</span></code> / <code class="docutils literal notranslate"><span class="pre">*_verify.log</span></code> files exist under <code class="docutils literal notranslate"><span class="pre">HVDVD_TS/</span></code> (<code class="docutils literal notranslate"><span class="pre">e06</span></code>). Authoring debris; ignore.
 <code class="docutils literal notranslate"><span class="pre">[11,</span> <span class="pre">12]</span></code> <strong>VERIFIED</strong></p>
 </section>
@@ -662,60 +679,65 @@ Four <code class="docutils literal notranslate"><span class="pre">*_load.log</sp
 <tbody>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">DISCID.DAT</span></code></p></td>
 <td><p>119</p></td>
-<td><p>Config File, always 128 bytes</p></td>
+<td><p>Configuration File, always 128 bytes. Required directly in <code class="docutils literal notranslate"><span class="pre">ADV_OBJ/</span></code> even when the disc uses no network or persistent storage [23 §3.3.2]</p></td>
 <td><p><a class="reference internal" href="#document-02_discid"><span class="std std-doc">02_discid.md</span></a></p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">VPLST$$$.XPL</span></code></p></td>
 <td><p>247</p></td>
-<td><p>Playlist. <code class="docutils literal notranslate"><span class="pre">$$$</span></code> = 000–999</p></td>
+<td><p>Startup playlist for a player with a display. <code class="docutils literal notranslate"><span class="pre">$$$</span></code> = 000–999, highest wins. Must be directly in <code class="docutils literal notranslate"><span class="pre">ADV_OBJ/</span></code></p></td>
 <td><p><a class="reference internal" href="#document-03_playlist"><span class="std std-doc">03_playlist.md</span></a></p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">VPLST$$$.BAK</span></code></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">*.XPL</span></code> / <code class="docutils literal notranslate"><span class="pre">*.xpl</span></code> elsewhere under <code class="docutils literal notranslate"><span class="pre">ADV_OBJ/</span></code></p></td>
+<td><p>—</p></td>
+<td><p>Other playlists (loaded by script, <code class="docutils literal notranslate"><span class="pre">IPlaylist.load</span></code>); subdirectories allowed [23 §3.3.2]</p></td>
+<td><p><a class="reference internal" href="#document-03_playlist"><span class="std std-doc">03</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">VPLST$$$.BAK</span></code></p></td>
 <td><p>3</p></td>
 <td><p>Not in the boot search (<code class="docutils literal notranslate"><span class="pre">.XPL</span></code> only)</p></td>
 <td><p>ignore for boot</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">APLST###.XPL</span></code></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">APLST###.XPL</span></code></p></td>
 <td><p>0</p></td>
-<td><p>Audio-only playlist</p></td>
+<td><p>Startup playlist for a player without a display</p></td>
 <td><p>unused</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">*.ACA</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">*.ACA</span></code></p></td>
 <td><p>409</p></td>
 <td><p>Application archive</p></td>
 <td><p><a class="reference internal" href="#document-04_aca"><span class="std std-doc">04_aca.md</span></a></p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">*.XMF</span></code></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">*.XMF</span></code></p></td>
 <td><p>3 loose + inside ACA</p></td>
 <td><p>Manifest</p></td>
 <td><p><a class="reference internal" href="#document-05_manifest_hdi"><span class="std std-doc">05_manifest_hdi.md</span></a></p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">*.XMU</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">*.XMU</span></code></p></td>
 <td><p>2 loose + inside ACA</p></td>
 <td><p>HDi markup</p></td>
 <td><p><a class="reference internal" href="#document-05_manifest_hdi"><span class="std std-doc">05</span></a></p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">*.JS</span></code></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">*.JS</span></code></p></td>
 <td><p>3 loose + inside ACA</p></td>
 <td><p>ECMAScript</p></td>
 <td><p><a class="reference internal" href="#document-05_manifest_hdi"><span class="std std-doc">05</span></a></p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">*.PNG</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">*.PNG</span></code></p></td>
 <td><p>72</p></td>
 <td><p>Icons / resources</p></td>
 <td><p>standard PNG</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">*.TTF</span></code></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">*.TTF</span></code></p></td>
 <td><p>1 loose</p></td>
 <td><p>Font</p></td>
 <td><p>standard</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">*.CER</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">*.CER</span></code></p></td>
 <td><p>10</p></td>
-<td><p><strong>Standard X.509 DER certificates</strong> (<code class="docutils literal notranslate"><span class="pre">30</span> <span class="pre">82…</span></code>). TLS trust anchors for the HDi network layer (<code class="docutils literal notranslate"><span class="pre">IHTTPClient</span></code>/HTTPS to studio servers). Sample <code class="docutils literal notranslate"><span class="pre">dynamichd.cer</span></code> = <em>Thawte Premium Server CA</em> root [15]. Not AACS <code class="docutils literal notranslate"><span class="pre">CONTENT_CERT</span></code>. <strong>Not used by linear playback.</strong> Ignore.</p></td>
+<td><p><strong>Standard X.509 DER certificates</strong> (<code class="docutils literal notranslate"><span class="pre">30</span> <span class="pre">82…</span></code>). Book: X.509v3, directly in <code class="docutils literal notranslate"><span class="pre">ADV_OBJ/</span></code>, for server authentication [23 §3.2, §9.3]. TLS trust anchors for the HDi network layer (<code class="docutils literal notranslate"><span class="pre">IHTTPClient</span></code>/HTTPS to studio servers). Sample <code class="docutils literal notranslate"><span class="pre">dynamichd.cer</span></code> = <em>Thawte Premium Server CA</em> root [15]. Not AACS <code class="docutils literal notranslate"><span class="pre">CONTENT_CERT</span></code>. <strong>Not used by linear playback.</strong> Ignore.</p></td>
 <td><p>X.509</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">Thumbs.db</span></code></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">Thumbs.db</span></code></p></td>
 <td><p>2</p></td>
 <td><p>Junk</p></td>
 <td><p>ignore</p></td>
@@ -723,6 +745,126 @@ Four <code class="docutils literal notranslate"><span class="pre">*_load.log</sp
 </tbody>
 </table>
 <p><code class="docutils literal notranslate"><span class="pre">[11,</span> <span class="pre">12]</span></code> <strong>VERIFIED</strong></p>
+<p><strong>Names and limits under <code class="docutils literal notranslate"><span class="pre">ADV_OBJ/</span></code></strong> [23 §3.3.2]:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Rule</p></th>
+<th class="head"><p>Value</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Subdirectories of <code class="docutils literal notranslate"><span class="pre">ADV_OBJ/</span></code></p></td>
+<td><p>fewer than 512 in total; depth at most 8 below <code class="docutils literal notranslate"><span class="pre">ADV_OBJ/</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>Files</p></td>
+<td><p>at most 512 × 2047 under <code class="docutils literal notranslate"><span class="pre">ADV_OBJ/</span></code>; fewer than 2048 per directory</p></td>
+</tr>
+<tr class="row-even"><td><p>Name characters</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">A–Z</span> <span class="pre">a–z</span> <span class="pre">0–9</span></code>, space, <code class="docutils literal notranslate"><span class="pre">!</span> <span class="pre">$</span> <span class="pre">%</span> <span class="pre">&amp;</span> <span class="pre">'</span> <span class="pre">(</span> <span class="pre">)</span> <span class="pre">+</span> <span class="pre">,</span> <span class="pre">-</span> <span class="pre">.</span> <span class="pre">;</span> <span class="pre">=</span> <span class="pre">&#64;</span> <span class="pre">_</span></code> (ISO 8859-1)</p></td>
+</tr>
+<tr class="row-odd"><td><p>Name length</p></td>
+<td><p>at most 255 characters</p></td>
+</tr>
+<tr class="row-even"><td><p>Case</p></td>
+<td><p>names may mix case; two names in one directory may not differ only in case; a reference must match the case exactly. If the case does not match, behave as if the file is not found (a case-insensitive system may open it)</p></td>
+</tr>
+<tr class="row-odd"><td><p>Zero-byte files</p></td>
+<td><p>allowed</p></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Extensions and MIME types</strong> [23 §3.3.5]. The extension decides the type; each
+extension is all upper or all lower case (<code class="docutils literal notranslate"><span class="pre">Xpl</span></code> is not allowed).</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Extension</p></th>
+<th class="head"><p>MIME type</p></th>
+<th class="head"><p>Content</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">XPL</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">text/hddvdpl+xml</span></code></p></td>
+<td><p>Playlist</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">XMF</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">text/hddvdmf+xml</span></code></p></td>
+<td><p>Manifest</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">XMU</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">text/hddvdmu+xml</span></code></p></td>
+<td><p>Markup</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">XTS</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">text/hddvdts+xml</span></code></p></td>
+<td><p>Timing sheet</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">XSS</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">text/hddvdss+xml</span></code></p></td>
+<td><p>Style sheet</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">XAS</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">text/hddvdas+xml</span></code></p></td>
+<td><p>Advanced Subtitle markup</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">JS</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">application/ecmascript</span></code></p></td>
+<td><p>Script</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">EVO</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">video/evob</span></code></p></td>
+<td><p>Secondary Video Set EVOB</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">MAP</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">application/tmap</span></code></p></td>
+<td><p>Time map</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">BUP</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">application/tmap</span></code></p></td>
+<td><p>Time map backup</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">JPG</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">image/jpeg</span></code></p></td>
+<td><p>Image</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">PNG</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">image/png</span></code></p></td>
+<td><p>Image</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">MNG</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">image/mng</span></code></p></td>
+<td><p>Animation</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">CVI</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">image/cvi</span></code></p></td>
+<td><p>Capture Video image</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">CDW</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">image/cdw</span></code></p></td>
+<td><p>Capture Drawing image</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">WAV</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">audio/x-wav</span></code></p></td>
+<td><p>Effect audio</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">OTF</span></code> <code class="docutils literal notranslate"><span class="pre">TTF</span></code> <code class="docutils literal notranslate"><span class="pre">TTC</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">application/font</span></code></p></td>
+<td><p>Font</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ACA</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">application/archiving</span></code></p></td>
+<td><p>Archive (<a class="reference internal" href="#document-04_aca"><span class="std std-doc">04</span></a>)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">CER</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">application/x-x509-ca-cert</span></code></p></td>
+<td><p>Certificate</p></td>
+</tr>
+<tr class="row-odd"><td><p>anything else</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">application/x-data</span></code></p></td>
+<td><p>Data</p></td>
+</tr>
+</tbody>
+</table>
 </section>
 <section id="disc-uri">
 <h4>1.6 Disc URI<a class="headerlink" href="#disc-uri" title="Link to this heading"></a></h4>
@@ -734,15 +876,20 @@ Four <code class="docutils literal notranslate"><span class="pre">*_load.log</sp
 </pre></div>
 </div>
 <p><code class="docutils literal notranslate"><span class="pre">file:///dvddisc</span></code> is the UDF volume root.</p>
-<p>Patent FIG.20 <strong>drawing</strong> (<code class="docutils literal notranslate"><span class="pre">US20070091495A1</span></code> <code class="docutils literal notranslate"><span class="pre">pages/page-024.png</span></code>) also lists
-<code class="docutils literal notranslate"><span class="pre">file:///filecache/</span></code>, <code class="docutils literal notranslate"><span class="pre">file:///required/</span></code>, <code class="docutils literal notranslate"><span class="pre">file:///additional/</span></code>,
-<code class="docutils literal notranslate"><span class="pre">file:///common/required/</span></code>, <code class="docutils literal notranslate"><span class="pre">file:///common/additional/</span></code>. The <strong>same patent’s
-prose</strong> writes <code class="docutils literal notranslate"><span class="pre">file:///fixed/</span></code> and <code class="docutils literal notranslate"><span class="pre">file:///removable/</span></code> instead. Playlist.xsd
+<p>The book’s URI roots [23 §6.2.2, §4.3.20.4, §10.3.1] match the patent FIG.20
+<strong>drawing</strong> (<code class="docutils literal notranslate"><span class="pre">US20070091495A1</span></code> <code class="docutils literal notranslate"><span class="pre">pages/page-024.png</span></code>): <code class="docutils literal notranslate"><span class="pre">file:///dvddisc/</span></code>,
+<code class="docutils literal notranslate"><span class="pre">file:///filecache/</span></code> (the File Cache’s API area, stored as <code class="docutils literal notranslate"><span class="pre">temp/</span></code>),
+<code class="docutils literal notranslate"><span class="pre">file:///required/</span></code>, <code class="docutils literal notranslate"><span class="pre">file:///additional/&lt;BasePath&gt;/</span></code>,
+<code class="docutils literal notranslate"><span class="pre">file:///common/required/</span></code>, <code class="docutils literal notranslate"><span class="pre">file:///common/additional/&lt;BasePath&gt;/</span></code>. The patent’s
+prose writes <code class="docutils literal notranslate"><span class="pre">file:///fixed/</span></code> and <code class="docutils literal notranslate"><span class="pre">file:///removable/</span></code> instead; the book does not.
+A file inside an archive is <code class="docutils literal notranslate"><span class="pre">file:///&lt;source&gt;/&lt;archive&gt;/&lt;member&gt;</span></code>, for example
+<code class="docutils literal notranslate"><span class="pre">file:///dvddisc/ADV_OBJ/app_0001.aca/app_0001_01.xmu</span></code> [23 §4.3.20.4]. Playlist.xsd
 <code class="docutils literal notranslate"><span class="pre">DataSourceType</span></code> is <code class="docutils literal notranslate"><span class="pre">Disc</span></code> / <code class="docutils literal notranslate"><span class="pre">P-Storage</span></code> / <code class="docutils literal notranslate"><span class="pre">Network</span></code> / <code class="docutils literal notranslate"><span class="pre">FileCache</span></code>. Corpus <code class="docutils literal notranslate"><span class="pre">src</span></code>
 is all <code class="docutils literal notranslate"><span class="pre">file:///dvddisc/</span></code> (<strong>10 620 / 10 620</strong> playlist <code class="docutils literal notranslate"><span class="pre">src</span></code>, <code class="docutils literal notranslate"><span class="pre">e12</span></code>). The persistent-storage <strong>script</strong> URI form is specified:
 <code class="docutils literal notranslate"><span class="pre">file:///required/{contentId}/</span></code> (<a class="reference internal" href="#document-05_manifest_hdi"><span class="std std-doc">05</span></a> §5.8); on the storage medium the player
-nests it as <code class="docutils literal notranslate"><span class="pre">/HD_DVD/&lt;PROVIDER_DIR&gt;/&lt;CONTENT_ID&gt;/</span></code>, with <code class="docutils literal notranslate"><span class="pre">PROVIDER_DIR</span></code> derived from
-<code class="docutils literal notranslate"><span class="pre">PROVIDER_ID</span></code> and the DKF key [4 §6.3] (<a class="reference internal" href="#document-05_manifest_hdi"><span class="std std-doc">05</span></a> §5.8).
+nests it as <code class="docutils literal notranslate"><span class="pre">/HD_DVD/&lt;PROVIDER_DIR&gt;/&lt;CONTENT_ID&gt;/</span></code>. The book names <code class="docutils literal notranslate"><span class="pre">PROVIDER_DIR</span></code> with
+the Provider ID itself [23 §10.3.2]; on an AACS disc the AACS book replaces it with a
+keyed transform of <code class="docutils literal notranslate"><span class="pre">PROVIDER_ID</span></code> [4 §6.3] (<a class="reference internal" href="#document-05_manifest_hdi"><span class="std std-doc">05</span></a> §5.8).
 <code class="docutils literal notranslate"><span class="pre">[11,</span> <span class="pre">12]</span></code> <strong>VERIFIED</strong> (<code class="docutils literal notranslate"><span class="pre">dvddisc</span></code> only)
 <code class="docutils literal notranslate"><span class="pre">[1]</span></code></p>
 </section>
@@ -754,9 +901,13 @@ nests it as <code class="docutils literal notranslate"><span class="pre">/HD_DVD
 Size: <strong>128 bytes</strong> on 119/119 Advanced discs<br />
 Magic: <code class="docutils literal notranslate"><span class="pre">HDDVD-V_CONF</span></code><br />
 This is <strong>not</strong> AACS Volume ID.</p>
+<p>The book calls it the Configuration File. It is required directly in <code class="docutils literal notranslate"><span class="pre">ADV_OBJ/</span></code> on
+every Category 2 and 3 disc. It names the disc’s area in persistent storage and
+identifies the disc to a network server [23 §6.6]. Its presence is what marks a
+disc as Category 2 or 3 [23 §4.1.1].</p>
 <p>The Playlist Manager reads this <strong>before</strong> choosing a playlist.</p>
 <p><code class="docutils literal notranslate"><span class="pre">[11,</span> <span class="pre">12]</span></code> <strong>VERIFIED</strong>
-<code class="docutils literal notranslate"><span class="pre">[1]</span></code></p>
+<code class="docutils literal notranslate"><span class="pre">[1]</span></code> <code class="docutils literal notranslate"><span class="pre">[23</span> <span class="pre">§6.6]</span></code></p>
 <section id="layout">
 <h4>2.1 Layout<a class="headerlink" href="#layout" title="Link to this heading"></a></h4>
 <p>All fields big-endian where numeric. Strings are ASCII, not necessarily NUL-terminated
@@ -772,28 +923,28 @@ if they fill the field.</p>
 <tbody>
 <tr class="row-even"><td><p>0</p></td>
 <td><p>12</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">ID</span></code></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">&quot;HDDVD-V_CONF&quot;</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">CONFIG_ID</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&quot;HDDVD-V_CONF&quot;</span></code>, ISO 8859-1</p></td>
 </tr>
 <tr class="row-odd"><td><p>12</p></td>
 <td><p>16</p></td>
-<td><p>Disc ID (network)</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">0xFF</span></code>×16 on 109 discs; UUID on 10. <strong>Not</strong> Volume ID.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">DISC_ID</span></code></p></td>
+<td><p>Disc ID for the network, binary GUID [23 §9]. All <code class="docutils literal notranslate"><span class="pre">0xFF</span></code> if the disc uses no network. <strong>Not</strong> Volume ID.</p></td>
 </tr>
 <tr class="row-even"><td><p>28</p></td>
 <td><p>16</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">PROVIDER_ID</span></code></p></td>
-<td><p>ASCII studio tag or 16-byte binary. Input to the persistent-storage provider directory name (below).</p></td>
+<td><p>Provider ID, binary GUID [23 §10.2]. All <code class="docutils literal notranslate"><span class="pre">0xFF</span></code> if the disc uses no provider directory in persistent storage. Discs: ASCII studio tag or 16-byte binary (below). Input to the persistent-storage provider directory name.</p></td>
 </tr>
 <tr class="row-odd"><td><p>44</p></td>
 <td><p>16</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">CONTENT_ID</span></code></p></td>
-<td><p>16-byte UUID</p></td>
+<td><p>Content ID, binary GUID [23 §10.2]. All <code class="docutils literal notranslate"><span class="pre">0xFF</span></code> if the provider directory is not used.</p></td>
 </tr>
 <tr class="row-even"><td><p>60</p></td>
 <td><p>1</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">SEARCH_FLG</span></code></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">0</span></code> = also search persistent storage for <code class="docutils literal notranslate"><span class="pre">VPLST$$$.XPL</span></code>; <code class="docutils literal notranslate"><span class="pre">1</span></code> = disc only</p></td>
+<td><p>Bit 0: <code class="docutils literal notranslate"><span class="pre">0</span></code> = search persistent storage and the disc for the startup playlist; <code class="docutils literal notranslate"><span class="pre">1</span></code> = disc only. Bits 7–1 reserved. Must be <code class="docutils literal notranslate"><span class="pre">1</span></code> when <code class="docutils literal notranslate"><span class="pre">PROVIDER_ID</span></code> and <code class="docutils literal notranslate"><span class="pre">CONTENT_ID</span></code> are all <code class="docutils literal notranslate"><span class="pre">0xFF</span></code></p></td>
 </tr>
 <tr class="row-odd"><td><p>61</p></td>
 <td><p>67</p></td>
@@ -802,15 +953,21 @@ if they fill the field.</p>
 </tr>
 </tbody>
 </table>
-<p><code class="docutils literal notranslate"><span class="pre">SEARCH_FLG</span></code>: 0 on 106 discs, 1 on 13. No other values (<code class="docutils literal notranslate"><span class="pre">e14</span></code>).
+<p>The three IDs are stored as 16 binary bytes, not as text [23 §6.6]. Shown to people
+and in paths, a GUID is the RFC 4122 string in upper case, for example
+<code class="docutils literal notranslate"><span class="pre">F81D4FAE-7DEC-11D0-A765-00A0C91E6BF6</span></code> [23 §10.2].</p>
+<p><code class="docutils literal notranslate"><span class="pre">SEARCH_FLG</span></code>: 0 on 106 discs, 1 on 13. No other values (<code class="docutils literal notranslate"><span class="pre">e14</span></code>). A player in
+Restricted Mode treats it as <code class="docutils literal notranslate"><span class="pre">1</span></code> (<a class="reference internal" href="#document-10_playback"><span class="std std-doc">10</span></a>, [23 Annex X.4.2]).
 Reserved 61–127: <strong>zeros 119/119</strong> (<code class="docutils literal notranslate"><span class="pre">e11</span></code>). A non-zero byte is a different format
 version. Fail closed.</p>
 <p>Disc ID &#64;12: <code class="docutils literal notranslate"><span class="pre">0xFF</span></code>×16 on <strong>109</strong>, other (UUID-shaped) on <strong>10</strong> (<code class="docutils literal notranslate"><span class="pre">e14</span></code>).
 <code class="docutils literal notranslate"><span class="pre">PROVIDER_ID</span></code>: 9 distinct ASCII tags (95 discs) + <strong>24 binary</strong>. Binary shapes
 include all-<code class="docutils literal notranslate"><span class="pre">FF</span></code>, UUID-like 16 bytes, and mixed (<code class="docutils literal notranslate"><span class="pre">BROTHERS_GRIMM</span></code> ends <code class="docutils literal notranslate"><span class="pre">SLY</span></code>).
-On an AACS disc the provider’s persistent-storage directory is <strong>not</strong> named
-<code class="docutils literal notranslate"><span class="pre">PROVIDER_ID</span></code>: it is <code class="docutils literal notranslate"><span class="pre">PROVIDER_DIR</span> <span class="pre">=</span> <span class="pre">AES-G(KDIR,</span> <span class="pre">PROVIDER_ID)</span></code> written as a GUID,
-with <code class="docutils literal notranslate"><span class="pre">KDIR</span></code> from the DKF (<a class="reference internal" href="#document-09_aacs"><span class="std std-doc">09</span></a> §9.4, [4 §6.3]). Scripts never see it; they
+The book wants a binary GUID [23 §6.6]; the ASCII tags are still 16 bytes and work
+the same way. The book names the provider’s persistent-storage directory with the
+Provider ID [23 §10.3.2]. On an AACS disc it is <strong>not</strong> named <code class="docutils literal notranslate"><span class="pre">PROVIDER_ID</span></code>: it is
+<code class="docutils literal notranslate"><span class="pre">PROVIDER_DIR</span> <span class="pre">=</span> <span class="pre">AES-G(KDIR,</span> <span class="pre">PROVIDER_ID)</span></code> written as a GUID, with <code class="docutils literal notranslate"><span class="pre">KDIR</span></code> from the
+DKF (<a class="reference internal" href="#document-09_aacs"><span class="std std-doc">09</span></a> §9.4, [4 §6.3]). Scripts never see it; they
 use <code class="docutils literal notranslate"><span class="pre">file:///required/{contentId}/</span></code> (<a class="reference internal" href="#document-05_manifest_hdi"><span class="std std-doc">05</span></a> §5.8).</p>
 </section>
 <section id="observed-provider-id-tags-ascii">
@@ -827,17 +984,27 @@ image was processed; see <a class="reference internal" href="#document-09_aacs">
 </section>
 <section id="player-use">
 <h4>2.3 Player use<a class="headerlink" href="#player-use" title="Link to this heading"></a></h4>
+<p>The book’s startup sequence [23 §4.3.22.2, §10.3.2]:</p>
 <ol class="arabic simple">
 <li><p>Read <code class="docutils literal notranslate"><span class="pre">PROVIDER_ID</span></code>, <code class="docutils literal notranslate"><span class="pre">CONTENT_ID</span></code>, <code class="docutils literal notranslate"><span class="pre">SEARCH_FLG</span></code>.</p></li>
-<li><p>If <code class="docutils literal notranslate"><span class="pre">SEARCH_FLG</span> <span class="pre">==</span> <span class="pre">0</span></code>, search persistent storage for <code class="docutils literal notranslate"><span class="pre">VPLST000.XPL</span></code>…<code class="docutils literal notranslate"><span class="pre">VPLST999.XPL</span></code>
-under that provider/content.</p></li>
+<li><p>If the player is connected to a display, look for <code class="docutils literal notranslate"><span class="pre">VPLST$$$.XPL</span></code>; otherwise for
+<code class="docutils literal notranslate"><span class="pre">APLST###.XPL</span></code> (same steps, <code class="docutils literal notranslate"><span class="pre">000</span></code>–<code class="docutils literal notranslate"><span class="pre">999</span></code>).</p></li>
+<li><p>If <code class="docutils literal notranslate"><span class="pre">SEARCH_FLG</span> <span class="pre">==</span> <span class="pre">0</span></code>, search every connected persistent storage device for
+<code class="docutils literal notranslate"><span class="pre">/HD_DVD/&lt;Provider</span> <span class="pre">ID&gt;/&lt;Content</span> <span class="pre">ID&gt;/VPLST$$$.XPL</span></code>.</p></li>
 <li><p>Search <code class="docutils literal notranslate"><span class="pre">ADV_OBJ/</span></code> (not subdirectories) for <code class="docutils literal notranslate"><span class="pre">VPLST$$$.XPL</span></code>.</p></li>
-<li><p>Open the file with the <strong>highest</strong> <code class="docutils literal notranslate"><span class="pre">$$$</span></code> among files that exist.
-Empty persistent storage under <code class="docutils literal notranslate"><span class="pre">SEARCH_FLG=0</span></code> still boots the disc playlist.</p></li>
+<li><p>Open the file with the <strong>highest</strong> <code class="docutils literal notranslate"><span class="pre">$$$</span></code> among all files found.
+Empty persistent storage under <code class="docutils literal notranslate"><span class="pre">SEARCH_FLG=0</span></code> still boots the disc playlist.
+No <code class="docutils literal notranslate"><span class="pre">VPLST</span></code> at all: run the same search for <code class="docutils literal notranslate"><span class="pre">APLST</span></code>. Neither: failure, and what
+happens next is up to the player.</p></li>
 </ol>
+<p>A playlist read from persistent storage comes with its Assignment Information File
+(<code class="docutils literal notranslate"><span class="pre">VPSAI$$$.TXT</span></code> / <code class="docutils literal notranslate"><span class="pre">APSAI###.TXT</span></code>, same directory, same number), which maps Base Paths
+to additional storage devices [23 §10.6]. In Restricted Mode the persistent-storage
+search is skipped, and a persistent-storage playlist must be signed like the disc
+[23 Annex X.2.1, X.4.2].</p>
 <p>See <a class="reference internal" href="#document-10_playback"><span class="std std-doc">10_playback.md</span></a>.
-<code class="docutils literal notranslate"><span class="pre">[1]</span></code>
-<code class="docutils literal notranslate"><span class="pre">[11,</span> <span class="pre">12]</span></code> <strong>VERIFIED</strong> (disc half). P-storage search <strong>INFERRED</strong> (0 specimens).</p>
+<code class="docutils literal notranslate"><span class="pre">[1]</span></code> <code class="docutils literal notranslate"><span class="pre">[23</span> <span class="pre">§4.3.22.2]</span></code>
+<code class="docutils literal notranslate"><span class="pre">[11,</span> <span class="pre">12]</span></code> <strong>VERIFIED</strong> (disc half). P-storage search <strong>SPEC</strong> [23]; 0 specimens.</p>
 </section>
 </section>
 <span id="document-03_playlist"></span><section id="playlist-vplst-xpl">
