@@ -29,7 +29,7 @@ separate gap.
    (`IPlaylist.load` / `play` / `pause`, `ITitle.jump`, `Player.menuLanguage`,
    events).
 7. Graphics plane composited over scaled main video in the Aperture.
-8. ADV_PCK `0x80` → File Cache when packs exist; always load `src` (slot may
+8. ADV_PCK `0x80` → File Cache when packs exist; always load `src` (identifier may
    be absent from that EVO; see [08](08_evo.md) §8.6).
 9. Persistent-storage URI grammar for apps that `IPlaylist.load` a P-storage
    `VPLST` (PREMONITION).
@@ -61,9 +61,9 @@ Manifests are usually members of an ACA ([04](04_aca.md)).
 | | |
 |---|---|
 | Namespace | `http://www.dvdforum.org/2005/HDDVDVideo/Manifest` |
-| Schema | `spec/raw/adv_obj/v1.0/Manifest.xsd` (Spec. 6.2.4.2); v1.1 is identical |
+| Schema | `spec/raw/adv_obj/v1.0/Manifest.xsd` (Spec. 6.2.4.2); v1.1 is identical. Book: [23 §6.2.4] |
 | Root element | `Application` |
-| Encoding | UTF-8, optionally with a byte-order mark |
+| Encoding | UTF-8, optionally with a byte-order mark, or UTF-16 with one [23 §6.2.1] |
 
 ### Document tree
 
@@ -98,7 +98,9 @@ Application     @id?  @xml:base?                 the application
 **`Region`** (exactly 1, first child). Where the application draws when it
 starts: the values are the region's **initial** position and size. The canvas
 is the graphics plane; its size comes from the playlist's `Aperture`
-([03](03_playlist.md) §3.5). No children.
+([03](03_playlist.md) §3.5). The region is the application's own coordinate
+system, with (0,0) at its top-left; anything drawn outside it is clipped. Script
+may move the region but not resize it [23 §7.3.1.1]. No children.
 
 | Attribute | Type | Req. | What it is for |
 |---|---|---|---|
@@ -111,7 +113,7 @@ is the graphics plane; its size comes from the playlist's `Aperture`
 
 | Attribute | Type | Req. | What it is for |
 |---|---|---|---|
-| `src` | URI | yes | An ECMAScript (`.js`) file, evaluated as global code during start-up |
+| `src` | URI | yes | An ECMAScript (`.js`) file, evaluated as global code during start-up, in document order; all scripts share one execution context for the application's life [23 §6.2.4, §7.2.2] |
 | `id` | ID | no | Name of this entry |
 
 **`Markup`** (0 or 1). The first page the application shows. Absent for
@@ -119,7 +121,7 @@ script-only applications. No children.
 
 | Attribute | Type | Req. | What it is for |
 |---|---|---|---|
-| `src` | URI | yes | The **initial** markup page (`.xmu`, §5.2). Later pages are loaded by script |
+| `src` | URI | yes | The **initial** markup page (`.xmu`, §5.2), loaded after the scripts have run. Later pages are loaded by script or `link` |
 | `id` | ID | no | Name of this entry |
 
 **`Resource`** (1 or more, last). A file the application uses. No children.
@@ -134,7 +136,11 @@ script-managed (API Managed) area of the File Cache. Each `src` must be the
 absolute URI of one of the playlist's resources (`ApplicationResource`,
 `TitleResource` or `PlaylistApplicationResource` `src`,
 [03](03_playlist.md) §3.14): the playlist decides when files are loaded, the
-manifest says which of them this application uses.
+manifest says which of them this application uses. A `Resource` for the manifest
+itself may be left out. The application is activated only once every listed
+resource is in the File Cache [23 §6.2.4]. A file the application needs that is
+not in the File Cache is an error: the application is terminated as if its valid
+period had ended [23 §7.3].
 
 `Script` and `Markup` say **what to run**; `Resource` says **what to load**. The
 file a `Script` or `Markup` names is always loadable through the `Resource` list:
@@ -231,7 +237,25 @@ Used `ihd#state` (`e27`): `value` 113, `focused` 33, `enabled` 1. Markup rarely 
 
 **Clocks.** `timing@clock` (`e27`): `page` 68, `application` 9, `title` 3, omitted 8.
 
-The three clock types (Microsoft HDi Jumpstart [14], *Dissecting Chapters*):
+The book defines them [23 §7.2.3, §7.2.4]. Every tick carries all three values.
+
+- **application clock**: ticks since the start of the presentation of the
+  application's first markup page; never stops, never repeats, independent of the
+  title timeline.
+- **page clock**: ticks since the current page started; reset to zero at each
+  page change; otherwise like the application clock.
+- **title clock**: the title timeline position minus the start of the
+  application's valid period. Stops while the timeline is paused, runs fast or
+  slow in trick play, jumps when the timeline jumps, and may repeat or go
+  backwards.
+
+The tick rate is `TitleSet@tickBase` divided by `Title@tickBaseDivisor`
+([03](03_playlist.md) §3.7–3.8). A timed element follows the title clock unless
+its `timing@clock` says otherwise. A jump into the valid period restarts the
+application (both application and page clocks at zero); a jump within it only
+moves the title clock; a jump out of it ends the application.
+
+Jumpstart's description [14], *Dissecting Chapters*, agrees:
 
 - **title clock**: locked to media time, *"when cues should occur at specific timecodes
   during the movie"* (in-movie experiences such as Warner IME and Universal U-Control).
@@ -250,8 +274,7 @@ at exclusive `titleTimeEnd`.
 `ApplicationSegment@sync` [1]: `hard` holds the Title Timeline until File Cache load and
 startup finish; `soft` lets the timeline run, so the app may miss its window.
 
-`[11, 12]` **VERIFIED** (title and page clocks from Jumpstart; independence from patent).
-`[5]` application-clock lifetime and `[1]` pause behaviour are **INFERRED**.
+`[23 §7.2.3]` **SPEC**; `[11, 12]` **VERIFIED** (clock usage on disc).
 
 **Cue.** `begin`/`end` are `TimeOrPathExpressionType` (iHD.xsd): either
 `HH:MM:SS:FF` / `NNh|m|s|ms|f`, or a path. Retail menus use XPath:
@@ -276,8 +299,10 @@ subset, not a general XPath 1.0 engine.
 **Mapping vs cues (A40).** `ApplicationSegment@titleTimeBegin` / `@titleTimeEnd`
 decide whether the app is on the Title Timeline. Cues run only while that
 app is active. If a cue time and the mapping disagree, **mapping wins**:
-there is no app to tick. Soft-sync apps may miss their window (Q52).
-`[11, 12]` The mapping fields are **VERIFIED**; the rule that mapping (not cue time) gates whether an app ticks is **INFERRED** (Annex Z unpublished).
+there is no app to tick. Soft-sync apps may miss their window (Q52). The book
+says the same: an application cannot run outside its valid interval, and each of
+its pages is valid for the whole interval [23 §7.2.4.1, §7.2.4.3].
+`[23]` **SPEC**; `[11, 12]` **VERIFIED** (mapping fields).
 
 **Layout (used attrs only).** Implement §5.9. `x`,`y`,`width`,`height` are
 aperture pixels (Configuration Aperture 1920×1080 on 247/247). `position` is
@@ -294,44 +319,53 @@ Full element/attribute list remains the XSD. Do not invent a second schema.
 
 ## 5.3 Script
 
-Compact-profile ECMAScript (no `with`, no `eval`; no optional methods such as
-`substr`) talking to the HDi type library
-(`spec/raw/adv_obj/iHD_Scripting_API.txt`, 106 typeinfos).
-`[14]`
+Compact-profile ECMAScript (ECMA-327 on ECMA-262 edition 3) talking to the HDi
+API [23 §8.2, Annex Z] (type library: `spec/raw/adv_obj/iHD_Scripting_API.txt`,
+106 typeinfos). The book's restrictions: `eval()`, `Function()` and
+`new Function()` throw `EvalError`; `with` is a syntax error; there is **no
+automatic semicolon insertion** (a missing semicolon is a syntax error), though an
+empty function body is allowed; host objects cannot gain or lose properties
+(except application events); the global object has a `global` property that is
+itself. Character set Unicode 3.0. See [12](12_hdi_scripting_abi.md) for the API.
+`[23 §8.2]` `[14]`
 
 **Encoding:** UTF-16BE with BOM `FE FF` on **every** saved `.js` (`e15` N=122),
-including the three loose `1408` files. Do not sniff UTF-8 for script.
+including the three loose `1408` files. The book requires exactly that
+[23 §8.2.1]. Do not sniff UTF-8 for script.
 
 Playback surface actually **called** on saved discs (`e15`):
 
 | Call | Signature (disc + Jumpstart) |
 |---|---|
 | `Player.playlist.load(uri)` | string, full URI (`file:///dvddisc/ADV_OBJ/VPLST$$$.XPL` or `psUrl+name`) |
-| `ITitle.jump(time, pause)` | `time` = `HH:MM:SS:FF`; `pause` boolean. Saved sources: **always `false`** |
-| `IChapter.jump(time, pause)` | same. Index: `Player.playlist.titles["id"]` or `.chapters[n]` |
+| `ITitle.jump(time, bookmark)` | `time` = `HH:MM:SS:FF` within the title; `bookmark` boolean: `true` saves a bookmark (`Player.bookmark.save()`) before jumping [23 Annex Z.10.13]. Saved sources: **always `false`** |
+| `IChapter.jump(time, bookmark)` | same, time relative to the chapter. Index: `Player.playlist.titles["id"]` or `.chapters[n]` |
 | `Player.playlist.play()` / `.pause` | distinct from `jump`. `1408` chapter handler: `jump(..., false)` then `play()` after hiding the menubar |
 | `Player.playlist.currentTitle.elapsedTime` | `HH:MM:SS:FF` string |
-| `application.createTimer(time, type, cb)` | `time` = `HH:MM:SS:FF` interval. `type` is `1` (150/151 sites) or `TIMER_APPLICATION` (1). `1` = title-timeline clock (fail-closed `TIMER_TITLE`; that name is unused in JS). Owner is `application.` (127 sites; 24 bare are continuation lines of the same). Returns `ITimer`: set `.enabled` (true 155 / false 74) and `.autoReset`. **`.autoReset` is `false` (one-shot) on 142 sites but `true` on 7**, all `resumeStoreTimer`, a `00:00:15:00` periodic resume-position saver. **Honor `autoReset` as written; do not assume one-shot.** `[11, 12]` VERIFIED |
+| `application.createTimer(ticks, type, cb)` | `ticks` = `HH:MM:SS:FF` interval. `type` is `1` (150/151 sites) or `TIMER_APPLICATION` (1): **`1` is the application clock**; `TIMER_TITLE` = `2` is the title clock, which stops while the timeline holds, does not fire in trick play, restarts its count after it, and is refused (`HDDVD_E_ARGUMENT`) for a Playlist Application [23 Annex Z.1.1, Z.2.2]. Owner is `application.` (127 sites; 24 bare are continuation lines of the same). Returns `ITimer`: `.enabled` starts `false` (true 155 / false 74 set on disc), `.autoReset` starts `true`, `.interval` resets the count when changed. **`.autoReset` is `false` (one-shot) on 142 sites but `true` on 7**, all `resumeStoreTimer`, a `00:00:15:00` periodic resume-position saver. A one-shot timer clears `enabled` after it fires. `[23]` **SPEC**; `[11, 12]` VERIFIED |
 | `Player.video.main.changeLayout(x, y, scale, cropX, cropY, cropW, cropH, time)` | **always 8 args** (101/101). `scale` = `Player.createVideoScale(num, den)` or `null`. Used: `(96,166,createVideoScale(1,1),0,0,720,480,"00:00:00:00")` ×67 (SD window); `(0,0,null,0,0,1920,1080,"00:00:00:00")` ×30 (full aperture). `createVideoScale` is **only** `(1,1)` (71/71) |
-| `addEventListener(name, fn, bool)` | markup `event@name`, plus `controller_key_down`, `application_end` |
+| `addEventListener(name, fn, bool)` | markup `event@name`, plus the system event types of [23 Annex Z.6.2] ([12](12_hdi_scripting_abi.md) §12.2): on disc `controller_key_down` 58, `chapter` 48, `scheduled_event` 14, `title_begin` 9, `title_end` 8, `play_state` 7, `audio_track` 6, `controller_key_up` 5, `subtitle_track` 5, `stop_request` 2 |
 | `Player.menuLanguage` | two-letter (`en`/`fr`/`ja`/`de`). Selectors `switch` on that. Some JS `slice(0,2)` first |
 | `Player.track.selectAudioTrackNumber` / `selectSubtitleTrackNumber` | 1-based |
 | `Player.generalParameters.getValue` / `setValue` | string keys |
-| `PersistentStorageManager.contentId` | GUID string in URI |
+| `PersistentStorageManager.contentId` | GUID string in URI (upper case, §5.8) |
 | `FileIO.getFileInfo` / `remove` / `createDirectory` / `getDirectoryInfo` | P-storage paths |
 | `document.setXPathVariable(name, value)` | binds `$name` for cue path expressions (ARMY_OF_SHADOWS `$sw01`) |
 | `document.getElementById` / `setProperty` | markup nodes from script |
 
-`ITitle.jump` / `IChapter.jump` second argument is **pause-at-destination**
-(fail-closed). `true` → seek then `PLAYSTATE_PAUSE`. `false` → seek and do
-not force pause: a jump that selects another Title starts that title playing
-(`1408` extras/trailers call `jump(..., false)` with no `play()`). If the
-current title was already paused, it stays paused unless script calls
-`Player.playlist.play()` (`1408` chapter buttons: `jump` then `play()` after
-`menubarHide()`). Saved JS never passes `true` (`e15` 258/258 `false`).
-Typelib: `play` / `pause` / `playState` live on `IPlaylist`, not on `jump`.
-`[11]` **INFERRED**
-(Annex Z unpublished; disc call shapes).
+`ITitle.jump` / `IChapter.jump` second argument is **bookmark**, not pause
+[23 Annex Z.10.13.3]. The jump itself: throw `HDDVD_E_INVALIDCALL` while the main
+video is capturing or changing (or a synchronised sub video is changing); throw
+`HDDVD_E_ARGUMENT` if the time is not a valid timecode inside the title; hold the
+title timeline; if `bookmark` is `true`, call `Player.bookmark.save()`; start
+from the new time. A jump **within** the current title keeps the play state (a
+paused title stays paused, the `1408` chapter buttons therefore call `play()`
+after `jump`). A jump to **another** title sets `PLAYSTATE_PLAY` and resets the
+video layout (`1408` extras/trailers call `jump(..., false)` with no `play()`).
+Tracks are re-chosen ([03](03_playlist.md) §3.17). Saved JS never passes `true`
+(`e15` 258/258 `false`). An earlier version of this sheet read the boolean as
+pause-at-destination; the book refutes that.
+`[23]` **SPEC**; `[11]` **VERIFIED** (call shapes).
 
 `IPlaylist.load` / soft reset is how a selector playlist (`VPLST099`) replaces
 itself with `VPLST000` (patent FIG.51). Argument is the **full URI**:
@@ -349,7 +383,13 @@ Player.playlist.load(psUrl + playlist);
 
 `[11, 12]` **VERIFIED**
 Soft reset replaces the playlist document; it is not a disc re-insert (DISCID
-category probe is not re-run).
+category probe is not re-run). The book's update sequence [23 §4.3.22.3]: script
+stores the new playlist (File Cache for one use, persistent storage to keep it),
+the soft reset registers it, then the player runs Change System Configuration
+(empties File Cache and Streaming Buffer), restores the new playlist and its
+Assignment Information files into the File Cache, and starts from the timeline
+set-up step. Parameters marked "I" in [23 Annex W] go back to their initial
+values; "K" are kept.
 
 ## 5.4 Runtime (patent FIG.50 steps 6–7)
 
@@ -389,10 +429,10 @@ XPL/DISCID instead ([10](10_playback.md) §10.7).
 | Markup `cue` vs `titleTimeBegin` | A40; §5.2 | specified (mapping wins) |
 | `.CER` / `IHTTPClient` | 10 listed, bodies unsaved | out of gate |
 
-XSD annotations cite unpublished DVD Forum book sections (`Spec. 7.5…`). Those
-numbers are **not** a substitute for writing the engine here. Jumpstart
-(https://learn.microsoft.com/en-us/archive/blogs/amyd/) and Scenarist AC 4.5
-User Guide are the public prose; disc `.xmu` / `.js` win when they disagree.
+XSD annotations cite DVD Forum book sections (`Spec. 7.5…`); those are the
+sections of the v1.01 book [23], now public. Jumpstart
+(https://learn.microsoft.com/en-us/archive/blogs/amyd/) and the Scenarist AC 4.5
+User Guide are other public prose; disc `.xmu` / `.js` win when they disagree.
 
 ## 5.6 Remaining spec work (no firmware)
 
@@ -441,16 +481,25 @@ not raw member bytes.
 `[7]` **INFERRED**
 (authoring tool, not a player dump).
 
-If a conforming title stays ≤ 64 MB, a player does not need an overflow
-policy. When the live reserved `@size` sum would exceed 64 MB: flush
-resources with the **highest** `@priority` first (Scenarist Buffer Flush
-Priority; omitted PlaylistApplicationResource stays; they outlive titles).
-If the new resource still does not fit, **do not load it**. Reference
-decoder strings: `Exceeded cache size! Used: %.3f mb, Available: %.3f mb`
+The book's rules [23 §4.3.20.3–4.3.20.5]: the author guarantees that resources
+in the loading, ready and used states fit in 64 MB minus the Streaming Buffer.
+Space is counted in **512-byte blocks**, `ceil(size / 512)` per file; file-system
+bookkeeping does not count; an `.aca` is one item. At most 2048 resources. When
+space is needed, the File Cache Manager never removes used or ready resources and
+removes the others by priority: the **highest** `@priority` number first, and all
+application resources before any title resource (Scenarist's Buffer Flush
+Priority agrees). It keeps resources as long as it can, so trick play does not
+reload them. If loading the playlist's resources still overflows, the player goes
+to the **Stop** state; a script write that does not fit fails with an error.
+Reference decoder strings: `Exceeded cache size! Used: %.3f mb, Available: %.3f mb`
 and `Insufficient space in file cache`.
-`[10]`
-**INFERRED** as fail-closed (no player dump of an overflowing title).
+`[23]` **SPEC**; `[10]` agrees.
 Conforming authored titles never hit this.
+
+The File Cache root holds the resources (names unique); script-made files live in
+`temp/`, addressed as `file:///filecache/`. Resources are read-only to script;
+the `temp/` area is read-write, has no priorities, and shares the life of the
+application that wrote it [23 §4.3.20.4].
 
 **`IPlaylist.load` (A37).** Follow FIG.51 **body**, not the drawing: Soft
 Reset runs Change System Configuration (wipe File Cache and Streaming
@@ -481,18 +530,44 @@ PREMONITION uses the same concatenation for `VPLST` and `update.txt`.
 
 **Host binding for `contentId`:** DISCID `CONTENT_ID` (16 bytes @44).
 PREMONITION names the value `GUID`. Scenarist “Auto-generate” for Content
-ID. Expose it as lowercase UUID `8-4-4-4-12` hex (`aabbccdd-eeff-…`).
-All-`FF` (10 discs, usually `SEARCH_FLG=1`) is not a usable content
-directory. Skip P-storage search.
-`[11, 12]` **INFERRED**
-(string punctuation; 16 bytes VERIFIED).
+ID. Expose it as the RFC 4122 string in **upper case**, `8-4-4-4-12` hex
+(`F81D4FAE-7DEC-11D0-A765-00A0C91E6BF6`) [23 §10.2]. The sheet earlier said lower
+case; the book says upper. All-`FF` (14 discs: 9 with `SEARCH_FLG=1`, 5 with
+0) is not a usable content directory; skip the P-storage search. The book requires
+`SEARCH_FLG=1` when both IDs are all-`FF` [23 §6.6]; `STALINGRAD` has both all-`FF`
+and flag 0.
+`[23]` **SPEC**; `[11, 12]` 16 bytes **VERIFIED**.
+
+**The book's persistent-storage URIs** [23 §10.3]:
+
+| URI | Area | Physical path |
+|---|---|---|
+| `file:///required/<file>`, `…/<ContentID>/<file>`, `…/<ContentID>/<dir>/<file>` | own provider, required device | `/HD_DVD/<ProviderID>/…` |
+| `file:///additional/<BasePath>/…` (same shapes) | own provider, an additional device | `/HD_DVD/<ProviderID>/…` on that device |
+| `file:///common/required/<file>` or `…/<dir>/<file>` | shared by every provider | `/HD_DVD/common/…` |
+| `file:///common/additional/<BasePath>/…` | shared, additional device | `/HD_DVD/common/…` on that device |
+
+At most one directory level below a Content ID directory or `common/`. Script can
+never open an `info.txt` (Information Files are read through the
+`PersistentStorageManager` API only) or a non-GUID directory directly under the
+provider directory; those accesses fail with file-not-found. The player creates
+`HD_DVD/`, the provider directory and `common/`; applications create Content ID
+directories. `info.txt` files are UTF-16BE with BOM, one `[key]"value"` per line,
+fewer than 1024 keys, keys and values at most 1024 characters; reserved keys
+`<lang>-icon` (a 1024×96 PNG or JPEG in the same directory), `<lang>-explanation`,
+`device-id`. Additional devices get a Base Path (at most 256 characters) through
+the API, recorded in `VPSAI$$$.TXT` / `APSAI###.TXT` next to the playlist as
+`[BasePath]"DeviceID"` lines; an unassigned device is `undefined` and cannot be
+reached [23 §10.4, §10.6].
 
 **FIG.50 VPLST search (`SEARCH_FLG=0`).** Search
 `file:///required/{contentId}/VPLST$$$.XPL` on every connected required
 device, then `ADV_OBJ/VPLST$$$.XPL` on disc, then pick the highest `$$$`.
 Empty P-storage still boots the disc playlist (106 discs).
 
-**Persistent-storage directory layout (AACS book [4 §6.3]).** The player creates
+**Persistent-storage directory layout on an AACS disc (AACS book [4 §6.3]).** The
+DVD Forum book names the provider directory with the Provider ID itself
+[23 §10.3.2]; the AACS book replaces that name. The player creates
 `/HD_DVD/` on the storage medium with `INFO.TXT` (medium information). Each content
 provider gets `/HD_DVD/<PROVIDER_DIR>/`, where `PROVIDER_DIR = AES-G(KDIR,
 PROVIDER_ID)` is written as a GUID; `KDIR` is unwrapped from the disc's DKF
@@ -524,18 +599,24 @@ are 1920×1080 on 247/247 playlists. `style:x` / `y` / `width` / `height` are
 focusable.
 
 **Position.** XSD: `static` | `relative` | `absolute` | `inherit`, default
-`static`. Saved markup: **every** `position` is `absolute` (406/406). For
-this sample, place the box at `(x,y)` in the parent’s content box (the
-root/`body` is the Region). `static`/`relative` remain untranscribed.
+`static`; applies to `div`, `button` and `object` in a block context
+[23 §7.6.3.3.2.47]. Saved markup: **every** `position` is `absolute` (406/406):
+place the box with `anchor` at `(x,y)` in the nearest reference area (the
+root/`body` is the Region). `relative` offsets the box like XSL `left`/`top`;
+`static` follows normal XSL flow and ignores `x`/`y`/`anchor`.
 
 **Anchor.** Default `startBefore`. Used 31 times. XSD 3×3
-(`start|center|end` × `Before|Center|After`, plus token `center`; Spec
-7.6.3.3.2.1). Same names as XSL-FO area alignment: the named point of the
-**border box** sits on `(x,y)`. `writingMode` is unused in the census.
-`start` is left, `before` is top. Even `width`/`height` for a `center*`
-token: integer-floor toward start/before (do not screenshot-measure).
-`[5]` **VERIFIED** (names, default).
-Pixel of even `center` **INFERRED** (fail-closed floor).
+(`start|center|end` × `Before|Center|After`, plus token `center`;
+[23 §7.6.3.3.2.1]). Applies only with `position="absolute"`. The book converts
+`x`, `y`, `width`, `height` to XSL positions with `w0`/`w1` = left/right padding
+plus border and `h0`/`h1` = top/bottom: on each axis, **start/before** puts the
+outer (border) edge at `x`/`y` (left = `x`); **center** puts the content centre
+there (left = `x − (width/2 + w0)`); **end/after** puts the outer far edge there
+(right = container width − `x`). `writingMode` is unused in the census; `start`
+is left, `before` is top. Odd halves: integer-floor toward start/before (do not
+screenshot-measure).
+`[23]` **SPEC**; `[5]` names and default. Pixel of an odd `center` **INFERRED**
+(fail-closed floor).
 
 **Stacking.** `zIndex` default `auto` (used 19). `opacity` default `1.0`
 (`AlphaValueType`, 0–1). `display` `auto`|`none` (default `auto`);
@@ -567,54 +648,73 @@ image inside the box; default `auto` = box size. `scaling` used once
 JPEG/PNG as `object` is legal in the XSD and unused here; those assets are
 `backgroundImage` on `div`/`button`.
 
-**Composite (graphics over video).** Five presentation planes; main video
-is the bottom plane inside the Aperture after `changeLayout` /
-`createVideoScale`. Paint the graphics plane **src-over** that scaled
-YCbCr: PNG per-pixel alpha × object `opacity` (default 1.0).
-`application/x-clearrect` punches alpha 0 in that box (video shows
-through). `zOrder` stacks apps on the graphics plane. Cursor sits above
-graphics. Unmapped ticks: fill `MainVideoDefaultColor`.
-`[2, 3]`
-**INFERRED** (fail-closed overlay; not screenshot-measured).
+**Composite (graphics over video).** Five planes, top to bottom: cursor,
+graphics, sub-picture, sub video, main video [23 §4.3.13.3]. Main video is the
+bottom plane inside the Aperture after `changeLayout` / `createVideoScale`
+(default: fill the Aperture without distortion; 4:3 is centred at full height).
+Paint each plane **src-over** the ones below: graphics alpha = pixel alpha ×
+element `opacity` (default 1.0) [23 §7.3.1.3.1]. Applications draw in `zOrder`
+from 0 upward, each clipped to its Region; elements inside one draw in `zIndex`
+order, ties in document order. `application/x-clearrect` cuts a hole in its box: with
+`param TargetPlane="sub"` through the graphics and sub-picture planes, showing
+the sub video; with `"main"` (the default) also through the sub-video plane,
+showing the main video [23 §7.8.4]. Advanced Subtitle applications draw on the sub-picture plane,
+below every graphics application. Unmapped ticks: fill `MainVideoDefaultColor`.
+`[23]` **SPEC**; `[2, 3]` agree.
 `[11, 12]` **VERIFIED**
 (API / object type). `changeLayout` 8-tuple **VERIFIED** (call sites).
 
-**Focus graph.** `button` and `input` are navigable. `navUp` `navDown`
-`navLeft` `navRight` (and the four diagonals, used 4 each) are
-`NavigationType`: `none` | `inherit` | element `xml:id`. Arrow on the
-remote follows that id; `none` does not move. `navIndex` is used twice, both
-`1408` debug `<input mode="display" style:navIndex="none">`. `none` = skip
-the node in the remote graph. XSD `auto` / `N N` unused.
+**Focus graph** [23 §7.2.5, §7.6.3.3.2.32–40]. `area`, `button` and `input` take
+the focus. `navUp` `navDown` `navLeft` `navRight` (and the four diagonals, used 4
+each) are `[appId#]elementId` | `none` | `inherit`: the arrow moves the focus to
+that element, in another application if `appId` (an `ApplicationSegment` or
+`PlaylistApplication` `id`) is given; if the target cannot take the focus, the
+focus stays. These override `navIndex`. `navIndex` is `N M` | `auto` | `none`,
+**default `auto`**: on every page load the player numbers every activatable
+element whose `navIndex` is not `none` (first number by rows: lowest `y`, then
+lowest `x`, then highest z-order; second number by columns), skipping numbers the
+author set. Right/Left go to the next higher/lower first number, Down/Up to the
+next higher/lower second number, wrapping round, skipping elements with
+`display="none"` or `state:enabled="false"`. `none` = never reached by arrows.
+`application.computeImplicitNav()` reruns the numbering. On disc `navIndex` is
+used twice, both `1408` debug `<input mode="display" style:navIndex="none">`; so
+every other element is `auto`.
 
 **`accessKey`.** Used (OLIVER `VK_A_BUTTON`…`VK_D_BUTTON` / `VK_MENU`;
-Resident Evil `VK_TOP_MENU` / `VK_MENU`). Token is `AccessKeyType` in iHD.xsd.
-That remote key synthesizes `state:actioned` on the element (same path as
-Enter on a focused button). It is not a second nav graph.
+Resident Evil `VK_TOP_MENU` / `VK_MENU`). Token is `AccessKeyType` in iHD.xsd: a
+space-separated list of key names from [23 Annex V] or `U+hhhh` characters. That
+remote key synthesizes `state:actioned` on the element (same path as Enter on a
+focused button) and is consumed. It works whatever the focus and z-order, on any
+element whose `display` is not `none` [23 §7.2.8.1]. It is not a second nav graph.
+Script handlers see the key first and may cancel it ([12](12_hdi_scripting_abi.md)).
 
 **`input`.** 113 elements. `@mode`: `multiline` 106 (AACS error text on
 CRANK/DEATH_PROOF/PREMONITION `client.aca`; paint `state:value`),
 `display` 7 (`1408` debug line, `navIndex="none"`). `password` unused.
 Treat used `input` as a styled text run of `state:value`, not a PIN pad.
 
-**Initial focus.** An element may set `state:focused="true"` at parse
-(`1408` `BT_dummy`). Otherwise the first navigable in document order.
-Exactly one focused node. Moving focus: old node `focused=false`, new
-`focused=true`. Enter: `state:actioned=true` while the key is held /
-until the action cue ends (Jumpstart: actioned begins the `g` that
-dispatches the event). `state:enabled` default `true` (used 1).
-`state:value` on `input` (80).
+**Initial focus** [23 §7.6.3.4.2.3]. An element may set `state:focused="true"`
+at parse (`1408` `BT_dummy`); if several do, the lexically last wins. Otherwise
+nothing has the focus until the first arrow key, which focuses the element with
+the lowest `navIndex` number for that direction. At most one focused element in
+the whole player. Moving focus: old node `focused=false`, new `focused=true`.
+Enter: `state:actioned=true` for one title tick (a pointer click: from button
+down to button up), then the activated element takes the focus. ESC (Cancel)
+removes the focus from every element. `state:enabled` default `true` (used 1); a
+disabled element cannot be focused or activated. `state:value` on `input` (80); on
+`button` and `area` it starts `false` and toggles on each activation.
 
 **Cues (page clock, menus).** On each focus/action/timer tick:
 
 1. Evaluate every `cue@begin` / `@end` as either a clock time / duration
-   or a path (`PathExpressionType` is an unrestricted `xs:string`; Spec
-   7.5.2.4 is unpublished).
-2. Implement the **used** path subset only (`e17`):
+   or a path. The path grammar is the book's XPath 1.0 subset
+   [23 §7.5.2.4] ([14](14_markup.md) §14.8).
+2. The **used** path subset (`e17`) is
    `id('ID')[state:focused()=0|1]`,
    `//button[state:actioned()=true()]`, duration, timecode,
    `style:opacity()=1`, `$name` / `$name='…'` after `setXPathVariable`.
-   An unknown path is false. The cue does **not** fire. This is not a
-   general XPath 1.0 engine.
+   A path that fails to evaluate is false; the cue does **not** fire. Paths are
+   allowed only under the application or page clock, inside a `par`.
 3. When begin is true and end is false, apply `use` (`defs/g`: `set`
    style/state, `event@name`) and/or child `set`/`event`/`animate`.
 4. `1408` action path: `seq begin="//button[state:actioned()=true()]"
@@ -626,9 +726,11 @@ dispatches the event). `state:enabled` default `true` (used 1).
 **semicolon list** on a LengthType / AlphaValueType attr (XSD already allows
 `;` keyframes) and spreads those N values across the parent `cue@dur`
 (`0.25s` / `0.5s` / `800ms` on ARMY_OF_SHADOWS). `calcMode` default `linear`
-(interpolates); `discrete` jumps. `additive` default `replace`; `sum` adds to
-the current value (subtitle drift). `fill="hold"` (used) keeps the last
-keyframe; XSD default `remove`.
+(interpolates); `discrete` jumps; a property whose values cannot be interpolated
+falls back to `discrete`. `additive` default `replace`; `sum` adds to the current
+value (subtitle drift), only on properties with linear animation. `fill="hold"`
+(used) keeps the last keyframe; XSD default `remove`; under the title clock
+`hold` acts as `remove` [23 §7.7.2].
 
 **Include.** `include@href` loads another iHD document (`.xmu` fragment,
 `.xts` timing-only, `.xss` style fragment) into the parent. Same
@@ -636,7 +738,8 @@ namespaces. Not Mozilla XUL (`.xul` on PANS_LABYRINTH is a different
 language; ignore for the HDi engine).
 
 **Not in this algorithm:** unused iHDstyle attrs (`writingMode`, padding,
-borders, MNG, `pointer` state). Stay on the XSD until a census hits them.
+borders, MNG, `pointer` state). Their full definitions are in [14](14_markup.md)
+§14.9 from the book [23 §7.6].
 
 **Text (`<p>`).** 1390/1390 `<p>` are children of a `div` (TERMINATOR_2_GER
 `bonus_menu.xmu` and others). The `p` itself has **no** style attributes.
@@ -647,13 +750,14 @@ without a `.ttf` suffix, e.g. `…/IMAGION_SA`), and often
 built-in fonts; missing OpenType in File Cache → no glyphs.
 
 Fail-closed raster: scale the OpenType em so `unitsPerEm` maps to
-`fontSize` CSS px. Line box height is `lineHeight` (equals `fontSize` on
-the checked pages). Successive `<p>` in one tall box (`height="2604px"`)
-stack on that stride. Baseline from font `hhea` / `OS/2`. Do not
+`fontSize` CSS px (default `medium` = 64 px on a 1920×1080 Aperture,
+[14](14_markup.md) §14.9). Line box height is `lineHeight` (equals `fontSize` on
+the checked pages; `auto` = the font's line height). Successive `<p>` in one tall
+box (`height="2604px"`) stack on that stride. Ascent, descent and line gap come
+from `OS/2` `sTypoAscender`/`sTypoDescender`/`sTypoLineGap`, else `hhea` or
+`usWin*` [23 §7.3.2.2]. Line breaking and stacking follow [23 §7.3.2.3–4]: a line
+that does not fit is dropped, a paragraph never overflows its box. Do not
 screenshot-calibrate hinting.
-`[11, 12]` **VERIFIED**
-(structure).
-`[14]` **INFERRED**
-(em scale; not screenshot-measured).
+`[23]` **SPEC**; `[11, 12]` **VERIFIED** (structure).
 
 
